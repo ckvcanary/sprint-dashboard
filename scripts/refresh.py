@@ -227,6 +227,14 @@ def record(ok, issues, err=""):
 if __name__ == "__main__":
     if not all(ENV.get(k) for k in ("JIRA_BASE", "JIRA_EMAIL", "JIRA_TOKEN")):
         sys.exit("Missing JIRA_BASE, JIRA_EMAIL or JIRA_TOKEN")
+    try:  # cooldown: a manual refresh right after another one is skipped
+        mp = DATA / "meta.json"
+        if ENV.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and mp.exists():
+            last = dt.datetime.fromisoformat(json.loads(mp.read_text())["refreshedAt"].replace("Z", "+00:00"))
+            if (dt.datetime.now(dt.timezone.utc) - last).total_seconds() < 90:
+                print("skipped: data refreshed less than 90 seconds ago"); sys.exit(0)
+    except (ValueError, KeyError, json.JSONDecodeError):
+        pass
     try:
         n = main()
     except Exception as ex:

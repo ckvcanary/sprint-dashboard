@@ -20,3 +20,9 @@ Four views: **Map** (epics, user stories, tasks, with a description drawer), **C
 - `template.html` source page. `index.html` built page. `data/` map, burndown, meta, runs.
 - `scripts/refresh.py` Jira pull (REST, standard library only). `scripts/build.py` rebuilds `index.html` (`--embed` also writes `artifact.html` with the data inside).
 - Hours rule: new tickets use the original estimate; rolled-over tickets use the original estimate minus time logged before the sprint start.
+
+## Refresh button without a token in the page
+The page never holds a GitHub token. The Refresh button calls a small relay (`relay/worker.js`, Cloudflare Worker, free) that holds the token as a secret and starts the GitHub job. Set it up once:
+1. Create a fine-grained GitHub token: repository `ckvcanary/sprint-dashboard` only, permission Actions: Read and write.
+2. Deploy `relay/worker.js` to Cloudflare Workers and add the token as the secret `GH_TOKEN`.
+3. Put the worker address into `REFRESH_URL` in `template.html`, run `python3 scripts/build.py` and push.
