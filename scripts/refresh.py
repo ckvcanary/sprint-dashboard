@@ -120,6 +120,8 @@ def sprint_label(date_str):
 
 
 def main():
+    me = api("/rest/api/3/myself")           # a bad or revoked token fails here (Jira would otherwise return empty results)
+    print("signed in as", me.get("displayName"))
     old = json.loads((DATA / "map.json").read_text())
     sprints = {k: v for k, v in SPRINT_IDS.items()}
     names = {s["id"]: s for s in old["sprints"]}
@@ -183,6 +185,8 @@ def main():
             if ep:
                 epics.setdefault(ep, {"key": ep, "title": clean(par["fields"]["summary"]), "a": None})
             if sk in DESC_SPRINTS and f.get("description"): desc[k] = adf_md(f["description"]).strip()
+    if total < 200 or not any(s['sprint'] == 'S24' for s in stories.values()):
+        raise RuntimeError(f"Jira returned too little data ({total} issues); data files left unchanged")
     # epics: assignee and description
     if epics:
         for x in search("key in (%s)" % ",".join(sorted(epics)), ["summary", "assignee", "description"]):
