@@ -1,0 +1,455 @@
+<title>Sprint Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#ffffff;--soft:#f7f7f8;--ink:#0d0d0d;--muted:#6b6b72;--faint:#9a9aa2;--line:#ececf0;--lineStrong:#d9d9e0;
+  --epic:#fdeef5;--epicInk:#a0205f;--epicLine:#f3c3d9;--story:#e9f6ee;--storyInk:#137333;--storyLine:#bfe3cb;--task:#e8f0fe;--taskInk:#1967d2;--taskLine:#c4d6fb;
+  --blue:#1967d2;--green:#2e9e6b;--red:#c5221f;--amber:#b06000;--shadow:0 10px 30px rgba(0,0,0,.14);--sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141416;--soft:#1d1d20;--ink:#f3f3f5;--muted:#a3a3ab;--faint:#7c7c85;--line:#2a2a2f;--lineStrong:#3a3a42;
+  --epic:#3a2230;--epicInk:#f5b9d6;--epicLine:#5a3248;--story:#1f3326;--storyInk:#a8dab5;--storyLine:#2f4d39;--task:#1f2e46;--taskInk:#aecbfa;--taskLine:#2f4670;
+  --blue:#8ab4f8;--green:#5cc796;--red:#f28b82;--amber:#fdd663;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141416;--soft:#1d1d20;--ink:#f3f3f5;--muted:#a3a3ab;--faint:#7c7c85;--line:#2a2a2f;--lineStrong:#3a3a42;
+  --epic:#3a2230;--epicInk:#f5b9d6;--epicLine:#5a3248;--story:#1f3326;--storyInk:#a8dab5;--storyLine:#2f4d39;--task:#1f2e46;--taskInk:#aecbfa;--taskLine:#2f4670;
+  --blue:#8ab4f8;--green:#5cc796;--red:#f28b82;--amber:#fdd663;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 72px}
+.wrap{max-width:1280px;margin:0 auto}
+.wrap>*{min-width:0}
+h1{font:600 30px/1.15 var(--sans);letter-spacing:-.02em;margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 22px;max-width:70ch}
+.top{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.tabs{display:flex;gap:4px}
+.tab{font:500 14px var(--sans);border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:999px;cursor:pointer}
+.tab[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.tab:hover:not([aria-selected=true]){background:var(--soft)}
+.sel{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+select,input[type=number]{font:inherit;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:12px;margin-bottom:22px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.mapwrap{position:relative;overflow-x:auto;padding-bottom:12px}
+.map{position:relative;display:grid;grid-template-columns:230px repeat(var(--n,4),minmax(220px,1fr));column-gap:28px;row-gap:26px;min-width:calc(230px + var(--n,4) * 248px);align-items:start}
+.map svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.map path{fill:none;stroke:var(--lineStrong);stroke-width:1.4;transition:stroke .15s,stroke-width .15s}
+.map path.hl{stroke:var(--epicInk);stroke-width:2.4}
+.colh{font-weight:600;font-size:13px}.colh small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.colh.now{color:var(--storyInk)}
+.cell{display:flex;flex-direction:column;gap:12px;position:relative;z-index:1}
+.card{position:relative;z-index:1;text-align:left;font:inherit;border:1px solid;border-radius:14px;padding:14px 16px;cursor:pointer;width:100%;
+  transition:transform .15s ease,box-shadow .15s ease}
+.card:hover,.card:focus-visible{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card.epic{background:var(--epic);border-color:var(--epicLine);color:var(--epicInk)}
+.card.story{background:var(--story);border-color:var(--storyLine);color:var(--storyInk)}
+.card .k{font-size:12px;opacity:.8;font-weight:500}
+.card .t{font-weight:600;font-size:14px;line-height:1.35;margin:4px 0 10px;overflow-wrap:anywhere}
+.card .m{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:6px;font-weight:500}
+.av{width:18px;height:18px;border-radius:50%;background:rgba(127,127,127,.22);display:inline-grid;place-items:center;font-size:9px;font-weight:700}
+.pill.n{margin-left:auto;font-weight:600}
+.empty{color:var(--faint);font-size:12px;padding-top:6px}
+.rowlab{font-size:12px;color:var(--muted);margin-top:4px}
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.28);opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--bg);border-left:1px solid var(--line);box-shadow:var(--shadow);z-index:30;
+  transform:translateX(105%);transition:transform .25s ease;overflow-y:auto;padding:26px 26px 60px;padding-right:max(26px,env(safe-area-inset-right,0px))}
+.drawer.on{transform:none}
+.drawer .x{position:sticky;top:0;float:right;font:500 13px var(--sans);border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer}
+.crumb{font-size:12px;color:var(--muted);margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap}
+.crumb button{border:0;background:none;color:var(--blue);cursor:pointer;font:inherit;padding:0}
+.crumb button:hover{text-decoration:underline}
+.kind{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;margin-bottom:10px}
+.kind.epic{background:var(--epic);color:var(--epicInk)}.kind.story{background:var(--story);color:var(--storyInk)}.kind.task{background:var(--task);color:var(--taskInk)}
+.drawer h2{font:600 22px/1.25 var(--sans);margin:0 0 6px;letter-spacing:-.01em;overflow-wrap:anywhere}
+.drawer a.link{color:var(--blue)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin:18px 0}
+.fact{background:var(--soft);border-radius:12px;padding:10px 12px}
+.fact b{display:block;font-size:18px;font-weight:600}.fact span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sec{margin-top:22px}.lb{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:8px}
+.desc p{margin:0 0 10px}.desc ul{margin:0 0 10px;padding-left:20px}.desc li{margin:2px 0}
+.nodesc{color:var(--faint)}
+.list{display:flex;flex-direction:column;gap:8px}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;text-align:left;font:inherit;border:1px solid;border-radius:12px;padding:10px 12px;cursor:pointer;width:100%;transition:transform .12s,box-shadow .12s}
+.item:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.item.story{background:var(--story);border-color:var(--storyLine);color:var(--storyInk)}
+.item.task{background:var(--task);border-color:var(--taskLine);color:var(--taskInk)}
+.item .k{font-size:12px;font-weight:600}.item .t{font-weight:500;overflow-wrap:anywhere}.item .h{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.item .s{grid-column:2/4;font-size:12px;opacity:.8}
+/* capacity */
+.card2{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:18px}
+.capgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px}
+.chart{width:100%;height:auto;display:block}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--lineStrong)}
+td{padding:9px 8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+td:nth-child(n+2),th:nth-child(n+2){text-align:right}
+tr.tot td{font-weight:700}
+.scroll{overflow-x:auto}
+.note{color:var(--muted);font-size:12px}
+.mlist{display:none}
+.mspop[hidden]{display:none}
+.msel{position:relative}
+.msbtn{font:500 13px var(--sans);color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer}
+.msbtn:after{content:"  \25BE"}
+.mspop{position:absolute;right:0;top:calc(100% + 6px);z-index:15;background:var(--bg);border:1px solid var(--lineStrong);border-radius:12px;box-shadow:var(--shadow);padding:10px;min-width:230px;display:flex;flex-direction:column;gap:2px}
+.mspop label{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:13px}
+.mspop label:hover{background:var(--soft)}
+.mspop input{width:16px;height:16px;accent-color:var(--ink)}
+.mspop .q{display:flex;gap:6px;padding:4px 4px 8px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 13px var(--sans);border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:6px 14px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.capfull{margin-top:6px}
+.capfull .chart{width:100%;height:auto;max-height:68vh}
+.capfull table{margin-top:18px;font-size:14px}
+.capfull th,.capfull td{white-space:nowrap}
+.capfull th{padding:8px 12px}.capfull td{padding:11px 12px}
+@media (max-width:860px){
+  .mapwrap{overflow:visible}.map{display:none}.mlist{display:block}
+  .mlist .ep{margin:0 0 30px}.mlist .ep>.card{margin-bottom:12px}
+  .mlist .sp{font-size:12px;font-weight:600;color:var(--muted);margin:16px 0 8px}
+  .mlist .cell{margin-left:14px}
+  .capgrid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.card:hover{transform:none}}
+
+.bdbar{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.bdbar label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
+.bdbar input[type=datetime-local]{font:inherit;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:6px 8px}
+.bdinfo{color:var(--muted);font-size:13px;margin:0 0 16px}
+.bdgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:16px;margin-bottom:22px}
+.bdc{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--soft);min-width:0}
+.bdc h3{margin:0 0 2px;font:600 15px var(--sans);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.bdc .flag{font:600 12px var(--sans);padding:3px 10px;border-radius:999px;border:1px solid currentColor}
+.bdc .ok{color:var(--green)}.bdc .warn{color:var(--amber)}.bdc .bad{color:var(--red)}
+.bdc .line{color:var(--muted);font-size:12px;margin:0 0 6px}
+.bdc svg{width:100%;height:auto;display:block}
+.bdt td.ok{color:var(--green);font-weight:600}.bdt td.warn{color:var(--amber);font-weight:600}.bdt td.bad{color:var(--red);font-weight:600}
+.bdt th,.bdt td{white-space:nowrap;padding:10px 12px}
+.rf{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rfpanel{border:1px solid var(--line);background:var(--soft);border-radius:14px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--muted);max-width:760px}
+.rfpanel input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:min(100%,420px)}
+.rfpanel a{color:var(--blue)}.rfpanel p{margin:0 0 8px}
+.rf .chip[disabled]{opacity:.6;cursor:default}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="t-map" aria-selected="true">Map</button>
+      <button class="tab" role="tab" id="t-cap" aria-selected="false">Capacity</button>
+      <button class="tab" role="tab" id="t-bd" aria-selected="false">Burndown</button>
+      <button class="tab" role="tab" id="t-log" aria-selected="false">Pull log</button>
+    </div>
+    <div class="rf"><span id="rfstat" class="note"></span><button class="chip" id="rfbtn">Refresh data</button></div>
+    <div class="msel"><button class="msbtn" id="msbtn" aria-haspopup="true" aria-expanded="false">Sprints</button><div class="mspop" id="mspop" hidden></div></div>
+  </div>
+  <div id="rfpanel" class="rfpanel" hidden></div>
+  <section id="v-map">
+    <div class="legend"><span><i style="background:var(--epicInk)"></i>Epic</span><span><i style="background:var(--storyInk)"></i>User story</span><span><i style="background:var(--taskInk)"></i>Task, opens inside a user story</span></div>
+    <div class="mapwrap"><div class="map" id="map"></div><div class="mlist" id="mlist"></div></div>
+  </section>
+  <section id="v-cap" hidden></section>
+  <section id="v-bd" hidden></section>
+  <section id="v-log" hidden></section>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-live="polite" aria-label="Details"></aside>
+
+<script>
+let D = /*DATA*/{sprints:[],epics:[],stories:[],desc:{}};
+let BD = /*BD*/{}, META = /*META*/null, RUNS = /*RUNS*/[];
+const TEAM = ['Nikita','Sumit','Aditi','Abhishek','Rushikesh','Chetan','Nitin','Rujin'];
+const J = k => 'https://canaryai.atlassian.net/browse/' + k;
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const f1 = v => (Math.round(v * 10) / 10).toString();
+const ini = n => n && n !== 'Unassigned' ? n.slice(0, 2).toUpperCase() : '–';
+let SP = [], IDX = {}, E = {}, S = {}, T = {};
+function ingest() {
+  SP = D.sprints; IDX = {}; SP.forEach((s, i) => IDX[s.id] = i);
+  E = {}; S = {}; T = {}; D.epics.forEach(e => E[e.key] = e); D.stories.forEach(s => S[s.key] = s);
+  D.stories.forEach(s => s.tasks.forEach(t => T[t.key] = Object.assign({ story: s.key }, t)));
+}
+ingest();
+const hrs = s => s.tasks.length ? s.tasks.reduce((a, t) => a + (t.h || 0), 0) : (s.own || 0);
+let sel = ['S22','S23','S24','NEXT'], tab = 'map', stack = [], capSp = null, bdSp = 'S24', bdAsOf = '';
+try { const x = JSON.parse(localStorage.getItem('sprintmap.sel') || 'null'); if (Array.isArray(x)) sel = x.filter(i => IDX[i] != null); } catch (e) {}
+const selSorted = () => SP.filter(s => sel.includes(s.id));
+
+function md(t) {
+  let h = esc(String(t || '').replace(/<custom[^>]*>(https?:\/\/[^<\s]+)<\/custom>/g, '[Open link]($1)'));
+  h = h.replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a class="link" target="_blank" rel="noopener" href="$2">$1</a>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+  let out = '', ul = false;
+  h.split('\n').forEach(l => {
+    if (/^\s*[\*-]\s+/.test(l)) { if (!ul) { out += '<ul>'; ul = true; } out += '<li>' + l.replace(/^\s*[\*-]\s+/, '') + '</li>'; }
+    else { if (ul) { out += '</ul>'; ul = false; } if (l.trim()) out += '<p>' + l + '</p>'; }
+  });
+  return out + (ul ? '</ul>' : '');
+}
+const who = a => `<span class="pill"><span class="av">${esc(ini(a))}</span>${esc(a || 'Unassigned')}</span>`;
+const pts = s => s.sp != null ? s.sp + (s.sp === 1 ? ' pt' : ' pts') : '';
+
+function storyCard(s) {
+  return `<button class="card story" data-s="${esc(s.key)}" data-r="${esc(s.epic || 'none')}"><div class="k">${esc(s.key)}</div><div class="t">${esc(s.title)}</div>
+    <div class="m">${who(s.a)}<span class="pill n">${f1(hrs(s))} h${s.sp != null ? ' · ' + pts(s) : ''}</span></div></button>`;
+}
+function rowsModel() {
+  const win = selSorted(), ids = new Set(win.map(w => w.id));
+  const rows = D.epics.map(e => ({ e, st: D.stories.filter(s => s.epic === e.key && ids.has(s.sprint)) }));
+  const none = D.stories.filter(s => !D.epics.some(e => e.key === s.epic) && ids.has(s.sprint));
+  const out = rows.filter(r => r.st.length);
+  if (none.length) out.push({ e: null, st: none });
+  return { win, out };
+}
+function epicCard(r) {
+  if (!r.e) return `<div class="card epic" style="cursor:default" data-r="none"><div class="k">No epic</div><div class="t">User stories without an epic</div><div class="m"><span class="pill">${r.st.length} stories</span></div></div>`;
+  const inF = r.st, h = inF.reduce((a, s) => a + hrs(s), 0), p = inF.reduce((a, s) => a + (s.sp || 0), 0);
+  return `<button class="card epic" data-e="${esc(r.e.key)}" data-r="${esc(r.e.key)}"><div class="k">${esc(r.e.key)}</div><div class="t">${esc(r.e.title)}</div>
+    <div class="m">${who(r.e.a)}<span class="pill n">${f1(h) + ' h' + (p ? ' · ' + p + ' pts' : '')}</span></div></button>`;
+}
+function renderMap() {
+  const { win, out } = rowsModel();
+  $('#map').style.setProperty('--n', Math.max(1, win.length));
+  if (!out.length) { $('#map').innerHTML = '<div class="empty">' + (win.length ? 'No user stories in the selected sprints.' : 'Tick at least one sprint in the Sprints menu.') + '</div>'; $('#mlist').innerHTML = ''; return; }
+  let h = '<svg id="lines"></svg><div></div>' + win.map(w => `<div class="colh">${esc(w.name)}<small>${esc(w.r)}</small></div>`).join('');
+  out.forEach((r, i) => {
+    h += `<div style="grid-row:${i + 2};grid-column:1">${epicCard(r)}</div>`;
+    win.forEach((w, c) => {
+      const ss = r.st.filter(s => s.sprint === w.id);
+      h += `<div class="cell" style="grid-row:${i + 2};grid-column:${c + 2}">${ss.map(storyCard).join('')}</div>`;
+    });
+  });
+  $('#map').innerHTML = h;
+  $('#mlist').innerHTML = out.map(r => `<div class="ep">${epicCard(r)}${win.map(w => { const ss = r.st.filter(s => s.sprint === w.id); return ss.length ? `<div class="sp">${esc(w.name)}</div><div class="cell">${ss.map(storyCard).join('')}</div>` : ''; }).join('')}</div>`).join('');
+  requestAnimationFrame(lines);
+}
+function lines() {
+  const m = $('#map'), svg = $('#lines'); if (!svg || !m.offsetParent) return;
+  const mr = m.getBoundingClientRect(); let d = '';
+  const rect = el => { const r = el.getBoundingClientRect(); return { l: r.left - mr.left, r: r.right - mr.left, y: r.top - mr.top + r.height / 2 }; };
+  const rowsSeen = {};
+  m.querySelectorAll('[data-r]').forEach(el => (rowsSeen[el.dataset.r] = rowsSeen[el.dataset.r] || []).push(el));
+  Object.values(rowsSeen).forEach(els => {
+    const ep = els.find(e => e.classList.contains('epic')); if (!ep) return;
+    const cards = els.filter(e => e.classList.contains('story'));
+    const byCol = {}; cards.forEach(c => { const col = c.parentElement.style.gridColumn; (byCol[col] = byCol[col] || []).push(c); });
+    const cols = Object.keys(byCol).sort((a, b) => a - b); let prev = [ep];
+    cols.forEach(col => {
+      byCol[col].forEach((c, i) => {
+        const a = rect(prev[Math.min(i, prev.length - 1)]), b = rect(c), mx = (a.r + b.l) / 2;
+        d += `<path data-a="${esc(c.dataset.s)}" d="M${a.r},${a.y} C${mx},${a.y} ${mx},${b.y} ${b.l},${b.y}"/>`;
+      });
+      prev = byCol[col];
+    });
+  });
+  svg.setAttribute('viewBox', `0 0 ${mr.width} ${mr.height}`); svg.innerHTML = d;
+}
+function renderCap() {
+  const opts = selSorted().filter(s => s.id !== 'NEXT');
+  if (!opts.length) { $('#v-cap').innerHTML = '<div class="note">Tick at least one sprint (other than Sprint 25 and backlog) in the Sprints menu.</div>'; return; }
+  if (!capSp || !opts.some(o => o.id === capSp)) capSp = opts[opts.length - 1].id;
+  const CAP = 64, sp = SP[IDX[capSp]];
+  const by = {}; D.stories.filter(s => s.sprint === capSp).forEach(s => (s.tasks.length ? s.tasks : [{ a: s.a, h: s.own }]).forEach(t => by[t.a] = (by[t.a] || 0) + (t.h || 0)));
+  const names = capSp === 'S24' ? ['Nikita','Sumit','Aditi','Abhishek','Rushikesh','Nitin'] : TEAM.filter(n => (by[n] || 0) > 0);
+  const rows = names.map(n => ({ n, h: by[n] || 0 }));
+  const chips = `<div class="chips">${opts.map(o => `<button class="chip" data-cs="${o.id}" aria-pressed="${o.id === capSp}">${esc(o.name)}</button>`).join('')}</div>`;
+  if (!rows.length) { $('#v-cap').innerHTML = chips + `<p class="note">No estimated team work recorded for ${esc(sp.name)}.</p>`; return; }
+  const top = Math.ceil(Math.max(CAP, ...rows.map(r => r.h)) * 1.1 / 16) * 16, W = 1200, H = 480, L = 44, R = 10, Tp = 26, B = 40, ph = H - Tp - B, pw = W - L - R;
+  const y = v => Tp + ph - v / top * ph, gw = pw / rows.length, bw = Math.min(70, gw * .3);
+  let g = ''; for (let v = 0; v <= top; v += top / 5) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${y(v) + 5}" text-anchor="end" font-size="14" fill="var(--muted)">${Math.round(v)}</text>`;
+  rows.forEach((r, i) => { const cx = L + gw * i + gw / 2;
+    g += `<rect x="${cx - bw - 3}" y="${y(CAP)}" width="${bw}" height="${y(0) - y(CAP)}" rx="5" fill="var(--green)"/><rect x="${cx + 3}" y="${y(r.h)}" width="${bw}" height="${Math.max(0, y(0) - y(r.h))}" rx="5" fill="var(--blue)"/>
+      <text x="${cx - bw / 2 - 3}" y="${y(CAP) - 8}" text-anchor="middle" font-size="15" font-weight="600" fill="var(--ink)">${CAP}</text><text x="${cx + bw / 2 + 3}" y="${y(r.h) - 8}" text-anchor="middle" font-size="15" font-weight="600" fill="var(--ink)">${f1(r.h)}</text>
+      <text x="${cx}" y="${H - 12}" text-anchor="middle" font-size="16" font-weight="600" fill="var(--ink)">${esc(r.n)}</text>`; });
+  const tot = rows.reduce((a, r) => a + r.h, 0), tc = CAP * rows.length, sg = d => d > 0 ? '+' + f1(d) : d < 0 ? '−' + f1(-d) : '0';
+  $('#v-cap').innerHTML = `<div class="legend" style="justify-content:space-between;align-items:center;margin-bottom:8px">${chips}<span style="display:flex;gap:18px"><span><i style="background:var(--blue);border-radius:3px"></i>Original estimate</span><span><i style="background:var(--green);border-radius:3px"></i>Capacity: ${CAP} h per person (8 × 8)</span></span></div>
+    <div class="capfull"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Original estimate against capacity per person">${g}</svg>
+    <div class="scroll"><table><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Capacity (h)</th><th>Over (+) / under (−) (h)</th></tr></thead><tbody>
+      ${rows.map(r => `<tr><td><b>${esc(r.n)}</b></td><td>${f1(r.h)}</td><td>${CAP}</td><td><b>${sg(r.h - CAP)}</b></td></tr>`).join('')}
+      <tr class="tot"><td>Team</td><td>${f1(tot)}</td><td>${f1(tc)}</td><td>${sg(tot - tc)}</td></tr></tbody></table></div></div>`;
+}
+/* drawer */
+const dr = $('#drawer'), scrim = $('#scrim');
+function crumbs() {
+  return '<div class="crumb">' + stack.map((k, i) => (i ? '<span>/</span>' : '') + (i < stack.length - 1 ? `<button data-go="${i}">${esc(k)}</button>` : `<span>${esc(k)}</span>`)).join('') + '</div>';
+}
+function descBlock(k) { const t = D.desc[k]; return `<div class="sec"><div class="lb">Description</div><div class="desc">${t ? md(t) : '<span class="nodesc">No description in Jira.</span>'}</div></div>`; }
+function openItem(kind, key) {
+  stack = stack.slice(); if (stack[stack.length - 1] !== key) stack.push(key);
+  let o = kind === 'e' ? E[key] : kind === 's' ? S[key] : T[key], h = '<button class="x" data-close>Close</button>' + crumbs();
+  if (kind === 'e') {
+    const ss = D.stories.filter(s => s.epic === key).sort((a, b) => IDX[a.sprint] - IDX[b.sprint]), hh = ss.reduce((a, s) => a + hrs(s), 0), pp = ss.reduce((a, s) => a + (s.sp || 0), 0);
+    h += `<span class="kind epic">Epic</span><h2>${esc(o.title)}</h2><a class="link" target="_blank" rel="noopener" href="${J(key)}">${esc(key)} in Jira</a>
+      <div class="facts"><div class="fact"><b>${esc(o.a || 'Unassigned')}</b><span>Assignee</span></div><div class="fact"><b>${ss.length}</b><span>User stories</span></div><div class="fact"><b>${f1(hh)} h</b><span>Original estimate</span></div>${pp ? `<div class="fact"><b>${pp}</b><span>Story points</span></div>` : ''}</div>
+      ${descBlock(key)}<div class="sec"><div class="lb">User stories (${ss.length})</div><div class="list">${ss.map(s => `<button class="item story" data-s="${esc(s.key)}"><span class="k">${esc(s.key)}</span><span class="t">${esc(s.title)}</span><span class="h">${f1(hrs(s))} h${s.sp != null ? ' · ' + pts(s) : ''}</span><span class="s">${esc(SP[IDX[s.sprint]].name)} · ${esc(s.a)}</span></button>`).join('')}</div></div>`;
+  } else if (kind === 's') {
+    const hh = hrs(o);
+    h += `<span class="kind story">User story</span><h2>${esc(o.title)}</h2><a class="link" target="_blank" rel="noopener" href="${J(key)}">${esc(key)} in Jira</a>
+      <div class="facts"><div class="fact"><b>${esc(o.a || 'Unassigned')}</b><span>Assignee</span></div><div class="fact"><b>${esc(SP[IDX[o.sprint]].name)}</b><span>Sprint</span></div><div class="fact"><b>${f1(hh)} h</b><span>Original estimate</span></div>${o.sp != null ? `<div class="fact"><b>${o.sp}</b><span>Story points</span></div>` : ''}</div>
+      ${descBlock(key)}<div class="sec"><div class="lb">Tasks (${o.tasks.length})</div>${o.tasks.length ? `<div class="list">${o.tasks.map(t => `<button class="item task" data-t="${esc(t.key)}"><span class="k">${esc(t.key)}</span><span class="t">${esc(t.t)}</span><span class="h">${f1(t.h || 0)} h</span><span class="s">${esc(t.a)} · ${esc(t.s)}</span></button>`).join('')}</div>` : '<span class="nodesc">No tasks under this user story.</span>'}</div>`;
+  } else {
+    h += `<span class="kind task">Task</span><h2>${esc(o.t)}</h2><a class="link" target="_blank" rel="noopener" href="${J(key)}">${esc(key)} in Jira</a>
+      <div class="facts"><div class="fact"><b>${esc(o.a || 'Unassigned')}</b><span>Assignee</span></div><div class="fact"><b>${f1(o.h || 0)} h</b><span>Original estimate</span></div><div class="fact"><b>${esc(o.s || '–')}</b><span>Status</span></div></div>${descBlock(key)}`;
+  }
+  dr.innerHTML = h; dr.classList.add('on'); scrim.classList.add('on'); dr.scrollTop = 0;
+}
+const closeD = () => { dr.classList.remove('on'); scrim.classList.remove('on'); stack = []; };
+dr.addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) return closeD();
+  const g = e.target.closest('[data-go]'); if (g) { const i = +g.dataset.go, k = stack[i]; stack = stack.slice(0, i); return openItem(k.startsWith('PROD') && E[k] ? 'e' : S[k] ? 's' : 't', k); }
+  const s = e.target.closest('[data-s]'); if (s) return openItem('s', s.dataset.s);
+  const t = e.target.closest('[data-t]'); if (t) return openItem('t', t.dataset.t);
+});
+scrim.onclick = closeD;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeD(); });
+$('#v-map').addEventListener('click', e => {
+  const c = e.target.closest('[data-e],[data-s]'); if (!c) return; stack = [];
+  c.dataset.e ? openItem('e', c.dataset.e) : openItem('s', c.dataset.s);
+});
+$('#map').addEventListener('mouseover', e => { const c = e.target.closest('[data-s]'); document.querySelectorAll('#lines path').forEach(p => p.classList.toggle('hl', !!c && p.dataset.a === c.dataset.s)); });
+$('#map').addEventListener('mouseleave', () => document.querySelectorAll('#lines path.hl').forEach(p => p.classList.remove('hl')));
+$('#v-cap').addEventListener('click', e => { const c = e.target.closest('[data-cs]'); if (c) { capSp = c.dataset.cs; renderCap(); } });
+
+/* burndown */
+const CAPH = 64, WH0 = 11, WH1 = 19, DH = 8;
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const dUTC = s => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
+const dStr = ms => new Date(ms).toISOString().slice(0, 10);
+const fmtD = s => { const d = new Date(dUTC(s)); return d.getUTCDate() + ' ' + MON[d.getUTCMonth()]; };
+function nowIST() { const d = new Date(Date.now() + 5.5 * 3600e3); return d.toISOString().slice(0, 16); }
+function workDays(w) { const a = []; for (let ms = dUTC(w[0]); ms <= dUTC(w[1]); ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) a.push(dStr(ms)); } return a; }
+function elapsed(days, asOf) { const d = asOf.slice(0, 10), hh = +asOf.slice(11, 13) + (+asOf.slice(14, 16)) / 60; let e = 0;
+  days.forEach(x => { if (x < d) e += DH; else if (x === d) e += Math.max(0, Math.min(DH, hh - WH0)); }); return e; }
+function bdPerson(name, p, days, asOf) {
+  const tot = days.length * DH, el = elapsed(days, asOf), ad = asOf.slice(0, 10), pts = [[0, p.E]];
+  const entries = Object.entries(p.logs).filter(([d]) => d <= ad).sort();
+  let cum = 0, logged = 0;
+  entries.forEach(([d, h]) => logged += h);
+  const before = entries.filter(([d]) => d < days[0]).reduce((a, [, h]) => a + h, 0); cum = before; pts[0] = [0, Math.max(0, p.E - cum)];
+  days.forEach((d, i) => { if (d > ad) return; const dayLog = entries.filter(([x]) => (x > (days[i - 1] || '0000') && x <= d && x >= days[0]) ).reduce((a, [, h]) => a + h, 0); cum += dayLog;
+    const x = d === ad ? el : (i + 1) * DH; pts.push([x, Math.max(0, p.E - cum)]); });
+  const exp = CAPH * el / tot, missing = Math.max(0, exp - logged), remain = Math.max(0, p.E - logged), left = CAPH * (tot - el) / tot;
+  const late = ad > days[days.length - 1];
+  let st = 'On track', cl = 'ok';
+  if (el <= 0) { st = 'Not started'; cl = 'ok'; }
+  else if (missing > 8) { st = 'Time log missing'; cl = 'bad'; } else if (missing > 2) { st = 'Behind on logging'; cl = 'warn'; }
+  if (el > 0 && remain > left + 0.05 && !late) { if (cl === 'ok') { st = 'Cannot finish in time'; cl = 'warn'; } }
+  return { name, E: p.E, logged, remain, exp, missing, left, pts, tot, el, st, cl };
+}
+function bdChart(r) {
+  const W = 400, H = 220, L = 38, R = 12, T = 14, B = 34, pw = W - L - R, ph = H - T - B, top = Math.ceil(Math.max(CAPH, r.E) / 16) * 16;
+  const X = x => L + x / r.tot * pw, Y = v => T + ph - v / top * ph;
+  let g = '';
+  for (let i = 0; i <= 4; i++) { const v = top / 4 * i; g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${Math.round(v)}</text>`; }
+  r.days.forEach((d, i) => { if (r.days.length <= 8 || i % 2 === 0) g += `<text x="${X((i + .5) * DH)}" y="${H - 14}" text-anchor="middle" font-size="10" fill="var(--muted)">${esc(fmtD(d))}</text>`; });
+  g += `<line x1="${X(0)}" y1="${Y(CAPH)}" x2="${X(r.tot)}" y2="${Y(0)}" stroke="var(--green)" stroke-width="1.6" stroke-dasharray="2 4"><title>Time left in the sprint (64 h falling to 0)</title></line>`;
+  g += `<line x1="${X(0)}" y1="${Y(r.E)}" x2="${X(r.tot)}" y2="${Y(0)}" stroke="var(--faint)" stroke-width="1.6" stroke-dasharray="6 4"><title>Ideal burndown of the original estimate</title></line>`;
+  const act = r.pts.map(p => `${X(p[0])},${Y(p[1])}`).join(' ');
+  g += `<polyline points="${act}" fill="none" stroke="var(--blue)" stroke-width="2.6" stroke-linejoin="round"/>` + r.pts.map(p => `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.4" fill="var(--blue)"><title>${f1(p[1])} h remaining</title></circle>`).join('');
+  if (r.el > 0 && r.el < r.tot) g += `<line x1="${X(r.el)}" x2="${X(r.el)}" y1="${T}" y2="${T + ph}" stroke="var(--ink)" stroke-width="1.2"/>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Burndown for ${esc(r.name)}">${g}</svg>`;
+}
+function renderBd() {
+  const ids = Object.keys(BD).filter(k => BD[k].win), live = nowIST();
+  if (!ids.includes(bdSp)) bdSp = ids[ids.length - 1];
+  const s = BD[bdSp], days = workDays(s.win), asOfRaw = bdAsOf || live, asOf = asOfRaw > days[days.length - 1] + 'T19:00' ? days[days.length - 1] + 'T19:00' : asOfRaw;
+  const rows = Object.entries(s.people).filter(([, p]) => p.E > 0 || Object.keys(p.logs).length).map(([n, p]) => { const r = bdPerson(n, p, days, asOf); r.days = days; return r; }).sort((a, b) => b.missing - a.missing || b.E - a.E);
+  const chips = `<div class="chips">${ids.map(i => `<button class="chip" data-bs="${i}" aria-pressed="${i === bdSp}">${esc(BD[i].name)}</button>`).join('')}</div>`;
+  const el = rows[0] ? rows[0].el : 0, tot = days.length * DH;
+  const dayNo = days.filter(d => d <= asOf.slice(0, 10)).length;
+  $('#v-bd').innerHTML = `<div class="bdbar">${chips}<label>As of (IST)<input type="datetime-local" id="bdasof" value="${esc(asOfRaw)}"></label></div>
+    <p class="bdinfo">${esc(s.name)}: working days ${esc(fmtD(days[0]))} to ${esc(fmtD(days[days.length - 1]))}, ${WH0}:00 to ${WH1}:00 IST, ${DH} h a day, capacity ${CAPH} h per person. ${dayNo ? 'Working day ' + dayNo + ' of ' + days.length + ', ' + f1(el) + ' of ' + tot + ' working hours gone.' : 'Not started.'}${BD[bdSp].note ? ' ' + esc(BD[bdSp].note) : ''}</p>
+    <div class="legend"><span><i style="background:var(--blue)"></i>Remaining estimate (original estimate less time logged)</span><span><i style="background:var(--faint)"></i>Ideal burndown</span><span><i style="background:var(--green)"></i>Time left in the sprint</span><span><i style="background:var(--ink)"></i>Now</span></div>
+    <div class="bdgrid">${rows.map(r => `<div class="bdc"><h3>${esc(r.name)}<span class="flag ${r.cl}">${esc(r.st)}</span></h3><p class="line">Original estimate ${f1(r.E)} h, logged ${f1(r.logged)} h, remaining ${f1(r.remain)} h${r.missing > 0.05 ? ', <b class="' + r.cl + '">' + f1(r.missing) + ' h of time log missing</b>' : ''}</p>${bdChart(r)}</div>`).join('')}</div>
+    <div class="scroll"><table class="bdt"><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Logged (h)</th><th>Remaining estimate (h)</th><th>Expected logged by now (h)</th><th>Missing log (h)</th><th>Time left in sprint (h)</th><th>Flag</th></tr></thead><tbody>
+    ${rows.map(r => `<tr><td><b>${esc(r.name)}</b></td><td>${f1(r.E)}</td><td>${f1(r.logged)}</td><td>${f1(r.remain)}</td><td>${f1(r.exp)}</td><td class="${r.cl}">${r.missing > 0.05 ? f1(r.missing) : '0'}</td><td>${f1(r.left)}</td><td class="${r.cl}">${esc(r.st)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+$('#v-bd').addEventListener('click', e => { const c = e.target.closest('[data-bs]'); if (c) { bdSp = c.dataset.bs; renderBd(); } });
+$('#v-bd').addEventListener('change', e => { if (e.target.id === 'bdasof') { bdAsOf = e.target.value; renderBd(); } });
+function show() {
+  $('#t-map').setAttribute('aria-selected', tab === 'map'); $('#t-cap').setAttribute('aria-selected', tab === 'cap');
+  $('#t-bd').setAttribute('aria-selected', tab === 'bd'); $('#v-map').hidden = tab !== 'map'; $('#v-cap').hidden = tab !== 'cap'; $('#v-bd').hidden = tab !== 'bd'; $('#t-log').setAttribute('aria-selected', tab === 'log'); $('#v-log').hidden = tab !== 'log';
+  if (tab === 'map') renderMap(); else if (tab === 'cap') renderCap(); else if (tab === 'bd') renderBd(); else renderLog();
+}
+$('#t-map').onclick = () => { tab = 'map'; show(); }; $('#t-cap').onclick = () => { tab = 'cap'; show(); }; $('#t-bd').onclick = () => { tab = 'bd'; show(); }; $('#t-log').onclick = () => { tab = 'log'; show(); };
+const pop = $('#mspop'), btn = $('#msbtn');
+function msLabel() { const n = selSorted(); btn.textContent = n.length ? 'Sprints: ' + (n.length > 3 ? n.length + ' selected' : n.map(s => s.name.replace('Sprint ', '').replace(' and backlog', ' + backlog')).join(', ')) : 'Select sprints'; }
+function msRender() {
+  pop.innerHTML = '<div class="q"><button class="mini chip" data-q="last3">Last 3</button><button class="mini chip" data-q="all">All</button><button class="mini chip" data-q="none">Clear</button></div>' +
+    SP.map(s => `<label><input type="checkbox" value="${s.id}" ${sel.includes(s.id) ? 'checked' : ''}>${esc(s.name)}${s.r ? ' <span class="note">' + esc(s.r) + '</span>' : ''}</label>`).join('');
+  msLabel();
+}
+function msSave() { try { localStorage.setItem('sprintmap.sel', JSON.stringify(sel)); } catch (x) {} closeD(); msLabel(); show(); }
+btn.onclick = e => { e.stopPropagation(); const o = pop.hidden; pop.hidden = !o; btn.setAttribute('aria-expanded', o); if (o) msRender(); };
+pop.addEventListener('click', e => e.stopPropagation());
+pop.addEventListener('change', e => { const v = e.target.value; sel = e.target.checked ? sel.concat(v) : sel.filter(x => x !== v); msSave(); });
+pop.addEventListener('click', e => { const q = e.target.closest('[data-q]'); if (!q) return; const real = SP.filter(s => s.id !== 'NEXT').map(s => s.id); sel = q.dataset.q === 'all' ? SP.map(s => s.id) : q.dataset.q === 'none' ? [] : real.slice(-3).concat('NEXT'); msRender(); msSave(); });
+document.addEventListener('click', () => { pop.hidden = true; btn.setAttribute('aria-expanded', false); });
+msLabel();
+window.addEventListener('resize', () => { if (tab === 'map') lines(); });
+
+
+/* pull log */
+function renderLog() {
+  const runs = (RUNS || []).slice().sort((a, b) => b.at.localeCompare(a.at)), bySp = {};
+  runs.forEach(r => { const k = r.sprint || 'Outside a sprint'; const o = bySp[k] = bySp[k] || { s: 0, sok: 0, sf: 0, m: 0, last: '' };
+    if (r.trigger === 'schedule') { o.s++; r.ok ? o.sok++ : o.sf++; if (r.ok && r.at > o.last) o.last = r.at; } else o.m++; });
+  const names = Object.keys(bySp).sort().reverse(), sch = runs.filter(r => r.trigger === 'schedule').length;
+  $('#v-log').innerHTML = `<p class="bdinfo">The scheduled job pulls Jira automatically at 10:45 AM and 6:45 PM IST every day, with no one needed. ${sch} scheduled pulls recorded. Manual refreshes by team members are listed separately and are not counted as scheduled pulls.</p>
+    <div class="lb" style="font-weight:600;margin:0 0 8px">Scheduled pulls per sprint</div>
+    <div class="scroll"><table class="bdt"><thead><tr><th>Sprint</th><th>Scheduled pulls</th><th>Succeeded</th><th>Failed</th><th>Last scheduled pull (IST)</th><th>Manual refreshes (not counted)</th></tr></thead><tbody>
+    ${names.length ? names.map(n => { const o = bySp[n]; return `<tr><td><b>${esc(n)}</b></td><td><b>${o.s}</b></td><td>${o.sok}</td><td class="${o.sf ? 'bad' : ''}">${o.sf}</td><td>${o.last ? esc(istStr(o.last)) : '–'}</td><td>${o.m}</td></tr>`; }).join('') : '<tr><td colspan="6">No pulls recorded yet.</td></tr>'}</tbody></table></div>
+    <div class="lb" style="font-weight:600;margin:22px 0 8px">Every pull</div>
+    <div class="scroll"><table class="bdt"><thead><tr><th>Date and time (IST)</th><th>Sprint</th><th>Type</th><th>Result</th><th>Issues pulled</th><th>Started by</th></tr></thead><tbody>
+    ${runs.length ? runs.map(r => `<tr><td>${esc(istStr(r.at))}</td><td>${esc(r.sprint || '')}</td><td>${r.trigger === 'schedule' ? 'Scheduled' : 'Manual refresh'}</td><td class="${r.ok ? 'ok' : 'bad'}">${r.ok ? 'Succeeded' : 'Failed'}</td><td>${r.issues == null ? '' : r.issues}</td><td>${esc(r.by || '')}</td></tr>`).join('') : '<tr><td colspan="6">No pulls recorded yet.</td></tr>'}</tbody></table></div>`;
+}
+/* data refresh */
+const REPO = 'ckvcanary/sprint-dashboard', WF = 'refresh.yml';
+const rfb = $('#rfbtn'), rfs = $('#rfstat'), rfp = $('#rfpanel');
+function ago(ms) { const m = Math.round(ms / 60000); return m < 1 ? 'just now' : m < 60 ? m + ' min ago' : m < 1440 ? Math.round(m / 60) + ' h ago' : Math.round(m / 1440) + ' d ago'; }
+function istStr(iso) { const d = new Date(new Date(iso).getTime() + 5.5 * 3600e3), h = d.getUTCHours(), mi = String(d.getUTCMinutes()).padStart(2, '0');
+  return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ', ' + (h % 12 || 12) + ':' + mi + ' ' + (h < 12 ? 'AM' : 'PM') + ' IST'; }
+function showMeta() { if (!META) { rfs.textContent = 'Data refresh time unknown'; return; }
+  rfs.textContent = 'Data refreshed ' + istStr(META.refreshedAt) + ' (' + ago(Date.now() - new Date(META.refreshedAt)) + ', ' + (META.trigger === 'schedule' ? 'scheduled' : 'manual') + ')'; }
+async function loadData() {
+  const q = '?v=' + Date.now(), g = async f => { const r = await fetch('data/' + f + q, { cache: 'no-store' }); if (!r.ok) throw new Error(f); return r.json(); };
+  [D, BD, META, RUNS] = await Promise.all([g('map.json'), g('burndown.json'), g('meta.json'), g('runs.json')]); ingest();
+  sel = sel.filter(i => IDX[i] != null); msLabel(); closeD(); show(); showMeta();
+}
+const tok = () => { try { return localStorage.getItem('sprintdash.gh') || ''; } catch (e) { return ''; } };
+function panel(h) { rfp.innerHTML = h; rfp.hidden = !h; }
+async function startRefresh() {
+  const t = tok();
+  if (!t) return panel(`<p><b>One-time setup.</b> Refreshing runs a GitHub job that pulls Jira. It needs a GitHub token with permission to run the job. The token stays in this browser only.</p>
+    <p>1. <a target="_blank" rel="noopener" href="https://github.com/settings/personal-access-tokens/new">Create a fine-grained token</a>: repository access ${esc(REPO)}, permission Actions: Read and write.<br>2. Paste it here:</p>
+    <p><input id="rftok" type="password" placeholder="github_pat_..." autocomplete="off"> <button class="chip" id="rfsave">Save and refresh</button></p>
+    <p>No token? <a target="_blank" rel="noopener" href="https://github.com/${REPO}/actions/workflows/${WF}">Open the job page</a> and click Run workflow. The dashboard updates a few minutes later.</p>`);
+  panel(''); rfb.disabled = true; rfb.textContent = 'Refreshing...';
+  const before = META && META.refreshedAt;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/${WF}/dispatches`, { method: 'POST', headers: { Accept: 'application/vnd.github+json', Authorization: 'Bearer ' + t, 'Content-Type': 'application/json' }, body: JSON.stringify({ ref: 'main' }) });
+    if (r.status === 401 || r.status === 403 || r.status === 404) { try { localStorage.removeItem('sprintdash.gh'); } catch (e) {} rfb.disabled = false; rfb.textContent = 'Refresh data'; return panel('<p>GitHub refused the token. It needs access to ' + esc(REPO) + ' with Actions: Read and write, and you must be a collaborator. Click Refresh data to enter a new token.</p>'); }
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+  } catch (e) { rfb.disabled = false; rfb.textContent = 'Refresh data'; return panel('<p>Could not start the refresh (' + esc(e.message) + '). Try again, or <a target="_blank" rel="noopener" href="https://github.com/' + REPO + '/actions/workflows/' + WF + '">run it from GitHub</a>.</p>'); }
+  rfs.textContent = 'Pulling from Jira. This takes about 2 to 4 minutes.';
+  for (let i = 0; i < 40; i++) {
+    await new Promise(r => setTimeout(r, 10000));
+    try { const m = await (await fetch('data/meta.json?v=' + Date.now(), { cache: 'no-store' })).json(); if (m.refreshedAt !== before) { await loadData(); rfb.disabled = false; rfb.textContent = 'Refresh data'; return; } } catch (e) {}
+  }
+  rfb.disabled = false; rfb.textContent = 'Refresh data'; rfs.textContent = 'Refresh is taking longer than expected. Reload the page in a few minutes.';
+}
+rfb.onclick = startRefresh;
+rfp.addEventListener('click', e => { if (e.target.id === 'rfsave') { const v = $('#rftok').value.trim(); if (v) { try { localStorage.setItem('sprintdash.gh', v); } catch (x) {} startRefresh(); } } });
+setInterval(() => { if (META) showMeta(); }, 60000);
+showMeta();
+show();
+if (!D.stories.length) loadData().catch(() => { rfs.textContent = 'Could not load data files'; });
+</script>

@@ -1,0 +1,59 @@
+name: Refresh Jira data
+
+on:
+  schedule:
+    - cron: "15 5 * * *"    # 10:45 AM IST every day
+    - cron: "15 13 * * *"   # 6:45 PM IST every day
+  workflow_dispatch:         # manual refresh, started from the dashboard or the Actions tab
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pull from Jira
+        id: pull
+        env:
+          JIRA_BASE: ${{ secrets.JIRA_BASE }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_ACTOR: ${{ github.actor }}
+        run: python3 scripts/refresh.py
+      - name: Save data and the pull log
+        if: always()
+        run: |
+          git config user.name "dashboard-bot"
+          git config user.email "dashboard-bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -m "Data refresh $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase -q origin main || true
+          git push -q origin HEAD:main || true
+      - name: Build site
+        if: always()
+        run: |
+          mkdir -p _site
+          cp index.html _site/
+          cp -r data _site/data
+      - uses: actions/upload-pages-artifact@v3
+        if: always()
+        with:
+          path: _site
+      - id: deploy
+        if: always()
+        uses: actions/deploy-pages@v4

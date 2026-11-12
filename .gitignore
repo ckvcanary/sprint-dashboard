@@ -1,0 +1,7 @@
+.env
+.env.*
+*.db
+*.log
+.DS_Store
+__pycache__/
+artifact.html
