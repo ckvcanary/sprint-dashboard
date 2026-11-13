@@ -209,7 +209,7 @@ td.ok{color:var(--green);font-weight:600}td.warn{color:var(--amber);font-weight:
 <script>
 let D = /*DATA*/{sprints:[],epics:[],stories:[],desc:{}};
 let BD = /*BD*/{}, META = /*META*/null, RUNS = /*RUNS*/[];
-const REFRESH_URL = '';   // address of the refresh relay (relay/worker.js); it holds the GitHub token, the page holds none
+const REFRESH_URL = 'https://sprint-dashboard-umber.vercel.app/api/refresh';   // address of the refresh relay (relay/worker.js); it holds the GitHub token, the page holds none
 const SHOW = ['S20', 'S21', 'S22', 'S23', 'S24'];          // sprints offered in the dashboard
 const CAP = 64, WH0 = 11, DH = 8, SCHED_START = '2026-11-13', SLOTS = [[10, 45], [18, 45]];
 const TEAM = ['Nikita', 'Sumit', 'Aditi', 'Abhishek', 'Rushikesh', 'Chetan', 'Nitin', 'Rujin'];
