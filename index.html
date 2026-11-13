@@ -492,12 +492,12 @@ async function loadData() {
 }
 async function startRefresh() {
   if (!REFRESH_URL) return msg('Refresh is not switched on yet. The admin needs to finish the one-time setup.', true);
-  const before = META && META.refreshedAt; rfb.disabled = true; rfb.classList.add('spin'); $('#rfbtxt').textContent = 'Refreshing'; $('#rfdot').className = 'dot busy'; msg('Pulling the latest from Jira. This takes about 2 to 4 minutes.');
+  const before = META && META.refreshedAt; rfb.disabled = true; rfb.classList.add('spin'); $('#rfbtxt').textContent = 'Refreshing'; $('#rfdot').className = 'dot busy'; msg('Pulling the latest from Jira. This usually takes about a minute.');
   const done = (m, err) => { rfb.disabled = false; rfb.classList.remove('spin'); $('#rfbtxt').textContent = 'Refresh'; showMeta(); msg(m, err); if (m) setTimeout(() => { if (rfm.textContent === m) msg(''); }, 8000); };
   try { const r = await fetch(REFRESH_URL, { method: 'POST' }); if (!r.ok) throw new Error('relay answered ' + r.status); }
   catch (e) { return done('Could not start the refresh (' + e.message + '). Try again in a minute.', true); }
-  for (let i = 0; i < 45; i++) {
-    await new Promise(r => setTimeout(r, 10000));
+  for (let i = 0; i < 90; i++) {
+    await new Promise(r => setTimeout(r, 3000));
     try { const m = await (await fetch('data/meta.json?v=' + Date.now(), { cache: 'no-store' })).json(); if (m.refreshedAt !== before) { await loadData(); return done('Data updated.'); } } catch (e) {}
   }
   done('The refresh is taking longer than expected. Reload in a few minutes.', true);
