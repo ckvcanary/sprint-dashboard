@@ -62,7 +62,7 @@ def test_burndown_overall_and_per_person_with_hover_and_day_panel(pw):
     t = pg.locator(".term").inner_text(); assert "of 10" in t and "Whole team" in pg.locator(".capb").inner_text()
     pg.click('[data-bdview="person"]'); pg.wait_for_selector("#cw svg"); svg = pg.locator("#cw svg").bounding_box(); x = svg["x"] + (60 + 4.5 / 11 * 924) / 1000 * svg["width"]
     pg.mouse.move(x, svg["y"] + svg["height"] * .4); pg.wait_for_selector("#tip:not([hidden])"); tip = pg.locator("#tip").inner_text()
-    assert "Tasks closed so far" in tip and "Epics closed so far" in tip and "data as of" in tip and pg.locator("#tip .tc .tchip").count() == 8
+    assert "Epics" in tip and "Ideal pace" in tip and "data as of" in tip and pg.locator("#tip .mt tbody tr").count() == 5 and pg.locator("#tip .tc .tchip").count() == 8
     pg.mouse.click(x, svg["y"] + svg["height"] * .4); pg.wait_for_selector("#dayd:not([hidden])"); pg.get_by_role("tab", name="Still open").click(); assert pg.locator("#dayd tbody tr").count() > 10
     pg.select_option("#bdwho", index=1); assert "Used" in pg.locator(".pcap").inner_text()
 

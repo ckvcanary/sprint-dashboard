@@ -15,15 +15,19 @@ TASK_TYPES = [("Sub-task", True), ("Story sub-task", True), ("Bug sub-task", Tru
 
 
 @pytest.mark.parametrize("kind,sub", TASK_TYPES)
-def test_every_task_type_closes_on_the_six_task_statuses(kind, sub):
-    for st in ("Technical Review", "Done", "Fixed", "In Documentation", "Deployed to UAT", "Deployed to Prod"): assert R.finished(issue(kind, st, sub)), (kind, st)
-    for st in ("Backlog", "In Progress", "In Testing", "Code_Review", "Research", "Deferred", "Invalid", "On-Hold"): assert not R.finished(issue(kind, st, sub)), (kind, st)
+def test_every_task_type_closes_on_the_eight_task_statuses(kind, sub):
+    for st in ("Technical Review", "Done", "Fixed", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Invalid", "Deferred"): assert R.finished(issue(kind, st, sub)), (kind, st)
+    for st in ("Backlog", "In Progress", "In Testing", "Code_Review", "Research", "On-Hold", "Spec_Completed", "Accepted by Developer", "Ready for Development", "New", "Triaged", "Reopened", "Verified", "ACTIVE"): assert not R.finished(issue(kind, st, sub)), (kind, st)
 
 
-@pytest.mark.parametrize("kind", ["Story", "Epic"])
-def test_user_stories_and_epics_close_only_when_deployed(kind):
-    for st in ("Deployed to UAT", "Deployed to Prod"): assert R.finished(issue(kind, st))
-    for st in ("Technical Review", "Done", "Fixed", "In Documentation", "In Testing", "Backlog"): assert not R.finished(issue(kind, st)), (kind, st)
+def test_user_stories_close_only_when_deployed():
+    for st in ("Deployed to UAT", "Deployed to Prod"): assert R.finished(issue("Story", st))
+    for st in ("Technical Review", "Done", "Fixed", "In Documentation", "In Testing", "Backlog"): assert not R.finished(issue("Story", st)), st
+
+
+def test_epics_close_only_in_done_because_their_workflow_has_no_deployed_status():
+    assert R.finished(issue("Epic", "Done"))
+    for st in ("Backlog", "In Progress", "In Testing", "In Documentation"): assert not R.finished(issue("Epic", st)), st
 
 
 def moves(*pairs):   # (when, to_status)

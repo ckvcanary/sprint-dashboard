@@ -17,8 +17,9 @@ BOARD = 243
 FIELDS = ["summary", "status", "assignee", "issuetype", "parent", "timeoriginalestimate", "worklog", "customfield_10044", "customfield_10020", "created", "updated", "statuscategorychangedate"]
 EXTRA_FIELDS = ["attachment", "comment"]       # names of attached files and the comment history, shown in the ticket drawer (names only, no files are stored)
 # What counts as closed (Chetan, 13 Nov 2026):
-TASK_DONE = {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done"}   # sub-tasks
-STORY_DONE = {"Deployed to UAT", "Deployed to Prod"}                                                              # user stories and epics
+TASK_DONE = {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}   # tasks: every sub-task type and any top-level Task, Bug or New Feature
+STORY_DONE = {"Deployed to UAT", "Deployed to Prod"}                                                                                 # user stories
+EPIC_DONE = {"Done"}                                                                                                                 # epics: the Epic workflow has no Deployed status, Done is its only closing status
 IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
 CUR = {}                                       # issues read per sprint in this pull
 
@@ -123,7 +124,8 @@ def is_story_like(x):
 
 
 def done_set(x):
-    return STORY_DONE if is_story_like(x) else TASK_DONE
+    if is_story_like(x): return EPIC_DONE if x["fields"]["issuetype"]["name"] == "Epic" else STORY_DONE
+    return TASK_DONE
 
 
 def finished(x):
@@ -227,7 +229,7 @@ def main():
                     elif d <= en: ppl[au]["logs"][d] += h
                 e_ = max(0.0, (f.get("timeoriginalestimate") or 0) / 3600 - pre)
                 ppl[first(f["assignee"])]["E"] += e_
-                if sk in SHOW_BD: tl.append({"k": k, "a": first(f["assignee"]), "e": round(e_, 2), "d": done_date(x), **({"y": 1} if is_story_like(x) else {})})
+                if sk in SHOW_BD: tl.append({"k": k, "a": first(f["assignee"]), "e": round(e_, 2), "d": done_date(x), "ty": x["fields"]["issuetype"]["name"], **({"y": 1} if is_story_like(x) else {})})
             eks = sorted({(x["fields"].get("parent") or {}).get("key") for x in iss.values() if not x["fields"]["issuetype"].get("subtask")
                           and ((x["fields"].get("parent") or {}).get("fields", {}).get("issuetype", {}).get("name") == "Epic")}) if sk in SHOW_BD else []
             el_ = [{"k": e["key"], "a": first(e["fields"].get("assignee")), "d": done_date(e)} for e in (search("key in (%s)" % ",".join(eks), ["summary", "assignee", "status", "issuetype", "created", "updated", "statuscategorychangedate"], "changelog") if eks else [])]

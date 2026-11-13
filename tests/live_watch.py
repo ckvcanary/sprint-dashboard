@@ -16,20 +16,25 @@ seen = {r["id"] for r in sched_runs()}; log(f"watching {URL}; scheduled runs alr
 with sync_playwright() as p:
     b = p.chromium.launch(channel="chrome", headless=True); c = b.new_context(viewport={"width": 1440, "height": 900}); c.add_init_script(f"localStorage.setItem('sd_auth','{SESSION}')")
     pg = c.new_page(); pg.goto(URL + "/"); pg.wait_for_selector("#map .card"); start = pg.evaluate("META.refreshedAt"); log(f"open page shows data refreshed at {start}")
-    t_end = time.time() + HOURS * 3600; run_seen = None; data_seen = None
+    t_end = time.time() + HOURS * 3600; handled = set(seen); last_stamp = start
     while time.time() < t_end:
         time.sleep(20)
         try:
             for r in sched_runs():
-                if r["id"] not in seen and run_seen is None:
-                    run_seen = r; log(f"CRON FIRED: GitHub started a scheduled run at {r['created_at']} (status {r['status']})")
-            if run_seen and run_seen["id"] and data_seen is None:
-                m = get(f"{URL}/data/meta.json?v={int(time.time())}")
-                if m["refreshedAt"] != start: data_seen = m; log(f"DATA LIVE ON VERCEL: new pull {m['refreshedAt']} (trigger {m.get('trigger')})")
-            if data_seen:
-                shown = pg.evaluate("META.refreshedAt"); toast = pg.locator(".tst").all_inner_texts()
-                if shown == data_seen["refreshedAt"]:
-                    log(f"OPEN PAGE UPDATED ITSELF: header now reads '{pg.inner_text('#rfval')}'; messages: {toast}"); log("RESULT: cron ran and the open page updated"); break
+                if r["id"] in handled: continue
+                handled.add(r["id"]); log(f"CRON FIRED: GitHub started a scheduled run at {r['created_at']}")
+                for _ in range(30):       # wait for it to finish (up to 10 minutes)
+                    time.sleep(20); cur = [x for x in sched_runs() if x["id"] == r["id"]][0]
+                    if cur["status"] == "completed": break
+                log(f"  that run finished: {cur['conclusion']}")
+                time.sleep(25); m = get(f"{URL}/data/meta.json?v={int(time.time())}")
+                if m["refreshedAt"] == last_stamp: log("  it stood down (this slot already had a scheduled pull), so no new data, as designed"); continue
+                log(f"  DATA LIVE ON VERCEL: new pull {m['refreshedAt']} (trigger {m.get('trigger')})"); last_stamp = m["refreshedAt"]
+                for _ in range(15):
+                    time.sleep(20)
+                    if pg.evaluate("META.refreshedAt") == m["refreshedAt"]:
+                        log(f"  OPEN PAGE UPDATED ITSELF: header reads '{pg.inner_text('#rfval')}'; messages on screen: {pg.locator('.tst').all_inner_texts()}"); log("RESULT: cron ran and the open page updated"); b.close(); sys.exit(0)
+                log("  the open page did NOT update within 5 minutes")
+        except SystemExit: raise
         except Exception as e: log(f"(check failed, will retry: {e})")
-    else: log("RESULT: nothing happened within the watch window")
-    b.close()
+    log("RESULT: window ended"); b.close()

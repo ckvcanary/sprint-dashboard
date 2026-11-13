@@ -32,11 +32,11 @@ button{font-family:inherit}
 button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 /* header */
 .top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;margin-bottom:20px}
-.tabs{display:flex;gap:2px;padding:4px;background:var(--soft);border:1px solid var(--line);border-radius:12px;overflow-x:auto;max-width:100%}
-.tab{font:500 14px var(--sans);border:0;background:transparent;color:var(--muted);padding:9px 18px;border-radius:9px;cursor:pointer;white-space:nowrap}
+.tabs{display:flex;align-items:stretch;height:52px;box-sizing:border-box;gap:2px;padding:4px;background:var(--soft);border:1px solid var(--line);border-radius:12px;overflow-x:auto;max-width:100%}
+.tab{font:500 14px var(--sans);border:0;background:transparent;color:var(--muted);padding:0 18px;border-radius:9px;cursor:pointer;white-space:nowrap}
 .tab[aria-selected=true]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
 .tab:hover:not([aria-selected=true]){color:var(--ink)}
-.rfcard{display:flex;align-items:center;gap:14px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:6px 6px 6px 16px;min-height:52px}
+.rfcard{display:flex;align-items:center;gap:14px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:6px 6px 6px 16px;height:52px;box-sizing:border-box}
 .rfcard .dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none}
 .rfcard .dot.old{background:var(--amber)}.rfcard .dot.busy{background:var(--blue);animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.3}}
@@ -235,13 +235,37 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .meter i{display:block;height:100%;background:var(--blue)}
 .tmeter{padding:0 0 2px}
 .cw{position:relative}
-.tip{position:absolute;z-index:6;pointer-events:none;min-width:260px;max-width:330px;background:var(--bg);border:1px solid var(--lineStrong);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;font-size:12px}
+.tip{position:absolute;z-index:6;pointer-events:none;width:372px;background:var(--bg);border:1px solid var(--lineStrong);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;font-size:12px}
 .tip[hidden]{display:none}
-.th{font-weight:700;font-size:13px;margin-bottom:8px}
+/* hover card on the burndown chart */
+/* hover card, simple */
+.tph{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.tph .tpb{margin:0;flex-wrap:nowrap}
+.tpt{display:flex;justify-content:space-between;align-items:center}.tpt .pill2{text-transform:none;letter-spacing:0;padding:2px 9px;font-size:11.5px}
+.mt td small{display:block;font-size:11px;font-weight:400;color:var(--faint);margin-top:1px}
+.tps{padding:8px 0 2px}.tps+.tps{padding-top:8px}.tip .mt td{padding:4px 0}.tip .mt th{padding-bottom:3px}.tip .tpt{margin-bottom:4px}.tip{padding:10px 14px}.tip .tph{margin-bottom:4px}.tip .tpd{font-size:15px}
+.tf{margin-top:6px;border-top:0;padding-top:0}
+/* day panel segments */
+.dseg{margin-top:14px}.dsh{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}.dsh b{font-size:14px}.dsh .dn{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}.dsh .dhh{margin-left:auto;color:var(--muted);font-size:12.5px}
+.dnone{color:var(--faint);font-size:13px;padding:8px 2px}
+.dseg .dlist{max-height:260px}.dseg table{table-layout:fixed;width:100%}.dseg th:nth-child(1){width:100px}.dseg th:nth-child(3){width:150px}.dseg th:nth-child(4){width:110px}.dseg th:nth-child(5){width:150px}.dseg th:nth-child(6){width:120px}.dseg td.ttl{min-width:0}
+/* pull log budget */
+.budget{margin-bottom:14px}.mk{position:relative}.mk .stopm{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:1px}
+.stoplab{display:flex;justify-content:flex-end;font-size:12px;color:var(--muted);margin-top:6px}.stoplab b{color:var(--ink);margin-left:4px}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.feat>div{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:13px;color:var(--muted)}.feat b{display:block;color:var(--ink);font-size:14px;margin-bottom:3px}
+/* how it works, grouped links */
+.lgrp{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;padding:4px 0 14px}.lgrp h4{margin:0 0 6px;font:600 11px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}.lgrp a{display:block;color:var(--blue);text-decoration:none;font-size:13.5px;padding:7px 0;border-bottom:1px solid var(--line)}
+
+.tph{margin-bottom:12px}.tpd{font-size:16px;font-weight:700;letter-spacing:-.01em}.tpb{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.bdg{border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--soft);border:1px solid var(--lineStrong);color:var(--muted)}.bdg.blue{background:color-mix(in srgb,var(--blue) 12%,var(--bg));border-color:color-mix(in srgb,var(--blue) 40%,var(--lineStrong));color:var(--blue)}
+.tps{padding:12px 0;border-top:1px solid var(--line)}.tpt{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.mt{width:100%;border-collapse:collapse;font-size:13px}.mt th{font-size:11px;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0;padding:0 0 6px;text-align:right;white-space:normal;border:0}.mt th:first-child,.mt td:first-child{text-align:left}
+.mt td{padding:6px 0;border-top:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:600}.mt td:first-child{font-weight:500;color:var(--muted)}
+.tpcalc{margin:10px 0 8px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}.tpn{margin:0;color:var(--muted);font-size:13px}
+.pill2{display:inline-block;border-radius:999px;padding:3px 11px;font-size:12px;font-weight:600}.pill2.ok{background:var(--greenBg);color:var(--green)}.pill2.bad{background:var(--redBg);color:var(--red)}
 .tr{display:flex;justify-content:space-between;gap:18px;padding:3px 0;color:var(--muted)}.tr b{color:var(--ink);font-variant-numeric:tabular-nums}
 .tn{color:var(--muted);margin:2px 0 6px}
-.tc{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12px}
-.tcl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:8px 0 6px}.tcl:first-child{margin-top:0}.tcn{margin-top:8px;color:var(--faint);font-size:11.5px}
+.tc{margin-top:2px;padding:10px 12px;border-radius:12px;background:var(--soft);font-size:12px}.tcr{margin-top:8px}.tcrl{display:block;font-size:12px;font-weight:600;margin-bottom:5px}
+.tcl{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}.tcn{margin-top:8px;color:var(--faint);font-size:11.5px}
 .tchips{display:flex;flex-wrap:wrap;gap:5px}.tchip{border-radius:999px;padding:3px 9px;font-size:11.5px;line-height:1.35;background:color-mix(in srgb,currentColor 11%,transparent);border:1px solid color-mix(in srgb,currentColor 18%,transparent);white-space:nowrap}
 .tt{font-size:12.5px}.tth{font-weight:700;font-size:13px;margin-bottom:6px}.ttp{margin:0 0 6px;line-height:1.5;opacity:.85}
 .ttr{margin:9px 0}.ttn{display:flex;align-items:center;gap:7px;font-weight:600}.ttd{display:block;margin:1px 0 0 15px;opacity:.8;line-height:1.45}
@@ -259,8 +283,8 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .grp{display:flex;gap:16px;flex-wrap:wrap}
 .loaderr{border:1px solid var(--redBg);background:var(--redBg);color:var(--ink);border-radius:14px;padding:22px 24px;margin-top:6px}.loaderr b{font-size:16px;color:var(--red)}.loaderr p{margin:6px 0 0}.loaderr[hidden]{display:none}
 .hr{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.btn.ghost{background:transparent;color:var(--ink);border-color:var(--lineStrong)}.btn.ghost:hover{background:var(--soft);opacity:1}
-.gtip{position:fixed;z-index:300;max-width:340px;background:var(--ink);color:var(--bg);border-radius:10px;padding:10px 13px;font-size:12.5px;line-height:1.5;box-shadow:var(--shadow);pointer-events:none}.gtip[hidden]{display:none}.gtip b{font-weight:600}
+.btn.ghost#signout{height:52px;border-radius:12px;padding:0 18px}.btn.ghost{background:transparent;color:var(--ink);border-color:var(--lineStrong)}.btn.ghost:hover{background:var(--soft);opacity:1}
+.gtip{position:fixed;z-index:300;max-width:340px;background:color-mix(in srgb,var(--ink) 13%,var(--bg));color:var(--ink);border:1px solid var(--lineStrong);border-radius:10px;padding:10px 13px;font-size:12.5px;line-height:1.5;box-shadow:var(--shadow);pointer-events:none}.gtip[hidden]{display:none}.gtip b{font-weight:600}
 .seg{display:inline-flex;gap:2px;padding:4px;background:var(--soft);border:1px solid var(--line);border-radius:12px;margin-bottom:18px}
 .seg button{font:500 14px var(--sans);border:0;background:transparent;color:var(--muted);padding:8px 18px;border-radius:9px;cursor:pointer}
 .seg button[aria-selected=true]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
@@ -547,7 +571,7 @@ function person(name, p, days, at) {
 }
 let BDV = null, bdDay = null, bdTab = 'today';   // chart data for the hover, the day that is pinned, the tab of the day panel
 function lineChart(rs, ctx) {
-  const { sd, plan, s, tasks, stories, epics, el, tot, ad } = ctx, retro = s.end && s.end > sd[sd.length - 1], slots = sd.length + (retro ? 1 : 0);
+  const { sd, plan, wd, s, tasks, stories, epics, el, tot, ad } = ctx, retro = s.end && s.end > sd[sd.length - 1], slots = sd.length + (retro ? 1 : 0);
   const sumE = rs.reduce((a, r) => a + r.E, 0), W = 1000, H = 330, L = 60, R = 16, Tp = 16, B = 76, pw = W - L - R, ph = H - Tp - B, top = Math.max(16, Math.ceil(sumE / 16) * 16);
   const X = k => L + k / slots * pw, Y = v => Tp + ph - v / top * ph;
   const xs = [...new Set(rs.flatMap(r => r.pts.map(p => p[0])))].sort((a, b) => a - b);
@@ -567,32 +591,38 @@ function lineChart(rs, ctx) {
   g += `<line id="guide" x1="0" x2="0" y1="${Tp}" y2="${Tp + ph}" stroke="var(--ink)" stroke-opacity=".35" visibility="hidden"/>`;
   const days = []; for (let i = 0; i < slots; i++) {
     const d = i < sd.length ? sd[i] : s.end, future = d > ad, n = i - plan + 1, h = i < plan ? 0 : Math.min(Math.max(0, n) * DH, el), idealH = i < plan ? 0 : Math.min(n * DH, tot);
-    days.push({ d, i, end: i >= sd.length, future, rem: remAt(h), ideal: sumE * (1 - idealH / tot) });
+    days.push({ d, i, end: i >= sd.length, future, total: sumE, rem: remAt(h), ideal: sumE * (1 - idealH / tot), burn: sumE * idealH / tot, wdn: i < plan ? 0 : Math.min(n, wd.length), nwd: wd.length });
   }
   BDV = { days, L, pw, W, slots, tasks, stories, epics };
   return `<div class="cw" id="cw"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Burndown: remaining estimate by sprint day. Hover a day for a summary, click it to list the tickets.">${g}</svg><div class="tip" id="tip" hidden></div></div>`;
 }
 const finishedBy = (r, d) => r.d && r.d <= d;
 function dayCounts(x) {
-  const T_ = BDV.tasks, S_ = BDV.stories, E_ = BDV.epics;
-  return { eClosed: E_.filter(r => finishedBy(r, x.d)).length, eTotal: E_.length, tToday: T_.filter(r => r.d === x.d).length, tClosed: T_.filter(r => finishedBy(r, x.d)).length, tOpen: T_.filter(r => !finishedBy(r, x.d)).length, tTotal: T_.length,
-           sClosed: S_.filter(r => finishedBy(r, x.d)).length, sTotal: S_.length };
+  const T_ = BDV.tasks, S_ = BDV.stories, E_ = BDV.epics, one = (L, d) => ({ today: L.filter(r => r.d === d).length, closed: L.filter(r => finishedBy(r, d)).length, total: L.length });
+  return { tasks: one(T_, x.d), stories: one(S_, x.d), epics: one(E_, x.d) };
 }
 const dayHead = x => `${dayName(x.d)} ${fmtD(x.d)} · ${x.end ? 'Sprint retrospective' : 'Day ' + (x.i + 1) + ' of 10'}`;
+const workDayLine = x => x.end ? '' : (x.wdn ? `Working day ${x.wdn} of ${x.nwd}` : 'Sprint Planning, no capacity counted');
 function tipHtml(x) {
-  const head = `<div class="th">${esc(dayHead(x))}</div>`;
-  if (x.future) return head + `<div class="tn">This day has not happened yet, so there is nothing to show.</div>`;
-  const c = dayCounts(x);
-  return head + (x.end ? '<div class="tn">Sprint retrospective. The sprint ends today.</div>' : '') +
-    `<div class="tr"><span>Tasks closed this day</span><b>${c.tToday}</b></div><div class="tr"><span>Tasks closed so far</span><b>${c.tClosed} of ${c.tTotal}</b></div><div class="tr"><span>Tasks still open</span><b>${c.tOpen}</b></div>` +
-    `<div class="tr"><span>User stories closed so far</span><b>${c.sClosed} of ${c.sTotal}</b></div><div class="tr"><span>Epics closed so far</span><b>${c.eClosed} of ${c.eTotal}</b></div><div class="tr"><span>Remaining estimate</span><b>${f1(x.rem)} h</b></div><div class="tr"><span>Ideal pace</span><b>${f1(x.ideal)} h</b></div>` +
-    `${closedBlock()}<div class="tf">Click the day to list every ticket · data as of ${esc(tfmt(asOfMs()))}</div>`;
+  const date = `${dayName(x.d)} ${fmtD(x.d)}`, badges = x.end ? '<span class="bdg">Retrospective</span>' : `<span class="bdg">Day ${x.i + 1} of 10</span>${x.wdn ? `<span class="bdg blue">Working day ${x.wdn} of ${x.nwd}</span>` : '<span class="bdg">Sprint Planning</span>'}`;
+  const head = `<div class="tph"><div class="tpd">${esc(date)}</div><div class="tpb">${badges}</div></div>`;
+  if (x.future) return head + `<p class="tpn">Not happened yet.</p>`;
+  const c = dayCounts(x), done = Math.max(0, x.total - x.rem), diff = done - x.burn;
+  const pill = !x.wdn ? '' : Math.abs(diff) < .05 ? '<span class="pill2 ok">On ideal pace</span>' : diff > 0 ? `<span class="pill2 ok">${f1(diff)} h ahead</span>` : `<span class="pill2 bad">${f1(-diff)} h behind</span>`;
+  const how = x.wdn ? `${f1(x.total)} h × ${x.wdn} / ${x.nwd}` : 'Planning, no capacity';
+  const tr = (l, o) => `<tr><td>${l}</td><td>${o.today}</td><td>${o.closed} of ${o.total}</td><td>${o.total - o.closed}</td></tr>`;
+  return head + `<div class="tps"><div class="tpt"><span>Hours</span>${pill}</div>
+      <table class="mt"><thead><tr><th></th><th>Done</th><th>Remaining</th></tr></thead><tbody><tr><td>Ideal pace<small>${esc(how)}</small></td><td>${f1(x.burn)} h</td><td>${f1(x.ideal)} h</td></tr><tr><td>Actual</td><td>${f1(done)} h</td><td>${f1(x.rem)} h</td></tr></tbody></table></div>
+    <div class="tps"><div class="tpt"><span>Tickets</span></div>
+      <table class="mt"><thead><tr><th></th><th>Closed today</th><th>Closed so far</th><th>Open</th></tr></thead><tbody>${tr('Epics', c.epics)}${tr('User stories', c.stories)}${tr('Tasks', c.tasks)}</tbody></table></div>
+    <div class="tf">Click the day for the ticket list</div>`;
 }
 function slotAt(ev) {
   const cw = $('#cw'); if (!cw || !BDV) return null; const r = cw.querySelector('svg').getBoundingClientRect();
   const vx = (ev.clientX - r.left) / r.width * BDV.W, k = Math.floor((vx - BDV.L) / BDV.pw * BDV.slots); return { k, r };
 }
 function setGuide(k, show) { const gd = $('#guide'); if (!gd || !BDV) return; const cx = BDV.L + (k + .5) / BDV.slots * BDV.pw; gd.setAttribute('x1', cx); gd.setAttribute('x2', cx); gd.setAttribute('visibility', show ? 'visible' : 'hidden'); }
+function hideBdTip() { const t = $('#tip'); if (t) t.hidden = true; if (BDV) setGuide(bdDay == null ? 0 : bdDay, bdDay != null); }
 function hoverBd(ev) {
   const s = slotAt(ev); if (!s) return; const tip = $('#tip');
   if (s.k < 0 || s.k >= BDV.slots) { tip.hidden = true; setGuide(bdDay == null ? 0 : bdDay, bdDay != null); return; }
@@ -601,7 +631,7 @@ function hoverBd(ev) {
   tip.style.left = Math.max(4, Math.min(s.r.width - tw - 4, px + 14 > s.r.width - tw ? px - tw - 14 : px + 14)) + 'px'; tip.style.top = '24px';
 }
 function dayRows(x, which) {
-  const row = (r, kind) => { const k = TK[r.k] || {}; return { key: r.k, kind, t: k.t || r.k, a: r.a || k.a || 'Unassigned', s: k.s || '–', h: kind === 'Task' ? (k.h != null ? k.h : null) : null, d: r.d }; };
+  const row = (r, kind) => { const k = TK[r.k] || {}; return { key: r.k, kind, ty: kind === 'Task' ? (r.ty || 'Task') : kind === 'Story' ? 'Story' : 'Epic', t: k.t || r.k, a: r.a || k.a || 'Unassigned', s: k.s || '–', h: kind === 'Task' ? (k.h != null ? k.h : null) : null, d: r.d }; };
   const all = BDV.tasks.map(r => row(r, 'Task')).concat(BDV.stories.map(r => row(r, 'Story'))).concat(BDV.epics.map(r => row(r, 'Epic')));
   const f = which === 'today' ? r => r.d === x.d : which === 'closed' ? r => r.d && r.d <= x.d : r => !(r.d && r.d <= x.d);
   const rank = { Epic: 0, Story: 1, Task: 2 };
@@ -610,13 +640,14 @@ function dayRows(x, which) {
 function renderDay() {
   const box = $('#dayd'); if (!box) return; if (bdDay == null || !BDV || !BDV.days[bdDay]) { box.hidden = true; box.innerHTML = ''; return; }
   const x = BDV.days[bdDay]; box.hidden = false;
-  if (x.future) { box.innerHTML = `<div class="dh"><h3>${esc(dayHead(x))}</h3><button type="button" class="dx" data-dayclose>Close</button></div><p class="note" style="margin:0">This day has not happened yet, so there are no tickets to list.</p>`; return; }
+  const hd = `<div class="dh"><h3>${esc(dayHead(x))}${tip('closed')}</h3><button type="button" class="dx" data-dayclose>Close</button></div>`;
+  if (x.future) { box.innerHTML = hd + `<p class="note" style="margin:0">Not happened yet.</p>`; return; }
   const tabs = [['today', 'Closed this day'], ['closed', 'Closed so far'], ['open', 'Still open']], rows = dayRows(x, bdTab), n = w => dayRows(x, w).length;
-  box.innerHTML = `<div class="dh"><h3>${esc(dayHead(x))}</h3><button type="button" class="dx" data-dayclose>Close</button></div>
-    <div class="dtabs" role="tablist">${tabs.map(([w, l]) => `<button type="button" role="tab" data-dtab="${w}" aria-selected="${w === bdTab}">${l} <b>${n(w)}</b></button>`).join('')}</div>
-    <div class="dtiles" aria-label="Counts for this list">${[['Epics', 'Epic'], ['User stories', 'Story'], ['Tasks', 'Task']].map(([l, k]) => `<div class="tile"><b>${rows.filter(r => r.kind === k).length}</b><span>${l} ${bdTab === 'open' ? 'open' : 'closed'}</span></div>`).join('')}${rows.some(r => r.h != null) ? `<div class="tile hrs"><b>${f1(rows.reduce((a, r) => a + (r.h || 0), 0))} h</b><span>Original estimate of the tasks</span></div>` : ''}</div>
-    ${rows.length ? `<div class="dlist"><table><thead><tr><th>Ticket</th><th>Title</th><th>${lab('Type', 'type')}</th><th>Owner</th><th>${lab('Status', 'jira')}</th><th>Estimate (h)</th></tr></thead><tbody>${rows.map(r => `<tr><td><a class="link" target="_blank" rel="noopener" href="${J(r.key)}">${esc(r.key)}</a></td><td class="ttl">${esc(r.t)}</td><td>${r.kind}</td><td>${esc(r.a)}</td><td>${esc(r.s)}</td><td>${r.h != null ? f1(r.h) : '–'}</td></tr>`).join('')}</tbody></table></div>` : '<p class="note" style="margin:0">No tickets in this list.</p>'}
-    ${closedBlock()}`;
+  const seg = ([k, label]) => { const rs2 = rows.filter(r => r.kind === k), hsum = rs2.reduce((a, r) => a + (r.h || 0), 0), isT = k === 'Task';
+    const th = `<tr><th>Ticket</th><th>Title</th><th>${lab('Type', 'type')}</th><th>Owner</th><th>${lab('Status', 'jira')}</th><th>Estimate (h)</th></tr>`;
+    const tb = rs2.map(r => `<tr><td><a class="link" target="_blank" rel="noopener" href="${J(r.key)}">${esc(r.key)}</a></td><td class="ttl">${esc(r.t)}</td><td>${esc(r.ty)}</td><td>${esc(r.a)}</td><td>${esc(r.s)}</td><td>${isT && r.h != null ? f1(r.h) : '–'}</td></tr>`).join('');
+    return `<div class="dseg"><div class="dsh"><b>${label}</b><span class="dn">${rs2.length}</span>${isT && hsum ? `<span class="dhh">${f1(hsum)} h original estimate</span>` : ''}</div>${rs2.length ? `<div class="dlist"><table><thead>${th}</thead><tbody>${tb}</tbody></table></div>` : '<div class="dnone">None</div>'}</div>`; };
+  box.innerHTML = hd + `<div class="dtabs" role="tablist">${tabs.map(([w, l]) => `<button type="button" role="tab" data-dtab="${w}" aria-selected="${w === bdTab}">${l} <b>${n(w)}</b></button>`).join('')}</div>${[['Epic', 'Epics'], ['Story', 'User stories'], ['Task', 'Tasks']].map(seg).join('')}`;
 }
 function pinDay(ev) {
   const s = slotAt(ev); if (!s || s.k < 0 || s.k >= BDV.slots) return;
@@ -652,6 +683,7 @@ function renderBd() {
   const dayTxt = !dayNo ? 'Not started' : (ad > sd[sd.length - 1] ? 'Sprint complete, 10 of 10' : dayNo + ' of 10 · ' + dayName(sd[dayNo - 1]) + ' ' + fmtD(sd[dayNo - 1]));
   const d3 = wd[0], dEnd = wd[wd.length - 1], startTxt = dayName(d3) + ' ' + fmtD(d3), endTxt = dayName(dEnd) + ' ' + fmtD(dEnd);
   const seg = `<div class="seg" role="tablist" aria-label="Burndown view"><button type="button" role="tab" data-bdview="overall" aria-selected="${bdView === 'overall'}">Overall</button><button type="button" role="tab" data-bdview="person" aria-selected="${bdView === 'person'}">Per person</button></div>`;
+  TT.chart = { h: 'About this chart', rows: [['blue', 'Ideal pace', `From Day ${plan + 1} (${startTxt}) to Day ${plan + wd.length} (${endTxt}). Days 1 to ${plan} are Sprint Planning.`], ['ok', 'Remaining estimate', 'Original estimate minus time logged.']], groups: [['Epics are closed in', EPIC_CLOSED], ['User stories are closed in', STORY_CLOSED], ['Tasks are closed in', TASK_CLOSED]], note: 'Tasks are every sub-task type and any Task, Bug or New Feature.' };
   let body;
   if (bdView === 'overall') {
     BDV = null;
@@ -670,8 +702,7 @@ function renderBd() {
     const sum = k => sel.reduce((a, r) => a + r[k], 0);
     body = `<div class="pick"><label class="field"><span class="fl">Person</span><select id="bdwho" class="ctl" aria-label="Person">${['Team'].concat(rs.map(r => r.name)).map(x => `<option value="${esc(x)}" ${x === bdWho ? 'selected' : ''}>${x === 'Team' ? 'Everyone' : esc(x)}</option>`).join('')}</select></label>
         <div class="panel pcap">${capBlock(bdWho === 'Team' ? 'Everyone' : bdWho, bdWho === 'Team' ? n + ' people × ' + CAP + ' h' : CAP + ' h = ' + wd.length + ' days × ' + DH + ' h', n * CAP * el / tot, n * CAP)}</div></div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Remaining work against the ideal burndown · ${esc(bdWho === 'Team' ? 'Everyone' : bdWho)}${tip('closed')}</h3></div>
-      <p class="note" style="margin:0 0 10px">Ideal pace runs from <b>Day ${plan + 1} (${esc(startTxt)})</b>, when work formally started, to <b>Day ${plan + wd.length} (${esc(endTxt)})</b>. Days 1 to ${plan} were Sprint Planning.</p><div class="key" style="margin-bottom:6px"><span><i style="background:var(--blue)"></i>Remaining estimate (h)${tip('remaining')}</span><span><i style="background:var(--faint)"></i>Ideal pace${tip('ideal')}</span></div>${lineChart(sel, { sd, plan, wd, s, tasks, stories, epics, el, tot, ad })}<div class="dayd" id="dayd" hidden></div></div>
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Remaining work vs ideal pace · ${esc(bdWho === 'Team' ? 'Everyone' : bdWho)}${tip('chart')}</h3></div><div class="key" style="margin-bottom:6px"><span><i style="background:var(--blue)"></i>Remaining estimate (h)${tip('remaining')}</span><span><i style="background:var(--faint)"></i>Ideal pace${tip('ideal')}</span></div>${lineChart(sel, { sd, plan, wd, s, tasks, stories, epics, el, tot, ad })}<div class="dayd" id="dayd" hidden></div></div>
     <div class="panel" style="margin-top:16px"><div class="scroll"><table><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Logged (h)</th><th>Remaining estimate (h)</th><th>${lab('Expected logged by now (h)', 'expected')}</th><th>${lab('Missing log (h)', 'missing')}</th><th>Time left in sprint (h)</th><th>${lab('Flag', 'flag')}</th></tr></thead><tbody>
     ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td><td>${f1(r.E)}</td><td>${f1(r.logged)}</td><td>${f1(r.remain)}</td><td>${f1(r.exp)}</td><td class="${r.cl}">${r.miss > .05 ? f1(r.miss) : '0'}</td><td>${f1(r.left)}</td><td><span class="tag ${r.cl === 'ok' && r.st === 'Not started' ? 'nil' : r.cl}">${esc(r.st)}</span></td></tr>`).join('')}
     ${n > 1 ? `<tr class="tot"><td>Everyone</td><td>${f1(sum('E'))}</td><td>${f1(sum('logged'))}</td><td>${f1(sum('remain'))}</td><td>${f1(sum('exp'))}</td><td>${f1(sum('miss'))}</td><td>${f1(sum('left'))}</td><td></td></tr>` : ''}</tbody></table></div></div>`;
@@ -681,7 +712,10 @@ function renderBd() {
 }
 $('#v-bd').addEventListener('change', e => { if (e.target.id === 'bdwho') { bdWho = e.target.value; renderBd(); } });
 $('#v-bd').addEventListener('click', e => { const v = e.target.closest('[data-bdview]'); if (v) { bdView = v.dataset.bdview; renderBd(); } });
-$('#v-bd').addEventListener('mousemove', e => { if (e.target.closest('#cw')) hoverBd(e); });
+$('#v-bd').addEventListener('mousemove', e => { if (e.target.closest('#cw')) hoverBd(e); else hideBdTip(); });
+$('#v-bd').addEventListener('mouseover', e => { if (e.target.closest('.ibtn')) hideBdTip(); });
+document.addEventListener('mouseleave', hideBdTip); window.addEventListener('blur', hideBdTip); window.addEventListener('scroll', hideBdTip, { passive: true }); document.addEventListener('pointerdown', e => { if (!e.target.closest('#cw')) hideBdTip(); });
+$('#v-bd').addEventListener('mouseout', e => { if (e.target.closest('#cw') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#cw'))) hideBdTip(); });
 $('#v-bd').addEventListener('click', e => {
   if (e.target.closest('[data-dayclose]')) { bdDay = null; if (BDV) setGuide(0, false); return renderDay(); }
   const tb = e.target.closest('[data-dtab]'); if (tb) { bdTab = tb.dataset.dtab; return renderDay(); }
@@ -713,15 +747,18 @@ function renderLog() {
   const sumRows = SHOW.slice().reverse().map(id => { const r = spRange(id); if (!r) return null; let pl = 0, ok = 0, bad = 0, ms = 0;
     for (let x = dUTC(r[0]); x <= dUTC(r[1]); x += 864e5) { const d = dStr(x), g = new Date(x).getUTCDay(); if (g > 0 && g < 6 && d >= SCHED_START) [0, 1].forEach(i => { pl++; const c = (m.st[d + '|' + i] || {}).c; if (c === 'ok') ok++; else if (c === 'bad') bad++; else if (c === 'warn') ms++; }); }
     return { id, pl, ok, bad, ms }; }).filter(Boolean);
+  const u = usage(), pu = Math.min(100, u.n / LIMIT * 100);
   $('#v-log').innerHTML = `<div class="sched3">
-      <div class="stat"><span class="fl">Schedule</span><b>Twice every weekday</b><small>10:45 AM and 6:45 PM IST, no one needs to be online</small></div>
+      <div class="stat"><span class="fl">Cron schedule</span><b>Weekdays, twice a day</b><small>10:45 AM and 6:45 PM IST</small></div>
       <div class="stat"><span class="fl">${lab('Next scheduled pull', 'next')}</span><b>${m.next ? esc(tfmt(m.next.t)) : '–'}</b><small>${m.next ? 'in ' + inM(m.next.t) : ''}</small></div>
-      <div class="stat"><span class="fl">${lab('Latest scheduled pull', 'latest')}</span><b>${m.lastOk ? esc(tfmt(m.lastOk.ms)) : 'None yet'}</b><small>${m.lastOk ? Number(m.lastOk.issues).toLocaleString('en-US') + ' issues read from Jira' : 'Scheduled pulls began on ' + esc(fmtD(SCHED_START))}</small></div></div>
+      <div class="stat"><span class="fl">${lab('Latest scheduled pull', 'latest')}</span><b>${m.lastOk ? esc(tfmt(m.lastOk.ms)) : 'None yet'}</b><small>${m.lastOk ? Number(m.lastOk.issues).toLocaleString('en-US') + ' issues read from Jira' : ''}</small></div>
+      <div class="stat"><span class="fl">${lab('Runs under', 'cron')}</span><b>GitHub: ckvcanary</b><small>Owner: chetan@canaryai.com</small></div></div>
+    <div class="panel budget"><div class="capb"><div class="capt"><b>${lab('Team refreshes', 'budget')}</b><span>Last 24 hours</span></div>
+      <div class="mk"><div class="meter2" role="img" aria-label="${u.n} of ${LIMIT} refreshes used; the Refresh button stops at ${LIMIT - RESERVE}"><i class="u" style="width:${pu}%"></i><i class="l" style="width:${100 - pu}%"></i></div><i class="stopm" style="left:${LIMIT - RESERVE}%"></i></div>
+      <div class="capl2"><span><i class="u"></i>Used <b>${u.n}</b></span><span><i class="l"></i>Left <b>${Math.max(0, LIMIT - u.n)}</b></span><span class="of">of ${LIMIT} · Refresh stops at <b>${LIMIT - RESERVE}</b></span></div></div></div>
     <div class="cnt"><div class="stat ok"><span class="fl">${lab('Pulled', 'pulled')}</span><b>${cnt.ok}</b></div><div class="stat bad"><span class="fl">${lab('Failed', 'failed')}</span><b>${cnt.bad}</b></div><div class="stat warn"><span class="fl">${lab('Missed', 'missed')}</span><b>${cnt.warn}</b></div><div class="stat"><span class="fl">${lab('Upcoming', 'upcoming')}</span><b>${cnt.up}</b></div></div>
-    <div class="panel"><div class="cardhead"><h3>${esc(name)}: scheduled pulls by working day</h3></div>${days.length ? `<div class="scroll"><table class="plt"><thead><tr><th>Day</th><th>Date</th><th>${lab('10:45 AM', 'slot')}</th><th>${lab('6:45 PM', 'slot')}</th></tr></thead><tbody>${days.map(d => `<tr><td><b>${dayName(d)}</b></td><td>${esc(fmtD(d))}</td>${[0, 1].map(i => { const c = cell(d, i); return `<td><span class="chip ${c.c}"><i></i>${c.t}${c.run ? ' · ' + tonly(c.run.ms) : ''}</span></td>`; }).join('')}</tr>`).join('')}</tbody></table></div>` : '<div class="empty">No dates are recorded for this sprint.</div>'}
-      ${days.length && days.every(d => d < SCHED_START) ? `<p class="note" style="margin:12px 0 0">Scheduled pulls began on ${esc(fmtD(SCHED_START))}, so this sprint has none.</p>` : ''}</div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>All sprints</h3></div><div class="scroll"><table class="plt"><thead><tr><th>Sprint</th><th>Planned</th><th>Pulled</th><th>Failed</th><th>Missed</th></tr></thead><tbody>${sumRows.map(r => `<tr><td><b>${esc(spName(r.id))}</b></td><td>${r.pl || '–'}</td><td>${r.pl ? r.ok : '–'}</td><td>${r.pl ? r.bad : '–'}</td><td>${r.pl ? r.ms : '–'}</td></tr>`).join('')}</tbody></table></div>
-      <p class="note" style="margin:12px 0 0">Manual refreshes from the Refresh button are not counted here.</p></div>`;
+    <div class="panel"><div class="cardhead"><h3>${esc(name)}: scheduled pulls by working day</h3></div>${days.length ? `<div class="scroll"><table class="plt"><thead><tr><th>Day</th><th>Date</th><th>${lab('10:45 AM', 'slot')}</th><th>${lab('6:45 PM', 'slot')}</th></tr></thead><tbody>${days.map(d => `<tr><td><b>${dayName(d)}</b></td><td>${esc(fmtD(d))}</td>${[0, 1].map(i => { const c = cell(d, i); return `<td><span class="chip ${c.c}"><i></i>${c.t}${c.run ? ' · ' + tonly(c.run.ms) : ''}</span></td>`; }).join('')}</tr>`).join('')}</tbody></table></div>` : '<div class="empty">No dates are recorded for this sprint.</div>'}</div>
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>All sprints${tip('manual')}</h3></div><div class="scroll"><table class="plt"><thead><tr><th>Sprint</th><th>Planned</th><th>Pulled</th><th>Failed</th><th>Missed</th></tr></thead><tbody>${sumRows.map(r => `<tr><td><b>${esc(spName(r.id))}</b></td><td>${r.pl || '–'}</td><td>${r.pl ? r.ok : '–'}</td><td>${r.pl ? r.bad : '–'}</td><td>${r.pl ? r.ms : '–'}</td></tr>`).join('')}</tbody></table></div></div>`;
 }
 
 /* ---------- stakeholders ---------- */
@@ -739,28 +776,28 @@ const ARW = '<div class="arr"><svg viewBox="0 0 30 14"><path d="M2 7h24"/><path 
 const infoBtn = k => `<button type="button" class="ibtn" data-tip="@${k}" aria-label="What is this?">i</button>`;
 const node = (n, h, s, d) => `<div class="node"><div class="nh"><span class="n">${n}</span>${infoBtn(d)}</div><b>${h}</b><span class="s">${s}</span></div>`;
 const chip = (h, s, d) => `<div class="chipc"><div class="nh"><b>${h}</b>${infoBtn(d)}</div><span class="s">${s}</span></div>`;
-const LINKS = [['Team dashboard (Vercel)', 'https://sprint-dashboard-umber.vercel.app/'], ['Vercel project', 'https://vercel.com/chetan-3565/sprint-dashboard'], ['GitHub project', 'https://github.com/ckvcanary/sprint-dashboard'], ['Automatic updates, run history', 'https://github.com/ckvcanary/sprint-dashboard/actions/workflows/refresh.yml'], ['Backup copy of the dashboard', 'https://ckvcanary.github.io/sprint-dashboard/'], ['Jira board', 'https://canaryai.atlassian.net/jira/software/c/projects/PROD/boards/243']];
+const LINKS = [['Use', [['Team dashboard (Vercel)', 'https://sprint-dashboard-umber.vercel.app/'], ['Jira board', 'https://canaryai.atlassian.net/jira/software/c/projects/PROD/boards/243']]],
+  ['Behind the scenes', [['GitHub repository', 'https://github.com/ckvcanary/sprint-dashboard'], ['GitHub Actions runs', 'https://github.com/ckvcanary/sprint-dashboard/actions/workflows/refresh.yml'], ['Vercel project', 'https://vercel.com/chetan-3565/sprint-dashboard']]],
+  ['Backup', [['GitHub Pages copy', 'https://ckvcanary.github.io/sprint-dashboard/']]]];
 function renderHow() {
   const u = usage(), pu = Math.min(100, u.n / LIMIT * 100);
-  $('#v-how').innerHTML = `<div class="hw"><h2>How this dashboard works</h2><p class="sub">This dashboard shows what is in Jira.</p><div class="feat glance"><div><b>Refreshes by itself</b>Weekdays, 10:45 AM and 6:45 PM IST</div><div><b>Refresh any time</b>Press the Refresh button</div><div><b>No computer needed</b>Nobody has to keep one switched on</div></div><p class="hint" style="margin:10px 0 18px">Hover over <span class="ibtn static">i</span> on any box to read what it does.</p>
-    <div class="flow">${node(1, 'Jira', 'Where our tickets are kept', 'n1')}${ARW}${node(2, 'Automatic copy job', 'Copies the latest from Jira', 'n2')}${ARW}${node(3, 'Saved copy', 'Keeps what was copied', 'n3')}${ARW}${node(4, 'Website host', 'Puts the page online', 'n4')}${ARW}${node(5, 'This dashboard', 'What you see', 'n5')}</div>
-    <section class="startsec"><h3>What makes the dashboard update</h3><p class="sn">Either of these starts the automatic copy job (step 2).</p><div class="sc">${chip('On a timetable', 'Weekdays, 10:45 AM and 6:45 PM IST', 'c1')}<span class="or">or</span>${chip('Someone presses Refresh', 'Anyone on the team', 'c2')}</div></section>
-    <div class="acc"><details><summary>Who owns what, and when passes need renewing</summary><div class="scroll"><table><thead><tr><th>What</th><th>Where it is kept</th><th>Whose account</th><th>${lab('Renew by', 'renew')}</th></tr></thead><tbody>
-      <tr><td><b>Automatic updates</b> (the timetable)</td><td>On GitHub, in the job called "Refresh Jira data"</td><td>Company GitHub account <b>ckvcanary</b></td><td>Never</td></tr>
-      <tr><td><b>Jira access pass</b> (read-only)</td><td>Stored safely on GitHub</td><td>Jira account of the dashboard owner</td><td><b>12 Nov 2027</b></td></tr>
-      <tr><td><b>Refresh button access pass</b></td><td>Stored safely on Vercel</td><td>ckvcanary. It can only start the copy job.</td><td>Does not expire</td></tr>
-      <tr><td><b>Publishing pass</b> (for changes to the dashboard)</td><td>The developer's computer</td><td>ckvcanary. It can only edit this dashboard's files.</td><td>Does not expire</td></tr>
-      <tr><td><b>Website hosting</b></td><td>Vercel project "sprint-dashboard"</td><td>Vercel account chetan-3565 (free plan)</td><td>Does not expire</td></tr></tbody></table></div></details>
-      <details><summary>How many times can we refresh?</summary><div class="lim"><div class="capb" style="padding:12px 0 4px"><div class="capt"><b>Refreshes in the last 24 hours</b><span>${u.n} of ${LIMIT}</span></div><div class="meter2" role="img" aria-label="${u.n} of ${LIMIT} refreshes used"><i class="u" style="width:${pu}%"></i><i class="l" style="width:${100 - pu}%"></i></div><p class="note" style="margin:8px 0 0">This count is shared by the whole team, from every browser and every person. It is not just yours.</p></div>
-        <div class="scroll"><table><thead><tr><th>What</th><th>Limit</th><th>Reason</th></tr></thead><tbody>
-        <tr><td><b>Refresh button</b></td><td>${LIMIT} times in any 24 hours. The button stops at ${LIMIT - RESERVE}, so ${RESERVE} stay free for the timetable updates.</td><td>Our free website hosting allows ${LIMIT} page updates a day, and every refresh uses one. <a class="link" target="_blank" rel="noopener" href="https://vercel.com/docs/limits">Vercel limits</a></td></tr>
-        <tr><td><b>Pressing it twice</b></td><td>A second press within 2 minutes is skipped. Only one refresh runs at a time and everyone shares it.</td><td>The information is already fresh, and it saves the daily allowance.</td></tr>
-        <tr><td><b>Automatic copy job</b></td><td>No limit for us.</td><td>GitHub does not charge or cap this for a public project. <a class="link" target="_blank" rel="noopener" href="https://docs.github.com/en/actions/reference/limits">GitHub limits</a></td></tr>
-        <tr><td><b>Behind-the-scenes requests</b></td><td>5,000 an hour. Each press uses 2.</td><td>Far above what the team will use.</td></tr></tbody></table></div>
-        <p class="note" style="margin:10px 0 4px">If the daily limit is reached, the information keeps updating. The backup copy of the dashboard always shows it.</p></div></details>
-      <details><summary>Words you may see</summary><dl class="gloss"><dt>Jira</dt><dd>The tool where our tickets are kept.</dd><dt>GitHub</dt><dd>Stores the dashboard's files and runs the automatic copy job.</dd><dt>Vercel</dt><dd>Shows the dashboard on the internet.</dd><dt>Access pass</dt><dd>A password-like key that lets one tool talk to another. Ours are read-only or limited to one job.</dd><dt>Refresh</dt><dd>Copying the latest information from Jira into the dashboard.</dd></dl></details>
-      <details><summary>Links</summary><div class="links">${LINKS.map(l => `<a target="_blank" rel="noopener" href="${l[1]}">${l[0]}</a>`).join('')}</div></details></div>
-    <ul class="gk"><li><b>Nobody's computer needs to be on, and nothing runs on Claude.</b> The only timetable is the GitHub one above, owned by the company GitHub account ckvcanary. Anyone with the team link can use the dashboard and the Refresh button.</li><li><b>Why Refresh shows a timer.</b> After the copy job saves the new information, Vercel needs a few seconds to put it on the page. The timer (about 40 seconds) has a little extra time built in, and the page says "Data refreshed" only after it has checked that the new information is really there.</li><li><b>Many people can press Refresh together.</b> The dashboard does one update and everyone sees it.</li><li><b>Daily refresh allowance.</b> Up to ${LIMIT} refreshes in any 24 hours for the whole team. The page warns you when it gets close.</li><li><b>One renewal to remember.</b> The Jira access pass, by 12 Nov 2027.</li></ul></div>`;
+  $('#v-how').innerHTML = `<div class="hw"><h2>How it works</h2><p class="sub">Jira to this dashboard, with no one needed.</p>
+    <div class="feat glance"><div><b>Cron schedule</b>Weekdays, 10:45 AM and 6:45 PM IST</div><div><b>Refresh button</b>Anyone, any time</div><div><b>Hosted on Vercel</b>No laptop needs to be on</div></div>
+    <div class="flow" style="margin-top:18px">${node(1, 'Jira', 'Tickets', 'n1')}${ARW}${node(2, 'GitHub Actions', 'Reads the Jira REST API', 'n2')}${ARW}${node(3, 'GitHub repository', 'Commits JSON data', 'n3')}${ARW}${node(4, 'Vercel', 'Deploys the page', 'n4')}${ARW}${node(5, 'Dashboard', 'Your browser', 'n5')}</div>
+    <section class="startsec"><h3>What starts GitHub Actions</h3><div class="sc">${chip('Cron schedule', 'Weekdays, twice a day', 'c1')}<span class="or">or</span>${chip('Refresh button', 'Anyone on the team', 'c2')}</div></section>
+    <div class="acc"><details><summary>Accounts and renewal</summary><div class="scroll"><table><thead><tr><th>What</th><th>Account</th><th>${lab('Renew by', 'renew')}</th></tr></thead><tbody>
+      <tr><td><b>Cron schedule</b></td><td>GitHub: ckvcanary</td><td>No expiry</td></tr>
+      <tr><td><b>Jira API token</b> (read-only)</td><td>Jira: dashboard owner</td><td><b>12 Nov 2027</b></td></tr>
+      <tr><td><b>GitHub token, Refresh button</b></td><td>GitHub: ckvcanary</td><td>No expiry</td></tr>
+      <tr><td><b>GitHub token, publishing</b></td><td>GitHub: ckvcanary</td><td>No expiry</td></tr>
+      <tr><td><b>Hosting</b></td><td>Vercel: chetan-3565 (free plan)</td><td>No expiry</td></tr></tbody></table></div></details>
+      <details><summary>Refresh limits</summary><div class="lim"><div class="capb" style="padding:12px 0 4px"><div class="capt"><b>Team refreshes, last 24 hours</b><span>${u.n} of ${LIMIT}</span></div><div class="meter2" role="img" aria-label="${u.n} of ${LIMIT} refreshes used"><i class="u" style="width:${pu}%"></i><i class="l" style="width:${100 - pu}%"></i></div></div>
+        <div class="scroll"><table><thead><tr><th>Rule</th><th>Value</th></tr></thead><tbody>
+        <tr><td><b>Refresh button</b>${tip('budget')}</td><td>Stops at ${LIMIT - RESERVE} of ${LIMIT} a day</td></tr>
+        <tr><td><b>Pressing twice</b></td><td>One refresh per 2 minutes</td></tr>
+        <tr><td><b>GitHub Actions</b></td><td>No limit (public repository)</td></tr>
+        <tr><td><b>GitHub API</b></td><td>5,000 requests an hour</td></tr></tbody></table></div></div></details>
+      <details><summary>Links</summary><div class="lgrp">${LINKS.map(g => `<div><h4>${g[0]}</h4>${g[1].map(l => `<a target="_blank" rel="noopener" href="${l[1]}">${l[0]}</a>`).join('')}</div>`).join('')}</div></details></div></div>`;
 }
 
 /* ---------- drawer ---------- */
@@ -822,8 +859,8 @@ $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-ta
 window.addEventListener('resize', () => { if (tab === 'map') lines(); });
 
 /* ---------- what each status word means (shown by the (i) next to the column or label) ---------- */
-const TASK_CLOSED = ['Technical Review', 'Done', 'Fixed', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod'], STORY_CLOSED = ['Deployed to UAT', 'Deployed to Prod'];
-const OPEN_STATUSES = ['Backlog', 'New', 'Research', 'Spec_Completed', 'Accepted by Developer', 'In Progress', 'Code_Review', 'In Testing', 'On-Hold', 'Verified', 'Deferred', 'Invalid'];
+const TASK_CLOSED = ['Technical Review', 'Done', 'Fixed', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod', 'Invalid', 'Deferred'], STORY_CLOSED = ['Deployed to UAT', 'Deployed to Prod'], EPIC_CLOSED = ['Done'];
+const OPEN_STATUSES = ['Backlog', 'Research', 'Spec_Completed', 'Accepted by Developer', 'Ready for Development', 'In Progress', 'Code_Review', 'In Testing', 'On-Hold', 'New', 'Triaged', 'Reopened', 'Verified', 'ACTIVE', 'Duplicate', "Won't Fix"];
 const TT = {   // every (i) tooltip: a heading, an optional one-line intro, then labelled rows or groups of chips
   flag: { h: 'Flag', p: 'How time logging compares with the working time that has passed. The first rule that fits is shown.', rows: [['nil', 'Not started', 'The working days have not begun.'], ['bad', 'Time log missing', 'More than 8 h less logged than expected.'], ['warn', 'Behind on logging', 'More than 2 h less logged than expected.'], ['warn', 'Cannot finish in time', 'Logging is fine, but the work left is more than the hours left.'], ['ok', 'On track', 'None of the rules above apply.']] },
   missing: { h: 'Missing log (h)', p: 'Hours expected to be logged by now, minus hours actually logged.', rows: [['warn', 'Orange', 'More than 2 h missing.'], ['bad', 'Red', 'More than 8 h missing.']] },
@@ -832,21 +869,24 @@ const TT = {   // every (i) tooltip: a heading, an optional one-line intro, then
   pulled: { h: 'Pulled', p: 'A scheduled pull that ran and read Jira.' }, failed: { h: 'Failed', p: 'A scheduled pull that ran but could not read Jira.' },
   missed: { h: 'Missed', p: 'A scheduled time that passed more than 3 hours ago with no scheduled pull.' }, upcoming: { h: 'Upcoming', p: 'Scheduled times that have not come yet.' },
   latest: { h: 'Latest scheduled pull', p: 'The most recent scheduled pull that worked. "None yet" means none has worked since scheduled pulls began on 13 Nov.' },
-  next: { h: 'Next scheduled pull', p: 'The next time on the timetable, in India time, and how long until then.' },
-  jira: { h: 'Jira status', groups: [['Tasks are closed in', TASK_CLOSED], ['User stories and epics are closed only in', STORY_CLOSED], ['Open, not counted as closed', OPEN_STATUSES]] },
-  type: { h: 'Type', rows: [['blue', 'Epic', 'A large piece of work that holds user stories.'], ['ok', 'Story', 'A user story.'], ['nil', 'Task', 'Any sub-task type, and any ticket that is not a story or an epic.']] },
+  next: { h: 'Next scheduled pull', p: 'The next time on the cron schedule, in India time, and how long until then.' },
+  jira: { h: 'Jira status', groups: [['Epics are closed in', EPIC_CLOSED], ['User stories are closed in', STORY_CLOSED], ['Tasks are closed in', TASK_CLOSED], ['Open, not counted as closed', OPEN_STATUSES]], note: 'An epic stays open in In Documentation, In Testing, In Progress and Backlog.' },
+  type: { h: 'Type', rows: [['blue', 'Epic', 'Holds user stories.'], ['ok', 'Story', 'A user story.'], ['nil', 'Task', 'Sub-task, Story sub-task, Bug sub-task, New Feature sub-task, and any Task, Bug or New Feature.']] },
   day: { h: 'Sprint day', rows: [['nil', 'Not started', 'Before day 1 of the sprint.'], ['blue', 'N of 10', 'The current working day. Days 1 and 2 are Sprint Planning.'], ['ok', 'Sprint complete', 'After day 10.']] },
   renew: { h: 'Renew by', rows: [['ok', 'Never, Does not expire, No expiry', 'Nothing to renew.'], ['warn', 'A date', 'Renew the pass before this date, or the dashboard stops reading Jira.']] },
-  closed: { h: 'What counts as closed', groups: [['Tasks', TASK_CLOSED], ['User stories and epics', STORY_CLOSED]], note: 'Tasks include sub-tasks, story sub-tasks and bug sub-tasks, and any other ticket that is not a story or an epic.' },
-  ideal: { h: 'Ideal pace', p: 'The hours expected to burn at an even pace, from the day work formally started to the last working day.' },
-  remaining: { h: 'Remaining estimate', p: 'Original estimate minus the time logged.' },
-  n1: { h: 'Jira', p: 'Where the team creates tickets, estimates the work, logs time, writes comments and attaches files.', rows: [['ok', 'Read-only', 'The dashboard only reads from Jira. It never changes anything there.']] },
-  n2: { h: 'Automatic copy job', p: 'A small program that copies the latest tickets from Jira.', rows: [['blue', 'Where it runs', "On GitHub's computers, not on anyone's laptop."], ['ok', 'Access', 'Reads Jira with a read-only access pass.']] },
-  n3: { h: 'Saved copy', p: 'Each run saves the latest tickets as files on GitHub.', rows: [['ok', 'Nothing is lost', 'Older versions are kept.']] },
-  n4: { h: 'Website host (Vercel)', p: 'Shows this page on the internet.', rows: [['blue', 'Team link', 'The Vercel address is the link the team uses.'], ['warn', 'A few seconds of wait', 'After new information is saved, Vercel needs a few seconds to put it on the page. That is why the Refresh button shows a countdown timer with a little extra time built in.']] },
-  n5: { h: 'This dashboard', p: 'What you see in your browser.', rows: [['ok', 'Sign-in', 'Open the link and sign in with the team password.'], ['blue', 'Stays current', "A teammate's refresh appears here by itself within about a minute."]] },
-  c1: { h: 'On a timetable', rows: [['blue', 'When', 'Weekdays at 10:45 AM and 6:45 PM IST.'], ['ok', 'Who starts it', 'GitHub, by itself, using the company account ckvcanary.'], ['warn', 'If GitHub is busy', 'A skipped slot is tried again 30 and 60 minutes later.']] },
-  c2: { h: 'Someone presses Refresh', rows: [['blue', 'What happens', 'A small helper on Vercel starts the copy job. It keeps the access key safe.'], ['warn', 'Not started if', 'An update is already running, or the information is under 2 minutes old.'], ['ok', 'Then', 'After about 40 seconds this page checks the new information and shows "Data refreshed".']] }
+  closed: { h: 'What counts as closed', groups: [['Epics', EPIC_CLOSED], ['User stories', STORY_CLOSED], ['Tasks', TASK_CLOSED]], note: 'Tasks are every sub-task type (Sub-task, Story sub-task, Bug sub-task, New Feature sub-task) and any Task, Bug or New Feature.' },
+  ideal: { h: 'Ideal pace', p: 'Work that should be done by the end of each day, if the sprint hours burn evenly.', rows: [['blue', 'Formula', 'Total hours × working day / 8 working days'], ['nil', 'Days 1 and 2', 'Sprint Planning, no capacity counted.']] },
+  remaining: { h: 'Remaining estimate', p: 'Hours actually remaining: original estimate minus the time logged.' },
+  n1: { h: 'Jira', p: 'Where tickets, estimates, time logs, comments and attachments live.', rows: [['ok', 'Read-only', 'The dashboard only reads from Jira. It never writes to it.']] },
+  n2: { h: 'GitHub Actions', p: 'Runs a script that reads Jira through the Jira REST API.', rows: [['blue', 'Where it runs', "On GitHub's servers, not on anyone's laptop."], ['ok', 'Access', 'A read-only Jira API token stored as a GitHub secret.']] },
+  n3: { h: 'GitHub repository', p: 'The script commits the latest data as JSON files.', rows: [['ok', 'History kept', 'Every update is a commit, so older data is never lost.']] },
+  n4: { h: 'Vercel', p: 'Hosts this page and serves the JSON files.', rows: [['blue', 'Team link', 'The Vercel address is the link the team uses.'], ['warn', 'A few seconds of wait', 'After a commit, Vercel needs a few seconds to deploy it. The Refresh button shows a countdown timer with extra time built in.']] },
+  n5: { h: 'This dashboard', p: 'The page in your browser.', rows: [['ok', 'Sign-in', 'Team password.'], ['blue', 'Stays current', "A teammate's refresh appears here within about a minute."]] },
+  c1: { h: 'Cron schedule', rows: [['blue', 'When', 'Weekdays at 10:45 AM and 6:45 PM IST.'], ['ok', 'Who runs it', 'GitHub Actions, under the GitHub account ckvcanary. No Claude job and no laptop is involved.'], ['warn', 'If GitHub skips a slot', 'It is retried 30 and 60 minutes later.']] },
+  c2: { h: 'Refresh button', rows: [['blue', 'What happens', 'A Vercel API route starts the GitHub Actions workflow. The GitHub token stays on Vercel.'], ['warn', 'Not started if', 'A run is already going, or the data is under 2 minutes old.'], ['ok', 'Then', 'After about 40 seconds this page checks the new data and shows "Data refreshed".']] },
+  manual: { h: 'Scheduled pulls only', p: 'Refreshes from the Refresh button are not counted here.' },
+  budget: { h: 'Refresh budget', p: 'Refreshes by the whole team in the last 24 hours.', rows: [['blue', 'Limit', 'Vercel Hobby allows 100 deployments a day, and every refresh is one.'], ['warn', 'Stops at 95', 'The Refresh button stops at 95. The last 5 are kept for the cron schedule.'], ['ok', 'Not counted', 'GitHub Actions runs from the cron schedule have no limit for a public repository.']] },
+  cron: { h: 'Cron schedule account', rows: [['blue', 'GitHub account', 'ckvcanary owns the repository and its schedule.'], ['ok', 'Owner', 'chetan@canaryai.com'], ['warn', 'Claude', 'No Claude routine or Claude cron exists for this dashboard.']] },
 };
 const chips = a => `<span class="tchips">${a.map(x => `<span class="tchip">${esc(x)}</span>`).join('')}</span>`;
 function ttHtml(d) {
@@ -854,12 +894,12 @@ function ttHtml(d) {
 }
 const lab = (text, key) => `${text}<button type="button" class="ibtn" data-tip="@${key}" aria-label="What do the values mean?">i</button>`;
 const tip = key => `<button type="button" class="ibtn" data-tip="@${key}" aria-label="What does this mean?">i</button>`;
-const closedBlock = () => `<div class="tc"><div class="tcl">Tasks count as closed in</div>${chips(TASK_CLOSED)}<div class="tcl">User stories and epics count as closed in</div>${chips(STORY_CLOSED)}<div class="tcn">Tasks include sub-tasks, story sub-tasks and bug sub-tasks.</div></div>`;
 
 /* ---------- tooltips: hover or focus an (i) button; tap on touch screens ---------- */
 const gtip = document.createElement('div'); gtip.id = 'gtip'; gtip.className = 'gtip'; gtip.setAttribute('role', 'tooltip'); gtip.hidden = true; document.body.appendChild(gtip);
 const tipOf = b => { const k = b.dataset.tip; if (k === '@refresh') return refreshTip(); return k[0] === '@' ? ttHtml(TT[k.slice(1)]) : `<p class="ttp" style="margin:0">${esc(k)}</p>`; };
 function showTip(b) {
+  { const bt = document.getElementById('tip'); if (bt) bt.hidden = true; }
   gtip.innerHTML = tipOf(b); gtip.hidden = false; const r = b.getBoundingClientRect(), w = gtip.offsetWidth, h = gtip.offsetHeight;
   gtip.style.left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), innerWidth - w - 8) + 'px'; gtip.style.top = (r.bottom + 8 + h > innerHeight - 8 ? Math.max(8, r.top - h - 8) : r.bottom + 8) + 'px'; b.setAttribute('aria-describedby', 'gtip');
 }

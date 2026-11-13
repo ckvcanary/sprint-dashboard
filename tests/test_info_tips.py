@@ -38,29 +38,31 @@ def test_pull_log_columns_and_tiles_list_every_status(page):
 def test_day_panel_status_and_type_columns_list_all_values(page):
     page.click('[data-tab="bd"]'); page.click('[data-bdview="person"]'); page.wait_for_selector("#cw svg")
     svg = page.locator("#cw svg").bounding_box(); page.mouse.click(svg["x"] + (60 + 4.5 / 11 * 924) / 1000 * svg["width"], svg["y"] + svg["height"] * .4); page.get_by_role("tab", name="Still open").click()
-    tip = hover(page, page.locator("#dayd th:has-text('Status') .ibtn")); g = tip.locator(".ttg")
-    assert tip.locator(".tth").inner_text() == "Jira status" and g.count() == 3
-    closed_tasks = g.nth(0).locator(".tchip").all_inner_texts(); closed_stories = g.nth(1).locator(".tchip").all_inner_texts(); opened = g.nth(2).locator(".tchip").all_inner_texts()
-    assert closed_tasks == ["Technical Review", "Done", "Fixed", "In Documentation", "Deployed to UAT", "Deployed to Prod"] and closed_stories == ["Deployed to UAT", "Deployed to Prod"]
-    for st in page.locator("#dayd tbody tr td:nth-child(5)").all_inner_texts(): assert st in closed_tasks + closed_stories + opened + ["–"], st
-    t = hover(page, page.locator("#dayd th:has-text('Type') .ibtn")); assert names(t) == ["Epic", "Story", "Task"]
+    tip = hover(page, page.locator("#dayd th:has-text('Status') .ibtn").first); g = tip.locator(".ttg")
+    assert tip.locator(".tth").inner_text() == "Jira status" and g.count() == 4
+    epics = g.nth(0).locator(".tchip").all_inner_texts(); stories = g.nth(1).locator(".tchip").all_inner_texts(); closed_tasks = g.nth(2).locator(".tchip").all_inner_texts(); opened = g.nth(3).locator(".tchip").all_inner_texts()
+    assert epics == ["Done"] and stories == ["Deployed to UAT", "Deployed to Prod"] and closed_tasks == ["Technical Review", "Done", "Fixed", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Invalid", "Deferred"]
+    assert not set(opened) & set(closed_tasks) and {"Triaged", "Reopened", "ACTIVE", "Ready for Development", "Duplicate", "Won't Fix"} <= set(opened), "every workflow status is either closed or listed as open"
+    sts = page.evaluate("[...document.querySelectorAll('#dayd table')].flatMap(t => { const i = [...t.querySelectorAll('th')].findIndex(h => h.innerText.toUpperCase().startsWith('STATUS')); return [...t.querySelectorAll('tbody tr')].map(r => r.cells[i].innerText) })")
+    for st in sts: assert st in epics + stories + closed_tasks + opened + ["–"], st
+    t = hover(page, page.locator("#dayd th:has-text('Type') .ibtn").first); assert names(t) == ["Epic", "Story", "Task"]
 
 
 def test_ticket_drawer_explains_status_where_it_appears(page):
     page.click('#map .card[data-s="PROD-9101"]'); page.wait_for_selector("#drawer.on")
     t = hover(page, page.locator("#drawer .lb:has-text('Tasks') .ibtn")); assert t.locator(".tth").inner_text() == "Jira status"
-    page.mouse.move(5, 5); page.click('#drawer [data-t="PROD-9111"]'); t = hover(page, page.locator("#drawer .fact span:has-text('Status') .ibtn")); assert t.locator(".ttg").count() == 3
+    page.mouse.move(5, 5); page.click('#drawer [data-t="PROD-9111"]'); t = hover(page, page.locator("#drawer .fact span:has-text('Status') .ibtn")); assert t.locator(".ttg").count() == 4
 
 
 def test_last_refreshed_and_renewal_columns_have_their_info(page):
     t = hover(page, page.locator(".rfcard .ibtn")); assert t.locator(".tth").inner_text() == "Refresh limit" and "Green" in t.inner_text()
-    page.mouse.move(5, 5); page.click('[data-tab="how"]'); page.click("summary:has-text('Who owns what')"); t = hover(page, page.locator("th:has-text('Renew by') .ibtn"))
+    page.mouse.move(5, 5); page.click('[data-tab="how"]'); page.click("summary:has-text('Accounts and renewal')"); t = hover(page, page.locator("th:has-text('Renew by') .ibtn"))
     assert names(t) == ["Never, Does not expire, No expiry", "A date"]
 
 
 def test_no_tooltip_is_an_unformatted_wall_of_text(page):
     """Every status tooltip is structured (heading plus rows or chips); any plain tooltip is a short sentence or two."""
-    page.click('[data-tab="how"]'); page.wait_for_selector(".hw"); page.click("summary:has-text('Who owns what')")
+    page.click('[data-tab="how"]'); page.wait_for_selector(".hw"); page.click("summary:has-text('Accounts and renewal')"); page.click("summary:has-text('Refresh limits')")
     seen = 0
     for i in range(page.locator("[data-tip]").count()):
         b = page.locator("[data-tip]").nth(i)

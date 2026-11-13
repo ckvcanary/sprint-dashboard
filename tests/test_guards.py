@@ -54,8 +54,9 @@ def statuses(name):
 
 
 def test_closed_statuses_follow_the_agreed_lists():
-    assert statuses("TASK_DONE") == {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done"}
-    assert statuses("STORY_DONE") == {"Deployed to UAT", "Deployed to Prod"}, "user stories and epics close only when deployed"
+    assert statuses("TASK_DONE") == {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}
+    assert statuses("EPIC_DONE") == {"Done"}, "the Epic workflow has no Deployed status"
+    assert statuses("STORY_DONE") == {"Deployed to UAT", "Deployed to Prod"}, "user stories close only when deployed"
 
 
 def test_page_size_is_reasonable():

@@ -8,7 +8,7 @@ def open_log(page):
 
 def test_schedule_and_next_pull_are_clear(page):
     open_log(page); t = page.locator("#v-log").inner_text()
-    assert "Twice every weekday" in t and "10:45 AM and 6:45 PM IST" in t
+    assert "cron schedule" in t.lower() and "Weekdays, twice a day" in t and "10:45 AM and 6:45 PM IST" in t
     tl = t.lower(); assert "next scheduled pull" in tl and "13 Nov, 6:45 PM IST" in t and "in 2 h 5 min" in t
     assert "latest scheduled pull" in tl and "13 Nov, 10:46 AM IST" in t and "not yet run" not in t.lower()
 
@@ -37,12 +37,13 @@ def test_status_chips_use_plain_professional_words(page):
 
 
 def test_selecting_an_earlier_sprint_explains_there_were_no_scheduled_pulls(page):
-    open_log(page); page.click("#ddbtn"); page.click("text=Sprint 22"); assert "Scheduled pulls began on 13 Nov" in page.locator("#v-log").inner_text()
+    open_log(page); page.click("#ddbtn"); page.click("text=Sprint 22"); assert page.locator(".plt").first.locator(".chip.na").count() == page.locator(".plt").first.locator(".chip").count() and "Scheduled pulls began" not in page.locator("#v-log").inner_text()
 
 
 def test_fourteen_day_grid_is_gone_and_manual_runs_are_not_counted(page):
     open_log(page); t = page.locator("#v-log").inner_text()
-    assert "next 14 days" not in t and page.locator(".cal").count() == 0 and "Manual refreshes from the Refresh button are not counted" in t
+    assert "next 14 days" not in t and page.locator(".cal").count() == 0 and "Manual refreshes" not in t
+    page.locator("h3:has-text('All sprints') .ibtn").hover(); assert "not counted here" in page.locator("#gtip").inner_text()
     assert page.locator(".plt").nth(1).inner_text().count("Sprint 24") == 1
 
 
@@ -61,3 +62,24 @@ def test_a_scheduled_pull_that_started_a_few_minutes_early_still_counts_for_its_
         if r["trigger"] == "schedule": r["at"] = "2026-11-13T05:08:06Z"      # 7 minutes before the 10:45 AM slot, as GitHub really did
     d.write_text(json.dumps(runs)); pg = ctx_factory(); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); pg.click('[data-tab="log"]'); pg.wait_for_selector(".plt")
     assert "Pulled · 10:38 AM" in pg.locator(".plt").first.inner_text() and pg.locator(".cnt .stat.warn b").inner_text() == "0", "must not be shown as Missed"
+
+
+def test_refresh_budget_shows_used_left_and_where_the_button_stops(page):
+    open_log(page); b = page.locator(".budget"); t = b.inner_text()
+    assert "Team refreshes" in t and "Used 3" in t and "Left 97" in t and "of 100" in t and "Refresh stops at 95" in t and "Last 24 hours" in t
+    assert b.locator(".meter2 .u").get_attribute("style").startswith("width:3%") and b.locator(".stopm").get_attribute("style").startswith("left:95%")
+    b.locator(".ibtn").hover(); g = page.locator("#gtip").inner_text(); assert "Stops at 95" in g and "100 deployments a day" in g and "cron schedule" in g
+
+
+def test_the_account_behind_the_cron_schedule_is_named_with_its_owner_email(page):
+    open_log(page); s = page.locator(".sched3 .stat").nth(3); t = s.inner_text()
+    assert "GitHub: ckvcanary" in t and "Owner: chetan@canaryai.com" in t
+    s.locator(".ibtn").hover(); g = page.locator("#gtip").inner_text(); assert "chetan@canaryai.com" in g and "No Claude routine" in g
+
+
+def test_the_budget_counts_every_refresh_from_every_person(ctx_factory, mock):
+    import json
+    d = mock.site / "data" / "runs.json"; runs = json.loads(d.read_text())
+    for _ in range(21): runs.append({"at": "2026-11-13T10:00:00Z", "trigger": "manual", "ok": True, "issues": 1066, "sprint": "Sprint 24", "by": "ckvcanary"})
+    d.write_text(json.dumps(runs)); pg = ctx_factory(); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); pg.click('[data-tab="log"]'); pg.wait_for_selector(".budget")
+    t = pg.locator(".budget").inner_text(); assert "Used 24" in t and "Left 76" in t

@@ -12,7 +12,7 @@ for p in (ROOT / ".env", ROOT.parent / ".env"):
 BASE, AUTH = env["JIRA_BASE"].rstrip("/"), base64.b64encode(f"{env['JIRA_EMAIL']}:{env['JIRA_TOKEN']}".encode()).decode()
 PREVIEW = (sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8767").rstrip("/").replace("/index.html", "")
 SPRINT, SPRINT_START, ROLL = 1195, "2026-11-09", {"PROD-3913", "PROD-3977", "PROD-3978", "PROD-3979"}
-TASK_DONE = {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done"}; STORY_DONE = {"Deployed to UAT", "Deployed to Prod"}
+TASK_DONE = {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}; STORY_DONE = {"Deployed to UAT", "Deployed to Prod"}; EPIC_DONE = {"Done"}
 IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
 first = lambda a: a["displayName"].split()[0] if a else None
 
@@ -107,8 +107,8 @@ check("Tasks the dashboard counts as closed equal Jira's list for the agreed sta
 sd_ = {s["k"]: s for s in bd["S24"]["stories"]}; done_s = {k for k, s in sd_.items() if s["d"]}
 check("User stories counted as closed equal Jira's list (Deployed to UAT or Prod)", done_s == story_done, f"dashboard {len(done_s)}, Jira {len(story_done)}")
 ed_ = {e["k"]: e for e in bd["S24"]["epics"]}; done_e = {k for k, e in ed_.items() if e["d"]}
-ej = {x["key"] for x in search(f"key in ({','.join(sorted(eps))}) AND status in ({q(STORY_DONE)})", ["status"])} if eps else set()
-check("Epics of the sprint equal Jira's, and the closed ones equal Jira's list (Deployed to UAT or Prod)", set(ed_) == set(eps) and done_e == ej, f"{len(ed_)} epics, {len(done_e)} closed (Jira {len(ej)})")
+ej = {x["key"] for x in search(f"key in ({','.join(sorted(eps))}) AND status in ({q(EPIC_DONE)})", ["status"])} if eps else set()
+check("Epics of the sprint equal Jira's, and the closed ones equal Jira's list (Done)", set(ed_) == set(eps) and done_e == ej, f"{len(ed_)} epics, {len(done_e)} closed (Jira {len(ej)})")
 
 # the day each task was closed, from Jira's own history
 wrong = []

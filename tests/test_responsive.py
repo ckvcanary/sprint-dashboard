@@ -39,3 +39,8 @@ def test_chart_text_stays_readable_on_a_phone(ctx_factory, mock, sel, tab, minfo
     scale = pg.evaluate("s => { const e = document.querySelector(s), vb = e.viewBox.baseVal.width; return e.getBoundingClientRect().width / vb }", sel)
     assert 11 * scale >= minfont, f"chart text would render at {11 * scale:.1f}px"
     assert pg.evaluate("document.documentElement.scrollWidth - window.innerWidth") <= 1
+
+
+def test_tabs_last_refreshed_and_sign_out_are_the_same_height(page):
+    h = page.evaluate("['#tabs', '.rfcard', '#signout'].map(s => document.querySelector(s).getBoundingClientRect().height)")
+    assert max(h) - min(h) <= 1 and h[0] >= 50, h

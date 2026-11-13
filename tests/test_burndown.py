@@ -14,6 +14,11 @@ def hover_slot(page, k):
     page.wait_for_selector("#tip:not([hidden])"); return page.locator("#tip").inner_text()
 
 
+def rows(page):
+    """The two small tables in the hover card as {row name: [cells]}"""
+    return page.evaluate("() => Object.fromEntries([...document.querySelectorAll('#tip .mt tbody tr')].map(r => [r.cells[0].innerText.split(String.fromCharCode(10))[0], [...r.cells].slice(1).map(c => c.innerText.trim())]))")
+
+
 def click_slot(page, k):
     svg = page.locator("#cw svg").bounding_box(); L, pw, slots, W = 60, 1000 - 60 - 16, 11, 1000
     page.mouse.click(svg["x"] + (L + (k + .5) / slots * pw) / W * svg["width"], svg["y"] + svg["height"] * .4)
@@ -86,11 +91,13 @@ def test_chart_table_and_selector_live_together_and_hours_chart_does_not(page):
     open_bd(page); assert page.locator("#cw").count() == 1 and page.locator("#v-bd table").count() == 1 and page.locator("svg[aria-label^='Original estimate, logged']").count() == 0
 
 
-def test_ideal_pace_says_when_work_formally_started_in_one_clear_line(page):
-    open_bd(page); n = page.locator("#v-bd .panel .note").first.inner_text()
-    assert n == "Ideal pace runs from Day 3 (Wed 11 Nov), when work formally started, to Day 10 (Fri 20 Nov). Days 1 to 2 were Sprint Planning."
-    k = page.locator("#v-bd .key").first.inner_text(); assert "Remaining estimate (h)" in k and "Ideal pace" in k and len(k) < 60, "the legend stays short"
-    page.locator("#v-bd .key .ibtn").nth(1).hover(); assert "even pace" in page.locator("#gtip").inner_text()
+def test_chart_title_is_a_few_words_and_the_detail_sits_under_its_info_button(page):
+    open_bd(page); h = page.locator("#v-bd .cardhead h3").first
+    assert h.inner_text().rstrip("i") == "Remaining work vs ideal pace · Everyone" and page.locator("#v-bd .panel .note").count() == 0, "no explanatory sentence under the title"
+    k = page.locator("#v-bd .key").first.inner_text(); assert "Remaining estimate (h)" in k and "Ideal pace" in k and len(k) < 60
+    h.locator(".ibtn").hover(); t = page.locator("#gtip").inner_text()
+    assert "Day 3 (Wed 11 Nov)" in t and "Day 10 (Fri 20 Nov)" in t and "Sprint Planning" in t
+    page.locator("#v-bd .key .ibtn").nth(1).hover(); assert "Total hours × working day / 8" in page.locator("#gtip").inner_text()
 
 
 def test_x_axis_shows_every_sprint_day_and_the_retrospective(page):
@@ -100,36 +107,37 @@ def test_x_axis_shows_every_sprint_day_and_the_retrospective(page):
 
 
 def test_hover_shows_tasks_closed_and_open_for_a_day(page):
-    open_bd(page); t = hover_slot(page, 3)
-    assert "Thu 12 Nov" in t and "Day 4 of 10" in t and "Tasks closed this day\n1" in t
-    assert "Tasks closed so far\n1 of 5" in t and "Tasks still open\n4" in t and "User stories closed so far\n1 of 3" in t and "Epics closed so far\n0 of 2" in t and "Ideal pace" in t
+    open_bd(page); t = hover_slot(page, 3); r = rows(page)       # Thu 12 Nov
+    assert "Thu 12 Nov" in t and "Day 4 of 10" in t and "Working day 2 of 8" in t
+    assert r["Tasks"] == ["1", "1 of 5", "4"] and r["User stories"] == ["1", "1 of 3", "2"] and r["Epics"] == ["0", "0 of 2", "2"]
+    assert r["Ideal pace"] == ["12.5 h", "37.5 h"] and r["Actual"][0].endswith(" h") and "ahead" in t
 
 
-def test_hover_says_what_closed_means_and_counts_epics_by_day(page):
-    open_bd(page); t = hover_slot(page, 4)     # Fri 13 Nov: epic PROD-9002 reached Deployed to UAT
-    assert "Epics closed so far\n1 of 2" in t and "Tasks closed so far\n2 of 5" in t
-    tc = page.locator("#tip .tc"); groups = tc.locator(".tchips").all()
-    assert [c.inner_text() for c in groups[0].locator(".tchip").all()] == ["Technical Review", "Done", "Fixed", "In Documentation", "Deployed to UAT", "Deployed to Prod"]
-    assert [c.inner_text() for c in groups[1].locator(".tchip").all()] == ["Deployed to UAT", "Deployed to Prod"] and "story sub-tasks and bug sub-tasks" in tc.inner_text()
+def test_hover_counts_epics_by_day_and_leaves_the_definition_to_the_info_button(page):
+    open_bd(page); hover_slot(page, 4); r = rows(page)     # Fri 13 Nov: epic PROD-9002 reached its closing status
+    assert r["Epics"] == ["1", "1 of 2", "1"] and r["Tasks"] == ["1", "2 of 5", "3"]
+    t = page.locator("#tip").inner_text(); assert page.locator("#tip .tc, #tip .tchip").count() == 0 and "sub-tasks" not in t and "counts as closed" not in t.lower()
+    assert page.locator("#tip").bounding_box()["height"] < 400, "the card fits on one screen"
 
 
-def test_info_button_beside_the_chart_title_defines_closed(page):
+def test_info_button_beside_the_chart_title_defines_closed_per_type(page):
     open_bd(page); page.hover(".cardhead .ibtn"); tip = page.locator("#gtip"); tip.wait_for(); g = tip.locator(".ttg")
-    assert tip.locator(".tth").inner_text() == "What counts as closed" and g.count() == 2 and g.nth(0).locator(".tchip").count() == 6 and g.nth(1).locator(".tchip").count() == 2
-    assert "story sub-tasks and bug sub-tasks" in tip.inner_text()
+    assert g.count() == 3 and [g.nth(i).locator(".tchip").count() for i in range(3)] == [1, 2, 8]
+    assert g.nth(0).locator(".tchip").inner_text() == "Done" and "epics" in g.nth(0).inner_text().lower() and "user stories" in g.nth(1).inner_text().lower() and "tasks" in g.nth(2).inner_text().lower()
+    assert "Bug sub-task" in tip.inner_text() or "every sub-task type" in tip.inner_text()
 
 
 def test_hover_on_a_day_that_has_not_happened_says_so_without_blaming_jira(page):
-    open_bd(page); t = hover_slot(page, 6); assert "has not happened yet" in t and "Jira" not in t and "Tasks closed" not in t
+    open_bd(page); t = hover_slot(page, 6); assert "Not happened yet" in t and "Jira" not in t and page.locator("#tip .mt").count() == 0
 
 
-def test_hover_on_days_with_data_names_the_pull_time(page):
+def test_hover_on_days_with_data_points_to_the_ticket_list(page):
     open_bd(page)
-    for k in (0, 3, 4): assert "data as of 13 Nov, 4:34 PM IST" in hover_slot(page, k)
+    for k in (0, 3, 4): assert "Click the day for the ticket list" in hover_slot(page, k)
 
 
 def test_retrospective_day_is_shaded_and_labelled_not_a_line(page):
-    open_bd(page); t = hover_slot(page, 10); assert "Sprint retrospective" in t and "Mon 23 Nov" in t
+    open_bd(page); t = hover_slot(page, 10); assert "Retrospective" in t and "Mon 23 Nov" in t
     assert page.locator("#cw svg line[stroke-dasharray]").count() == 0 and "Retrospective" in page.locator("#cw svg").text_content()
 
 
@@ -140,29 +148,38 @@ def test_ideal_line_only_goes_down_and_actual_never_goes_up(page):
 
 
 def test_person_filter_changes_the_task_counts(page):
-    open_bd(page); page.select_option("#bdwho", "Sumit"); assert "Tasks closed so far\n0 of 1" in hover_slot(page, 4)
+    open_bd(page); page.select_option("#bdwho", "Sumit"); hover_slot(page, 4); assert rows(page)["Tasks"][1] == "0 of 1"
 
 
-def test_click_on_a_day_lists_every_ticket_in_tabs(page):
+def counts(d): return d.locator(".dsh .dn").all_inner_texts()
+
+
+def test_click_on_a_day_lists_every_ticket_in_three_segments(page):
     open_bd(page); click_slot(page, 3); d = page.locator("#dayd"); d.wait_for(state="visible")
     assert "Thu 12 Nov" in d.inner_text() and "Closed this day" in d.inner_text()
-    assert d.locator("tbody tr").count() == 2 and "PROD-9112" in d.inner_text() and "PROD-9103" in d.inner_text()
+    assert [b.inner_text() for b in d.locator(".dsh b").all()] == ["Epics", "User stories", "Tasks"], "epics, then user stories, then tasks"
+    assert counts(d) == ["0", "1", "1"] and "PROD-9112" in d.inner_text() and "PROD-9103" in d.inner_text()
     assert d.locator("a[href='https://canaryai.atlassian.net/browse/PROD-9112']").count() == 1
-    d.get_by_role("tab", name="Still open").click(); tiles = {x.locator("span").inner_text(): x.locator("b").inner_text() for x in d.locator(".tile:not(.hrs)").all()}
-    assert d.locator("tbody tr").count() == 8 and tiles == {"Epics open": "2", "User stories open": "2", "Tasks open": "4"}, tiles
-    assert d.locator(".tc .tchip").count() == 8 and "tasks count as closed in" in d.inner_text().lower() and d.locator("tbody tr").first.inner_text().split("\t")[2] == "Epic", "epics are listed first"
-    d.get_by_role("tab", name="Closed so far").click(); assert d.locator("tbody tr").count() == 2
-    assert {x.locator("span").inner_text(): x.locator("b").inner_text() for x in d.locator(".tile:not(.hrs)").all()} == {"Epics closed": "0", "User stories closed": "1", "Tasks closed": "1"}
+    d.get_by_role("tab", name="Still open").click(); assert counts(d) == ["2", "2", "4"] and d.locator("tbody tr").count() == 8
+    assert d.locator(".dseg").nth(0).locator("tbody tr").first.inner_text().startswith("PROD-"), "epic rows come first"
+    d.get_by_role("tab", name="Closed so far").click(); assert counts(d) == ["0", "1", "1"]
+    assert d.locator(".dseg").nth(0).inner_text().endswith("None") and d.locator(".tc, .tchip").count() == 0 or d.locator(".dseg .dnone").count() >= 1
     page.click("[data-dayclose]"); assert not page.locator("#dayd").is_visible()
+
+
+def test_day_panel_task_table_shows_the_exact_issue_type_and_the_heading_defines_closed(page):
+    open_bd(page); click_slot(page, 3); d = page.locator("#dayd"); d.get_by_role("tab", name="Still open").click()
+    ths = d.locator(".dseg").nth(2).locator("th").all_inner_texts(); assert ths[2].upper().startswith("TYPE") and ths[0].upper() == "TICKET", ths
+    d.locator(".dh .ibtn").hover(); assert page.locator("#gtip .tth").inner_text() == "What counts as closed"
 
 
 def test_day_panel_scrolls_inside_itself_when_the_list_is_long(page):
     open_bd(page); click_slot(page, 3); page.get_by_role("tab", name="Still open").click()
-    assert page.evaluate("(() => { const c = getComputedStyle(document.querySelector('.dlist')); return [c.maxHeight, c.overflowY] })()") == ["360px", "auto"]
+    assert page.evaluate("(() => { const c = getComputedStyle(document.querySelector('.dlist')); return [c.maxHeight, c.overflowY] })()") == ["260px", "auto"]
 
 
 def test_clicking_a_future_day_explains_instead_of_listing(page):
-    open_bd(page); click_slot(page, 6); assert "has not happened yet" in page.locator("#dayd").inner_text()
+    open_bd(page); click_slot(page, 6); assert "Not happened yet" in page.locator("#dayd").inner_text()
 
 
 def test_switching_view_or_person_closes_the_day_panel(page):
@@ -184,3 +201,57 @@ def test_segment_control_selector_and_panels_have_even_spacing(page):
     open_bd(page); seg = page.locator(".seg").bounding_box(); pick = page.locator(".pick .field").bounding_box(); card = page.locator(".pcap").bounding_box(); chart = page.locator("#cw").bounding_box()
     gaps = [pick["y"] - (seg["y"] + seg["height"]), card["y"] - (pick["y"] + pick["height"])]
     assert all(8 <= g <= 40 for g in gaps), gaps
+
+
+def numbers(page):
+    r = rows(page)["Ideal pace"]; return float(r[0].split()[0]), float(r[1].split()[0])
+
+
+def test_ideal_done_plus_ideal_remaining_always_equals_the_total_hours(page):
+    """Whatever day you point at, hours that should be done plus hours that should remain is the whole estimate (50 h here)."""
+    open_bd(page)
+    for k in (2, 3, 4):
+        hover_slot(page, k); done, remain = numbers(page); assert abs(done + remain - 50) < 0.15, (k, done, remain)
+
+
+def test_ideal_hours_follow_working_days_and_the_calculation_is_shown(page):
+    open_bd(page); expected = {2: (1, 6.3), 3: (2, 12.5), 4: (3, 18.8)}      # sprint day 3, 4, 5 are working day 1, 2, 3 of 8: 1/8, 2/8, 3/8 of 50 h
+    for k, (wd, done) in expected.items():
+        t = hover_slot(page, k); assert f"Working day {wd} of 8" in t and abs(numbers(page)[0] - done) < 0.15 and f"50 h × {wd} / 8" in t and "Ideal pace =" not in t, (k, t)
+
+
+def test_planning_days_say_no_capacity_and_expect_nothing_done(page):
+    open_bd(page)
+    for k in (0, 1):
+        t = hover_slot(page, k); assert "Sprint Planning" in t and "no capacity" in t and numbers(page) == (0.0, 50.0), (k, t)
+
+
+def test_hover_card_is_two_small_tables_not_a_list_of_small_lines(page):
+    open_bd(page); hover_slot(page, 4)
+    assert page.locator("#tip .mt").count() == 2 and page.locator("#tip .tpb .bdg").count() == 2
+    assert page.locator("#tip .mt").first.locator("thead th").all_inner_texts() == ["", "Done", "Remaining"]
+    assert page.locator("#tip .mt").nth(1).locator("thead th").all_inner_texts() == ["", "Closed today", "Closed so far", "Open"]
+    t = page.locator("#tip").inner_text(); assert "dashed line" not in t and "Ideal pace =" not in t and "HOURS" in t.upper() and "TICKETS" in t.upper()
+
+
+def test_hover_says_whether_the_work_is_ahead_of_or_behind_the_ideal_pace(page):
+    open_bd(page); hover_slot(page, 4); pill = page.locator("#tip .pill2"); assert pill.count() == 1 and (re.fullmatch(r"[\d.]+ h (ahead|behind)", pill.inner_text()) or pill.inner_text() == "On ideal pace")
+    hover_slot(page, 0); assert page.locator("#tip .pill2").count() == 0, "no verdict on planning days"
+
+
+def test_ideal_pace_hours_come_before_the_ticket_counts(page):
+    open_bd(page); hover_slot(page, 4); secs = page.locator("#tip .tps"); assert "HOURS" in secs.nth(0).inner_text().upper() and "TICKETS" in secs.nth(1).inner_text().upper()
+
+
+def test_hover_card_fits_inside_itself_and_the_screen(page):
+    open_bd(page); hover_slot(page, 4); card = page.locator("#tip").bounding_box()
+    assert page.evaluate("(() => { const t = document.querySelector('#tip'); return t.scrollWidth <= t.clientWidth + 1 })()") and card["height"] < 400
+
+
+def test_hover_card_goes_away_when_the_pointer_leaves_the_chart_or_reaches_an_info_button(page):
+    open_bd(page); hover_slot(page, 3); page.locator("#v-bd .key .ibtn").first.hover()
+    assert page.locator("#tip").is_hidden() and page.locator("#gtip").is_visible(), "the info text shows and the day card is gone"
+    hover_slot(page, 4); page.mouse.move(5, 5); page.wait_for_function("document.querySelector('#tip').hidden"); assert page.locator("#tip").is_hidden()
+    hover_slot(page, 4); page.locator("#v-bd .seg").hover(); assert page.locator("#tip").is_hidden()
+    hover_slot(page, 4); page.mouse.wheel(0, 300); page.wait_for_function("document.querySelector('#tip').hidden")
+    hover_slot(page, 4); svg = page.locator("#cw svg").bounding_box(); page.mouse.move(svg["x"] + svg["width"] / 2, svg["y"] - 30); assert page.locator("#tip").is_hidden()
