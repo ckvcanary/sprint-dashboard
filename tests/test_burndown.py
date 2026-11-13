@@ -25,9 +25,9 @@ def click_slot(page, k):
 
 
 # ---------- header and structure
-def test_two_areas_overall_is_the_default(page):
+def test_three_areas_overall_is_the_default(page):
     page.click('[data-tab="bd"]'); page.wait_for_selector(".seg")
-    tabs = page.locator(".seg button"); assert tabs.all_inner_texts() == ["Overall", "Per person"]
+    tabs = page.locator(".seg button"); assert tabs.all_inner_texts() == ["Overall", "Per person", "Logic"]
     assert tabs.nth(0).get_attribute("aria-selected") == "true" and page.locator(".term").count() == 1 and page.locator("#cw").count() == 0
 
 
@@ -255,3 +255,32 @@ def test_hover_card_goes_away_when_the_pointer_leaves_the_chart_or_reaches_an_in
     hover_slot(page, 4); page.locator("#v-bd .seg").hover(); assert page.locator("#tip").is_hidden()
     hover_slot(page, 4); page.mouse.wheel(0, 300); page.wait_for_function("document.querySelector('#tip').hidden")
     hover_slot(page, 4); svg = page.locator("#cw svg").bounding_box(); page.mouse.move(svg["x"] + svg["width"] / 2, svg["y"] - 30); assert page.locator("#tip").is_hidden()
+
+# ---------- Logic page and over-estimate column
+def open_logic(page):
+    page.click('[data-tab="bd"]'); page.wait_for_selector(".seg"); page.click('[data-bdview="logic"]'); page.wait_for_selector("#lgchk")
+
+
+def test_logic_page_lists_rules_and_every_self_check_passes(page):
+    open_logic(page)
+    t = page.locator("#v-bd").inner_text()
+    for w in ("Rules behind every number", "Original estimate", "Remaining estimate", "Over estimate", "Ideal pace", "Expected logged by now", "Closed means", "Self-checks on this sprint", "Data checks"):
+        assert w in t, w
+    assert page.locator("#lgchk .tag.bad").count() == 0 and page.locator("#lgchk .tag.ok").count() >= 6
+    assert "—" not in t and "–" not in page.locator(".lgc").first.inner_text()
+
+
+def test_per_person_table_has_an_over_estimate_column_and_totals_add_up(page):
+    open_bd(page)
+    heads = page.evaluate("() => [...[...document.querySelectorAll('#v-bd .panel table')].pop().tHead.rows[0].cells].map(c => c.innerText.trim())")
+    assert [h.lower().rstrip("i") for h in heads[:5]] == ["name", "original estimate (h)", "logged (h)", "remaining estimate (h)", "over estimate (h)"], heads
+    t = page.evaluate("() => [...[...document.querySelectorAll('#v-bd .panel table')].pop().tBodies[0].rows].map(r => [...r.cells].map(c => c.innerText.trim()))")
+    body, tot = t[:-1], t[-1]
+    for c in (1, 2, 3, 4, 5, 6, 7): assert abs(sum(float(r[c]) for r in body) - float(tot[c])) < .6, c
+    assert all(float(r[3]) <= float(r[1]) + .01 for r in body)
+
+
+def test_retrospective_slot_only_when_jira_end_is_the_next_working_day(page):
+    open_bd(page)
+    labs = page.evaluate("() => [...document.querySelectorAll('#cw svg text')].map(t => t.textContent).filter(x => /^(Day \\d+|Retro)$/.test(x))")
+    assert labs[:10] == [f"Day {i}" for i in range(1, 11)]

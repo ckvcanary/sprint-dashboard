@@ -280,6 +280,7 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .hr{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .btn.ghost#signout{height:52px;border-radius:12px;padding:0 18px}.btn.ghost{background:transparent;color:var(--ink);border-color:var(--lineStrong)}.btn.ghost:hover{background:var(--soft);opacity:1}
 .gtip{position:fixed;z-index:300;max-width:340px;background:color-mix(in srgb,var(--ink) 13%,var(--bg));color:var(--ink);border:1px solid var(--lineStrong);border-radius:10px;padding:10px 13px;font-size:12.5px;line-height:1.5;box-shadow:var(--shadow);pointer-events:none}.gtip[hidden]{display:none}.gtip b{font-weight:600}
+.lgc{width:100%;border-collapse:collapse;table-layout:fixed}.lgc td,.lgc th{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left;font-size:13px;line-height:1.45;white-space:normal;overflow-wrap:anywhere}.lgc.rules th:nth-child(1){width:15%}.lgc.rules th:nth-child(2){width:13%}.lgc.rules th:nth-child(4){width:20%}
 .seg{display:inline-flex;gap:2px;padding:4px;background:var(--soft);border:1px solid var(--line);border-radius:12px;margin-bottom:18px}
 .seg button{font:500 14px var(--sans);border:0;background:transparent;color:var(--muted);padding:8px 18px;border-radius:9px;cursor:pointer}
 .seg button[aria-selected=true]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
@@ -543,6 +544,8 @@ function renderCap() {
 }
 
 /* ---------- burndown ---------- */
+const nextWork = d => { let ms = dUTC(d) + 864e5; while ([0, 6].includes(new Date(ms).getUTCDay())) ms += 864e5; return dStr(ms); };   // first working day after d
+const hasRetro = (s, sd) => !!(s.end && s.end === nextWork(sd[sd.length - 1]));   // a retrospective day exists only when Jira's end date is the working day after Day 10
 const dUTC = s => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
 const dStr = ms => new Date(ms).toISOString().slice(0, 10);
 const fmtD = s => { const d = new Date(dUTC(s)); return d.getUTCDate() + ' ' + MON[d.getUTCMonth()]; };
@@ -551,22 +554,23 @@ const dayName = s => DAYN[new Date(dUTC(s)).getUTCDay()];
 const asOfMs = () => META ? Date.parse(META.refreshedAt) : Date.now();
 const asOfIST = () => new Date(asOfMs() + 5.5 * 3600e3).toISOString().slice(0, 16);
 function workDays(w) { const a = []; for (let ms = dUTC(w[0]); ms <= dUTC(w[1]); ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) a.push(dStr(ms)); } return a; }
-function sprintDays(s) { const a = []; for (let ms = dUTC(s.start || s.win[0]); a.length < 10; ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) a.push(dStr(ms)); } return a; }   // a sprint has 10 working days
+function sprintDays(s) { const a = []; for (let ms = dUTC(s.start && s.start < s.win[0] ? s.start : s.win[0]); a.length < 10; ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) a.push(dStr(ms)); } return a; }   // a sprint has 10 working days
 function elapsed(days, at) { const d = at.slice(0, 10), hh = +at.slice(11, 13) + (+at.slice(14, 16)) / 60; let e = 0; days.forEach(x => { if (x < d) e += DH; else if (x === d) e += Math.max(0, Math.min(DH, hh - WH0)); }); return e; }
-function person(name, p, days, at) {
-  const tot = days.length * DH, el = elapsed(days, at), ad = at.slice(0, 10);
-  const ent = Object.entries(p.logs).filter(([d]) => d <= ad).sort(), logged = ent.reduce((a, [, h]) => a + h, 0);
-  let cum = ent.filter(([d]) => d < days[0]).reduce((a, [, h]) => a + h, 0); const pts = [[0, Math.max(0, p.E - cum)]];
-  days.forEach((d, i) => { if (d > ad) return; cum += ent.filter(([x]) => x > (days[i - 1] || '0000') && x <= d && x >= days[0]).reduce((a, [, h]) => a + h, 0); pts.push([d === ad ? el : (i + 1) * DH, Math.max(0, p.E - cum)]); });
-  const exp = CAP * el / tot, miss = Math.max(0, exp - logged), remain = Math.max(0, p.E - logged), left = CAP * (tot - el) / tot, late = ad > days[days.length - 1];
+function person(name, p, days, at, today) {
+  const tot = days.length * DH, el = elapsed(days, at), ad = at.slice(0, 10), bn = p.burn || p.logs;
+  const ent = Object.entries(p.logs).filter(([d]) => d <= ad), logged = ent.reduce((a, [, h]) => a + h, 0);
+  const be = Object.entries(bn).filter(([d]) => d <= ad).sort(), burned = be.reduce((a, [, h]) => a + h, 0);
+  let cum = be.filter(([d]) => d < days[0]).reduce((a, [, h]) => a + h, 0); const pts = [[0, Math.max(0, p.E - cum)]];
+  days.forEach((d, i) => { if (d > ad) return; cum += be.filter(([x]) => x > (days[i - 1] || '0000') && x <= d && x >= days[0]).reduce((a, [, h]) => a + h, 0); pts.push([d === ad ? el : (i + 1) * DH, Math.max(0, p.E - cum)]); });
+  const exp = CAP * el / tot, miss = Math.max(0, exp - logged), remain = Math.max(0, p.E - burned), over = Math.max(0, logged - burned), left = CAP * (tot - el) / tot, late = (today || ad) > days[days.length - 1];
   let st = 'On track', cl = 'ok';
   if (el <= 0) st = 'Not started'; else if (miss > 8) { st = 'Time log missing'; cl = 'bad'; } else if (miss > 2) { st = 'Behind on logging'; cl = 'warn'; }
   if (el > 0 && remain > left + .05 && !late && cl === 'ok') { st = 'Cannot finish in time'; cl = 'warn'; }
-  return { name, E: p.E, logged, remain, exp, miss, left, pts, tot, el, st, cl };
+  return { name, E: p.E, logged, remain, over, exp, miss, left, pts, tot, el, st, cl };
 }
 let BDV = null, bdDay = null, bdTab = 'today';   // chart data for the hover, the day that is pinned, the tab of the day panel
 function lineChart(rs, ctx) {
-  const { sd, plan, wd, s, tasks, stories, epics, el, tot, ad } = ctx, retro = s.end && s.end > sd[sd.length - 1], slots = sd.length + (retro ? 1 : 0);
+  const { sd, plan, wd, s, tasks, stories, epics, el, tot, ad } = ctx, retro = hasRetro(s, sd), slots = sd.length + (retro ? 1 : 0);
   const sumE = rs.reduce((a, r) => a + r.E, 0), W = 1000, H = 330, L = 60, R = 16, Tp = 16, B = 76, pw = W - L - R, ph = H - Tp - B, top = Math.max(16, Math.ceil(sumE / 16) * 16);
   const X = k => L + k / slots * pw, Y = v => Tp + ph - v / top * ph;
   const xs = [...new Set(rs.flatMap(r => r.pts.map(p => p[0])))].sort((a, b) => a - b);
@@ -666,21 +670,72 @@ function capBlock(label, sub, used, cap) {
     <div class="meter2" role="img" aria-label="${esc(label)}: capacity used ${Math.round(pu)} percent, left ${Math.round(100 - pu)} percent"><i class="u" style="width:${pu}%"></i><i class="l" style="width:${100 - pu}%"></i></div>
     <div class="capl2"><span><i class="u"></i>Used <b>${f1(used)} h</b> (${Math.round(pu)}%)</span><span><i class="l"></i>Left <b>${f1(left)} h</b> (${Math.round(100 - pu)}%)</span><span class="of">of ${f1(cap)} h</span></div></div>`;
 }
+
+/* ---------- logic page: the rules behind every number on the Burndown page, with the live value and a self-check ---------- */
+function logicHtml(s, rs, c) {
+  const { wd, sd, plan, el, tot, ad, at } = c, sum = k => rs.reduce((a, r) => a + r[k], 0), n = rs.length, pk = Object.entries(s.people);
+  const tasks = (s.tasks || []).filter(t => !t.y), au = s.audit || { noEstimate: [], unassigned: [], overrun: [], afterWindow: 0 };
+  const dayNo = sd.filter(d => d <= ad).length, done = Math.max(0, sum('E') - sum('remain'));
+  const rowsT = [
+    ['Original estimate', 'Per person and table', 'Jira original estimate of every task, added up. Tasks are all sub-task types and any Task, Bug or New Feature that has no sub-tasks in the sprint. A story with sub-tasks is skipped, so hours are never counted twice. For a task with hours logged before the sprint start, those hours are taken off, never below 0 h. A task with no assignee is left out and listed under Data checks.', f1(sum('E')) + ' h'],
+    ['Logged', 'Table, Hours by person', 'Jira worklogs, counted for the person who logged them, on the day they were logged. Hours logged before the sprint start belong to the earlier sprint. Hours after the last working day are not counted.', f1(sum('logged')) + ' h'],
+    ['Remaining estimate', 'Table, chart line', 'For each task: original estimate minus hours logged on it, never below 0 h. The results are added up per person. Hours beyond one task\'s estimate never reduce another task.', f1(sum('remain')) + ' h'],
+    ['Over estimate', 'Table', 'Hours logged on a task beyond its own estimate: logged minus the hours that reduced the remaining estimate.', f1(sum('over')) + ' h'],
+    ['Capacity', 'Capacity bars', `${CAP} h per person = ${wd.length} working days × ${DH} h. Sprint Planning days are sprint days with no capacity. Public holidays are not removed.`, f1(n * CAP) + ' h (' + n + ' people)'],
+    ['Time elapsed (bar: Used)', 'Capacity bars', `Capacity × working hours passed / ${f1(tot)} h. A full day counts ${DH} h; today counts the hours between 11:00 and 19:00 IST up to the latest Jira pull. The bar shows time, not logged hours.`, f1(n * CAP * el / tot) + ' h (' + (tot ? Math.round(el / tot * 100) : 0) + '%)'],
+    ['Expected logged by now', 'Table, Hours by person', `Capacity × working hours passed / ${f1(tot)} h, per person.`, f1(sum('exp')) + ' h'],
+    ['Missing log', 'Table', 'Expected logged by now minus logged, never below 0 h. Orange above 2 h, red above 8 h.', f1(sum('miss')) + ' h'],
+    ['Time left in sprint', 'Table', `Capacity × working hours still to come / ${f1(tot)} h.`, f1(sum('left')) + ' h'],
+    ['Flag', 'Table', 'First rule that fits: Not started (no working time yet); Time log missing (missing log above 8 h); Behind on logging (above 2 h); Cannot finish in time (remaining estimate above time left, only while the sprint runs); On track.', rs.map(r => r.name + ': ' + r.st).join(' · ')],
+    ['Ideal pace', 'Chart, hover', `Starts at the total original estimate and falls in a straight line to 0 h over the ${wd.length} working days. Remaining on working day n = total × (1 − n / ${wd.length}).`, f1(sum('E')) + ' h at start, 0 h on Day ' + (plan + wd.length)],
+    ['Done (hover)', 'Hover card', 'Total original estimate minus remaining estimate on that day. Ahead or behind = done minus the ideal pace done.', f1(done) + ' h so far'],
+    ['Closed today, so far, open', 'Hover card, day panel', 'Closed today: tickets that entered their closed status on that day (IST). Closed so far: that day or earlier. Open: all others. A ticket closed before the sprint counts from Day 1.', tasks.filter(t => t.d && t.d <= ad).length + ' of ' + tasks.length + ' tasks closed'],
+    ['Sprint day', 'Overview', 'Working days from the sprint start, Monday to Friday, 10 in total. The retrospective day shows only when Jira\'s end date is the working day after Day 10.', dayNo ? dayNo + ' of 10' : 'Not started'],
+    ['As of', 'Overview', 'Time of the latest Jira pull. The page never shows a day or hour after it.', at.replace('T', ' ') + ' IST']
+  ];
+  const allT = s.tasks || [], sumTask = allT.reduce((a, t) => a + t.e, 0), sumPeople = pk.reduce((a, [, p]) => a + p.E, 0), byP = {}; allT.forEach(t => { byP[t.a] = (byP[t.a] || 0) + t.e; });   // a story with no sub-tasks counts as a task for hours
+  const hasList = allT.length > 0, ok = (a, b) => Math.abs(a - b) < .06;
+  const chk = [
+    ['Estimates of all tasks add up to the estimates of all people', !hasList || ok(sumTask, sumPeople), hasList ? f1(sumTask) + ' h and ' + f1(sumPeople) + ' h' : 'No ticket list for this sprint'],
+    ['Each person\'s estimate equals the estimates of their own tasks', !hasList || pk.every(([nm, p]) => ok(p.E, byP[nm] || 0)), hasList ? pk.length + ' people compared' : 'No ticket list for this sprint'],
+    ['Remaining estimate is never above the original estimate', rs.every(r => r.remain <= r.E + .01), n + ' people'],
+    ['Original estimate = hours burned + remaining estimate', pk.every(([nm, p]) => { const r = rs.find(x => x.name === nm); const b = Object.entries(p.burn || p.logs).filter(([d]) => d <= at.slice(0, 10)).reduce((a, [, h]) => a + h, 0); return !r || ok(p.E, b + r.remain); }), n + ' people'],
+    ['Logged hours are never below burned hours', pk.every(([nm, p]) => { const b = Object.values(p.burn || p.logs).reduce((a, h) => a + h, 0), l = Object.values(p.logs).reduce((a, h) => a + h, 0); return l + .01 >= b; }), n + ' people'],
+    ['Capacity of the team = people × ' + CAP + ' h', ok(n * CAP, rs.reduce((a, r) => a + CAP, 0)), f1(n * CAP) + ' h'],
+    ['No ticket is closed after the latest Jira pull', tasks.every(t => !t.d || t.d <= ad), 'Latest pull ' + ad],
+    ['Sprint has 10 working days and ' + wd.length + ' of them carry capacity', sd.length === 10 && sd.slice(plan).length === wd.length, plan + ' planning + ' + wd.length + ' working']
+  ];
+  const bulk = []; pk.forEach(([nm, p]) => Object.entries(p.logs).forEach(([d, h]) => { if (h > 2 * DH) bulk.push(nm + ' ' + fmtD(d) + ' ' + f1(h) + ' h'); }));
+  const warn = [
+    ['Tasks with no original estimate', au.noEstimate.length, au.noEstimate.join(', ')],
+    ['Tasks with no assignee (left out of the burndown)', au.unassigned.length, au.unassigned.map(u => u.k + ' ' + f1(u.e) + ' h').join(', ')],
+    ['Tasks logged over their own estimate', au.overrun.length, au.overrun.map(o => o.k + ' ' + o.a + ' ' + f1(o.l) + ' of ' + f1(o.e) + ' h').join(', ')],
+    ['Hours logged after the last working day (not counted)', au.afterWindow > 0 ? 1 : 0, au.afterWindow > 0 ? f1(au.afterWindow) + ' h' : ''],
+    ['Days with more than ' + 2 * DH + ' h logged by one person (bulk logging)', bulk.length, bulk.join(', ')]
+  ];
+  const tag = (okk, t) => `<span class="tag ${okk ? 'ok' : 'bad'}">${t}</span>`;
+  return `<div class="panel"><div class="cardhead"><h3>Rules behind every number</h3></div><p class="note" style="margin:0 0 12px">${esc(s.name)}. Values are for everyone in the sprint and come from the latest Jira pull.</p>
+    <div class="scroll"><table class="lgc rules"><thead><tr><th>Number</th><th>Where shown</th><th>Rule</th><th>Value now</th></tr></thead><tbody>${rowsT.map(r => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td></tr>`).join('')}</tbody></table></div></div>
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Closed means</h3></div><div class="scroll"><table class="lgc"><tbody><tr><td><b>Tasks</b></td><td>${TASK_CLOSED.map(esc).join(', ')}</td></tr><tr><td><b>User stories</b></td><td>${STORY_CLOSED.map(esc).join(', ')}</td></tr><tr><td><b>Epics</b></td><td>${EPIC_CLOSED.map(esc).join(', ')}</td></tr></tbody></table></div></div>
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Self-checks on this sprint</h3></div><div class="scroll"><table class="lgc" id="lgchk"><tbody>${chk.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[2])}</td><td>${tag(r[1], r[1] ? 'Pass' : 'Fail')}</td></tr>`).join('')}</tbody></table></div></div>
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Data checks</h3></div><div class="scroll"><table class="lgc" id="lgwarn"><tbody>${warn.map(r => `<tr><td>${esc(r[0])}</td><td><b>${r[1]}</b></td><td>${esc(r[2] || 'None')}</td></tr>`).join('')}</tbody></table></div></div>`;
+}
 function renderBd() {
   const s = BD[selOne];
   if (!s || !s.win) { $('#v-bd').innerHTML = `<div class="empty">No time-logging data for ${esc(spName(selOne))}.</div>`; return; }
   const wd = workDays(s.win), sd = sprintDays(s), plan = sd.filter(d => d < wd[0]).length, at0 = asOfIST(), ad = at0.slice(0, 10), lastT = wd[wd.length - 1] + 'T19:00', at = at0 > lastT ? lastT : at0;
   $('#asof').textContent = META ? tfmt(asOfMs()) : 'Unknown';
-  const rs = Object.entries(s.people).filter(([, p]) => p.E > 0 || Object.keys(p.logs).length).map(([n, p]) => person(n, p, wd, at)).sort((a, b) => b.miss - a.miss || b.E - a.E);
+  const rs = Object.entries(s.people).filter(([, p]) => p.E > 0 || Object.keys(p.logs).length).map(([n, p]) => person(n, p, wd, at, ad)).sort((a, b) => b.miss - a.miss || b.E - a.E);
   const el = rs[0] ? rs[0].el : 0, tot = wd.length * DH, dayNo = sd.filter(d => d <= ad).length;
   if (bdWho !== 'Team' && !rs.some(r => r.name === bdWho)) bdWho = 'Team';
   if (renderBd.lastWho !== bdWho || renderBd.lastSp !== selOne || renderBd.lastView !== bdView) bdDay = null; renderBd.lastWho = bdWho; renderBd.lastSp = selOne; renderBd.lastView = bdView;
   const dayTxt = !dayNo ? 'Not started' : (ad > sd[sd.length - 1] ? 'Sprint complete, 10 of 10' : dayNo + ' of 10 · ' + dayName(sd[dayNo - 1]) + ' ' + fmtD(sd[dayNo - 1]));
   const d3 = wd[0], dEnd = wd[wd.length - 1], startTxt = dayName(d3) + ' ' + fmtD(d3), endTxt = dayName(dEnd) + ' ' + fmtD(dEnd);
-  const seg = `<div class="seg" role="tablist" aria-label="Burndown view"><button type="button" role="tab" data-bdview="overall" aria-selected="${bdView === 'overall'}">Overall</button><button type="button" role="tab" data-bdview="person" aria-selected="${bdView === 'person'}">Per person</button></div>`;
+  const seg = `<div class="seg" role="tablist" aria-label="Burndown view"><button type="button" role="tab" data-bdview="overall" aria-selected="${bdView === 'overall'}">Overall</button><button type="button" role="tab" data-bdview="person" aria-selected="${bdView === 'person'}">Per person</button><button type="button" role="tab" data-bdview="logic" aria-selected="${bdView === 'logic'}">Logic</button></div>`;
   TT.chart = { h: 'About this chart', rows: [['blue', 'Ideal pace', `From Day ${plan + 1} (${startTxt}) to Day ${plan + wd.length} (${endTxt}). Days 1 to ${plan} are Sprint Planning.`], ['ok', 'Remaining estimate', 'Original estimate minus time logged.']], groups: [['Epics are closed in', EPIC_CLOSED], ['User stories are closed in', STORY_CLOSED], ['Tasks are closed in', TASK_CLOSED]], note: 'Tasks are every sub-task type and any Task, Bug or New Feature.' };
   let body;
-  if (bdView === 'overall') {
+  if (bdView === 'logic') { BDV = null; body = logicHtml(s, rs, { wd, sd, plan, el, tot, ad, at }); }
+  else if (bdView === 'overall') {
     BDV = null;
     body = `<div class="panel term"><div class="tgrid">
       <div class="tk">Sprint</div><div class="tv">${esc(s.name)} · ${esc(fmtD(s.start || sd[0]))} to ${esc(fmtD(s.end || sd[sd.length - 1]))}, 10 working days</div>
@@ -698,9 +753,9 @@ function renderBd() {
     body = `<div class="pick"><label class="field"><span class="fl">Person</span><select id="bdwho" class="ctl" aria-label="Person">${['Team'].concat(rs.map(r => r.name)).map(x => `<option value="${esc(x)}" ${x === bdWho ? 'selected' : ''}>${x === 'Team' ? 'Everyone' : esc(x)}</option>`).join('')}</select></label>
         <div class="panel pcap">${capBlock(bdWho === 'Team' ? 'Everyone' : bdWho, bdWho === 'Team' ? n + ' people × ' + CAP + ' h' : CAP + ' h = ' + wd.length + ' days × ' + DH + ' h', n * CAP * el / tot, n * CAP)}</div></div>
     <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Remaining work vs ideal pace · ${esc(bdWho === 'Team' ? 'Everyone' : bdWho)}${tip('chart')}</h3></div><div class="key" style="margin-bottom:6px"><span><i style="background:var(--blue)"></i>Remaining estimate (h)${tip('remaining')}</span><span><i style="background:var(--faint)"></i>Ideal pace${tip('ideal')}</span></div>${lineChart(sel, { sd, plan, wd, s, tasks, stories, epics, el, tot, ad })}<div class="dayd" id="dayd" hidden></div></div>
-    <div class="panel" style="margin-top:16px"><div class="scroll"><table><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Logged (h)</th><th>Remaining estimate (h)</th><th>${lab('Expected logged by now (h)', 'expected')}</th><th>${lab('Missing log (h)', 'missing')}</th><th>Time left in sprint (h)</th><th>${lab('Flag', 'flag')}</th></tr></thead><tbody>
-    ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td><td>${f1(r.E)}</td><td>${f1(r.logged)}</td><td>${f1(r.remain)}</td><td>${f1(r.exp)}</td><td class="${r.cl}">${r.miss > .05 ? f1(r.miss) : '0'}</td><td>${f1(r.left)}</td><td><span class="tag ${r.cl === 'ok' && r.st === 'Not started' ? 'nil' : r.cl}">${esc(r.st)}</span></td></tr>`).join('')}
-    ${n > 1 ? `<tr class="tot"><td>Everyone</td><td>${f1(sum('E'))}</td><td>${f1(sum('logged'))}</td><td>${f1(sum('remain'))}</td><td>${f1(sum('exp'))}</td><td>${f1(sum('miss'))}</td><td>${f1(sum('left'))}</td><td></td></tr>` : ''}</tbody></table></div></div>`;
+    <div class="panel" style="margin-top:16px"><div class="scroll"><table><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Logged (h)</th><th>Remaining estimate (h)</th><th>${lab('Over estimate (h)', 'over')}</th><th>${lab('Expected logged by now (h)', 'expected')}</th><th>${lab('Missing log (h)', 'missing')}</th><th>Time left in sprint (h)</th><th>${lab('Flag', 'flag')}</th></tr></thead><tbody>
+    ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td><td>${f1(r.E)}</td><td>${f1(r.logged)}</td><td>${f1(r.remain)}</td><td>${r.over > .05 ? f1(r.over) : '0'}</td><td>${f1(r.exp)}</td><td class="${r.cl}">${r.miss > .05 ? f1(r.miss) : '0'}</td><td>${f1(r.left)}</td><td><span class="tag ${r.cl === 'ok' && r.st === 'Not started' ? 'nil' : r.cl}">${esc(r.st)}</span></td></tr>`).join('')}
+    ${n > 1 ? `<tr class="tot"><td>Everyone</td><td>${f1(sum('E'))}</td><td>${f1(sum('logged'))}</td><td>${f1(sum('remain'))}</td><td>${f1(sum('over'))}</td><td>${f1(sum('exp'))}</td><td>${f1(sum('miss'))}</td><td>${f1(sum('left'))}</td><td></td></tr>` : ''}</tbody></table></div></div>`;
   }
   $('#v-bd').innerHTML = seg + body;
   renderDay(); if (bdDay != null && BDV) setGuide(bdDay, true);
@@ -871,7 +926,8 @@ const TT = {   // every (i) tooltip: a heading, an optional one-line intro, then
   renew: { h: 'Renew by', rows: [['ok', 'Never, Does not expire, No expiry', 'Nothing to renew.'], ['warn', 'A date', 'Renew the pass before this date, or the dashboard stops reading Jira.']] },
   closed: { h: 'What counts as closed', groups: [['Epics', EPIC_CLOSED], ['User stories', STORY_CLOSED], ['Tasks', TASK_CLOSED]], note: 'Tasks are every sub-task type (Sub-task, Story sub-task, Bug sub-task, New Feature sub-task) and any Task, Bug or New Feature.' },
   ideal: { h: 'Ideal pace', p: 'Work that should be done by the end of each day, if the sprint hours burn evenly.', rows: [['blue', 'Formula', 'Total hours × working day / 8 working days'], ['nil', 'Days 1 and 2', 'Sprint Planning, no capacity counted.']] },
-  remaining: { h: 'Remaining estimate', p: 'Hours actually remaining: original estimate minus the time logged.' },
+  remaining: { h: 'Remaining estimate', p: 'For each task, original estimate minus the time logged on it (never below 0), added up.' },
+  over: { h: 'Over estimate (h)', p: 'Hours logged beyond a task\'s own estimate. They do not reduce the remaining estimate of other tasks.' },
   n1: { h: 'Jira', p: 'Where tickets, estimates, time logs, comments and attachments live.', rows: [['ok', 'Read-only', 'The dashboard only reads from Jira. It never writes to it.']] },
   n2: { h: 'GitHub Actions', p: 'Runs a script that reads Jira through the Jira REST API.', rows: [['blue', 'Where it runs', "On GitHub's servers, not on anyone's laptop."], ['ok', 'Access', 'A read-only Jira API token stored as a GitHub secret.']] },
   n3: { h: 'GitHub repository', p: 'The script commits the latest data as JSON files.', rows: [['ok', 'History kept', 'Every update is a commit, so older data is never lost.']] },

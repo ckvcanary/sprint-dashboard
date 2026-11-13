@@ -216,26 +216,40 @@ def main():
         # ---------- burndown
         if sk in WIN:
             st, en = WIN[sk]; ss = SPRINT_START.get(sk, st)
-            ppl = collections.defaultdict(lambda: {"E": 0.0, "logs": collections.defaultdict(float)})
+            ppl = collections.defaultdict(lambda: {"E": 0.0, "logs": collections.defaultdict(float), "burn": collections.defaultdict(float), "over": 0.0})
             tl = []
+            audit = {"noEstimate": [], "unassigned": [], "overrun": [], "afterWindow": 0.0}
             sl = [{"k": k, "a": first(x["fields"].get("assignee")), "d": done_date(x)} for k, x in sorted(iss.items()) if sk in SHOW_BD and is_story_like(x)]
             for k, x in iss.items():
-                if k in parents or not x["fields"].get("assignee"):
+                if k in parents:
                     continue
-                f = x["fields"]; pre = 0.0
+                f = x["fields"]; pre = 0.0; inwin = []
                 for l in full_worklogs(x):
-                    d = l["started"][:10]; h = l["timeSpentSeconds"] / 3600; au = first(l["author"])
+                    d = l["started"][:10]; h = l["timeSpentSeconds"] / 3600
                     if d < ss: pre += h
-                    elif d <= en: ppl[au]["logs"][d] += h
-                e_ = max(0.0, (f.get("timeoriginalestimate") or 0) / 3600 - pre)
-                ppl[first(f["assignee"])]["E"] += e_
-                if sk in SHOW_BD: tl.append({"k": k, "a": first(f["assignee"]), "e": round(e_, 2), "d": done_date(x), "ty": x["fields"]["issuetype"]["name"], **({"y": 1} if is_story_like(x) else {})})
+                    elif d <= en: inwin.append((d, h, first(l["author"])))
+                    else: audit["afterWindow"] += h
+                raw = (f.get("timeoriginalestimate") or 0) / 3600
+                e_ = max(0.0, raw - pre)
+                if not f.get("assignee"):
+                    audit["unassigned"].append({"k": k, "e": round(e_, 2)}); continue      # no owner, so no person line: listed under Data checks
+                if not raw: audit["noEstimate"].append(k)
+                who = first(f["assignee"]); left = e_; lg = 0.0
+                for d, h, au in sorted(inwin):
+                    ppl[au]["logs"][d] += h; lg += h                  # time logged: counted by author and log date
+                    cr = min(h, left); left -= cr                     # burn: hours that reduce this task's estimate; hours beyond the estimate do not reduce other tasks
+                    ppl[who]["burn"][d] += cr
+                if lg > e_ + 0.005:
+                    ppl[who]["over"] += lg - e_; audit["overrun"].append({"k": k, "a": who, "e": round(e_, 2), "l": round(lg, 2)})
+                ppl[who]["E"] += e_
+                if sk in SHOW_BD: tl.append({"k": k, "a": who, "e": round(e_, 2), "d": done_date(x), "ty": x["fields"]["issuetype"]["name"], **({"y": 1} if is_story_like(x) else {})})
             eks = sorted({(x["fields"].get("parent") or {}).get("key") for x in iss.values() if not x["fields"]["issuetype"].get("subtask")
                           and ((x["fields"].get("parent") or {}).get("fields", {}).get("issuetype", {}).get("name") == "Epic")}) if sk in SHOW_BD else []
             el_ = [{"k": e["key"], "a": first(e["fields"].get("assignee")), "d": done_date(e)} for e in (search("key in (%s)" % ",".join(eks), ["summary", "assignee", "status", "issuetype", "created", "updated", "statuscategorychangedate"], "changelog") if eks else [])]
             sd = spdates.get(sid, (ss, en))
             bd[sk] = {"name": names.get(sk, {}).get("name", sk.replace("S", "Sprint ")), "win": [st, en], "start": sd[0], "end": sd[1], "tasks": sorted(tl, key=lambda r: r["k"]), "stories": sl, "epics": sorted(el_, key=lambda r: r["k"]),
-                      "people": {p: {"E": round(v["E"], 2), "logs": {d: round(h, 2) for d, h in sorted(v["logs"].items())}} for p, v in ppl.items() if v["E"] > 0 or v["logs"]}}
+                      "audit": {**audit, "afterWindow": round(audit["afterWindow"], 2)},
+                      "people": {p: {"E": round(v["E"], 2), "logs": {d: round(h, 2) for d, h in sorted(v["logs"].items())}, "burn": {d: round(h, 2) for d, h in sorted(v["burn"].items())}, "over": round(v["over"], 2)} for p, v in ppl.items() if v["E"] > 0 or v["logs"]}}
             if sk != "S24": bd[sk]["note"] = "Shows only work still attached to the sprint in Jira; tasks moved out at closure are not included."
         else:
             bd[sk] = {"name": names.get(sk, {}).get("name", sk.replace("S", "Sprint ")), "win": None, "people": {}}
