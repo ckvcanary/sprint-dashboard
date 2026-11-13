@@ -171,8 +171,47 @@ td.ok{color:var(--green);font-weight:600}td.warn{color:var(--amber);font-weight:
   .mlist .sp{font-size:12px;font-weight:600;color:var(--muted);margin:16px 0 8px}.mlist .cell{margin-left:14px}
   .rfcard{width:100%}.ctl,input.ctl{min-width:0;width:100%}.field,.dd{width:100%}.ddpop{width:100%}
 }
+
+/* sign-in gate */
+html.locked{overflow:hidden}html.locked .wrap{display:none}
+#gate{display:none}
+html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px 16px;background:var(--bg)}
+.gcard{width:100%;max-width:400px;background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:36px 32px 28px;text-align:center}
+.gmark{width:44px;height:44px;border-radius:12px;background:var(--blue);margin:0 auto 18px;display:flex;align-items:center;justify-content:center}
+.gmark svg{width:22px;height:22px}
+.gcard h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px;color:var(--ink)}
+.gcard p{font-size:14px;color:var(--muted);margin:0 0 24px}
+.gcard form{text-align:left}
+.gcard label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:0 0 6px;letter-spacing:.02em}
+.gpw{position:relative}
+.gpw input{width:100%;height:44px;border:1px solid var(--lineStrong);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:15px;padding:0 64px 0 14px}
+.gpw input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:transparent}
+.gpw button{position:absolute;right:6px;top:6px;height:32px;padding:0 10px;border:0;background:none;color:var(--muted);font:inherit;font-size:13px;font-weight:600;cursor:pointer;border-radius:8px}
+.gpw button:hover{color:var(--ink)}
+.gerr{min-height:18px;font-size:13px;color:var(--red);margin:8px 0 14px}
+.gsub{width:100%;height:44px;border:0;border-radius:10px;background:var(--blue);color:var(--bg);font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.gsub:hover{filter:brightness(1.08)}.gsub:disabled{opacity:.6;cursor:default}
+.gfoot{margin-top:20px;font-size:12px;color:var(--faint)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.card:hover{transform:none}}
 </style>
+
+<script>
+(function(){try{var v=JSON.parse(localStorage.getItem('sd_auth')||'null');if(!v||!v.exp||v.exp<Date.now())document.documentElement.classList.add('locked');}catch(e){document.documentElement.classList.add('locked');}})();
+</script>
+<div id="gate" role="main">
+  <div class="gcard">
+    <div class="gmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7"/></svg></div>
+    <h1>Sprint Dashboard</h1>
+    <p>Sign in with the team password to continue.</p>
+    <form id="gform" autocomplete="off">
+      <label for="gpw">PASSWORD</label>
+      <div class="gpw"><input id="gpw" type="password" autocomplete="current-password" required autofocus><button type="button" id="gshow" aria-label="Show password">Show</button></div>
+      <div class="gerr" id="gerr" role="alert"></div>
+      <button class="gsub" id="gsub" type="submit">Sign in</button>
+    </form>
+    <div class="gfoot">Canary Hiring Technologies · Engineering, India</div>
+  </div>
+</div>
 
 <div class="wrap">
   <div class="top">
@@ -513,6 +552,18 @@ async function startRefresh() {
   }
   done('The refresh is taking longer than expected. Reload in a few minutes.', true);
 }
+
+// sign-in gate (a light team password, checked in the browser)
+const GATE_HASH = 'fa9304349b9d8b93e5010a67a2f78bf1f174c2678d266316d82fb6a59926771c';
+async function sha(s) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+$('#gshow').onclick = () => { const i = $('#gpw'), s = i.type === 'password'; i.type = s ? 'text' : 'password'; $('#gshow').textContent = s ? 'Hide' : 'Show'; };
+$('#gform').onsubmit = async e => {
+  e.preventDefault(); const btn = $('#gsub'), err = $('#gerr'); btn.disabled = true; err.textContent = '';
+  let ok = false; try { ok = (await sha($('#gpw').value)) === GATE_HASH; } catch (x) { err.textContent = 'Sign-in needs a secure (https) connection.'; btn.disabled = false; return; }
+  if (!ok) { err.textContent = 'Incorrect password. Try again.'; btn.disabled = false; $('#gpw').select(); return; }
+  try { localStorage.setItem('sd_auth', JSON.stringify({ exp: Date.now() + 12 * 3600e3 })); } catch (x) {}
+  $('#gpw').value = ''; btn.disabled = false; document.documentElement.classList.remove('locked');
+};
 rfb.onclick = startRefresh;
 setInterval(() => { if (META) showMeta(); if (tab === 'log') renderLog(); }, 60000);
 showMeta(); show();
