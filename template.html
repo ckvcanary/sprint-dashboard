@@ -694,7 +694,7 @@ function pullModel() {
   const runs = (RUNS || []).filter(r => r.trigger === 'schedule').map(r => Object.assign({ ms: Date.parse(r.at) }, r)).sort((a, b) => a.ms - b.ms), now = Date.now(), used = new Set(), st = {};
   const first = dUTC(SCHED_START), lastMs = Math.max(now, ...runs.map(r => r.ms)) + 70 * 864e5, all = [];
   for (let ms = first; ms <= lastMs; ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) SLOTS.forEach((sl, i) => all.push({ d: dStr(ms), i, t: slotMs(dStr(ms), sl[0], sl[1]) })); }
-  all.forEach(sl => { const run = runs.find(r => !used.has(r) && r.ms >= sl.t - 5 * 60e3 && r.ms <= sl.t + 180 * 60e3);
+  all.forEach(sl => { const run = runs.find(r => !used.has(r) && r.ms >= sl.t - 15 * 60e3 && r.ms <= sl.t + 180 * 60e3);
     if (run) { used.add(run); st[sl.d + '|' + sl.i] = { c: run.ok ? 'ok' : 'bad', t: run.ok ? 'Pulled' : 'Failed', run }; }
     else st[sl.d + '|' + sl.i] = sl.t + 180 * 60e3 < now ? { c: 'warn', t: 'Missed' } : { c: 'up', t: 'Upcoming' }; });
   return { runs, now, st, next: all.find(x => x.t > now), lastOk: runs.filter(r => r.ok).pop() };

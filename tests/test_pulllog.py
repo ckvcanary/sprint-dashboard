@@ -52,3 +52,12 @@ def test_next_pull_countdown_follows_the_clock_and_updates_every_minute(page):
     assert "in 2 h" in page.locator("#v-log").inner_text() and "in 2 h 5 min" not in page.locator("#v-log").inner_text()
     page.clock.run_for(2 * 3600 * 1000); page.wait_for_function("document.querySelector('#v-log').innerText.includes('Missed') || document.querySelector('#v-log').innerText.includes('min')")
     assert "in 2 h" not in page.locator("#v-log").inner_text()
+
+
+def test_a_scheduled_pull_that_started_a_few_minutes_early_still_counts_for_its_slot(ctx_factory, mock):
+    import json
+    d = mock.site / "data" / "runs.json"; runs = json.loads(d.read_text())
+    for r in runs:
+        if r["trigger"] == "schedule": r["at"] = "2026-11-13T05:08:06Z"      # 7 minutes before the 10:45 AM slot, as GitHub really did
+    d.write_text(json.dumps(runs)); pg = ctx_factory(); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); pg.click('[data-tab="log"]'); pg.wait_for_selector(".plt")
+    assert "Pulled · 10:38 AM" in pg.locator(".plt").first.inner_text() and pg.locator(".cnt .stat.warn b").inner_text() == "0", "must not be shown as Missed"
