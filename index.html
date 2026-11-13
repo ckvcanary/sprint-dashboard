@@ -47,6 +47,10 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 @keyframes rot{to{transform:rotate(360deg)}}
 .rfmsg{font-size:12px;color:var(--muted);margin:-10px 0 14px;text-align:right}
 .rfmsg.err{color:var(--red)}
+.rfprog{display:flex;flex-direction:column;align-items:flex-end;gap:6px;margin:-10px 0 14px;font-size:12px;color:var(--muted)}
+.rfprog .bar{width:min(320px,100%);height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.rfprog .bar i{display:block;height:100%;width:0;background:var(--blue);transition:width .3s linear}
+.rfprog b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
 /* toolbar and fields */
 .bar{display:flex;flex-wrap:wrap;gap:16px 20px;align-items:flex-end;margin-bottom:18px}
 .field{display:block}.field[hidden]{display:none}
@@ -189,7 +193,8 @@ td.ok{color:var(--green);font-weight:600}td.warn{color:var(--amber);font-weight:
       <button class="btn" id="rfbtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span id="rfbtxt">Refresh</span></button>
     </div>
   </div>
-  <div class="rfmsg" id="rfmsg" hidden></div>
+  <div class="rfmsg" id="rfmsg" hidden aria-live="polite"></div>
+  <div class="rfprog" id="rfprog" hidden><div id="rfptxt" aria-live="polite"></div><div class="bar" id="rfpbarwrap" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="rfpbar"></i></div></div>
   <div class="bar" id="bar">
     <div class="field" id="fsprint"><span class="fl">Sprint</span>
       <div class="dd"><button class="ctl" id="ddbtn" type="button" aria-haspopup="listbox" aria-expanded="false"><span id="ddlab">Sprint</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4.5 6 8l4-3.5"/></svg></button>
@@ -490,15 +495,25 @@ async function loadData() {
   const q = '?v=' + Date.now(), g = async f => { const r = await fetch('data/' + f + q, { cache: 'no-store' }); if (!r.ok) throw new Error(f); return r.json(); };
   [D, BD, META, RUNS] = await Promise.all([g('map.json'), g('burndown.json'), g('meta.json'), g('runs.json')]); ingest(); selMap = selMap.filter(i => SHOW.includes(i)); closeD(); show(); showMeta();
 }
+const EXPECT = 45;   // seconds a refresh normally takes (measured about 40)
 async function startRefresh() {
   if (!REFRESH_URL) return msg('Refresh is not switched on yet. The admin needs to finish the one-time setup.', true);
-  const before = META && META.refreshedAt; rfb.disabled = true; rfb.classList.add('spin'); $('#rfbtxt').textContent = 'Refreshing'; $('#rfdot').className = 'dot busy'; msg('Pulling the latest from Jira. This usually takes about a minute.');
-  const done = (m, err) => { rfb.disabled = false; rfb.classList.remove('spin'); $('#rfbtxt').textContent = 'Refresh'; showMeta(); msg(m, err); if (m) setTimeout(() => { if (rfm.textContent === m) msg(''); }, 8000); };
+  const before = META && META.refreshedAt, prog = $('#rfprog'), ptxt = $('#rfptxt'), pbar = $('#rfpbar'), pwrap = $('#rfpbarwrap');
+  rfb.disabled = true; rfb.classList.add('spin'); $('#rfbtxt').textContent = 'Refreshing'; $('#rfdot').className = 'dot busy'; msg('');
+  const t0 = Date.now(); let tick = null;
+  const paint = () => {
+    const s = (Date.now() - t0) / 1000, left = Math.ceil(EXPECT - s), pct = Math.min(95, s / EXPECT * 95);
+    pbar.style.width = pct + '%'; pwrap.setAttribute('aria-valuenow', Math.round(pct));
+    ptxt.innerHTML = left > 0 ? 'Fetching the latest data from Jira. About <b>' + left + ' s</b> left.' : 'Taking a little longer than usual. <b>' + Math.floor(s) + ' s</b> elapsed.';
+  };
+  const end = () => { clearInterval(tick); prog.hidden = true; pbar.style.width = '0'; };
+  const done = (m, err) => { end(); rfb.disabled = false; rfb.classList.remove('spin'); $('#rfbtxt').textContent = 'Refresh'; showMeta(); msg(m, err); if (m) setTimeout(() => { if (rfm.textContent === m) msg(''); }, 8000); };
+  prog.hidden = false; paint(); tick = setInterval(paint, 500);
   try { const r = await fetch(REFRESH_URL, { method: 'POST' }); if (!r.ok) throw new Error('relay answered ' + r.status); }
   catch (e) { return done('Could not start the refresh (' + e.message + '). Try again in a minute.', true); }
-  for (let i = 0; i < 90; i++) {
+  for (let i = 0; i < 100; i++) {
     await new Promise(r => setTimeout(r, 3000));
-    try { const m = await (await fetch('data/meta.json?v=' + Date.now(), { cache: 'no-store' })).json(); if (m.refreshedAt !== before) { await loadData(); return done('Data updated.'); } } catch (e) {}
+    try { const m = await (await fetch('data/meta.json?v=' + Date.now(), { cache: 'no-store' })).json(); if (m.refreshedAt !== before) { pbar.style.width = '100%'; await loadData(); return done('Data updated.'); } } catch (e) {}
   }
   done('The refresh is taking longer than expected. Reload in a few minutes.', true);
 }
