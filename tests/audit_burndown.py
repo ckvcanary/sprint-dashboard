@@ -247,7 +247,7 @@ with sync_playwright() as pw:
 
     # ---------------- C. edge cases on older sprints: the axis must start on the sprint's first working day
     print("\nC. Edge cases")
-    for sp, first_day, retro in (("S22", "Mon 12 Oct", False), ("S23", "Mon 26 Oct", True), ("S21", "Mon 28 Sep", False), ("S20", "Tue 8 Sep", False)):
+    for sp, first_day, retro in (("S22", "Mon 12 Oct", False), ("S23", "Mon 26 Oct", True), ("S21", "Mon 28 Sep", False), ("S20", "Tue 8 Sep", True)):
         q = page_for(sp); q.click('[data-bdview="person"]'); q.wait_for_selector("#cw svg")
         labs = q.evaluate("() => [...document.querySelectorAll('#cw svg text')].map(t => t.textContent)")
         bsp = bd[sp]; wd = wdays(*bsp["win"])
