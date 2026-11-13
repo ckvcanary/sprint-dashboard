@@ -102,6 +102,6 @@ def test_the_relay_rules_hold_on_the_live_site():
 def test_pressing_refresh_on_the_live_site_shows_a_verified_toast_and_new_data(pw):
     pg = fresh(pw); pg.wait_for_selector("#map .card"); before = pg.inner_text("#rfval")
     age = pg.evaluate("(Date.now() - Date.parse(META.refreshedAt)) / 1000")
-    if age < 125: pg.wait_for_timeout(int((125 - age) * 1000))
+    if age < 170: pg.wait_for_timeout(int((170 - age) * 1000))   # the relay counts 2 minutes from when the last refresh finished
     pg.click("#rfbtn"); pg.wait_for_selector("#rfprog", state="visible"); t = pg.locator(".tst.success, .tst.error, .tst.info"); t.first.wait_for(timeout=240000)
-    assert "tst success" in t.first.get_attribute("class") and "Data refreshed" in t.first.inner_text() and pg.inner_text("#rfval") != before and not pg.locator("#rfprog").is_visible()
+    msg = t.first.inner_text().replace("\n", " | "); assert "tst success" in t.first.get_attribute("class") and "Data refreshed" in msg and pg.inner_text("#rfval") != before and not pg.locator("#rfprog").is_visible(), msg
