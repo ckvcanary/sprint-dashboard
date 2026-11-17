@@ -70,7 +70,7 @@ def model(sc):
         miss = max(0, exp - logged)
         if late: verdict = "Not completed" if remain > .05 else "Completed"
         else: verdict = "Not achievable" if gap > .05 else "Achievable"
-        flag = "Not started" if el <= 0 else "Time log missing" if miss > 8 else "Behind on logging" if miss > .05 else "On track"
+        flag = "Not started" if el <= 0 else "Well behind pace" if miss > 8 else "Behind pace" if miss > .05 else "On pace"
         out[n] = dict(E=p["E"], logged=logged, burned=burned, remain=remain, over=max(0, logged - burned), exp=exp, miss=miss, left=left, cap=cap, used=used, leave=sum(lv.values()), gap=gap, verdict=verdict, flag=flag, used_at=used_at, p=p)
     return out, dict(el=el, ad=ad, late=late)
 
@@ -285,9 +285,9 @@ def test_expected_log_is_the_estimate_chunk_per_capacity_day(ctx_factory, mock):
     pg, M, info = load(ctx_factory, mock, "chunk")
     assert info["el"] == 32                                             # 4 capacity days passed (Wed, Thu, Fri, Mon), 8 h each
     assert round(M["Nikita"]["exp"], 4) == 25.5 and round(M["Aditi"]["exp"], 4) == 25.5 and round(M["Sumit"]["exp"], 3) == round(48 / 7 * 3, 3) == 20.571
-    assert M["Nikita"]["flag"] == "On track" and M["Aditi"]["flag"] == "Time log missing" and M["Sumit"]["flag"] == "Behind on logging"      # 26 h >= 25.5 h; 9.5 h short; 0.57 h short
+    assert M["Nikita"]["flag"] == "On pace" and M["Aditi"]["flag"] == "Well behind pace" and M["Sumit"]["flag"] == "Behind pace"      # 26 h >= 25.5 h; 9.5 h short; 0.57 h short
     pg.click('[data-bdview="person"]'); pg.wait_for_selector("#tlog"); log = {r[0]: r for r in cells(pg, "#tlog")}
-    assert [num(log[n][3]) for n in ("Nikita", "Aditi", "Sumit")] == [25.5, 25.5, 20.6] and [log[n][6] for n in ("Nikita", "Aditi", "Sumit")] == ["On track", "Time log missing", "Behind on logging"]
+    assert [num(log[n][3]) for n in ("Nikita", "Aditi", "Sumit")] == [25.5, 25.5, 20.6] and [log[n][6] for n in ("Nikita", "Aditi", "Sumit")] == ["On pace", "Well behind pace", "Behind pace"]
     assert near(num(log["Aditi"][4]), 9.5) and num(log["Nikita"][4]) == 0 and near(num(log["Sumit"][4]), 20.571 - 20, .06)
     gb = pg.evaluate("() => [...document.querySelectorAll('.gb svg text')].map(t => t.textContent)") if False else None
     pg.click('[data-bdview="overall"]'); pg.wait_for_selector(".gb svg"); gb = pg.evaluate("() => [...document.querySelectorAll('.gb svg text')].map(t => t.textContent)")
@@ -298,7 +298,7 @@ def test_on_track_means_logged_is_equal_to_or_more_than_expected(ctx_factory, mo
     SCEN["edge"] = dict(asof="2026-11-16T13:30:00Z", people=people(A=(48, {"2026-11-11": 24}, {"2026-11-11": 24}), B=(48, {"2026-11-11": 23.9}, {"2026-11-11": 23.9}), C=(48, {"2026-11-11": 40}, {"2026-11-11": 40})))
     try:
         pg, M, info = load(ctx_factory, mock, "edge"); pg.click('[data-bdview="person"]'); pg.wait_for_selector("#tlog"); log = {r[0]: r for r in cells(pg, "#tlog")}      # 48 h / 8 days x 4 days = 24 h expected
-        assert log["A"][6] == "On track" and log["C"][6] == "On track" and log["B"][6] == "Behind on logging" and near(num(log["B"][4]), .1, .06)
+        assert log["A"][6] == "On pace" and log["C"][6] == "On pace" and log["B"][6] == "Behind pace" and near(num(log["B"][4]), .1, .06)
     finally: SCEN.pop("edge", None)
 
 

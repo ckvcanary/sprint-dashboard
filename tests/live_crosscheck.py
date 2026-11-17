@@ -99,8 +99,13 @@ check("Assignee of every epic matches Jira", all(de.get(k) == v for k, v in eps.
 
 # closed tickets: Jira's own answer with the agreed lists (tasks: six statuses; user stories and epics: Deployed to UAT or Prod only)
 q = lambda names: ",".join(f'"{n}"' for n in sorted(names))
+import re as _re
+_ND = _re.compile(r"\b(document|documentation|docs?|demos?|jira|reporting|retrospective|presentation|deck|training|knowledge transfer|u\.?s\.? team)\b", _re.I)
+nondev = lambda x: (x["fields"].get("assignee") or {}).get("displayName", "").split(" ")[0] == "Chetan" or bool(_ND.search(x["fields"].get("summary") or ""))      # Technical Review closes only Jira management, U.S. team demos, reporting and documentation
 task_done = {x["key"] for x in search(f"project = PROD AND sprint = {SPRINT} AND issuetype in subTaskIssueTypes() AND status in ({q(TASK_DONE)})", ["status"])} | {x["key"] for x in search(f"project = PROD AND sprint = {SPRINT} AND issuetype in (Task, Bug, \"New Feature\") AND status in ({q(TASK_DONE)})", ["status"])}
 story_done = {x["key"] for x in search(f"project = PROD AND sprint = {SPRINT} AND issuetype = Story AND status in ({q(STORY_DONE)})", ["status"])}
+_tr = search(f"project = PROD AND sprint = {SPRINT} AND issuetype != Epic AND status = \"Technical Review\"", ["summary", "assignee"])
+task_done -= {x["key"] for x in _tr if not nondev(x)}      # a development, QA, infrastructure or cloud ticket in Technical Review is still open
 done_j = task_done & leaf     # tasks: every sub-task type and any top-level Task, Bug or New Feature without sub-tasks
 done_d = {k for k, t in bt.items() if t["d"] and not t.get("y")}
 check("Tasks the dashboard counts as closed equal Jira's list for the agreed statuses", done_d == done_j, f"dashboard {len(done_d)}, Jira {len(done_j)}" + ("" if done_d == done_j else f"; differences {sorted(done_d ^ done_j)}"))
@@ -112,11 +117,12 @@ check("Epics of the sprint equal Jira's, and the closed ones equal Jira's list (
 
 # the day each task was closed, from Jira's own history
 wrong = []
+_m = {x["key"]: x for x in search("key in (%s)" % ",".join(sorted(done_d)), ["summary", "assignee"])} if done_d else {}
 for k in done_d:
     since = None
     for h in sorted(iss[k].get("changelog", {}).get("histories", []), key=lambda h: h["created"]):
         for it in h["items"]:
-            if it.get("field") == "status": since = (since or h["created"]) if it.get("toString") in (TASK_DONE if k in subs else STORY_DONE) else None
+            if it.get("field") == "status": since = (since or h["created"]) if it.get("toString") in ((TASK_DONE if nondev(_m[k]) else TASK_DONE - {"Technical Review"}) if k in subs else STORY_DONE) else None
     want = dt.datetime.strptime(since, "%Y-%m-%dT%H:%M:%S.%f%z").astimezone(IST).date().isoformat() if since else None
     if want and bt[k]["d"] != want: wrong.append((k, bt[k]["d"], want))
 check("Closed-on date of every finished task matches Jira's status history", not wrong, f"{len(done_d)} compared" + (f"; differences {wrong[:5]}" if wrong else ""))

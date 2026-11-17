@@ -21,23 +21,23 @@ def names(tip): return [n.strip() for n in tip.locator(".ttn").all_inner_texts()
 def test_burndown_flag_column_lists_every_flag_and_covers_what_is_shown(page):
     page.click('[data-tab="bd"]'); page.click('[data-bdview="person"]'); page.wait_for_selector("#cw svg")
     tip = hover(page, page.locator("th:has-text('Flag') .ibtn")); flags = names(tip)
-    assert flags == ["Not started", "On track", "Behind on logging", "Time log missing"] and tip.locator(".tth").inner_text() == "Flag"
+    assert flags == ["Not started", "On pace", "Behind pace", "Well behind pace"] and tip.locator(".tth").inner_text() == "Flag"
     for tag in page.locator("#tlog tbody .tag").all_inner_texts(): assert tag in flags, tag
 
 
 def test_burndown_number_columns_explain_themselves(page):
     page.click('[data-tab="bd"]'); page.click('[data-bdview="person"]'); page.wait_for_selector("#cw svg")
-    t = hover(page, page.locator("th:has-text('Missing log') .ibtn")); assert names(t) == ["Formula", "Up to 8 h", "More than 8 h"] and "Behind on logging" in t.inner_text()
-    t = hover(page, page.locator("th:has-text('Expected log by now') .ibtn")); x = t.inner_text(); assert "(original estimate / capacity days) × (capacity days passed)" in x and "(48 h) / (8 days) = 6 h" in x and "(6 h × 4) = 24 h" in x and "Days on leave are not counted" in x
-    t = hover(page, page.locator("th:has-text('Verdict') .ibtn")); assert names(t) == ["Formula", "Achievable", "Not achievable", "Completed", "Not completed"] and "calculation" in t.inner_text().lower() and arith_ok(t.inner_text())
+    t = hover(page, page.locator("th:has-text('Pace gap') .ibtn")); assert names(t) == ["Up to 8 h", "More than 8 h"] and "Behind pace" in t.inner_text() and "(pace target) − (logged)" in t.inner_text()
+    t = hover(page, page.locator("th:has-text('Pace target by now') .ibtn")); x = t.inner_text(); assert "(original estimate / capacity days) × (capacity days passed)" in x and "(48 h) / (8 days) = 6 h" in x and "(6 h × 4) = 24 h" in x and "Days on leave are not counted" in x
+    t = hover(page, page.locator("th:has-text('Verdict') .ibtn")); assert names(t) == ["Achievable", "Not achievable", "Completed", "Not completed"] and "(remaining estimate) − (time left)" in t.inner_text() and "calculation" in t.inner_text().lower() and arith_ok(t.inner_text())
     t = hover(page, page.locator("th:has-text('Leave') .ibtn")); assert "Lowers capacity only" in t.inner_text() and arith_ok(t.inner_text())
 
 
 def test_hours_by_person_has_an_info_button_for_expected_log_by_now(page):
     page.click('[data-tab="bd"]'); page.wait_for_selector(".gb svg")
-    key = page.locator(".gb").locator("xpath=preceding-sibling::div[contains(@class,'key')]"); assert "Expected log by now (h)" in key.inner_text()
+    key = page.locator(".gb").locator("xpath=preceding-sibling::div[contains(@class,'key')]"); assert "Pace target by now (h)" in key.inner_text()
     t = hover(page, key.locator(".ibtn")); x = t.inner_text()
-    assert t.locator(".tth").inner_text() == "Expected log by now (h)" and "Hours that should be logged by now." in x and "(original estimate / capacity days) × (capacity days passed)" in x
+    assert t.locator(".tth").inner_text() == "Pace target by now (h)" and "Hours the original estimate predicts should be logged by now." in x and "(original estimate / capacity days) × (capacity days passed)" in x
     assert "(48 h) / (8 days) = 6 h" in x and "(6 h × 4) = 24 h" in x and "Days on leave are not counted" in x
 
 
@@ -92,7 +92,7 @@ def test_every_status_on_the_page_is_one_the_popup_lists(page):
 
 
 def test_the_closed_tip_next_to_the_day_has_no_sentences(page):
-    open_day(page); t = hover(page, page.locator("#dayd .dh .ibtn")); assert t.locator(".tth").inner_text() == "Counted as closed" and t.locator("p").count() == 0 and t.locator(".ttnote").count() == 0
+    open_day(page); t = hover(page, page.locator("#dayd .dh .ibtn")); assert t.locator(".tth").inner_text() == "Counted as closed" and t.locator("p").count() == 0 and t.locator(".ttnote").count() == 1 and "Technical Review is the last stage only for Jira management, U.S. team demos, reporting and documentation" in t.inner_text()
     assert [x.strip().lower() for x in t.locator(".ttgl").all_inner_texts()] == ["epic", "user story", "sub-task, story sub-task, bug sub-task, new feature sub-task"] and "first entered" not in t.inner_text()
 
 

@@ -18,7 +18,7 @@ TASK_TYPES = [("Sub-task", True), ("Story sub-task", True), ("Bug sub-task", Tru
 
 @pytest.mark.parametrize("kind,sub", TASK_TYPES)
 def test_every_task_type_closes_on_the_eight_task_statuses(kind, sub):
-    for st in ("Technical Review", "Done", "Fixed", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Invalid", "Deferred"): assert R.finished(issue(kind, st, sub)), (kind, st)
+    for st in ("Technical Review", "Done", "Fixed", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Invalid", "Deferred"): assert R.finished(issue(kind, st, sub, summary="Update the documentation")), (kind, st)
     for st in ("Backlog", "In Progress", "In Testing", "Code_Review", "Research", "On-Hold", "Spec_Completed", "Accepted by Developer", "Ready for Development", "New", "Triaged", "Reopened", "Verified", "ACTIVE"): assert not R.finished(issue(kind, st, sub)), (kind, st)
 
 
@@ -38,7 +38,7 @@ def moves(*pairs):   # (when, to_status)
 
 def test_closed_date_is_when_the_ticket_entered_its_closed_state():
     h = moves(("2026-11-10T09:00:00.000+0530", "In Progress"), ("2026-11-12T16:00:00.000+0530", "Technical Review"), ("2026-11-13T11:00:00.000+0530", "Deployed to UAT"))
-    assert R.done_date(issue("Story sub-task", "Deployed to UAT", True, h)) == "2026-11-12", "first day of the closed streak, not the last move"
+    assert R.done_date(issue("Story sub-task", "Deployed to UAT", True, h, summary="Release documentation")) == "2026-11-12", "first day of the closed streak, not the last move"
 
 
 def test_a_ticket_that_was_reopened_uses_the_new_closing_date():
@@ -53,7 +53,7 @@ def test_open_tickets_have_no_closed_date_and_late_night_uses_india_time():
 
 
 def test_a_story_in_technical_review_is_not_closed_even_though_a_task_would_be():
-    assert R.done_date(issue("Story", "Technical Review")) is None and R.done_date(issue("Task", "Technical Review")) is not None
+    assert R.done_date(issue("Story", "Technical Review")) is None and R.done_date(issue("Task", "Technical Review", summary="Jira clean-up")) is not None
 
 
 # ---------- the timetable retries
@@ -100,3 +100,13 @@ def test_retries_stand_down_after_a_cron_job_org_pull(monkeypatch, tmp_path):
     assert not R.scheduled_pull_done_recently()
     R.record(True, 5)
     assert R.scheduled_pull_done_recently() and R.is_scheduled()
+
+
+def test_technical_review_closes_only_jira_demo_reporting_and_documentation_work():
+    closed = ["Write the documentation for onboarding", "U.S. team demo of the registration flow", "Sprint 23 reporting to leadership", "Jira clean-up and maintenance", "Sprint retrospective deck"]
+    open_ = ["Build the phone sign-in service", "QA test of the I-9 audit agent", "Set up the cloud storage account", "Infrastructure readiness for the demo environment"]
+    for t in closed: assert R.finished(issue("Sub-task", "Technical Review", True, summary=t)), t
+    for t in open_[:3]: assert not R.finished(issue("Sub-task", "Technical Review", True, summary=t)), t
+    assert R.finished(issue("Sub-task", "Technical Review", True, summary="Anything", assignee={"displayName": "Chetan Kumar Verma"})), "the product manager's tickets are Jira, demo, reporting and documentation work"
+    assert not R.finished(issue("Sub-task", "Technical Review", True, summary="Anything", assignee={"displayName": "Nikita Rao"}))
+    assert R.finished(issue("Sub-task", "Done", True, summary="Build the phone sign-in service")), "Done always closes"

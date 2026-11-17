@@ -34,6 +34,11 @@ def jira(path, body=None):
     return json.load(urllib.request.urlopen(r, timeout=90))
 
 
+import re as _re
+_ND = _re.compile(r"\b(document|documentation|docs?|demos?|jira|reporting|retrospective|presentation|deck|training|knowledge transfer|u\.?s\.? team)\b", _re.I)
+nondev = lambda x: (x["fields"].get("assignee") or {}).get("displayName", "").split(" ")[0] == "Chetan" or bool(_ND.search(x["fields"].get("summary") or ""))      # Technical Review closes only documentation, demo, reporting and Jira work
+
+
 def search(jql, fields, expand=None):
     out, tok = [], None
     while True:
@@ -98,7 +103,7 @@ for k in leaf:
         c = min(h, left); left -= c; P[who]["burn"][d] += c
     if lg > e + .005: P[who]["over"] += lg - e; over.append(k)
     P[who]["E"] += e
-    if not is_story(x): task_close[k] = closed_day(x, TASK_DONE)
+    if not is_story(x): task_close[k] = closed_day(x, TASK_DONE if nondev(x) else TASK_DONE - {"Technical Review"})
 story_close = {k: closed_day(iss[k], STORY_DONE) for k in iss if is_story(iss[k])}
 eps = {iss[k]["fields"]["parent"]["key"] for k in iss if is_story(iss[k]) and (iss[k]["fields"].get("parent") or {}).get("fields", {}).get("issuetype", {}).get("name") == "Epic"}
 epic_close = {e["key"]: closed_day(e, EPIC_DONE) for e in (search("key in (%s)" % ",".join(sorted(eps)), ["status", "issuetype", "created", "updated", "statuscategorychangedate"], "changelog") if eps else [])}
@@ -160,7 +165,7 @@ def model(n, p):
         return u
     burned = sum(h for d, h in p["burn"].items() if d <= AD); logged = sum(h for d, h in p["logs"].items() if d <= AD)
     used = used_at(EL); remain, left = max(0, p["E"] - burned), max(0, capP - used); exp = p["E"] * used / capP if capP > 0 else 0; miss = max(0, exp - logged); gap = remain - left     # expected log = (original estimate / capacity days) x capacity days passed
-    st = "Not started" if EL <= 0 else "Time log missing" if miss > 8 else "Behind on logging" if miss > .05 else "On track"
+    st = "Not started" if EL <= 0 else "Well behind pace" if miss > 8 else "Behind pace" if miss > .05 else "On pace"
     late = asof.date().isoformat() > WD[-1]
     vd = ("Not completed" if remain > .05 else "Completed") if late else ("Not achievable" if gap > .05 else "Achievable")
     return dict(E=p["E"], logged=logged, remain=remain, over=max(0, logged - burned), exp=exp, miss=miss, left=left, st=st, cap=capP, used=used, leave=sum(lv.values()), vd=vd, used_at=used_at)

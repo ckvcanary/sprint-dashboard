@@ -25,11 +25,11 @@ def load_phone(ctx_factory, mock, name="leave", w=390):
 def test_tabs_become_a_bottom_navigation_bar(ctx_factory, mock):
     pg = load_phone(ctx_factory, mock); b = pg.locator("#tabs").bounding_box()
     assert pg.evaluate("getComputedStyle(document.querySelector('#tabs')).position") == "fixed" and abs(b["y"] + b["height"] - 844) <= 1 and b["width"] >= 389
-    tabs = pg.locator("#tabs .tab"); assert tabs.count() == 8
-    for i in range(8):
+    tabs = pg.locator("#tabs .tab"); assert tabs.count() == 7
+    for i in range(7):
         t = tabs.nth(i).bounding_box(); assert t["height"] >= 44 and t["width"] >= 44 and t["x"] >= 0 and t["x"] + t["width"] <= 390, (i, t)
     labels = pg.evaluate("[...document.querySelectorAll('#tabs .tl')].map(e => getComputedStyle(e, '::after').content)")
-    assert labels == ['"Map"', '"Capacity"', '"Burndown"', '"Log time"', '"Leave"', '"Pull log"', '"Roles"', '"How"']
+    assert labels == ['"Map"', '"Capacity"', '"Burndown"', '"Leave"', '"Pull log"', '"Roles"', '"How"']
     assert pg.evaluate("getComputedStyle(document.querySelector('.tab .ti')).display") == "block"
 
 
@@ -39,7 +39,7 @@ def test_desktop_has_a_left_panel_with_icons_and_names(ctx_factory, mock):
     assert pg.evaluate("getComputedStyle(document.querySelector('.tab .tl'), '::after').content") in ("none", "normal")
     side = pg.locator("#side").bounding_box(); main = pg.locator(".main").bounding_box(); assert side["x"] < 100 and side["width"] > 180 and main["x"] >= side["x"] + side["width"], (side, main)
     assert pg.locator(".hdr #guidebtn").is_visible() and pg.locator(".hdr #rfbtn").is_visible() and pg.locator("#side #signout").is_visible() and pg.locator("#side #themebtn").is_visible()
-    tabs = [t.strip() for t in pg.locator("#tabs .tab").all_inner_texts()]; assert tabs == ["Map", "Capacity", "Burndown", "Time logging", "Leave", "Pull log", "Stakeholders", "How it works"], tabs
+    tabs = [t.strip() for t in pg.locator("#tabs .tab").all_inner_texts()]; assert tabs == ["Map", "Capacity", "Burndown", "Leave", "Pull log", "Stakeholders", "How it works"], tabs
 
 
 @pytest.mark.parametrize("w", [360, 390, 430])
@@ -58,7 +58,7 @@ def test_tables_turn_into_labelled_cards(ctx_factory, mock):
     assert pg.evaluate("getComputedStyle(document.querySelector('#tlog thead')).display") == "none"
     assert pg.evaluate("getComputedStyle(document.querySelector('#tlog tbody tr')).display") == "block"
     labels = pg.evaluate("[...document.querySelectorAll('#tlog tbody tr:first-child td')].map(c => c.dataset.l || '')")
-    assert labels == ["", "Logged (h)", "Over estimate (h)", "Expected log by now (h)", "Missing log (h)", "Leave (h)", "Flag"]
+    assert labels == ["", "Logged (h)", "Over estimate (h)", "Pace target by now (h)", "Pace gap (h)", "Leave (h)", "Flag"]
     shown = pg.evaluate("getComputedStyle(document.querySelector('#tlog tbody tr:first-child td:nth-child(2)'), '::before').content")
     assert shown == '"Logged (h)"'
     assert pg.locator("#tplan tbody tr").first.bounding_box()["width"] <= 390
@@ -131,7 +131,7 @@ def test_phone_labels_are_tapped_not_dotted_with_circles(ctx_factory, mock):
     assert pg.locator("#tlog td .ci, #tplan td .ci").count() == 0 or pg.evaluate("[...document.querySelectorAll('#tlog td .ci, #tplan td .ci')].every(e => getComputedStyle(e).display === 'none')")
     u = pg.evaluate("getComputedStyle(document.querySelector('#tlog tbody tr td[data-tip]'), '::before').textDecorationLine"); assert "underline" in u, "the label of a tappable field is underlined with dots"
     cell = pg.locator("#tlog tbody tr:first-child td[data-tip]").nth(1); cell.scroll_into_view_if_needed(); cell.click(); tip = pg.locator("#gtip"); tip.wait_for()
-    assert "pop" in (tip.get_attribute("class") or "") and "Formula" in tip.inner_text()
+    assert "pop" in (tip.get_attribute("class") or "") and "formula" in tip.inner_text().lower()
     b = tip.bounding_box(); nav = pg.locator("#tabs").bounding_box(); assert b["x"] >= 0 and b["x"] + b["width"] <= 390 and b["y"] + b["height"] <= nav["y"] + 1, "the explanation is a popover that stays above the tab bar"
     pg.mouse.click(5, 440 if tip.bounding_box()['y'] < 400 else 120); pg.wait_for_timeout(150); assert not tip.is_visible()
     # the phone card keeps one right edge for every value

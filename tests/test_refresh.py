@@ -131,5 +131,5 @@ def test_relay_reporting_the_limit_shows_the_same_toast(ctx_factory, mock):
 def test_refresh_card_info_shows_the_limit_and_usage_on_hover(page):
     page.hover(".rfcard .ibtn"); tip = page.locator("#gtip"); tip.wait_for()
     t = tip.inner_text(); assert "100 pulls in 24 hours" in t and "3 of 100" in t and "Under 2 minutes apart: skipped" in t and "whole team" in t
-    assert tip.locator(".tth").inner_text() == "Refresh limit" and tip.locator(".ttr").count() == 6 and all(w in t for w in ("Green", "Amber", "Blue, pulsing"))
+    assert tip.locator(".tth").inner_text() == "Refresh limit" and tip.locator(".ttr").count() == 6 and all(w in t for w in ("Green", "Orange", "Blue, pulsing"))
     page.mouse.move(5, 5); tip.wait_for(state="hidden")

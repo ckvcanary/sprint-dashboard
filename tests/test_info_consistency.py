@@ -24,7 +24,7 @@ def test_markers_are_real_tags_and_chips(page):
 
 
 def test_refresh_tip_dots_match_the_dot_beside_the_time(page):
-    h = page.evaluate("refreshTip()"); assert h.count('class="td') == 3 and "Green" in h and "Amber" in h and "Blue, pulsing" in h
+    h = page.evaluate("refreshTip()"); assert h.count('class="td') == 3 and "Green" in h and "Orange" in h and "Blue, pulsing" in h
     r = page.evaluate("""() => { const out = {}; const probe = (cls) => { const host = document.querySelector('.rfcard'); const e = document.createElement('i'); e.className = cls; host.appendChild(e); const c = getComputedStyle(e).backgroundColor; e.remove(); return c; };
       out.ok = [probe('td ok'), probe('dot')]; out.old = [probe('td warn'), probe('dot old')]; out.busy = [probe('td blue'), probe('dot busy')]; return out; }""")
     for k, (legend, real) in r.items(): assert legend == real, (k, legend, real)
@@ -35,7 +35,7 @@ def test_flag_and_verdict_names_are_the_words_the_page_prints(page):
     t = all_tips(page)
     for name in re.findall(r'<span class="tag \w+">([^<]+)</span>', t["flag"]): assert f"'{name}'" in SRC.split("function person")[1] or f"st = '{name}'" in SRC, name
     for name in re.findall(r'<span class="tag \w+">([^<]+)</span>', t["verdict"]): assert f"'{name}'" in SRC, name
-    assert set(re.findall(r'<span class="tag \w+">([^<]+)</span>', t["flag"])) == {"Not started", "On track", "Behind on logging", "Time log missing"}
+    assert set(re.findall(r'<span class="tag \w+">([^<]+)</span>', t["flag"])) == {"Not started", "On pace", "Behind pace", "Well behind pace"}
 
 
 def test_pull_status_names_equal_the_chips_in_the_table(page):

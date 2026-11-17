@@ -31,12 +31,18 @@ def test_data_files_agree_with_each_other(real):
     assert b["S24"]["start"] < b["S24"]["end"]
 
 
+import re as _re
+ND = _re.compile(r"\b(document|documentation|docs?|demos?|jira|reporting|retrospective|presentation|deck|training|knowledge transfer|u\.?s\.? team)\b", _re.I)
+
+
 def test_closed_tickets_match_the_agreed_status_lists(real):
     m, b = data(real, "map"), data(real, "burndown")
     task_done = {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done"}; story_done = {"Deployed to UAT", "Deployed to Prod"}
+    ttitle = {t["key"]: t.get("t", "") for s in m["stories"] for t in s["tasks"]}
     tstat = {t["key"]: t["s"] for s in m["stories"] for t in s["tasks"]}; sstat = {s["key"]: s.get("s") for s in m["stories"]}; estat = {e["key"]: e.get("s") for e in m["epics"]}
     for t in b["S24"]["tasks"]:
-        st = tstat.get(t["k"], sstat.get(t["k"])); ok = st in (story_done if t.get("y") else task_done)
+        st = tstat.get(t["k"], sstat.get(t["k"])); title = ttitle.get(t["k"], ""); nd = t["a"] == "Chetan" or bool(ND.search(title))      # Technical Review closes only Jira management, U.S. team demos, reporting and documentation
+        ok = st in (story_done if t.get("y") else (task_done if nd else task_done - {"Technical Review"}))
         assert bool(t["d"]) == ok, (t, st)
     for s in b["S24"]["stories"]: assert bool(s["d"]) == (sstat.get(s["k"]) in story_done), (s, sstat.get(s["k"]))
     for e in b["S24"]["epics"]: assert bool(e["d"]) == (estat.get(e["k"]) in story_done), (e, estat.get(e["k"]))

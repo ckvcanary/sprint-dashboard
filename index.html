@@ -817,6 +817,43 @@ html.locked #gate{background:radial-gradient(900px 620px at 88% 100%,rgba(10,132
 @media (max-width:900px){.tl4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:720px){.tlstats{gap:8px}.tlstats:not(.tl4){grid-template-columns:repeat(3,minmax(0,1fr))}.tl4{grid-template-columns:repeat(2,minmax(0,1fr))}.tls{padding:12px}.tls b{font-size:24px}.tlstats:not(.tl4) .tls small{display:none}.tls .fl{white-space:normal;line-height:1.3}.tlev li span{width:78px}}
 .tlhead h2 a.link{color:inherit;text-decoration:underline;text-decoration-color:var(--lineStrong)}.key i.ln.g{background:var(--green)!important}.tlc2 td:first-child{white-space:nowrap}
+
+/* ---------- 18 Nov: info boxes use the graph hover card format ---------- */
+.gtip{background:var(--bg);border:1px solid var(--lineStrong);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;font-size:12px;color:var(--ink);max-width:372px}
+.gtip .tc .tph{margin-bottom:4px}.gtip .tc .tpd{font-size:15px;font-weight:700;letter-spacing:-.01em}.gtip .tc .tpl{font-size:12px;color:var(--muted);line-height:1.5;margin-top:2px}
+.gtip .tc .tps{padding:10px 0 0;border-top:0;margin-top:6px}.gtip .tc .tpt{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.gtip .mt{width:100%;border-collapse:collapse;font-size:12px}.gtip .mt td{border:0;padding:4px 0;vertical-align:top;white-space:normal;text-align:left}.gtip .mt td:last-child:not(:first-child){text-align:right;font-weight:600;font-variant-numeric:tabular-nums;padding-left:14px}
+.gtip .mt.lg td{padding:5px 0}.gtip .mt small,.gtip small.ttd{display:block;margin:2px 0 0;font-size:11.5px;font-weight:400;color:var(--muted);line-height:1.45;opacity:1}
+.gtip .mt th{padding:0 0 4px;font-size:12px;font-weight:600;color:var(--muted);text-align:left;text-transform:none;letter-spacing:0;border:0;border-bottom:1px solid var(--line);white-space:normal}
+.gtip .tpf{font:600 12px var(--sans);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:7px 10px;line-height:1.5}
+.gtip .tf{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.45}
+.gtip .ttn{font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.gtip.pop{font-size:14px}.gtip.pop .tc .tpd{font-size:16px}.gtip.pop .tc .tpl,.gtip.pop .mt,.gtip.pop .mt small,.gtip.pop small.ttd{font-size:13px}.gtip.pop .tpf{font-size:13px}
+.tmk{font-size:10.5px}
+
+/* ---------- 18 Nov: breathing room, a light theme with contrast, side panel colours, grid labels, landing without beating ---------- */
+.gtip .tc .tph{display:block}
+.dgh .wl{display:none}.dgh i{font-style:normal}.dgh b{font-size:12px}.dgh small{font-size:10.5px}
+@media (max-width:720px){.dgh .wf{display:none}.dgh .wl{display:inline}.dgh .mn{display:none}.dgh small{display:block;font-size:10px}.dgr.dgh span:last-child{display:none}}
+:root{--page:#dde4ee;--soft:#eef2f8;--line:#d3dbe8;--lineStrong:#b7c3d6;--cardShadow:0 1px 2px rgba(20,33,61,.08),0 10px 28px rgba(20,33,61,.10);--sb-bg:#15213b;--sb-ink:#eef3fb;--sb-muted:#a9b8d4;--sb-sel:rgba(255,255,255,.14);--sb-line:rgba(255,255,255,.16);--band:#e1e9f5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sb-bg:var(--soft);--sb-ink:var(--ink);--sb-muted:var(--muted);--sb-sel:color-mix(in srgb,var(--blue) 14%,var(--bg));--sb-line:var(--line);--band:color-mix(in srgb,var(--blue) 9%,var(--soft))}}
+:root[data-theme="dark"]{--sb-bg:var(--soft);--sb-ink:var(--ink);--sb-muted:var(--muted);--sb-sel:color-mix(in srgb,var(--blue) 14%,var(--bg));--sb-line:var(--line);--band:color-mix(in srgb,var(--blue) 9%,var(--soft))}
+.panel,.stat,.dwc,.rfcard{background:var(--card)}.panel{border-color:var(--line);box-shadow:var(--cardShadow)}
+.fit.hd thead th,.plt thead th,.fit thead th{background:var(--band)}
+.side{background:var(--sb-bg);border-color:var(--sb-bg)}
+.side .tab{color:var(--sb-muted)}.side .tab:hover:not([aria-selected=true]){color:var(--sb-ink)}.side .tab[aria-selected=true]{background:var(--sb-sel);color:var(--sb-ink)}
+.sidetgl{color:var(--sb-muted)}.sidetgl:hover{color:var(--sb-ink)}.sidefoot{border-top-color:var(--sb-line)}.sidefoot .btn{background:transparent;color:var(--sb-ink);border-color:var(--sb-line)}.sidefoot .btn:hover{background:var(--sb-sel)}
+.btn.ghost{background:var(--card)}
+@media (min-width:721px){
+body{padding-inline:clamp(24px,3.2vw,60px);padding-block:36px 64px}
+.wrap{max-width:1560px}
+.hdr{gap:24px;margin:0 0 32px}.hdr .brandbar{margin-right:12px}.clogo{height:34px}
+.shell{gap:28px;grid-template-columns:var(--sbw,204px) minmax(0,1fr)}.side{top:24px;padding:12px}
+}
+.gsc.play .ra{animation:none!important;stroke-dashoffset:0}.gsc .ra{stroke-dashoffset:0}.gsc .rd{opacity:1;animation:none!important}.gsc .rb{transform:none;animation:none!important}.gsc .rp{opacity:1;transform:none;animation:none!important}.gst .gi{animation:none!important}
+.gmon3d{animation:none!important}
+.sidefoot .btn.ghost{background:transparent;color:var(--sb-ink);border-color:var(--sb-line)}.sidefoot .btn.ghost:hover{background:var(--sb-sel)}
+.gtip{background:color-mix(in srgb,var(--ink) 6%,var(--bg))}
 </style>
 
 <script>
@@ -874,7 +911,6 @@ html.locked #gate{background:radial-gradient(900px 620px at 88% 100%,rgba(10,132
       <button class="tab" role="tab" data-tab="map" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="tl" data-s="Map">Map</span></button>
       <button class="tab" role="tab" data-tab="cap" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg><span class="tl" data-s="Capacity">Capacity</span></button>
       <button class="tab" role="tab" data-tab="bd" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5v14h18"/><path d="m6 9 4 4 3-3 5 5"/></svg><span class="tl" data-s="Burndown">Burndown</span></button>
-      <button class="tab" role="tab" data-tab="tlog" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M4 12h7M4 18h6"/><path d="m14 15 2.2 2.2L21 12.4"/></svg><span class="tl" data-s="Log time">Time logging</span></button>
       <button class="tab" role="tab" data-tab="leave" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="tl" data-s="Leave">Leave</span></button>
       <button class="tab" role="tab" data-tab="log" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="tl" data-s="Pull log">Pull log</span></button>
       <button class="tab" role="tab" data-tab="who" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3 3 0 0 1 0 6M18 14.5c1.8.8 3 2.6 3 5.5"/></svg><span class="tl" data-s="Roles">Stakeholders</span></button>
@@ -894,7 +930,6 @@ html.locked #gate{background:radial-gradient(900px 620px at 88% 100%,rgba(10,132
   <section id="v-map">    <div class="mapwrap"><div class="map" id="map"></div><div class="mlist" id="mlist"></div><div class="mm" id="mm"></div></div></section>
   <section id="v-cap" hidden></section>
   <section id="v-bd" hidden></section>
-  <section id="v-tlog" hidden></section>
   <section id="v-leave" hidden></section>
   <section id="v-log" hidden></section>
   <section id="v-who" hidden></section>
@@ -1079,8 +1114,8 @@ function person(name, p, days, at, today, leave) {
   days.forEach((d, i) => { if (d > ad) return; cum += be.filter(([x]) => x > (days[i - 1] || '0000') && x <= d && x >= days[0]).reduce((a, [, h]) => a + h, 0); pts.push([d === ad ? el : (i + 1) * DH, Math.max(0, p.E - cum)]); });
   const used = usedAt(el), exp = capP > 0 ? p.E * used / capP : 0, miss = Math.max(0, exp - logged),   // expected log = (original estimate / capacity days) x capacity days passed; leave days are not capacity days
     dayH = CAP / days.length, capDays = capP / dayH, daysPassed = used / dayH, dailyT = capDays > 0 ? p.E / capDays : 0, remain = Math.max(0, p.E - burned), over = Math.max(0, logged - burned), left = Math.max(0, capP - used), late = (today || ad) > days[days.length - 1];
-  let st = 'On track', cl = 'ok';
-  if (el <= 0) st = 'Not started'; else if (miss > 8) { st = 'Time log missing'; cl = 'bad'; } else if (miss > .05) { st = 'Behind on logging'; cl = 'warn'; }
+  let st = 'On pace', cl = 'ok';
+  if (el <= 0) st = 'Not started'; else if (miss > 8) { st = 'Well behind pace'; cl = 'bad'; } else if (miss > .05) { st = 'Behind pace'; cl = 'warn'; }
   const gap = remain - left; let vd, vc;   // the verdict compares the work still to do with the working time still to come
   if (late) { vd = remain > .05 ? 'Not completed' : 'Completed'; vc = remain > .05 ? 'bad' : 'ok'; } else { vd = gap > .05 ? 'Not achievable' : 'Achievable'; vc = gap > .05 ? 'bad' : 'ok'; }
   return { name, E: p.E, logged, remain, over, exp, miss, left, pts, tot, el, st, cl, vd, vc, gap, capP, used, leaveH, lv, usedAt, capDays, daysPassed, dailyT };
@@ -1090,20 +1125,21 @@ const chartW = (el, pad) => Math.max(300, Math.min(1000, Math.floor((el.clientWi
 let BDV = null, bdDay = null, bdTab = 'today';   // chart data for the hover, the day that is pinned, the tab of the day panel
 
 function dayGrid(sel, sd, wd, plan, ad, s) {
-  const dn = sd.length, rows = sel.map(r => {
-    const logs = (s.people[r.name] || {}).logs || {}, other = Object.entries(logs).filter(([d]) => !sd.includes(d) && d <= ad).reduce((a, [, h]) => a + h, 0);
+  const dn = sd.length, wk = d => [0, 6].includes(new Date(dUTC(d)).getUTCDay()), rows = sel.map(r => {
+    const logs = (s.people[r.name] || {}).logs || {}, odd = Object.keys(logs).filter(d => !sd.includes(d) && d <= ad).sort(), other = odd.reduce((a, d) => a + logs[d], 0);
     const cells = sd.map((d, i) => { const lg = logs[d] || 0, lvh = (r.lv || {})[d] || 0;
       if (d < wd[0]) return { c: 'na', t: '', tt: 'Sprint Planning' };
       if (d > ad) return { c: 'na', t: '', tt: 'Not yet' };
       if (lvh >= DH) return { c: 'na', t: 'L', tt: 'Leave' };
       const tg = r.dailyT * (DH - lvh) / DH;
-      if (lg + 0.05 >= tg) return { c: 'ok', t: f1(lg), tt: f1(lg) + ' h logged, target ' + f1(tg) + ' h' };
-      if (d === ad) return { c: 'now', t: lg ? f1(lg) : '', tt: 'Today, in progress: ' + f1(lg) + ' h so far, target ' + f1(tg) + ' h' };
-      return { c: lg > 0 ? 'warn' : 'bad', t: f1(lg), tt: f1(lg) + ' h logged, target ' + f1(tg) + ' h' }; });
-    return { r, cells, other, tot: Object.entries(logs).filter(([d]) => d <= ad).reduce((a, [, h]) => a + h, 0) }; });
-  const anyOther = rows.some(x => x.other > 0.04), cols = `minmax(96px,128px) repeat(${dn},minmax(0,1fr))${anyOther ? ' minmax(54px,.9fr)' : ''} minmax(56px,.9fr)`;
-  const head = `<div class="dgr dgh" style="grid-template-columns:${cols}"><span></span>${sd.map((d, i) => `<span title="${dayName(d)} ${fmtD(d)}"><b>${dayName(d).slice(0, 1)}</b><small>${fmtD(d).split(' ')[0]}</small></span>`).join('')}${anyOther ? '<span title="Logged on a weekend or outside the sprint days"><b>+</b><small>other</small></span>' : ''}<span><b>Σ</b><small>total</small></span></div>`;
-  return `<div class="panel dgrid" id="dgrid"><div class="cardhead"><h3>Time logged each day${tip('dgrid')}</h3></div><div class="dgs" style="--dn:${dn}">${head}${rows.map(x => `<div class="dgr" style="grid-template-columns:${cols}"><span class="dgn"><b>${esc(x.r.name)}</b></span>${x.cells.map(c => `<span class="dgc ${c.c}" title="${esc(c.tt)}">${c.t}</span>`).join('')}${anyOther ? `<span class="dgo">${x.other > 0.04 ? f1(x.other) : ''}</span>` : ''}<span class="dgt">${f1(x.tot)}</span></div>`).join('')}</div></div>`;
+      if (lg + 0.05 >= tg) return { c: 'ok', t: f1(lg), tt: f1(lg) + ' h logged, daily pace target ' + f1(tg) + ' h' };
+      if (d === ad) return { c: 'now', t: lg ? f1(lg) : '', tt: 'Today, in progress: ' + f1(lg) + ' h so far, daily pace target ' + f1(tg) + ' h' };
+      return { c: lg > 0 ? 'warn' : 'bad', t: f1(lg), tt: f1(lg) + ' h logged, daily pace target ' + f1(tg) + ' h' }; });
+    return { r, cells, other, odd, tot: Object.entries(logs).filter(([d]) => d <= ad).reduce((a, [, h]) => a + h, 0) }; });
+  const allOdd = [...new Set(rows.flatMap(x => x.odd))].sort(), anyOther = rows.some(x => x.other > 0.04), cols = `minmax(96px,128px) repeat(${dn},minmax(0,1fr))${anyOther ? ' minmax(64px,1fr)' : ''} minmax(56px,.9fr)`;
+  const oLab = !allOdd.length ? '' : (allOdd.every(wk) ? 'Weekend' : 'Other days'), oSub = !allOdd.length ? '' : allOdd.length === 1 ? fmtD(allOdd[0]) : fmtD(allOdd[0]).split(' ')[0] + '–' + fmtD(allOdd[allOdd.length - 1]);
+  const head = `<div class="dgr dgh" style="grid-template-columns:${cols}"><span></span>${sd.map(d => `<span title="${dayName(d)} ${fmtD(d)}"><b><i class="wf">${dayName(d)}</i><i class="wl">${dayName(d).slice(0, 1)}</i></b><small><i class="dnn">${fmtD(d).split(' ')[0]}</i><i class="mn"> ${fmtD(d).split(' ')[1]}</i></small></span>`).join('')}${anyOther ? `<span title="Time logged on days that are not sprint working days, by log date"><b>${oLab}</b><small>${oSub}</small></span>` : ''}<span><b>Total</b><small>logged</small></span></div>`;
+  return `<div class="panel dgrid" id="dgrid"><div class="cardhead"><h3>Time logged each day${tip('dgrid')}</h3></div><div class="dgs" style="--dn:${dn}">${head}${rows.map(x => `<div class="dgr" style="grid-template-columns:${cols}"><span class="dgn"><b>${esc(x.r.name)}</b></span>${x.cells.map(c => `<span class="dgc ${c.c}" title="${esc(c.tt)}">${c.t}</span>`).join('')}${anyOther ? `<span class="dgo" title="${esc(oLab)}">${x.other > 0.04 ? f1(x.other) : ''}</span>` : ''}<span class="dgt">${f1(x.tot)}</span></div>`).join('')}</div></div>`;
 }
 function lineChart(rs, ctx) {
   const { sd, plan, wd, s, tasks, stories, epics, el, tot, ad, at, late } = ctx, retro = hasRetro(s, sd), slots = sd.length + (retro ? 1 : 0);
@@ -1205,14 +1241,14 @@ function pinDay(ev) {
   if (bdDay != null) $('#dayd').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 function groupBars(rs) {
-  const ser = [['Original estimate', 'E', 'var(--blue)'], ['Logged', 'logged', 'var(--green)'], ['Expected log by now', 'exp', 'var(--faint)']];
+  const ser = [['Original estimate', 'E', 'var(--blue)'], ['Logged', 'logged', 'var(--green)'], ['Pace target by now', 'exp', 'var(--faint)']];
   const top = Math.max(16, Math.ceil(Math.max(...rs.map(r => Math.max(r.E, r.logged, r.exp))) * 1.15 / 16) * 16), W = CHW, H = 300, L = 44, R = 12, Tp = 24, B = 34, ph = H - Tp - B, pw = W - L - R;
   const y = v => Tp + ph - v / top * ph, gw = pw / rs.length, bw = Math.min(34, gw / 5);
   let g = ''; for (let i = 0; i <= 4; i++) { const v = top / 4 * i; g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${Math.round(v)}</text>`; }
   rs.forEach((r, i) => { const cx = L + gw * i + gw / 2; ser.forEach(([, k, c], j) => { const x = cx + (j - 1) * (bw + 4) - bw / 2, v = r[k];
       g += `<rect x="${x}" y="${y(v)}" width="${bw}" height="${Math.max(0, y(0) - y(v))}" rx="3" fill="${c}"/><text x="${x + bw / 2}" y="${y(v) - 5}" text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)">${f1(v)}</text>`; });
     g += `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${esc(r.name)}</text>`; });
-  return `<div class="key" style="margin-bottom:8px">${ser.map(s => `<span><i style="background:${s[2]}"></i>${s[0]} (h)${s[1] === 'exp' ? tip('expected') : ''}</span>`).join('')}</div><div class="gb"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Original estimate, logged and expected log by now, in hours per person">${g}</svg></div>`;
+  return `<div class="key" style="margin-bottom:8px">${ser.map(s => `<span><i style="background:${s[2]}"></i>${s[0]} (h)${s[1] === 'exp' ? tip('expected') : ''}</span>`).join('')}</div><div class="gb"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Original estimate, logged and pace target by now, in hours per person">${g}</svg></div>`;
 }
 let bdView = 'overall';
 function dayWidgets(sd, wd, plan, ad) {
@@ -1231,7 +1267,7 @@ function capBlock(label, sub, used, cap) {
 /* ---------- capacity: three bars (used, left, remaining estimate) and the working-out in plain words ---------- */
 const isNarrow = () => window.matchMedia('(max-width:720px)').matches;
 function groupBarsM(rs) {
-  const top = Math.max(1, ...rs.map(r => Math.max(r.E, r.logged, r.exp))), ser = [['Original estimate', 'E', 'var(--blue)'], ['Logged', 'logged', 'var(--green)'], ['Expected log by now', 'exp', 'var(--faint)']];
+  const top = Math.max(1, ...rs.map(r => Math.max(r.E, r.logged, r.exp))), ser = [['Original estimate', 'E', 'var(--blue)'], ['Logged', 'logged', 'var(--green)'], ['Pace target by now', 'exp', 'var(--faint)']];
   return `<div class="key" style="margin-bottom:10px">${ser.map(x => `<span><i style="background:${x[2]}"></i>${x[0]}${x[1] === 'exp' ? tip('expected') : ''}</span>`).join('')}</div><div class="gbm" id="gbm">${rs.map(r => `<div class="gbr"><b>${esc(r.name)}</b>${ser.map(([l, k, c]) => `<div class="gbl"><span>${l}</span><span class="gbt"><i style="width:${r[k] / top * 100}%;background:${c}"></i></span><em>${f1(r[k])} h</em></div>`).join('')}</div>`).join('')}</div>`;
 }
 const hoursTxt = v => f1(v) + (Math.abs(v - 1) < .05 ? ' hour' : ' hours');
@@ -1297,9 +1333,9 @@ function renderBd() {
     <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Can the work be finished?</h3></div><table class="fit" id="tplan"><thead><tr><th>Name</th><th>Original estimate (h)</th><th>${lab('Remaining estimate (h)', 'remaining')}</th><th>${lab('Time left in the sprint (h)', 'left')}</th><th>${lab('Verdict', 'verdict')}</th></tr></thead><tbody>
     ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td>${cl('Original estimate (h)', '', f1(r.E))}${cl('Remaining estimate (h)', 'remaining', f1(r.remain))}${cl('Time left in the sprint (h)', 'left', f1(r.left))}${cl('Verdict', 'verdict', vcell(r), 'vd')}</tr>`).join('')}
     ${tot_ ? `<tr class="tot"><td>Everyone</td>${cl('Original estimate (h)', '', f1(sum('E')))}${cl('Remaining estimate (h)', 'remaining', f1(sum('remain')))}${cl('Time left in the sprint (h)', 'left', f1(sum('left')))}${cl('Verdict', 'verdict', (() => { const g = sum('remain') - sum('left'); return late ? '' : `<span class="tag ${g > .05 ? 'bad' : 'ok'}">${g > .05 ? 'Not achievable' : 'Achievable'}</span><small class="vsm">${g > .05 ? 'Short by ' + f1(g) + ' h' : 'Room of ' + f1(-g) + ' h'}</small>`; })(), 'vd')}</tr>` : ''}</tbody></table></div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Time logging</h3></div><table class="fit" id="tlog"><thead><tr><th>Name</th><th>Logged (h)</th><th>${lab('Over estimate (h)', 'over')}</th><th>${lab('Expected log by now (h)', 'expected')}</th><th>${lab('Missing log (h)', 'missing')}</th><th>${lab('Leave (h)', 'leave')}</th><th>${lab('Flag', 'flag')}</th></tr></thead><tbody>
-    ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td>${cl('Logged (h)', '', f1(r.logged))}${cl('Over estimate (h)', 'over', r.over > .05 ? f1(r.over) : '0')}${cl('Expected log by now (h)', 'expected', f1(r.exp))}${cl('Missing log (h)', 'missing', r.miss > .05 ? f1(r.miss) : '0', r.cl)}${cl('Leave (h)', 'leave', r.leaveH > .05 ? f1(r.leaveH) : '0')}${cl('Flag', 'flag', `<span class="tag ${r.cl === 'ok' && r.st === 'Not started' ? 'nil' : r.cl}">${esc(r.st)}</span>`, 'fg')}</tr>`).join('')}
-    ${tot_ ? `<tr class="tot"><td>Everyone</td>${cl('Logged (h)', '', f1(sum('logged')))}${cl('Over estimate (h)', 'over', f1(sum('over')))}${cl('Expected log by now (h)', 'expected', f1(sum('exp')))}${cl('Missing log (h)', 'missing', f1(sum('miss')))}${cl('Leave (h)', 'leave', f1(sum('leaveH')))}<td></td></tr>` : ''}</tbody></table></div>${leavePanel(sel)}`;
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Logging pace</h3></div><table class="fit" id="tlog"><thead><tr><th>Name</th><th>Logged (h)</th><th>${lab('Over estimate (h)', 'over')}</th><th>${lab('Pace target by now (h)', 'expected')}</th><th>${lab('Pace gap (h)', 'missing')}</th><th>${lab('Leave (h)', 'leave')}</th><th>${lab('Flag', 'flag')}</th></tr></thead><tbody>
+    ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td>${cl('Logged (h)', '', f1(r.logged))}${cl('Over estimate (h)', 'over', r.over > .05 ? f1(r.over) : '0')}${cl('Pace target by now (h)', 'expected', f1(r.exp))}${cl('Pace gap (h)', 'missing', r.miss > .05 ? f1(r.miss) : '0', r.cl)}${cl('Leave (h)', 'leave', r.leaveH > .05 ? f1(r.leaveH) : '0')}${cl('Flag', 'flag', `<span class="tag ${r.cl === 'ok' && r.st === 'Not started' ? 'nil' : r.cl}">${esc(r.st)}</span>`, 'fg')}</tr>`).join('')}
+    ${tot_ ? `<tr class="tot"><td>Everyone</td>${cl('Logged (h)', '', f1(sum('logged')))}${cl('Over estimate (h)', 'over', f1(sum('over')))}${cl('Pace target by now (h)', 'expected', f1(sum('exp')))}${cl('Pace gap (h)', 'missing', f1(sum('miss')))}${cl('Leave (h)', 'leave', f1(sum('leaveH')))}<td></td></tr>` : ''}</tbody></table></div>${leavePanel(sel)}`;
   }
   $('#v-bd').innerHTML = seg + body;
   renderDay(); if (bdDay != null && BDV) setGuide(bdDay, true);
@@ -1462,137 +1498,15 @@ $('#map').addEventListener('mouseleave', () => document.querySelectorAll('#lines
 
 /* ---------- tabs ---------- */
 
-/* ---------- time logging: which tickets need time logged, how much, and why ----------
-   Should be logged (per ticket) = sum, over every working day the ticket was in progress, of  (hours the person had that day) / (tickets the person had in progress that day) x (share of the day that has passed),
-   capped at the original estimate. A closed ticket should carry its full estimate. Gap = should be logged - logged. A ticket is flagged when the gap is at least min(2 h, half the estimate). */
-const WORKING = ['In Progress', 'Code_Review', 'In Testing', 'ACTIVE', 'Reopened'];   // a developer is working on the ticket
-const wdIn = (a, b) => { if (!a || !b || b <= a) return 0; let n = 0; for (let ms = dUTC(a) + 864e5; ms <= dUTC(b); ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) n++; } return n; };   // working days after a, up to and including b
-const r1 = v => Math.round(v * 10) / 10;
-const prevD = d => dStr(dUTC(d) - 864e5);
-const stAt = (t, d) => { if (!t.h || !t.h.length) return !t.sd || d >= t.sd ? t.st : null; let st = t.h0 || null; t.h.forEach(([dd, to]) => { if (dd <= d) st = to; }); return st; };   // status at the end of day d
-const activeOn = (t, d) => WORKING.includes(stAt(t, prevD(d))) || WORKING.includes(stAt(t, d));   // in a working status at any moment of day d
-function tlFlags(s, ad, hr, leave) {   // pure: the tickets of a sprint that need time logged, with the numbers behind each one
-  const wd = workDays(s.win), days = wd.filter(d => d <= ad), tasks = (s.tasks || []).filter(t => !t.y && t.a && t.st != null);
-  const frac = d => d < ad ? 1 : d === ad ? Math.min(1, Math.max(0, hr / DH)) : 0, lvh = (a, d) => (leave || []).filter(x => x.name === a && x.date === d).reduce((z, x) => z + (+x.hours || 0), 0);
-  const nA = {}; tasks.forEach(t => days.forEach(d => { if (activeOn(t, d)) { const k = t.a + '|' + d; nA[k] = (nA[k] || 0) + 1; } }));
-  const out = [];
-  tasks.forEach(t => {
-    const E = t.e || 0, lg = t.lg || 0, closed = TASK_CLOSED.includes(t.st), working = WORKING.includes(t.st);
-    if (!E || !(closed || working)) return;
-    if (closed && !(t.d && t.d >= (s.start || wd[0]))) return;      // closed before this sprint
-    const rows = []; let cum = 0, pick = null;
-    days.forEach(d => { if (!activeOn(t, d)) return; pick = pick || d; const n = nA[t.a + '|' + d], avail = Math.max(0, DH - lvh(t.a, d)), f = frac(d), sh = avail / n * f; cum += sh; rows.push({ d, n, avail, f, sh, cum: Math.min(E, cum) }); });
-    if (!pick && !closed) return;
-    const exp = closed ? E : Math.min(E, cum), gap = exp - lg, thr = Math.min(2, .5 * E);
-    if (gap < thr - 1e-9) return;
-    out.push({ t, r: closed ? 'closed' : lg <= 0 ? 'none' : 'behind', E, exp: r1(exp), lg: r1(lg), gap: r1(gap), sug: r1(gap), pick, rows, avgN: rows.length ? rows.reduce((z, x) => z + x.n, 0) / rows.length : 0 });
-  });
-  const rk = { closed: 0, none: 1, behind: 2 };
-  return out.sort((a, b) => rk[a.r] - rk[b.r] || b.gap - a.gap || (a.t.k < b.t.k ? -1 : 1));
-}
-const curSprint = () => SHOW.slice().reverse().find(k => BD[k] && BD[k].win && (BD[k].tasks || []).some(t => t.st)) || null;
-const TLR = { none: ['bad', 'No time logged'], closed: ['bad', 'Closed under-logged'], behind: ['warn', 'Behind on logging'] };
-const dnm = d => dayName(d) + ' ' + fmtD(d);
-function tlWhy(f, ad) {   // the reasoning shown beside the numbers, read from the ticket's own history
-  const t = f.t, parts = [], path = (t.h || []).slice(-6).map(h => `${h[1]} (${dnm(h[0])})`).join(' → ');
-  parts.push(f.pick ? `Picked up on ${dnm(f.pick)}${stAt(t, f.pick) ? ' (' + stAt(t, f.pick) + ')' : ''}.` : 'It was not in a working status (In Progress, Code_Review or In Testing) on any sprint day so far.');
-  if (path) parts.push(`Status path: ${path}.`);
-  if (f.r === 'closed') parts.push(`Closed on ${t.d ? dnm(t.d) : 'an earlier day'} in ${t.st}. A closed ticket should carry its full estimate of ${f1(f.E)} h.`);
-  else if (f.rows.length) { const mn = Math.min(...f.rows.map(x => x.n)), mx = Math.max(...f.rows.map(x => x.n)); parts.push(`${t.a} had ${mn === mx ? mn : mn + ' to ' + mx} tickets in progress on those days, so about ${f1(f.rows.reduce((z, x) => z + x.avail / x.n, 0) / f.rows.length)} h a day was expected here.`); }
-  parts.push(`By now ${f1(f.exp)} h should be logged against the ${f1(f.E)} h estimate.`);
-  parts.push(f.lg > 0 ? `${f1(f.lg)} h are logged${t.ll ? ', last on ' + dnm(t.ll) : ''}.` : 'Nothing has been logged on it.');
-  parts.push(`The gap is ${f1(f.gap)} h.`);
-  return parts.join(' ');
-}
-let tlWho = 'All', tlReason = 'all', tlQ = '', tlOpen = null, tlShow = {}, tlV = { m: 'list', who: null, key: null }, tlPage = 1;
-const tlCtx = () => { const key = curSprint(); if (!key) return null; const s = BD[key], at = asOfIST(), ad = at.slice(0, 10), hr = Math.max(0, Math.min(DH, (+at.slice(11, 13) + (+at.slice(14, 16)) / 60) - WH0)); return { key, s, ad, hr, all: tlFlags(s, ad, hr, LEAVE[key] || []) }; };
-function tlReminder(name, list, spName_) {
-  return `Hi ${name}, these tickets need time logged for ${spName_} (${list.length}):\n` + list.slice(0, 25).map(f => `- ${f.t.k} ${f.t.s || ''}: should be ${f1(f.exp)} h, logged ${f1(f.lg)} h, gap ${f1(f.gap)} h`).join('\n') + (list.length > 25 ? `\n...and ${list.length - 25} more` : '') + '\nPlease log the time today. Thank you.';
-}
-const tlRow = (f, withWho) => { const t = f.t, [c, lab] = TLR[f.r];
-  return `<tr><td data-l="Ticket"><a class="link" href="${J(t.k)}" target="_blank" rel="noopener">${esc(t.k)}</a></td>${withWho ? `<td data-l="Person">${esc(t.a)}</td>` : ''}<td class="ttl" data-l="Title">${esc(t.s || '')}</td><td data-l="Status">${esc(t.st)}</td><td data-l="Should be logged">${f1(f.exp)} h</td><td data-l="Logged">${f1(f.lg)} h</td><td data-l="Gap"><b>${f1(f.gap)} h</b></td><td data-l="Reason"><span class="tag ${c}">${lab}</span></td><td class="act" data-l="Why"><button type="button" class="btn ghost sm" data-tlwhy="${esc(t.k)}">Why</button></td></tr>`; };
-const tlHead = withWho => `<thead><tr><th>Ticket</th>${withWho ? '<th>Person</th>' : ''}<th>Title</th><th>Status</th><th>Should be logged${tip('tlexpected')}</th><th>Logged</th><th>Gap${tip('tlgap')}</th><th>Reason${tip('tlreason')}</th><th></th></tr></thead>`;
-const tlCols = '<colgroup><col style="width:9%"><col style="width:25%"><col style="width:10%"><col style="width:11%"><col style="width:8%"><col style="width:8%"><col style="width:15%"><col style="width:9%"></colgroup>';
-function renderTlog() {
-  const c = tlCtx(), box = $('#v-tlog');
-  if (!c) { box.innerHTML = '<div class="empty">No ticket data with statuses yet. Press Refresh to load it.</div>'; return; }
-  if (tlV.m === 'ticket') { const f = c.all.find(x => x.t.k === tlV.key); if (f) return tlTicketPage(c, f); tlV = { m: 'list', who: null, key: null }; }
-  if (tlV.m === 'person') return tlPersonPage(c);
-  const { s, ad, all } = c, spn = s.name || c.key;
-  const people = [...new Set((s.tasks || []).filter(t => !t.y && t.a).map(t => t.a))].sort();
-  if (tlWho !== 'All' && !people.includes(tlWho)) tlWho = 'All';
-  const q = tlQ.trim().toLowerCase(), match = f => (tlReason === 'all' || f.r === tlReason) && (!q || (f.t.k + ' ' + (f.t.s || '') + ' ' + f.t.a).toLowerCase().includes(q));
-  const shown = all.filter(f => (tlWho === 'All' || f.t.a === tlWho) && match(f));
-  TLCALC = { first: all.find(f => f.r === 'none') || all[0] || null };
-  const by = {}; shown.forEach(f => (by[f.t.a] = by[f.t.a] || []).push(f));
-  const names = Object.keys(by).sort((a, b) => by[b].reduce((z, f) => z + f.gap, 0) - by[a].reduce((z, f) => z + f.gap, 0) || (a < b ? -1 : 1));
-  if (tlOpen == null || (tlOpen !== '' && !by[tlOpen])) tlOpen = names[0] || '';
-  const hrs = all.reduce((a, f) => a + f.gap, 0), affected = new Set(all.map(f => f.t.a)).size, cnt = r => all.filter(f => r === 'all' || f.r === r).length;
-  const stat = (k, v, sub, t) => `<div class="tls"><span class="fl">${k}${t ? tip(t) : ''}</span><b>${v}</b><small>${sub}</small></div>`;
-  const chips = [['all', 'All']].concat(Object.entries(TLR).map(([k, v]) => [k, v[1]])).map(([k, l]) => `<button type="button" class="tlc${tlReason === k ? ' on' : ''}" data-tlr="${k}">${l}<i>${cnt(k)}</i></button>`).join('');
-  const group = n => { const list = by[n], open = tlOpen === n, shownN = tlShow[n] || 10, left = list.length - shownN, h = list.reduce((a, f) => a + f.gap, 0);
-    const mini = Object.keys(TLR).map(k => { const z = list.filter(f => f.r === k).length; return z ? `<span class="tag ${TLR[k][0]}">${z} ${TLR[k][1].toLowerCase()}</span>` : ''; }).join('');
-    return `<div class="tlg${open ? ' open' : ''}"><button type="button" class="tlgh" data-tlg="${esc(n)}" aria-expanded="${open}"><span class="av">${esc(ini(n))}</span><b>${esc(n)}</b><span class="tln">${list.length} ticket${list.length > 1 ? 's' : ''}</span><span class="tlm">${mini}</span><span class="tlh2">${f1(h)} h gap</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
-      ${open ? `<div class="tlb"><div class="tlt"><button type="button" class="btn ghost sm" data-tlperson="${esc(n)}">Open full report for ${esc(n)}</button><button type="button" class="btn ghost sm" data-tlcopy="${esc(n)}">Copy reminder</button></div><div class="scroll"><table class="fit tlt2">${tlCols}${tlHead(false)}<tbody>${list.slice(0, shownN).map(f => tlRow(f, false)).join('')}</tbody></table></div>${left > 0 ? `<button type="button" class="btn ghost sm more" data-tlmore="${esc(n)}">Show ${Math.min(left, 20)} more of ${left}</button>` : ''}</div>` : ''}</div>`; };
-  box.innerHTML = `<div class="tlhead"><h2>Time logging</h2><p>Tickets in ${esc(spn)} where time should be logged. As of ${esc(tfmt(asOfMs()))}.</p></div>
-    <div class="tlstats">${stat('Tickets to fix', all.length, all.length ? 'across ' + affected + ' of ' + people.length + ' people' : 'nothing to chase', 'tlreason')}${stat('People affected', affected + ' of ' + people.length, 'have at least one ticket to fix')}${stat('Gap to log', f1(hrs) + ' h', 'should be logged minus logged, in total', 'tlgap')}</div>
-    <div class="panel tlf"><label class="field"><span class="fl">Person</span><select id="tlwho" class="ctl"><option value="All">Everyone</option>${people.map(p => `<option ${p === tlWho ? 'selected' : ''}>${esc(p)}</option>`).join('')}</select></label><label class="field tlq"><span class="fl">Search</span><input id="tlq" class="ctl" placeholder="Ticket or title" value="${esc(tlQ)}" autocomplete="off"></label><div class="tlcs" role="group" aria-label="Reason">${chips}</div></div>
-    ${names.length ? `<div class="tlgs">${names.map(group).join('')}</div>` : `<div class="empty tle">${all.length ? 'No ticket matches this filter.' : 'Every ticket in progress has the time it should have. Nothing to chase today.'}</div>`}`;
-}
-function tlPersonPage(c) {
-  const n = tlV.who, list = c.all.filter(f => f.t.a === n), per = 15, pages = Math.max(1, Math.ceil(list.length / per)); tlPage = Math.min(tlPage, pages);
-  const exp = list.reduce((z, f) => z + f.exp, 0), lg = list.reduce((z, f) => z + f.lg, 0), gap = list.reduce((z, f) => z + f.gap, 0);
-  const st = (k, v, sub) => `<div class="tls"><span class="fl">${k}</span><b>${v}</b><small>${sub}</small></div>`;
-  TLCALC = { first: list.find(f => f.r === 'none') || list[0] || null };
-  $('#v-tlog').innerHTML = `<div class="tlnav"><button type="button" class="btn ghost sm" data-tlback>← Time logging</button><span>${esc(n)}</span></div>
-    <div class="tlhead"><h2>${esc(n)}: time logging report</h2><p>${esc(c.s.name)}. Every ticket where the time logged is behind what the ticket's own history says it should be. As of ${esc(tfmt(asOfMs()))}.</p></div>
-    <div class="tlstats">${st('Tickets to fix', list.length, 'out of ' + (c.s.tasks || []).filter(t => !t.y && t.a === n).length + ' assigned')}${st('Should be logged', f1(exp) + ' h', 'on these tickets by now')}${st('Logged', f1(lg) + ' h', 'gap ' + f1(gap) + ' h')}</div>
-    <div class="panel"><div class="scroll"><table class="fit tlt2 tlp">${tlCols}${tlHead(false)}<tbody>${list.slice((tlPage - 1) * per, tlPage * per).map(f => tlRow(f, false)).join('') || '<tr><td colspan="9">Nothing to fix.</td></tr>'}</tbody></table></div>
-    ${pages > 1 ? `<div class="tlpg"><button type="button" class="btn ghost sm" data-tlpg="-1" ${tlPage <= 1 ? 'disabled' : ''}>Previous</button><span>Page ${tlPage} of ${pages}</span><button type="button" class="btn ghost sm" data-tlpg="1" ${tlPage >= pages ? 'disabled' : ''}>Next</button></div>` : ''}</div>`;
-}
-function tlTicketPage(c, f) {
-  const t = f.t, s = c.s, wd = workDays(s.win), W = 640, H = 230, L = 44, R = 16, Tp = 18, B = 40, pw = W - L - R, ph = H - Tp - B, top = Math.max(2, Math.ceil(Math.max(f.E, f.exp, f.lg) * 1.1)), X = i => L + (i + .5) / wd.length * pw, Y = v => Tp + ph - v / top * ph;
-  const lgc = d => Object.entries(t.wl || {}).filter(([k]) => k <= d).reduce((z, [, h]) => z + h, 0), expc = d => { let v = 0; f.rows.forEach(r => { if (r.d <= d) v = r.cum; }); return v; }, last = wd.filter(d => d <= c.ad);
-  const line = (fn, cls) => last.map((d, i) => `${i ? 'L' : 'M'}${X(wd.indexOf(d)).toFixed(1)} ${Y(fn(d)).toFixed(1)}`).join(' ');
-  const marks = (t.h || []).filter(h => wd.includes(h[0])).map(h => `<line x1="${X(wd.indexOf(h[0]))}" x2="${X(wd.indexOf(h[0]))}" y1="${Tp}" y2="${Tp + ph}" stroke="var(--lineStrong)" stroke-dasharray="3 3"/><text x="${X(wd.indexOf(h[0]))}" y="${Tp + 11}" font-size="10" text-anchor="middle" fill="var(--muted)">${esc(h[1])}</text>`).join('');
-  const grid = [0, .25, .5, .75, 1].map(q => `<line x1="${L}" x2="${W - R}" y1="${Y(top * q)}" y2="${Y(top * q)}" stroke="var(--line)"/><text x="${L - 6}" y="${Y(top * q) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${f1(top * q)}</text>`).join('');
-  const xl = wd.map((d, i) => `<text x="${X(i)}" y="${H - 20}" text-anchor="middle" font-size="11" fill="var(--muted)">${dayName(d).slice(0, 1)}</text><text x="${X(i)}" y="${H - 7}" text-anchor="middle" font-size="10" fill="var(--faint)">${fmtD(d).split(' ')[0]}</text>`).join('');
-  const ev = [...(t.h || []).filter(h => h[0] >= (s.start || wd[0])).map(h => [h[0], 0, `Status changed to ${h[1]}`]), ...Object.entries(t.wl || {}).map(([d, h]) => [d, 1, `Logged ${f1(h)} h`])].sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : a[1] - b[1]);
-  const [cl, lab] = TLR[f.r], st = (k, v, sub) => `<div class="tls"><span class="fl">${k}</span><b>${v}</b><small>${sub}</small></div>`;
-  TLCALC = { first: f };
-  const calcRows = f.rows.map(r => `<tr><td data-l="Day">${esc(dnm(r.d))}</td><td data-l="Tickets in progress">${r.n}</td><td data-l="Hours available">${f1(r.avail)} h</td><td data-l="Share of the day passed">${r.f >= 1 ? '1' : f1(r.f)}</td><td data-l="Hours counted">(${f1(r.avail)}) / (${r.n}) × (${r.f >= 1 ? 1 : f1(r.f)}) = <b>${f1(r.sh)} h</b></td><td data-l="Should be logged so far">${f1(r.cum)} h</td><td data-l="Logged so far">${f1(lgc(r.d))} h</td></tr>`).join('');
-  $('#v-tlog').innerHTML = `<div class="tlnav"><button type="button" class="btn ghost sm" data-tlback>← Time logging</button><span>${esc(t.a)}</span><span>${esc(t.k)}</span></div>
-    <div class="tlhead"><h2><a class="link" href="${J(t.k)}" target="_blank" rel="noopener">${esc(t.k)}</a> ${esc(t.s || '')}</h2><p>${esc(t.a)} · ${esc(t.st)} · <span class="tag ${cl}">${lab}</span></p></div>
-    <div class="tlstats tl4">${st('Original estimate', f1(f.E) + ' h', 'the hours planned')}${st('Should be logged', f1(f.exp) + ' h', 'by now' + tip('tlexpected'))}${st('Logged', f1(f.lg) + ' h', t.ll ? 'last on ' + dnm(t.ll) : 'nothing yet')}${st('Gap', f1(f.gap) + ' h', 'should be logged minus logged' + tip('tlgap'))}</div>
-    <div class="panel"><div class="cardhead"><h3>Why this ticket is flagged</h3></div><p class="tlwhy">${esc(tlWhy(f, c.ad))}</p></div>
-    <div class="panel" style="margin-top:14px"><div class="cardhead"><h3>Should be logged against logged</h3></div><div class="key"><span><i class="ln d"></i>Should be logged</span><span><i class="ln g"></i>Logged</span></div><svg class="chart tlchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Cumulative hours that should be logged against hours logged">${grid}${marks}${xl}<path d="${line(expc)}" fill="none" stroke="var(--muted)" stroke-width="2.2" stroke-dasharray="6 5"/><path d="${line(lgc)}" fill="none" stroke="var(--green)" stroke-width="3"/>${last.length ? `<circle cx="${X(wd.indexOf(last[last.length - 1]))}" cy="${Y(lgc(last[last.length - 1]))}" r="4.5" fill="var(--green)"/>` : ''}</svg></div>
-    <div class="panel" style="margin-top:14px"><div class="cardhead"><h3>How it was calculated</h3></div><p class="tlform">Should be logged = sum over each day the ticket was in progress of (hours available that day) / (tickets in progress that day) × (share of the day that has passed), up to the original estimate. Gap = (should be logged) − (logged).</p>${f.r === 'closed' ? `<p class="tlform">This ticket is closed, so it should carry its full estimate: (${f1(f.E)} h) − (${f1(f.lg)} h) = ${f1(f.gap)} h.</p>` : ''}
-      ${calcRows ? `<div class="scroll"><table class="fit tlc2"><thead><tr><th>Day</th><th>Tickets in progress</th><th>Hours available</th><th>Share of the day passed</th><th>Hours counted</th><th>Should be logged so far</th><th>Logged so far</th></tr></thead><tbody>${calcRows}</tbody></table></div>` : ''}
-      <p class="tlform"><b>Result:</b> (${f1(f.exp)} h should be logged) − (${f1(f.lg)} h logged) = <b>${f1(f.gap)} h</b>.</p></div>
-    <div class="panel" style="margin-top:14px"><div class="cardhead"><h3>What happened on this ticket</h3></div><ul class="tlev">${ev.map(([d, k, x]) => `<li><span>${esc(dnm(d))}</span>${esc(x)}</li>`).join('') || '<li>No history yet.</li>'}</ul></div>`;
-}
-$('#v-tlog').addEventListener('click', e => {
-  const g = e.target.closest('[data-tlg]'), r = e.target.closest('[data-tlr]'), m = e.target.closest('[data-tlmore]'), cp = e.target.closest('[data-tlcopy]'), w = e.target.closest('[data-tlwhy]'), pp = e.target.closest('[data-tlperson]'), bk = e.target.closest('[data-tlback]'), pg = e.target.closest('[data-tlpg]');
-  if (g) { tlOpen = tlOpen === g.dataset.tlg ? '' : g.dataset.tlg; renderTlog(); } else if (r) { tlReason = r.dataset.tlr; renderTlog(); } else if (m) { tlShow[m.dataset.tlmore] = (tlShow[m.dataset.tlmore] || 10) + 20; renderTlog(); }
-  else if (w) { tlV = { m: 'ticket', who: null, key: w.dataset.tlwhy, from: tlV.m, fromWho: tlV.who }; renderTlog(); window.scrollTo({ top: 0 }); }
-  else if (pp) { tlV = { m: 'person', who: pp.dataset.tlperson, key: null }; tlPage = 1; renderTlog(); window.scrollTo({ top: 0 }); }
-  else if (bk) { tlV = tlV.m === 'ticket' && tlV.from === 'person' ? { m: 'person', who: tlV.fromWho, key: null } : { m: 'list', who: null, key: null }; renderTlog(); }
-  else if (pg) { tlPage += +pg.dataset.tlpg; renderTlog(); }
-  else if (cp) { const c = tlCtx(), list = c.all.filter(f => f.t.a === cp.dataset.tlcopy), txt = tlReminder(cp.dataset.tlcopy, list, c.s.name || c.key); const ok = () => notify({ kind: 'success', title: 'Reminder copied', text: 'Paste it into a message to ' + cp.dataset.tlcopy + '.', ms: 3500 });
-    (navigator.clipboard ? navigator.clipboard.writeText(txt).then(ok, () => window.prompt('Copy this reminder', txt)) : Promise.resolve(window.prompt('Copy this reminder', txt))); }
-});
-$('#v-tlog').addEventListener('change', e => { if (e.target.id === 'tlwho') { tlWho = e.target.value; tlOpen = null; renderTlog(); } });
-$('#v-tlog').addEventListener('input', e => { if (e.target.id === 'tlq') { tlQ = e.target.value; const p = e.target.selectionStart; renderTlog(); const i = $('#tlq'); i.focus(); i.setSelectionRange(p, p); } });
-
 function show() {
   const dead = LOADFAIL && !(D.stories || []).length; $('#loaderr').hidden = !dead;
-  if (dead) { ['map', 'cap', 'bd', 'tlog', 'leave', 'log', 'who', 'how'].forEach(x => $('#v-' + x).hidden = true); $('#bar').style.display = 'none'; document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab)); return; }
+  if (dead) { ['map', 'cap', 'bd', 'leave', 'log', 'who', 'how'].forEach(x => $('#v-' + x).hidden = true); $('#bar').style.display = 'none'; document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab)); return; }
   document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
-  ['map', 'cap', 'bd', 'tlog', 'leave', 'log', 'who', 'how'].forEach(t => $('#v-' + t).hidden = t !== tab);
+  ['map', 'cap', 'bd', 'leave', 'log', 'who', 'how'].forEach(t => $('#v-' + t).hidden = t !== tab);
   const sp = ['map', 'cap', 'bd', 'leave'].includes(tab);
   $('#fsprint').hidden = !sp; $('#fasof').hidden = tab !== 'bd'; $('#legend').style.display = tab === 'map' ? '' : 'none'; $('#bar').style.display = sp ? '' : 'none';
   ddLabel();
-  ({ map: renderMap, cap: renderCap, bd: renderBd, tlog: renderTlog, leave: renderLeave, log: renderLog, who: renderWho, how: renderHow })[tab]();
+  ({ map: renderMap, cap: renderCap, bd: renderBd, leave: renderLeave, log: renderLog, who: renderWho, how: renderHow })[tab]();
 }
 $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) { tab = b.dataset.tab; closeD(); show(); } });
 window.addEventListener('resize', () => { if (tab === 'map') lines(); });
@@ -1603,16 +1517,13 @@ window.matchMedia('(max-width:720px)').addEventListener('change', () => { if (ta
 const TASK_CLOSED = ['Technical Review', 'Done', 'Fixed', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod', 'Invalid', 'Deferred'], STORY_CLOSED = ['Deployed to UAT', 'Deployed to Prod'], EPIC_CLOSED = ['Done'];
 const OPEN_STATUSES = ['Backlog', 'Research', 'Spec_Completed', 'Accepted by Developer', 'Ready for Development', 'In Progress', 'Code_Review', 'In Testing', 'On-Hold', 'New', 'Triaged', 'Reopened', 'Verified', 'ACTIVE', 'Duplicate', "Won't Fix"];
 const TT = {   // every (i): one short line, then a formula and a worked example laid out as rows
-  tlreason: { h: 'Why a ticket is flagged', mk: 'tag', p: 'Only tickets with an estimate and an owner are checked. A gap under 2 h (or half the estimate) is ignored.', rows: [['bad', 'No time logged', 'In progress and nothing logged, though hours should be'], ['warn', 'Behind on logging', 'Some time logged, less than should be'], ['bad', 'Closed under-logged', 'Closed in this sprint with less than its estimate logged']] },
-  tlexpected: { h: 'Should be logged', p: 'What the ticket should have by now, from its own history.', rows: [['blue', 'Formula', 'sum over the days it was in progress of (hours available) / (tickets the person had in progress that day), up to the estimate'], ['blue', 'Closed ticket', 'the full original estimate']], math: [{ h: 'Example', rows: [['Tuesday', '(8 h) / (2 tickets) = 4 h'], ['Wednesday', '(8 h) / (2 tickets) = 4 h'], ['Should be logged', '(4 h) + (4 h) = 8 h']] }] },
-  tlgap: { h: 'Gap', p: 'The hours still to be logged on the ticket.', rows: [['blue', 'Formula', '(should be logged) − (logged)']], math: [{ h: 'Example', rows: [['Should be logged', '8 h'], ['Logged', '3 h'], ['Gap', '(8 h) − (3 h) = 5 h']] }] },
-  dgrid: { h: 'Time logged each day', mk: 'tag', p: 'Each cell is the hours a person logged that day, by log date.', rows: [['ok', 'Green', 'At or above the daily target'], ['warn', 'Orange', 'Some time, below the daily target'], ['bad', 'Red', 'Nothing logged on a working day']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Capacity days', '8'], ['Daily target', '(48 h) / (8) = 6 h']] }], note: 'Grey: Sprint Planning, leave, or a day that has not come yet. A white outline is today, still in progress.' },
-  flag: { h: 'Flag', mk: 'tag', rows: [['nil', 'Not started', 'Work has not begun'], ['ok', 'On track', 'Logged is equal to or more than expected'], ['warn', 'Behind on logging', 'Up to 8 h short'], ['bad', 'Time log missing', 'More than 8 h short']] },
+  dgrid: { h: 'Time logged each day', mk: 'tag', p: 'Each cell is the hours a person logged that day, by log date.', rows: [['ok', 'On pace', 'At or above the daily pace target'], ['warn', 'Behind pace', 'Some time logged, under the daily pace target'], ['bad', 'Nothing logged', 'No time logged on a working day']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Capacity days', '8'], ['Daily pace target', '(48 h) / (8) = 6 h']] }], note: 'Grey: Sprint Planning, leave, or a day that has not come yet. An outline marks today, still in progress.' },
+  flag: { h: 'Flag', mk: 'tag', p: 'The pace target is a prediction from the original estimates, not a count of missed work.', rows: [['nil', 'Not started', 'Work has not begun'], ['ok', 'On pace', 'Logged is at or above the pace target'], ['warn', 'Behind pace', 'Up to 8 h under the pace target'], ['bad', 'Well behind pace', 'More than 8 h under the pace target']] },
   verdict: { h: 'Verdict', mk: 'tag', p: 'Can the remaining work fit in the time left?', rows: [['blue', 'Formula', '(remaining estimate) − (time left)'], ['ok', 'Achievable', 'Result is 0 or less'], ['bad', 'Not achievable', 'Result is above 0'], ['ok', 'Completed', 'Sprint over, no work left'], ['bad', 'Not completed', 'Sprint over, work left']], math: [{ h: 'Example', rows: [['Remaining estimate', '36 h'], ['Time left', '33.5 h'], ['Short by', '(36 h) − (33.5 h) = 2.5 h']] }] },
   left: { h: 'Time left in the sprint (h)', p: 'Working hours still to come, after leave.', rows: [['blue', 'Formula', '(capacity) − (hours passed)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Hours passed', '40 h'], ['Time left', '(64 h) − (40 h) = 24 h']] }] },
   leave: { h: 'Leave (h)', p: 'Hours away. Lowers capacity only.', rows: [['blue', 'Formula', '(capacity) − (leave)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Leave', '6 h'], ['After leave', '(64 h) − (6 h) = 58 h']] }] },
-  missing: { h: 'Missing log (h)', p: 'Hours expected but not logged.', mk: 'tag', rows: [['blue', 'Formula', '(expected log) − (logged)'], ['warn', 'Up to 8 h', 'Flag: Behind on logging'], ['bad', 'More than 8 h', 'Flag: Time log missing']], math: [{ h: 'Example', rows: [['Expected', '24 h'], ['Logged', '18 h'], ['Missing', '(24 h) − (18 h) = 6 h']] }] },
-  expected: { h: 'Expected log by now (h)', p: 'Hours that should be logged by now.', rows: [['blue', 'Formula', '(original estimate / capacity days) × (capacity days passed)'], ['warn', 'Leave', 'Days on leave are not counted']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Daily target', '(48 h) / (8 days) = 6 h'], ['Capacity days passed', '4'], ['Expected log', '(6 h × 4) = 24 h']] }] },
+  missing: { h: 'Pace gap (h)', p: 'How far logged time is under the pace target. The target is a prediction from the original estimates.', mk: 'tag', rows: [['blue', 'Formula', '(pace target) − (logged)'], ['warn', 'Up to 8 h', 'Behind pace'], ['bad', 'More than 8 h', 'Well behind pace']], math: [{ h: 'Example', rows: [['Pace target', '24 h'], ['Logged', '18 h'], ['Pace gap', '(24 h) − (18 h) = 6 h']] }] },
+  expected: { h: 'Pace target by now (h)', p: 'Hours the original estimate predicts should be logged by now. A prediction, not a count.', rows: [['blue', 'Formula', '(original estimate / capacity days) × (capacity days passed)'], ['warn', 'Leave', 'Days on leave are not counted']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Daily pace target', '(48 h) / (8 days) = 6 h'], ['Capacity days passed', '4'], ['Pace target', '(6 h × 4) = 24 h']] }] },
   over: { h: 'Over estimate (h)', p: 'Hours logged beyond the original estimate.', rows: [['blue', 'Formula', '(logged) − (counted against estimates)']], math: [{ h: 'Example', rows: [['Original estimate', '10 h'], ['Logged', '14 h'], ['Over estimate', '(14 h) − (10 h) = 4 h']] }] },
   ideal: { h: 'Ideal pace', p: 'Dashed line: every capacity day covers one equal chunk of the original estimate.', rows: [['blue', 'Formula', '(total) − ((total / capacity days) × days passed)'], ['warn', 'Leave', 'Days on leave carry no planned work']], math: [{ h: 'Example', rows: [['Original estimate', '10 h'], ['Capacity days', '5'], ['Chunk per day', '(10 h) / (5) = 2 h'], ['Left after day 3', '(10 h) − (2 h × 3) = 4 h']] }] },
   remaining: { h: 'Remaining estimate', p: 'Blue line: the work still left.', rows: [['blue', 'Formula', '(original estimate) − (logged), never below 0']], math: [{ h: 'Example', rows: [['Sub-task A', '(6 h) − (2 h) = 4 h'], ['Sub-task B', '(3 h) − (5 h) = 0 h'], ['Remaining', '(4 h) + (0 h) = 4 h']] }] },
@@ -1625,7 +1536,7 @@ const TT = {   // every (i): one short line, then a formula and a worked example
   day: { h: 'Sprint day', p: 'Working days since the sprint started. The first 2 are Sprint Planning.', rows: [['nil', 'Not started', 'Before day 1'], ['blue', 'Day N of 10', 'Counts every working day'], ['ok', 'Complete', 'After day 10']] },
   capday: { h: 'Capacity day', p: 'Working days that carry capacity. Sprint Planning days are not counted.', rows: [['blue', 'Formula', '(sprint day) − (planning days)']], math: [{ h: 'Example', rows: [['Sprint day', '6'], ['Planning days', '2'], ['Capacity day', '(6) − (2) = 4 of 8']] }] },
   renew: { h: 'Renew by', rows: [['ok', 'No expiry', 'Nothing to renew'], ['warn', 'A date', 'Renew before that day']] },
-  closed: { h: 'Counted as closed', groups: [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]] },
+  closed: { h: 'Counted as closed', note: 'Technical Review is the last stage only for Jira management, U.S. team demos, reporting and documentation tickets. For development, QA testing, infrastructure and cloud tickets it is not a last stage, so they stay open.', groups: [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]] },
   n1: { h: 'Jira', p: 'Where tickets and time logs live.', rows: [['ok', 'Read-only', 'The dashboard never writes to Jira']] },
   n2: { h: 'GitHub Actions', p: 'Reads Jira with an Atlassian API token.', rows: [['blue', 'Runs on', "GitHub's servers"]] },
   n3: { h: 'GitHub repository', p: 'Keeps the data as JSON files.', rows: [['ok', 'History', 'Every update is a commit']] },
@@ -1645,40 +1556,38 @@ const chips = a => `<span class="tchips">${a.map(x => `<span class="tchip">${esc
 function jiraPop() {
   const tabs = `<div class="jtabs" role="tablist"><button type="button" role="tab" data-jtab="status" aria-selected="${jiraTab === 'status'}">Statuses</button><button type="button" role="tab" data-jtab="closed" aria-selected="${jiraTab === 'closed'}">Counted as closed</button></div>`;
   const groups = jiraTab === 'status' ? [['Epic', ST_EPIC], ['User story', ST_STORY], ['Sub-task, Story sub-task, New Feature sub-task', ST_STORY], ['Bug sub-task', ST_BUG]] : [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]];
-  return `<div class="tt jp"><div class="tth">Jira status</div>${tabs}${groups.map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}</div>`;
+  return `<div class="tt jp"><div class="tth">Jira status</div>${tabs}${groups.map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${jiraTab === 'closed' ? '<p class="ttnote">Technical Review is the last stage only for Jira management, U.S. team demos, reporting and documentation tickets. For development, QA testing, infrastructure and cloud tickets it is not a last stage, so they stay open.</p>' : ''}</div>`;
 }
 // Colour appears in a legend only as the same tag or chip the page draws (Flag, Verdict, Pull status) or the same dot beside the time; every other row is a plain grey bullet. A marker appears only when the page really shows it: a coloured tag (Flag, Verdict), a chip with a dot (Pull status), or nothing.
 const mark = (mk, c, t) => mk === 'tag' && ['ok', 'bad', 'warn', 'nil'].includes(c) ? `<span class="tag ${c}">${esc(t)}</span>` : mk === 'chip' ? `<span class="chip ${c === 'nil' ? 'na' : c}"><i></i>${esc(t)}</span>` : `<i class="bl"></i>${esc(t)}`;      // a plain grey bullet where colour would mean nothing
 let CALC = null;   // the numbers behind the Burndown page right now, so a formula can be shown with the real calculation
-let TLCALC = null;
 function calcFor(key) {
-  if (key === 'tlexpected' || key === 'tlgap') { const f = TLCALC && TLCALC.first; if (!f) return null; const h = v => f1(v) + ' h';
-    if (key === 'tlgap') return { who: f.t.k, rows: [['Should be logged', h(f.exp)], ['Logged', h(f.lg)], ['Gap', `(${h(f.exp)}) − (${h(f.lg)}) = ${h(f.gap)}`]] };
-    if (f.r === 'closed' || !f.rows.length) return { who: f.t.k, rows: [['Original estimate', h(f.E)], ['Closed ticket', 'carries its full estimate'], ['Should be logged', h(f.exp)]] };
-    const shown = f.rows.slice(-3); return { who: f.t.k, rows: shown.map(r => [dnm(r.d), `(${h(r.avail)}) / (${r.n}) × (${r.f >= 1 ? 1 : f1(r.f)}) = ${h(r.sh)}`]).concat([['Should be logged', `${h(f.exp)}${f.rows.length > 3 ? ' (all ' + f.rows.length + ' days, up to the estimate)' : ''}`]]) }; }
-  if (key === 'dgrid') { const r = CALC && CALC.rs.find(x => x.name === CALC.who) || (CALC && CALC.rs[0]); if (!r || !(r.capDays > 0)) return null; return { who: r.name, rows: [['Original estimate', f1(r.E) + ' h'], ['Capacity days', f1(r.capDays)], ['Daily target', `(${f1(r.E)} h) / (${f1(r.capDays)}) = ${f1(r.dailyT)} h`]] }; }
+  if (key === 'dgrid') { const r = CALC && CALC.rs.find(x => x.name === CALC.who) || (CALC && CALC.rs[0]); if (!r || !(r.capDays > 0)) return null; return { who: r.name, rows: [['Original estimate', f1(r.E) + ' h'], ['Capacity days', f1(r.capDays)], ['Daily pace target', `(${f1(r.E)} h) / (${f1(r.capDays)}) = ${f1(r.dailyT)} h`]] }; }
   if (!CALC || !CALC.rs.length) return null;
   const rs = CALC.who === 'Team' ? CALC.rs : CALC.rs.filter(r => r.name === CALC.who); if (!rs.length) return null;
   const who = CALC.who === 'Team' ? 'Everyone' : CALC.who, one = rs.length === 1, Sm = k => rs.reduce((a, r) => a + r[k], 0), h = v => f1(v) + ' h', burned = Sm('E') - Sm('remain');
   const rows = {
     left: () => [['Capacity', h(Sm('capP'))], ['Hours passed', h(Sm('used'))], ['Time left', `(${h(Sm('capP'))}) − (${h(Sm('used'))}) = ${h(Sm('left'))}`]],
     leave: () => [['Capacity', h(CAP * rs.length)], ['Leave', h(CAP * rs.length - Sm('capP'))], ['After leave', `(${h(CAP * rs.length)}) − (${h(CAP * rs.length - Sm('capP'))}) = ${h(Sm('capP'))}`]],
-    missing: () => [['Expected', h(Sm('exp'))], ['Logged', h(Sm('logged'))], ['Missing', Sm('exp') - Sm('logged') > .05 ? `(${h(Sm('exp'))}) − (${h(Sm('logged'))}) = ${h(Sm('exp') - Sm('logged'))}` : '0 h (logged is ahead)']],
-    expected: () => one ? [['Original estimate', h(rs[0].E)], ['Daily target', `(${h(rs[0].E)}) / (${f1(rs[0].capDays)} days) = ${h(rs[0].dailyT)}`], ['Capacity days passed', f1(rs[0].daysPassed) + ' days'], ['Expected log', `(${h(rs[0].dailyT)}) × (${f1(rs[0].daysPassed)}) = ${h(rs[0].exp)}`]] : null,
+    missing: () => [['Pace target', h(Sm('exp'))], ['Logged', h(Sm('logged'))], ['Pace gap', Sm('exp') - Sm('logged') > .05 ? `(${h(Sm('exp'))}) − (${h(Sm('logged'))}) = ${h(Sm('exp') - Sm('logged'))}` : '0 h (logged is ahead)']],
+    expected: () => one ? [['Original estimate', h(rs[0].E)], ['Daily pace target', `(${h(rs[0].E)}) / (${f1(rs[0].capDays)} days) = ${h(rs[0].dailyT)}`], ['Capacity days passed', f1(rs[0].daysPassed) + ' days'], ['Pace target', `(${h(rs[0].dailyT)}) × (${f1(rs[0].daysPassed)}) = ${h(rs[0].exp)}`]] : null,
     over: () => [['Logged', h(Sm('logged'))], ['Counted against estimates', h(burned)], ['Over estimate', one ? `(${h(Sm('logged'))}) − (${h(burned)}) = ${h(Sm('over'))}` : h(Sm('over'))]],
     remaining: () => [['Original estimate', h(Sm('E'))], ['Counted against estimates', h(burned)], ['Remaining', `(${h(Sm('E'))}) − (${h(burned)}) = ${h(Sm('remain'))}`]],
-    ideal: () => [['Original estimate', h(Sm('E'))], ['Expected log by now', h(Sm('exp'))], ['Ideal pace', `(${h(Sm('E'))}) − (${h(Sm('exp'))}) = ${h(Sm('E') - Sm('exp'))}`]],
+    ideal: () => [['Original estimate', h(Sm('E'))], ['Pace target by now', h(Sm('exp'))], ['Ideal pace', `(${h(Sm('E'))}) − (${h(Sm('exp'))}) = ${h(Sm('E') - Sm('exp'))}`]],
     verdict: () => { const g = Sm('remain') - Sm('left'); return [['Remaining estimate', h(Sm('remain'))], ['Time left', h(Sm('left'))], g > .05 ? ['Short by', `(${h(Sm('remain'))}) − (${h(Sm('left'))}) = ${h(g)}`] : ['Room of', `(${h(Sm('left'))}) − (${h(Sm('remain'))}) = ${h(-g)}`]]; },
     capday: () => CALC.dayNo ? [['Sprint day', String(CALC.dayNo)], ['Planning days', String(CALC.plan)], ['Capacity day', `(${CALC.dayNo}) − (${CALC.plan}) = ${Math.max(0, CALC.dayNo - CALC.plan)} of ${CALC.wd}`]] : null,
   };
   const r = rows[key] && rows[key](); return r ? { who, rows: r } : null;
 }
-function ttHtml(d, key) {
-  const c = key && calcFor(key), math = c ? [{ h: 'Calculation', sub: c.who, rows: c.rows }] : (d.math || []).map(m => ({ ...m, h: m.h || 'Example' }));
-  const row = r => `<div class="ttr"><span class="ttn">${mark(d.mk, r[0], r[1])}</span><span class="ttd">${esc(r[2])}</span></div>`;
-  const pilled = r => d.mk && ((d.mk === 'tag' && ['ok', 'bad', 'warn', 'nil'].includes(r[0])) || d.mk === 'chip');
-  const rowsHtml = d.mk ? `<div class="ttpg">${(d.rows || []).map(r => pilled(r) ? `<span class="ttn">${mark(d.mk, r[0], r[1])}</span><span class="ttd">${esc(r[2])}</span>` : `<div class="ttr full"><span class="ttn">${mark('', r[0], r[1])}</span><span class="ttd">${esc(r[2])}</span></div>`).join('')}</div>` : (d.rows || []).map(row).join('');
-  return `<div class="tt"><div class="tth">${esc(d.h)}</div>${d.p ? `<p class="ttp">${esc(d.p)}</p>` : ''}${rowsHtml}${(d.groups || []).map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${math.map(m => `<div class="ttm"><div class="ttmh"><span class="tmk${c ? ' live' : ''}">${esc(m.h)}</span>${m.sub ? `<span class="tms">${esc(m.sub)}</span>` : ''}</div><table class="ttmt"><tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>`).join('')}${d.note ? `<p class="ttnote">${esc(d.note)}</p>` : ''}</div>`;
+function ttHtml(d, key) {   // the same card as the graph hover: a title, short lines, small-caps section titles, tables with the values on the right
+  const c = key && calcFor(key), m = c ? { live: true, who: c.who, rows: c.rows } : ((d.math || [])[0] ? { live: false, rows: d.math[0].rows } : null);
+  const formula = (d.rows || []).filter(r => r[1] === 'Formula'), list = (d.rows || []).filter(r => r[1] !== 'Formula');
+  const head = `<div class="tph"><div class="tpd tth">${esc(d.h)}</div>${d.p ? `<div class="tpl ttp">${esc(d.p)}</div>` : ''}</div>`;
+  const fsec = formula.length ? `<div class="tps"><div class="tpt">Formula</div>${formula.map(r => `<div class="tpf">${esc(r[2])}</div>`).join('')}</div>` : '';
+  const lsec = list.length ? `<div class="tps"><div class="tpt">${d.mk ? 'What each one means' : 'Good to know'}</div><table class="mt lg"><tbody>${list.map(r => `<tr class="ttr"><td><span class="ttn">${mark(d.mk, r[0], r[1])}</span><small class="ttd">${esc(r[2])}</small></td></tr>`).join('')}</tbody></table></div>` : '';
+  const gsec = (d.groups || []).map(g => `<div class="tps ttg"><div class="tpt ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('');
+  const msec = m ? `<div class="tps ttm"><div class="tpt"><span class="tmk${m.live ? ' live' : ''}">${m.live ? 'Calculation' : 'Example'}</span></div><table class="mt ttmt">${m.live ? `<thead><tr><th>${esc(m.who)}</th><th></th></tr></thead>` : ''}<tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>` : '';
+  return `<div class="tt tc">${head}${fsec}${lsec}${gsec}${msec}${d.note ? `<div class="tf ttnote">${esc(d.note)}</div>` : ''}</div>`;
 }
 const lab = (text, key) => `${text}<button type="button" class="ibtn" data-tip="@${key}" aria-label="What do the values mean?">i</button>`;
 const tip = key => `<button type="button" class="ibtn" data-tip="@${key}" aria-label="What does this mean?">i</button>`;
@@ -1753,7 +1662,9 @@ const LIMIT = 100, RESERVE = 5, DAY = 864e5;   // Vercel free plan: 100 deployme
 function usage() { const now = Date.now(), all = (RUNS || []).filter(x => now - Date.parse(x.at) < DAY), r = all.map(x => Date.parse(x.at)).sort((a, b) => a - b); return { n: r.length, sched: all.filter(x => x.trigger === 'schedule').length, resetAt: r.length ? r[0] + DAY : null }; }
 function refreshTip() {
   const u = usage();
-  return `<div class="tt"><div class="tth">Refresh limit</div><div class="ttr"><span class="ttn">Limit</span><span class="ttd">100 pulls in 24 hours</span></div><div class="ttr"><span class="ttn">Used</span><span class="ttd"><b>${u.n} of ${LIMIT}</b> in the last 24 hours, whole team</span></div><div class="ttr"><span class="ttn">Two clicks</span><span class="ttd">Under 2 minutes apart: skipped</span></div><div class="ttg"><div class="ttgl">The dot beside the time</div><div class="ttr"><span class="ttn"><i class="td ok"></i>Green</span><span class="ttd">Under 14 hours old</span></div><div class="ttr"><span class="ttn"><i class="td warn"></i>Amber</span><span class="ttd">Older than 14 hours</span></div><div class="ttr"><span class="ttn"><i class="td blue"></i>Blue, pulsing</span><span class="ttd">Refreshing now</span></div></div></div>`;
+  return `<div class="tt tc"><div class="tph"><div class="tpd tth">Refresh limit</div><div class="tpl">Pulls from Jira are limited by the free Vercel plan.</div></div>
+    <div class="tps"><div class="tpt">Limit</div><table class="mt"><tbody><tr class="ttr"><td>Limit</td><td>100 pulls in 24 hours</td></tr><tr class="ttr"><td>Used</td><td><b>${u.n} of ${LIMIT}</b>, whole team</td></tr><tr class="ttr"><td>Two clicks</td><td>Under 2 minutes apart: skipped</td></tr></tbody></table></div>
+    <div class="tps"><div class="tpt">The dot beside the time</div><table class="mt lg"><tbody><tr class="ttr"><td><span class="ttn"><i class="td ok"></i> Green</span><small class="ttd">Under 14 hours old</small></td></tr><tr class="ttr"><td><span class="ttn"><i class="td warn"></i> Orange</span><small class="ttd">Older than 14 hours</small></td></tr><tr class="ttr"><td><span class="ttn"><i class="td blue"></i> Blue, pulsing</span><small class="ttd">Refreshing now</small></td></tr></tbody></table></div></div>`;
 }
 
 /* ---------- messages ---------- */

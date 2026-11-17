@@ -15,7 +15,7 @@ def rows(pg, sel): return pg.evaluate("s => [...document.querySelectorAll(s + ' 
 
 def test_leave_tab_sits_after_burndown_and_the_page_is_simple(ctx_factory, mock):
     pg, M, info = open_leave(ctx_factory, mock)
-    assert [t.strip() for t in pg.locator("#tabs .tab").all_inner_texts()] == ["Map", "Capacity", "Burndown", "Time logging", "Leave", "Pull log", "Stakeholders", "How it works"]
+    assert [t.strip() for t in pg.locator("#tabs .tab").all_inner_texts()] == ["Map", "Capacity", "Burndown", "Leave", "Pull log", "Stakeholders", "How it works"]
     assert pg.locator("h2.pgtitle").inner_text() == "Leave" and pg.locator("#fsprint").is_visible()
     assert pg.locator("#lvwho option").all_inner_texts() == ["Everyone", "Aditi", "Nikita", "Sumit"]
     assert pg.locator("#v-leave table").count() == 2 and pg.locator("#v-leave p, #v-leave .calc, #v-leave .lvs, #v-leave ol").count() == 0, "two tables and a drop-down, no cards, no notes, no working-out"

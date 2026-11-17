@@ -123,9 +123,18 @@ def is_story_like(x):
     return (not x["fields"]["issuetype"].get("subtask")) and x["fields"]["issuetype"]["name"] in ("Story", "Epic")
 
 
+NONDEV_WORDS = re.compile(r"\b(document|documentation|docs?|demos?|jira|reporting|retrospective|presentation|deck|training|knowledge transfer|u\.?s\.? team)\b", re.I)
+NONDEV_PEOPLE = {"Chetan"}      # the product manager's tickets are Jira management, U.S. team demos, reporting and documentation
+
+
+def non_dev(x):
+    """Documentation, demo and Jira work: there is no development or QA step, so Technical Review is its last stage."""
+    f = x["fields"]; return first(f.get("assignee")) in NONDEV_PEOPLE or bool(NONDEV_WORDS.search(f.get("summary") or ""))
+
+
 def done_set(x):
     if is_story_like(x): return EPIC_DONE if x["fields"]["issuetype"]["name"] == "Epic" else STORY_DONE
-    return TASK_DONE
+    return TASK_DONE if non_dev(x) else TASK_DONE - {"Technical Review"}      # a development ticket in Technical Review is not closed
 
 
 def finished(x):
@@ -147,30 +156,6 @@ def done_date(x):
         return ist_date(since or f.get("statuscategorychangedate") or f["updated"])
     except Exception:
         return (since or f.get("statuscategorychangedate") or f["updated"])[:10]
-
-
-def status_since(x):
-    """Date (IST) the ticket entered its current status, from the changelog; falls back to when its status category last changed."""
-    f = x["fields"]; since = None
-    for h in sorted((x.get("changelog") or {}).get("histories", []), key=lambda h: h["created"]):
-        if any(it.get("field") == "status" for it in h.get("items", [])): since = h["created"]
-    raw = since or f.get("statuscategorychangedate") or f["updated"]
-    try:
-        return ist_date(raw)
-    except Exception:
-        return raw[:10]
-
-
-def status_history(x):
-    """Every status change of a ticket as (date IST, from, to), oldest first."""
-    out = []
-    for h in sorted((x.get("changelog") or {}).get("histories", []), key=lambda h: h["created"]):
-        for it in h.get("items", []):
-            if it.get("field") == "status":
-                try: d = ist_date(h["created"])
-                except Exception: d = h["created"][:10]
-                out.append((d, it.get("fromString"), it.get("toString")))
-    return out
 
 
 def extras(x):
@@ -247,10 +232,9 @@ def main():
             for k, x in iss.items():
                 if k in parents:
                     continue
-                f = x["fields"]; pre = 0.0; inwin = []; last_log = None
+                f = x["fields"]; pre = 0.0; inwin = []
                 for l in full_worklogs(x):
                     d = l["started"][:10]; h = l["timeSpentSeconds"] / 3600
-                    last_log = d if not last_log or d > last_log else last_log
                     if d < ss: pre += h
                     elif d <= en: inwin.append((d, h, first(l["author"])))
                     else: audit["afterWindow"] += h
@@ -267,7 +251,7 @@ def main():
                 if lg > e_ + 0.005:
                     ppl[who]["over"] += lg - e_; audit["overrun"].append({"k": k, "a": who, "e": round(e_, 2), "l": round(lg, 2)})
                 ppl[who]["E"] += e_
-                if sk in SHOW_BD: tl.append({"k": k, "a": who, "e": round(e_, 2), "d": done_date(x), "ty": x["fields"]["issuetype"]["name"], "s": f["summary"][:110], "st": f["status"]["name"], "sd": status_since(x), "lg": round(lg, 2), "ll": last_log, "h0": (status_history(x)[0][1] if status_history(x) else None), "h": [[d, to] for d, _, to in status_history(x)], "wl": {d: round(sum(hh for dd, hh, _ in inwin if dd == d and au == au), 2) for d in sorted({dd for dd, _, _ in inwin})}, **({"y": 1} if is_story_like(x) else {})})
+                if sk in SHOW_BD: tl.append({"k": k, "a": who, "e": round(e_, 2), "d": done_date(x), "ty": x["fields"]["issuetype"]["name"], **({"y": 1} if is_story_like(x) else {})})
             eks = sorted({(x["fields"].get("parent") or {}).get("key") for x in iss.values() if not x["fields"]["issuetype"].get("subtask")
                           and ((x["fields"].get("parent") or {}).get("fields", {}).get("issuetype", {}).get("name") == "Epic")}) if sk in SHOW_BD else []
             el_ = [{"k": e["key"], "a": first(e["fields"].get("assignee")), "d": done_date(e)} for e in (search("key in (%s)" % ",".join(eks), ["summary", "assignee", "status", "issuetype", "created", "updated", "statuscategorychangedate"], "changelog") if eks else [])]

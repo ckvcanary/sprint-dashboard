@@ -72,7 +72,7 @@ def test_tooltips_and_how_it_works_are_plain_and_complete(pw):
     assert "This dashboard shows what is in Jira." in t and "nothing runs on Claude" in t and "12 Nov 2027" in pg.locator(".hw").inner_html()
     pg.locator(".hw [data-tip]:visible").nth(3).hover(); tip = pg.locator("#gtip").inner_text(); assert "A few seconds of wait" in tip
     pg.click('[data-tab="bd"]'); pg.click('[data-bdview="person"]'); pg.wait_for_selector("#cw svg"); pg.locator("th:has-text('Flag') .ibtn").scroll_into_view_if_needed(); pg.mouse.move(2, 2); pg.wait_for_timeout(150)
-    pg.locator("th:has-text('Flag') .ibtn").hover(); assert "On track" in pg.locator("#gtip").inner_text() and "Cannot finish in time" in pg.locator("#gtip").inner_text()
+    pg.locator("th:has-text('Flag') .ibtn").hover(); assert "On pace" in pg.locator("#gtip").inner_text() and "Cannot finish in time" in pg.locator("#gtip").inner_text()
 
 
 def test_pull_log_lists_the_weekday_schedule_by_sprint(pw):

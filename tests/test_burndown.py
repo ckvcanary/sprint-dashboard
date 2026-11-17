@@ -114,7 +114,7 @@ def test_three_capacity_bars_with_the_working_out_in_plain_words(page):
 
 def test_one_grouped_bar_chart_with_three_series(page):
     open_bd(page, "overall"); k = page.locator("#v-bd .key").first.inner_text()
-    assert "Original estimate (h)" in k and "Logged (h)" in k and "Expected log by now (h)" in k and page.locator(".brow").count() == 0
+    assert "Original estimate (h)" in k and "Logged (h)" in k and "Pace target by now (h)" in k and page.locator(".brow").count() == 0
 
 
 # ---------- Per person (dynamic)
@@ -147,9 +147,9 @@ def test_time_is_split_into_two_tables_that_fit_without_sideways_scrolling(page)
     open_bd(page)
     h = lambda sel: [x.lower().rstrip("i").strip() for x in page.locator(f"{sel} thead th").all_inner_texts()]
     assert h("#tplan") == ["name", "original estimate (h)", "remaining estimate (h)", "time left in the sprint (h)", "verdict"]
-    assert h("#tlog") == ["name", "logged (h)", "over estimate (h)", "expected log by now (h)", "missing log (h)", "leave (h)", "flag"]
+    assert h("#tlog") == ["name", "logged (h)", "over estimate (h)", "pace target by now (h)", "pace gap (h)", "leave (h)", "flag"]
     for t in ("#tplan", "#tlog"): assert page.evaluate("t => { const e = document.querySelector(t); return e.scrollWidth <= e.parentElement.clientWidth + 1 && !e.closest('.scroll') }", t)
-    assert page.locator("#v-bd h3:has-text('Can the work be finished?')").count() == 1 and page.locator("#v-bd h3:has-text('Time logging')").count() == 1
+    assert page.locator("#v-bd h3:has-text('Can the work be finished?')").count() == 1 and page.locator("#v-bd h3:has-text('Logging pace')").count() == 1
 
 
 def test_chart_table_and_selector_live_together_and_hours_chart_does_not(page):
@@ -171,13 +171,13 @@ def test_ideal_pace_info_gives_a_worked_example_with_brackets(page):
     open_bd(page); page.locator("#v-bd .key .ibtn").nth(1).hover(); t = page.locator("#gtip").inner_text()
     assert t.startswith("Ideal pace") and "every capacity day covers one equal chunk of the original estimate" in t and "(total) − ((total / capacity days) × days passed)" in t
     assert "calculation" in t.lower() and "÷" not in t and "Days on leave carry no planned work" in t and re.search(r"\(([\d.]+) h\) − \(([\d.]+) h\) = ([\d.]+) h", t)
-    assert page.locator("#gtip .ttmt tr").count() == 3 and page.locator("#gtip .ttm").count() == 1, "the calculation is laid out as rows, not a sentence"
+    assert page.locator("#gtip .ttmt tbody tr").count() == 3 and page.locator("#gtip .ttm").count() == 1, "the calculation is laid out as rows, not a sentence"
 
 
 def test_remaining_estimate_info_explains_the_blue_line_with_an_example(page):
     open_bd(page); page.locator("#v-bd .key .ibtn").nth(0).hover(); t = page.locator("#gtip").inner_text()
     assert "Blue line: the work still left." in t and "(original estimate) − (logged), never below 0" in t and "calculation" in t.lower() and re.search(r"\(([\d.]+) h\) − \(([\d.]+) h\) = ([\d.]+) h", t)
-    assert page.locator("#gtip .ttmt tr").count() == 3
+    assert page.locator("#gtip .ttmt tbody tr").count() == 3
 
 
 def test_x_axis_shows_every_sprint_day_and_the_retrospective(page):
