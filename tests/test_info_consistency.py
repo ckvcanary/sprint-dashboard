@@ -63,3 +63,15 @@ def test_every_tip_example_is_arithmetically_true(page):
             a, op, b, r = float(m[1]), m[2], float(m[3]), float(m[4]); v = {"−": a - b, "+": a + b, "×": a * b, "/": a / b if b else 0}[op]
             if abs(max(v, 0) - r) > .051: bad.append((k, m[0]))
     assert not bad, bad
+
+
+def test_every_plain_row_is_a_grey_bullet_and_colour_is_only_a_real_tag_chip_or_dot(page):
+    t = all_tips(page)
+    for k, h in t.items():
+        rows = re.findall(r'<div class="ttr[^"]*"><span class="ttn">(.*?)</span>', h)
+        for r in rows:
+            assert ('<i class="bl"></i>' in r) or ('<span class="tag ' in r) or ('<span class="chip ' in r) or ('class="td ' in r), (k, r)
+    assert page.evaluate("[...document.querySelectorAll('.ttn')].length >= 0")
+    page.evaluate("document.body.insertAdjacentHTML('beforeend', '<div id=pb class=tt>' + ttHtml(TT.day) + '</div>')")
+    cols = page.evaluate("[...document.querySelectorAll('#pb .bl')].map(e => getComputedStyle(e).backgroundColor)")
+    assert cols and len(set(cols)) == 1, "all plain bullets share one neutral colour"

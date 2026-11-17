@@ -710,6 +710,39 @@ h4.sub{margin:22px 0 10px;font:600 12px var(--sans);letter-spacing:.07em;text-tr
 .fit thead th,.plt thead th,.hwt thead th{border-bottom:0}
 .fit tbody tr:first-child td,.plt tbody tr:first-child td,.hwt tbody tr:first-child td{padding-top:calc(var(--rowpad,10px) + 8px)}
 .fit,.plt,.hwt{border-collapse:separate;border-spacing:0}
+
+.ttn .bl{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.55;flex:none;margin:0 2px}
+.ttr .ttd{margin-left:14px}.ttr.pill .ttd{margin-left:0}
+.ttr.pill .ttn{margin-bottom:3px}
+.tnw{white-space:nowrap}
+.cst{color:var(--muted);font-size:12px;font-weight:500;white-space:nowrap;margin-left:6px}
+
+/* ---------- 17 Nov: landing page in the style of a terminal expo poster, in our blue theme: dark grid, one accent band, big title, a 3D monitor showing the dashboard; Canary logo top left on the dashboard and here ---------- */
+.clogo{display:block;height:30px;width:auto;color:var(--ink)}.brandbar{display:flex;align-items:center;margin:0 0 14px}
+@media (max-width:720px){.clogo{height:24px}.brandbar{margin-bottom:10px}}
+html.locked #gate{background:radial-gradient(900px 620px at 88% 100%,rgba(10,132,255,.5),transparent 62%),radial-gradient(700px 500px at 0% 0%,rgba(10,132,255,.14),transparent 60%),linear-gradient(160deg,#03060d,#08111f 55%,#0a1a38);color:#eaf1ff}
+#gate::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(140,175,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(140,175,255,.09) 1px,transparent 1px);background-size:96px 96px;mask-image:linear-gradient(160deg,transparent 8%,#000 70%);-webkit-mask-image:linear-gradient(160deg,transparent 8%,#000 70%)}
+#gate .gbg{display:none}
+#gate .glogo{position:absolute;z-index:2;left:max(28px,env(safe-area-inset-left,0px));top:calc(24px + env(safe-area-inset-top,0px))}#gate .glogo .clogo{height:34px;color:#fff}
+.gband{display:inline-flex;align-items:center;gap:12px;padding:8px 16px;background:var(--blue);color:#fff;font:700 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;margin-bottom:22px}.gband i{width:1.5px;height:14px;background:rgba(255,255,255,.7)}
+#gate .ghero h2{color:#fff;font-size:68px;letter-spacing:-.03em;line-height:1.02;margin:0 0 18px}#gate .ghero h2 span{color:#fff}
+#gate .gsub2{font:500 15px ui-monospace,SFMono-Regular,Menlo,monospace;color:#b7c8ea;letter-spacing:.01em;margin-bottom:22px}
+#gate .gfeat li{background:rgba(255,255,255,.05);border-color:rgba(160,190,255,.2)}#gate .gfeat b{color:#fff}#gate .gfeat span{color:#aebfdc}
+#gate .gcard{background:rgba(10,18,36,.72);border-color:rgba(160,190,255,.25);color:#eaf1ff;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+#gate .gcard h1{color:#fff}#gate .gcard p,#gate .gfoot{color:#aebfdc}#gate .gcard label{color:#aebfdc}
+#gate .gpw input{background:#0b1426;color:#fff;border-color:rgba(160,190,255,.3)}
+.gprev{position:relative;max-width:600px;padding:0;background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;overflow:visible;perspective:1300px;margin-top:6px}
+.gmon3d{--rx:0deg;--ry:0deg;position:relative;transform-style:preserve-3d;padding:11px 11px 16px;border-radius:16px;background:linear-gradient(145deg,#222a3d,#0a0e18);border:1px solid #33405e;box-shadow:42px 52px 70px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.06);transform:rotateX(calc(9deg + var(--rx))) rotateY(calc(-20deg + var(--ry))) rotateZ(1.5deg);transition:transform .35s cubic-bezier(.2,.8,.2,1);animation:gfloat3d 9s ease-in-out infinite}
+@keyframes gfloat3d{50%{translate:0 -10px}}
+.gmon3d::after{content:"";position:absolute;left:18%;right:18%;bottom:-26px;height:14px;border-radius:0 0 12px 12px;background:linear-gradient(#1a2133,#0a0e18);transform:translateZ(-12px);box-shadow:0 20px 30px rgba(0,0,0,.5)}
+.gscreen{position:relative;overflow:hidden;border-radius:9px;background:#060b16;color:#d6e4ff;padding:12px 16px 10px}
+.gscreen::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.1),transparent 38%)}
+.gsbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;color:#8fa6cf}.gsbar span{color:#fff}.gsbar b{font-weight:500}
+.gscreen .gcap{color:#8fa6cf}.gscreen .gst{height:200px}.gscreen svg{color:#d6e4ff}
+@media (max-width:1100px){#gate .ghero h2{font-size:54px}}
+@media (max-width:900px){#gate .ghero h2{font-size:42px}#gate .glogo{left:20px;top:18px}#gate .glogo .clogo{height:28px}.gwrap{padding-top:72px}}
+@media (max-width:720px){.gband{font-size:11px;letter-spacing:.06em;padding:7px 12px;gap:8px;white-space:nowrap}}
+@media (prefers-reduced-motion:reduce){.gmon3d{animation:none;transition:none}}
 </style>
 
 <script>
@@ -719,10 +752,13 @@ h4.sub{margin:22px 0 10px;font:600 12px var(--sans);letter-spacing:.07em;text-tr
 <div class="rfprog" id="rfprog" hidden><div class="rfph"><div class="rfw"><svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5v19M3.8 7.2l16.4 9.6M3.8 16.8 20.2 7.2"/></svg><span id="rfptxt">Tinkering</span><span class="dots" aria-hidden="true"></span></div><span id="rfpt"></span></div><div class="bar" id="rfpbarwrap" role="progressbar" aria-label="Refresh progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="rfpbar"></i></div><div class="rfps" id="rfps"></div></div>
   <div id="toasts"></div>
 </div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="canary" viewBox="0 0 703 209"><path fill="#fff" d="m91.671 96.613-12.235 7.062 12.235 7.085z"/><path fill="currentColor" d="M96.491 102.719c.945 0 1.712-3.092 1.712-6.906s-.767-6.907-1.712-6.907S94.78 92 94.78 95.813s.766 6.906 1.711 6.906"/><path fill="#F08121" d="m101.241 101.283-4.215 2.427-4.201 2.431v-9.72l4.2 2.431z"/><path fill="#FC3" d="m79.44 103.681 6.279-3.622 5.943-3.438v-3.514l-14.575-9.351-71.326 71.339 12.267.031 13-11.703 31.684.031s28.95-4.904 28.95-32.513v-.198l-5.944-3.438-6.277-3.622z"/><path fill="currentColor" d="M91.648 100.731c0 5.226-.81 9.459-1.802 9.459-.993 0-1.803-4.233-1.803-9.459 0-1.803.091-3.483.26-4.92.32-2.72.886-4.553 1.543-4.553.993 0 1.802 4.233 1.802 9.459z"/><path fill="currentColor" d="M59.52 100.489a.55.55 0 0 1-.412-.184.56.56 0 0 1 .03-.795l4.462-4.111a.6.6 0 0 1 .382-.153H89.8a.565.565 0 1 1 0 1.132H64.21l-4.308 3.958a.53.53 0 0 1-.382.153m548.711 3.963a37.55 37.55 0 0 0 37.552 37.552 37.553 37.553 0 0 0 37.551-37.319l.001-.233V49.937c0-.942.764-1.706 1.707-1.706h15.255c.943 0 1.707.764 1.707 1.706v102.841a56.22 56.22 0 0 1-16.221 39.507l-.246.248A56.22 56.22 0 0 1 645.783 209l-.35-.001a56.22 56.22 0 0 1-49.85-30.907c-.557-1.104.266-2.377 1.503-2.377h18.125c.529 0 1.026.247 1.358.659a37.55 37.55 0 0 0 66.765-23.362l.001-.234v-6.485a56.22 56.22 0 0 1-37.552 14.38l-.35-.001a56.224 56.224 0 0 1-55.871-56.22V49.937c0-.942.764-1.706 1.706-1.706h15.256c.943 0 1.707.764 1.707 1.706zm-41.4-56.221q2.425.015 4.823.213a1.674 1.674 0 0 1 1.527 1.679v15.299c0 1.045-.931 1.843-1.97 1.731a45 45 0 0 0-4.751-.253c-11.208 0-21.752 4.208-29.361 11.382-7.514 7.083-11.541 16.43-11.604 25.945l-.001.225-.106 24.643v29.871c0 .943-.764 1.707-1.707 1.707h-15.149a1.707 1.707 0 0 1-1.707-1.707v-54.514c0-14.795 6.185-28.988 17.206-39.507l.261-.248c11.184-10.543 26.352-16.467 42.168-16.467zm-261.226 0a56.22 56.22 0 0 1 55.872 56.221v54.514c0 .943-.765 1.707-1.707 1.707h-15.256a1.707 1.707 0 0 1-1.707-1.707v-54.514a37.553 37.553 0 0 0-75.103-.234l-.001.234v54.514c0 .943-.764 1.707-1.706 1.707h-15.256a1.707 1.707 0 0 1-1.707-1.707v-54.514a56.22 56.22 0 0 1 16.221-39.507l.246-.248a56.22 56.22 0 0 1 39.754-16.467z"/><path fill="currentColor" fill-rule="evenodd" d="M232.818 158.966c0 .943-.764 1.707-1.707 1.707h-15.255a1.707 1.707 0 0 1-1.707-1.707v-13.257c-10.027 9.287-23.447 14.964-38.192 14.964-31.05 0-56.221-25.171-56.221-56.221s25.171-56.221 56.221-56.221c14.745 0 28.165 5.676 38.192 14.963V49.937c0-.942.764-1.706 1.707-1.706h15.255c.943 0 1.707.764 1.707 1.706zM175.957 66.9c-20.739 0-37.552 16.812-37.552 37.552s16.813 37.552 37.552 37.552 37.552-16.813 37.552-37.552S196.696 66.9 175.957 66.9m314.817 92.066c0 .943-.764 1.707-1.706 1.707h-15.256a1.707 1.707 0 0 1-1.707-1.707v-13.257c-10.027 9.287-23.447 14.964-38.192 14.964-31.05 0-56.221-25.171-56.221-56.221s25.171-56.221 56.221-56.221c14.745 0 28.165 5.676 38.192 14.963V49.937c0-.942.764-1.706 1.707-1.706h15.256c.942 0 1.706.764 1.706 1.706zM433.913 66.9c-20.739 0-37.552 16.812-37.552 37.552s16.813 37.552 37.552 37.552 37.552-16.813 37.552-37.552S454.652 66.9 433.913 66.9" clip-rule="evenodd"/><path fill="currentColor" d="M56.201 65.193c0 .942-.766 1.703-1.707 1.745-19.94.893-35.831 17.347-35.831 37.514 0 20.739 16.806 37.552 37.538 37.552 14.909 0 27.787-8.694 33.846-21.29.293-.608.9-1.007 1.575-1.007h16.434c1.131 0 1.949 1.081 1.599 2.156-7.328 22.528-28.49 38.81-53.454 38.81C25.162 160.673 0 135.502 0 104.452c0-30.478 24.243-55.291 54.49-56.196a1.67 1.67 0 0 1 1.711 1.681z"/></symbol></svg>
 <div id="gate" role="main">
   <div class="gbg" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i></div>
+  <div class="glogo"><svg class="clogo" role="img" aria-label="Canary" viewBox="0 0 703 209"><use href="#canary"/></svg></div>
   <div class="gwrap">
     <section class="ghero">
+      <div class="gband">SPRINT DASHBOARD <i></i> ENGINEERING, INDIA</div>
       <h2>Your sprint,<br><span>at a glance.</span></h2>
       <p class="gsub2">Capacity, burndown, leave and the Jira pull, in one place for the whole team.</p>
       <ul class="gfeat">
@@ -730,11 +766,11 @@ h4.sub{margin:22px 0 10px;font:600 12px var(--sans);letter-spacing:.07em;text-tr
         <li><b>Clear</b><span>capacity and pace per person</span></li>
         <li><b>Honest</b><span>numbers that add up</span></li>
       </ul>
-      <div class="gprev" aria-hidden="true"><div class="gst" data-t="wipe">
+      <div class="gprev" aria-hidden="true"><div class="gmon3d"><div class="gscreen"><div class="gsbar"><span>SPRINT 24</span><b>Capacity · Burndown · Pull log</b></div><div class="gst" data-t="wipe">
         <div class="gsc" data-n="0"><span class="gcap">Work delivered</span><svg viewBox="0 0 360 150" fill="none"><path d="M10 30H350M10 80H350M10 130H350" stroke="currentColor" stroke-opacity=".12"/><path class="gi" d="M20 126 340 26" stroke="currentColor" stroke-opacity=".45" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/><path class="ra" d="M20 126H90C130 126 150 110 190 92S270 50 320 32" stroke="#32d74b" stroke-width="4" stroke-linecap="round"/><circle class="rd" cx="320" cy="32" r="6" fill="#32d74b"/></svg></div>
         <div class="gsc" data-n="1"><span class="gcap">Capacity by person: used and left</span><svg viewBox="0 0 360 150" fill="none"><path d="M10 130H350" stroke="currentColor" stroke-opacity=".18"/><path d="M10 40H350" stroke="currentColor" stroke-opacity=".3" stroke-dasharray="5 5"/><rect class="rb" x="34" y="40" width="38" height="90" rx="7" fill="#0a84ff"/><rect class="rb" x="34" y="84" width="38" height="46" rx="7" fill="#32d74b"/><rect class="rb" x="108" y="40" width="38" height="90" rx="7" fill="#0a84ff"/><rect class="rb" x="108" y="64" width="38" height="66" rx="7" fill="#32d74b"/><rect class="rb" x="182" y="40" width="38" height="90" rx="7" fill="#0a84ff"/><rect class="rb" x="182" y="76" width="38" height="54" rx="7" fill="#32d74b"/><rect class="rb" x="256" y="40" width="38" height="90" rx="7" fill="#0a84ff"/><rect class="rb" x="256" y="58" width="38" height="72" rx="7" fill="#32d74b"/></svg></div>
         <div class="gsc" data-n="2"><span class="gcap">Scheduled pulls</span><svg viewBox="0 0 360 150" fill="none"><path d="M10 100H350" stroke="currentColor" stroke-opacity=".14"/><circle class="rp" cx="40" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="100" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="160" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="220" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="280" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="330" cy="100" r="8" stroke="#0a84ff" stroke-width="3"/><text x="40" y="60" font-size="13" fill="currentColor" fill-opacity=".6" font-family="inherit">10:50 AM</text><text x="250" y="60" font-size="13" fill="currentColor" fill-opacity=".6" font-family="inherit">6:50 PM</text></svg></div>
-      </div></div>
+      </div></div></div></div>
     </section>
     <div class="gcard">
       <div class="gmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7"/></svg></div>
@@ -752,6 +788,7 @@ h4.sub{margin:22px 0 10px;font:600 12px var(--sans);letter-spacing:.07em;text-tr
 </div>
 
 <div class="wrap">
+  <div class="brandbar"><svg class="clogo" role="img" aria-label="Canary" viewBox="0 0 703 209"><use href="#canary"/></svg></div>
   <div class="top">
     <div class="tabs" role="tablist" id="tabs">
       <button class="tab" role="tab" data-tab="map" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="tl" data-s="Map">Map</span></button>
@@ -799,6 +836,7 @@ const J = k => 'https://canaryai.atlassian.net/browse/' + k;
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const f1 = v => (Math.round(v * 10) / 10).toString();
+const cst = d => d > 0.05 ? 'over capacity' : d < -0.05 ? 'under capacity' : 'at capacity';
 const sg = d => d > 0.05 ? '+' + f1(d) : d < -0.05 ? '−' + f1(-d) : '0';
 const ini = n => n && n !== 'Unassigned' ? n.slice(0, 2).toUpperCase() : '–';
 let SP = [], IDX = {}, E = {}, S = {}, T = {}, TK = {};
@@ -930,9 +968,9 @@ function renderCap() {
   $('#v-cap').innerHTML = `<div class="capgrid"><div class="panel capl">
     <div class="key keytop"><span><i style="background:var(--blue)"></i>Original estimate</span><span><i style="background:var(--green)"></i>Capacity: ${CAP} h per person, less leave</span></div>
     <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Original estimate and capacity per person">${g}</svg></div>
-    <div class="panel capr"><div><table class="fit capx"><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Leave (h)</th><th>Capacity (h)</th><th>Over (+) / under (−) (h)</th></tr></thead><tbody>
-    ${rows.map(r => `<tr><td><b>${esc(r.n)}</b></td><td data-l="Original estimate (h)">${f1(r.h)}</td><td data-l="Leave (h)">${f1(r.lv)}</td><td data-l="Capacity (h)">${f1(r.cap)}</td><td data-l="Over (+) / under (−) (h)"><b>${sg(r.h - r.cap)}</b></td></tr>`).join('')}
-    <tr class="tot"><td>Team</td><td data-l="Original estimate (h)">${f1(tot)}</td><td data-l="Leave (h)">${f1(tl)}</td><td data-l="Capacity (h)">${f1(tc)}</td><td data-l="Over (+) / under (−) (h)">${sg(tot - tc)}</td></tr></tbody></table></div></div></div>`;
+    <div class="panel capr"><div><table class="fit capx"><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Leave (h)</th><th>Capacity (h)</th><th>Over (+) / under (−) capacity (h)</th></tr></thead><tbody>
+    ${rows.map(r => `<tr><td><b>${esc(r.n)}</b></td><td data-l="Original estimate (h)">${f1(r.h)}</td><td data-l="Leave (h)">${f1(r.lv)}</td><td data-l="Capacity (h)">${f1(r.cap)}</td><td data-l="Over (+) / under (−) capacity (h)"><b>${sg(r.h - r.cap)}</b> <span class="cst">${cst(r.h - r.cap)}</span></td></tr>`).join('')}
+    <tr class="tot"><td>Team</td><td data-l="Original estimate (h)">${f1(tot)}</td><td data-l="Leave (h)">${f1(tl)}</td><td data-l="Capacity (h)">${f1(tc)}</td><td data-l="Over (+) / under (−) capacity (h)"><b>${sg(tot - tc)}</b> <span class="cst">${cst(tot - tc)}</span></td></tr></tbody></table></div></div></div>`;
 }
 
 /* ---------- burndown ---------- */
@@ -1259,9 +1297,9 @@ const LINKS = [['Use', [['Team dashboard (Vercel)', 'https://sprint-dashboard-um
 function renderHow() {
   const u = usage(), pu = Math.min(100, u.n / LIMIT * 100);
   $('#v-how').innerHTML = `<div class="hw"><h2>How it works</h2><p class="sub">Jira to this dashboard, with no one needed.</p>
-    <div class="feat glance"><div><b>Two timers</b>GitHub Actions and cron-job.org, every day at 10:50 AM and 6:50 PM IST</div><div><b>Refresh button</b>Anyone, any time</div><div><b>Hosted on Vercel</b>No laptop needs to be on</div></div>
+    <div class="feat glance"><div><b>Two timers</b>GitHub Actions and cron-job.org, every day at <span class="tnw">10:50 AM and 6:50 PM IST</span></div><div><b>Refresh button</b>Anyone, any time</div><div><b>Hosted on Vercel</b>No laptop needs to be on</div></div>
     <div class="flow" style="margin-top:18px">${node(1, 'Jira', 'Tickets', 'n1')}${ARW}${node(2, 'GitHub Actions', 'Reads the Jira REST API', 'n2')}${ARW}${node(3, 'GitHub repository', 'Commits JSON data', 'n3')}${ARW}${node(4, 'Vercel', 'Deploys the page', 'n4')}${ARW}${node(5, 'Dashboard', 'Your browser', 'n5')}</div>
-    <section class="startsec"><h3>What starts GitHub Actions</h3><div class="sc">${chip('GitHub Actions schedule', 'Every day at 10:50 AM and 6:50 PM IST', 'c1')}<span class="or">or</span>${chip('cron-job.org timer', 'Every day at 10:50 AM and 6:50 PM IST', 'c3')}<span class="or">or</span>${chip('Refresh button', 'Anyone on the team', 'c2')}</div></section>
+    <section class="startsec"><h3>What starts GitHub Actions</h3><div class="sc">${chip('GitHub Actions schedule', 'Every day at <span class="tnw">10:50 AM and 6:50 PM IST</span>', 'c1')}<span class="or">or</span>${chip('cron-job.org timer', 'Every day at <span class="tnw">10:50 AM and 6:50 PM IST</span>', 'c3')}<span class="or">or</span>${chip('Refresh button', 'Anyone on the team', 'c2')}</div></section>
     <div class="acc"><details><summary>Accounts and renewal</summary><div><table class="hwt"><thead><tr><th>What</th><th>What it does</th><th>Account</th><th>${lab('Renew by', 'renew')}</th></tr></thead><tbody>
       <tr><td><b>GitHub Actions schedule</b></td><td data-l="What it does">Starts the pull on a timer</td><td data-l="Account">GitHub: ckvcanary</td><td data-l="Renew by">No expiry</td></tr>
       <tr><td><b>cron-job.org timer</b></td><td data-l="What it does">Starts the same pull from outside GitHub</td><td data-l="Account">cron-job.org: dashboard owner</td><td data-l="Renew by">No expiry</td></tr>
@@ -1382,10 +1420,10 @@ function jiraPop() {
   const groups = jiraTab === 'status' ? [['Epic', ST_EPIC], ['User story', ST_STORY], ['Sub-task, Story sub-task, New Feature sub-task', ST_STORY], ['Bug sub-task', ST_BUG]] : [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]];
   return `<div class="tt jp"><div class="tth">Jira status</div>${tabs}${groups.map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}</div>`;
 }
-// A marker beside a legend row appears only when the page really shows it: a coloured tag (Flag, Verdict), a chip with a dot (Pull status), or nothing.
-const mark = (mk, c, t) => mk === 'tag' && ['ok', 'bad', 'warn', 'nil'].includes(c) ? `<span class="tag ${c}">${esc(t)}</span>` : mk === 'chip' ? `<span class="chip ${c === 'nil' ? 'na' : c}"><i></i>${esc(t)}</span>` : esc(t);
+// Colour appears in a legend only as the same tag or chip the page draws (Flag, Verdict, Pull status) or the same dot beside the time; every other row is a plain grey bullet. A marker appears only when the page really shows it: a coloured tag (Flag, Verdict), a chip with a dot (Pull status), or nothing.
+const mark = (mk, c, t) => mk === 'tag' && ['ok', 'bad', 'warn', 'nil'].includes(c) ? `<span class="tag ${c}">${esc(t)}</span>` : mk === 'chip' ? `<span class="chip ${c === 'nil' ? 'na' : c}"><i></i>${esc(t)}</span>` : `<i class="bl"></i>${esc(t)}`;      // a plain grey bullet where colour would mean nothing
 function ttHtml(d) {
-  return `<div class="tt"><div class="tth">${esc(d.h)}</div>${d.p ? `<p class="ttp">${esc(d.p)}</p>` : ''}${(d.rows || []).map(r => `<div class="ttr"><span class="ttn">${mark(d.mk, r[0], r[1])}</span><span class="ttd">${esc(r[2])}</span></div>`).join('')}${(d.groups || []).map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${(d.math || []).map(m => `<div class="ttm"><div class="ttmh">${esc(m.h)}</div><table class="ttmt"><tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>`).join('')}${d.note ? `<p class="ttnote">${esc(d.note)}</p>` : ''}</div>`;
+  return `<div class="tt"><div class="tth">${esc(d.h)}</div>${d.p ? `<p class="ttp">${esc(d.p)}</p>` : ''}${(d.rows || []).map(r => `<div class="ttr${d.mk ? ' pill' : ''}"><span class="ttn">${mark(d.mk, r[0], r[1])}</span><span class="ttd">${esc(r[2])}</span></div>`).join('')}${(d.groups || []).map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${(d.math || []).map(m => `<div class="ttm"><div class="ttmh">${esc(m.h)}</div><table class="ttmt"><tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>`).join('')}${d.note ? `<p class="ttnote">${esc(d.note)}</p>` : ''}</div>`;
 }
 const lab = (text, key) => `${text}<button type="button" class="ibtn" data-tip="@${key}" aria-label="What do the values mean?">i</button>`;
 const tip = key => `<button type="button" class="ibtn" data-tip="@${key}" aria-label="What does this mean?">i</button>`;
@@ -1563,6 +1601,9 @@ async function startRefresh() {
   let was = root.classList.contains('locked'); if (was) restart();
   new MutationObserver(() => { const now = root.classList.contains('locked'); if (now && !was) restart(); was = now; }).observe(root, { attributes: true, attributeFilter: ['class'] });
 })();
+
+(function () { const g = document.getElementById('gate'), m = document.querySelector('.gmon3d'); if (!g || !m || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  g.addEventListener('mousemove', e => { const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5; m.style.setProperty('--ry', (x * 8).toFixed(2) + 'deg'); m.style.setProperty('--rx', (-y * 6).toFixed(2) + 'deg'); }); })();
 const lockPage = () => { document.documentElement.classList.add('locked'); closeD(); hideTip(); $('#toasts').innerHTML = ''; $('#gpw').value = ''; };
 $('#signout').onclick = () => { try { localStorage.removeItem('sd_auth'); } catch (x) {} lockPage(); notify({ kind: 'info', title: 'Signed out', text: 'Enter the team password to open the dashboard again.' }); };
 window.addEventListener('storage', e => { if (e.key !== 'sd_auth' && e.key !== null) return; let ok = false; try { ok = localStorage.getItem('sd_auth') === GATE_V; } catch (x) {} if (!ok) lockPage(); else document.documentElement.classList.remove('locked'); });
