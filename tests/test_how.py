@@ -47,10 +47,11 @@ def test_info_buttons_show_a_tooltip_on_hover_and_never_expand_the_cards(page):
     btns.nth(7).hover(); assert "Starts a pull now" in tip.inner_text() and "data is under 2 minutes old" in tip.inner_text()
 
 
-def test_tooltips_are_grey_and_not_white_like_the_page_is_dark(ctx_factory, mock):
+def test_info_boxes_use_the_hover_card_colours_and_stand_apart_from_the_page(ctx_factory, mock):
     pg = ctx_factory(); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); pg.click('[data-tab="how"]'); pg.locator(".hw [data-tip]").nth(0).hover()
     bg = pg.evaluate("getComputedStyle(document.querySelector('#gtip')).backgroundColor"); page_bg = pg.evaluate("getComputedStyle(document.body).backgroundColor")
-    assert bg != "rgb(255, 255, 255)" and bg != page_bg, (bg, page_bg)
+    hover = pg.evaluate("(() => { const e = document.createElement('div'); e.className = 'tip'; document.body.appendChild(e); const c = getComputedStyle(e).backgroundColor; e.remove(); return c; })()")
+    assert bg == hover and bg != page_bg, (bg, hover, page_bg)      # the info boxes wear the colours of the graph hover card, which stands apart from the page
 
 
 def test_tooltip_also_opens_from_the_keyboard(page):

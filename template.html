@@ -868,6 +868,12 @@ body{padding:0}.wrap{max-width:none;margin:0}
 .shell.col .side .tab,.shell.col .sidefoot .btn.ghost,.shell.col .sidefoot .sidetgl{justify-content:center;padding:0}
 }
 .hr{margin:0}
+
+/* ---------- 18 Nov: the info boxes wear the graph hover card's colours; the subject sits in the title line ---------- */
+.gtip{background:var(--bg)!important;border:1px solid var(--lineStrong);box-shadow:var(--shadow)}
+.gtip .tpsub{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}.gtip .tpn{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.gtip .ttn .swl{font-weight:600}.gtip .ttn .swc{display:inline-block;width:26px;height:16px;border-radius:5px;flex:none}
+.swc.dgc{height:16px}
 </style>
 
 <script>
@@ -1532,7 +1538,7 @@ window.matchMedia('(max-width:720px)').addEventListener('change', () => { if (ta
 const TASK_CLOSED = ['Technical Review', 'Done', 'Fixed', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod', 'Invalid', 'Deferred'], STORY_CLOSED = ['Deployed to UAT', 'Deployed to Prod'], EPIC_CLOSED = ['Done'];
 const OPEN_STATUSES = ['Backlog', 'Research', 'Spec_Completed', 'Accepted by Developer', 'Ready for Development', 'In Progress', 'Code_Review', 'In Testing', 'On-Hold', 'New', 'Triaged', 'Reopened', 'Verified', 'ACTIVE', 'Duplicate', "Won't Fix"];
 const TT = {   // every (i): one short line, then a formula and a worked example laid out as rows
-  dgrid: { h: 'Time logged each day', mk: 'tag', p: 'Each cell is the hours a person logged that day, by log date.', rows: [['ok', 'On pace', 'At or above the daily pace target'], ['warn', 'Behind pace', 'Some time logged, under the daily pace target'], ['bad', 'Nothing logged', 'No time logged on a working day']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Capacity days', '8'], ['Daily pace target', '(48 h) / (8) = 6 h']] }], note: 'Grey: Sprint Planning, leave, or a day that has not come yet. An outline marks today, still in progress.' },
+  dgrid: { h: 'Time logged each day', mk: 'tag', p: 'Each cell is the hours a person logged that day, by log date.', rows: [['ok', 'On pace', 'At or above the daily pace target'], ['warn', 'Behind pace', 'Some time logged, under the daily pace target'], ['bad', 'Nothing logged', 'No time logged on a working day'], ['na', 'Grey', 'Sprint Planning, leave, or a day that has not come yet'], ['now', 'Outline', 'Today, still in progress']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Capacity days', '8'], ['Daily pace target', '(48 h) / (8) = 6 h']] }] },
   flag: { h: 'Flag', mk: 'tag', p: 'The pace target is a prediction from the original estimates, not a count of missed work.', rows: [['nil', 'Not started', 'Work has not begun'], ['ok', 'On pace', 'Logged is at or above the pace target'], ['warn', 'Behind pace', 'Up to 8 h under the pace target'], ['bad', 'Well behind pace', 'More than 8 h under the pace target']] },
   verdict: { h: 'Verdict', mk: 'tag', p: 'Can the remaining work fit in the time left?', rows: [['blue', 'Formula', '(remaining estimate) − (time left)'], ['ok', 'Achievable', 'Result is 0 or less'], ['bad', 'Not achievable', 'Result is above 0'], ['ok', 'Completed', 'Sprint over, no work left'], ['bad', 'Not completed', 'Sprint over, work left']], math: [{ h: 'Example', rows: [['Remaining estimate', '36 h'], ['Time left', '33.5 h'], ['Short by', '(36 h) − (33.5 h) = 2.5 h']] }] },
   left: { h: 'Time left in the sprint (h)', p: 'Working hours still to come, after leave.', rows: [['blue', 'Formula', '(capacity) − (hours passed)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Hours passed', '40 h'], ['Time left', '(64 h) − (40 h) = 24 h']] }] },
@@ -1574,7 +1580,7 @@ function jiraPop() {
   return `<div class="tt jp"><div class="tth">Jira status</div>${tabs}${groups.map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${jiraTab === 'closed' ? '<p class="ttnote">Technical Review is the last stage only for Jira management, U.S. team demos, reporting and documentation tickets. For development, QA testing, infrastructure and cloud tickets it is not a last stage, so they stay open.</p>' : ''}</div>`;
 }
 // Colour appears in a legend only as the same tag or chip the page draws (Flag, Verdict, Pull status) or the same dot beside the time; every other row is a plain grey bullet. A marker appears only when the page really shows it: a coloured tag (Flag, Verdict), a chip with a dot (Pull status), or nothing.
-const mark = (mk, c, t) => mk === 'tag' && ['ok', 'bad', 'warn', 'nil'].includes(c) ? `<span class="tag ${c}">${esc(t)}</span>` : mk === 'chip' ? `<span class="chip ${c === 'nil' ? 'na' : c}"><i></i>${esc(t)}</span>` : `<i class="bl"></i>${esc(t)}`;      // a plain grey bullet where colour would mean nothing
+const mark = (mk, c, t) => mk === 'tag' && ['na', 'now'].includes(c) ? `<span class="swc dgc ${c}"></span><span class="swl">${esc(t)}</span>` : mk === 'tag' && ['ok', 'bad', 'warn', 'nil'].includes(c) ? `<span class="tag ${c}">${esc(t)}</span>` : mk === 'chip' ? `<span class="chip ${c === 'nil' ? 'na' : c}"><i></i>${esc(t)}</span>` : `<i class="bl"></i>${esc(t)}`;      // a plain grey bullet where colour would mean nothing
 let CALC = null;   // the numbers behind the Burndown page right now, so a formula can be shown with the real calculation
 function calcFor(key) {
   if (key === 'dgrid') { const r = CALC && CALC.rs.find(x => x.name === CALC.who) || (CALC && CALC.rs[0]); if (!r || !(r.capDays > 0)) return null; return { who: r.name, rows: [['Original estimate', f1(r.E) + ' h'], ['Capacity days', f1(r.capDays)], ['Daily pace target', `(${f1(r.E)} h) / (${f1(r.capDays)}) = ${f1(r.dailyT)} h`]] }; }
@@ -1601,7 +1607,7 @@ function ttHtml(d, key) {   // the same card as the graph hover: a title, short 
   const fsec = formula.length ? `<div class="tps"><div class="tpt">Formula</div>${formula.map(r => `<div class="tpf">${esc(r[2])}</div>`).join('')}</div>` : '';
   const lsec = list.length ? `<div class="tps"><div class="tpt">${d.mk ? 'What each one means' : 'Good to know'}</div><table class="mt lg"><tbody>${list.map(r => `<tr class="ttr"><td><span class="ttn">${mark(d.mk, r[0], r[1])}</span><small class="ttd">${esc(r[2])}</small></td></tr>`).join('')}</tbody></table></div>` : '';
   const gsec = (d.groups || []).map(g => `<div class="tps ttg"><div class="tpt ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('');
-  const msec = m ? `<div class="tps ttm"><div class="tpt"><span class="tmk${m.live ? ' live' : ''}">${m.live ? 'Calculation' : 'Example'}</span></div><table class="mt ttmt">${m.live ? `<thead><tr><th>${esc(m.who)}</th><th></th></tr></thead>` : ''}<tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>` : '';
+  const msec = m ? `<div class="tps ttm"><div class="tpt tpsub"><span class="tmk${m.live ? ' live' : ''}">${m.live ? 'Calculation' : 'Example'}</span>${m.live ? `<span class="tpn">${esc(m.who)}</span>` : ''}</div><table class="mt ttmt"><tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>` : '';
   return `<div class="tt ttc">${head}${fsec}${lsec}${gsec}${msec}${d.note ? `<div class="tf ttnote">${esc(d.note)}</div>` : ''}</div>`;
 }
 const lab = (text, key) => `${text}<button type="button" class="ibtn" data-tip="@${key}" aria-label="What do the values mean?">i</button>`;
