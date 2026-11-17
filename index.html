@@ -1494,9 +1494,9 @@ const curSprint = () => SHOW.slice().reverse().find(k => BD[k] && BD[k].win && (
 const TLR = { none: ['bad', 'No time logged'], closed: ['bad', 'Closed under-logged'], behind: ['warn', 'Behind on logging'] };
 const dnm = d => dayName(d) + ' ' + fmtD(d);
 function tlWhy(f, ad) {   // the reasoning shown beside the numbers, read from the ticket's own history
-  const t = f.t, parts = [], hist = (t.h || []).filter(h => !f.pick || h[0] >= f.pick);
-  parts.push(f.pick ? `Picked up on ${dnm(f.pick)}${stAt(t, f.pick) ? ' (' + stAt(t, f.pick) + ')' : ''}.` : `It moved straight to ${t.st}.`);
-  const moves = hist.filter(h => h[0] !== f.pick || h[1] !== stAt(t, f.pick)).map(h => `${h[1]} on ${dnm(h[0])}`); if (moves.length) parts.push('Then: ' + moves.join(', then ') + '.');
+  const t = f.t, parts = [], path = (t.h || []).slice(-6).map(h => `${h[1]} (${dnm(h[0])})`).join(' → ');
+  parts.push(f.pick ? `Picked up on ${dnm(f.pick)}${stAt(t, f.pick) ? ' (' + stAt(t, f.pick) + ')' : ''}.` : 'It was not in a working status (In Progress, Code_Review or In Testing) on any sprint day so far.');
+  if (path) parts.push(`Status path: ${path}.`);
   if (f.r === 'closed') parts.push(`Closed on ${t.d ? dnm(t.d) : 'an earlier day'} in ${t.st}. A closed ticket should carry its full estimate of ${f1(f.E)} h.`);
   else if (f.rows.length) { const mn = Math.min(...f.rows.map(x => x.n)), mx = Math.max(...f.rows.map(x => x.n)); parts.push(`${t.a} had ${mn === mx ? mn : mn + ' to ' + mx} tickets in progress on those days, so about ${f1(f.rows.reduce((z, x) => z + x.avail / x.n, 0) / f.rows.length)} h a day was expected here.`); }
   parts.push(`By now ${f1(f.exp)} h should be logged against the ${f1(f.E)} h estimate.`);
