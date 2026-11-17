@@ -820,19 +820,19 @@ html.locked #gate{background:radial-gradient(900px 620px at 88% 100%,rgba(10,132
 
 /* ---------- 18 Nov: info boxes use the graph hover card format ---------- */
 .gtip{background:var(--bg);border:1px solid var(--lineStrong);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;font-size:12px;color:var(--ink);max-width:372px}
-.gtip .tc .tph{margin-bottom:4px}.gtip .tc .tpd{font-size:15px;font-weight:700;letter-spacing:-.01em}.gtip .tc .tpl{font-size:12px;color:var(--muted);line-height:1.5;margin-top:2px}
-.gtip .tc .tps{padding:10px 0 0;border-top:0;margin-top:6px}.gtip .tc .tpt{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.gtip .ttc .tph{margin-bottom:4px}.gtip .ttc .tpd{font-size:15px;font-weight:700;letter-spacing:-.01em}.gtip .ttc .tpl{font-size:12px;color:var(--muted);line-height:1.5;margin-top:2px}
+.gtip .ttc .tps{padding:10px 0 0;border-top:0;margin-top:6px}.gtip .ttc .tpt{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .gtip .mt{width:100%;border-collapse:collapse;font-size:12px}.gtip .mt td{border:0;padding:4px 0;vertical-align:top;white-space:normal;text-align:left}.gtip .mt td:last-child:not(:first-child){text-align:right;font-weight:600;font-variant-numeric:tabular-nums;padding-left:14px}
 .gtip .mt.lg td{padding:5px 0}.gtip .mt small,.gtip small.ttd{display:block;margin:2px 0 0;font-size:11.5px;font-weight:400;color:var(--muted);line-height:1.45;opacity:1}
 .gtip .mt th{padding:0 0 4px;font-size:12px;font-weight:600;color:var(--muted);text-align:left;text-transform:none;letter-spacing:0;border:0;border-bottom:1px solid var(--line);white-space:normal}
 .gtip .tpf{font:600 12px var(--sans);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:7px 10px;line-height:1.5}
 .gtip .tf{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.45}
 .gtip .ttn{font-weight:600;display:inline-flex;align-items:center;gap:7px}
-.gtip.pop{font-size:14px}.gtip.pop .tc .tpd{font-size:16px}.gtip.pop .tc .tpl,.gtip.pop .mt,.gtip.pop .mt small,.gtip.pop small.ttd{font-size:13px}.gtip.pop .tpf{font-size:13px}
+.gtip.pop{font-size:14px}.gtip.pop .ttc .tpd{font-size:16px}.gtip.pop .ttc .tpl,.gtip.pop .mt,.gtip.pop .mt small,.gtip.pop small.ttd{font-size:13px}.gtip.pop .tpf{font-size:13px}
 .tmk{font-size:10.5px}
 
 /* ---------- 18 Nov: breathing room, a light theme with contrast, side panel colours, grid labels, landing without beating ---------- */
-.gtip .tc .tph{display:block}
+.gtip .ttc .tph{display:block}
 .dgh .wl{display:none}.dgh i{font-style:normal}.dgh b{font-size:12px}.dgh small{font-size:10.5px}
 @media (max-width:720px){.dgh .wf{display:none}.dgh .wl{display:inline}.dgh .mn{display:none}.dgh small{display:block;font-size:10px}.dgr.dgh span:last-child{display:none}}
 :root{--page:#dde4ee;--soft:#eef2f8;--line:#d3dbe8;--lineStrong:#b7c3d6;--cardShadow:0 1px 2px rgba(20,33,61,.08),0 10px 28px rgba(20,33,61,.10);--sb-bg:#15213b;--sb-ink:#eef3fb;--sb-muted:#a9b8d4;--sb-sel:rgba(255,255,255,.14);--sb-line:rgba(255,255,255,.16);--band:#e1e9f5}
@@ -840,9 +840,9 @@ html.locked #gate{background:radial-gradient(900px 620px at 88% 100%,rgba(10,132
 :root[data-theme="dark"]{--sb-bg:var(--soft);--sb-ink:var(--ink);--sb-muted:var(--muted);--sb-sel:color-mix(in srgb,var(--blue) 14%,var(--bg));--sb-line:var(--line);--band:color-mix(in srgb,var(--blue) 9%,var(--soft))}
 .panel,.stat,.dwc,.rfcard{background:var(--card)}.panel{border-color:var(--line);box-shadow:var(--cardShadow)}
 .fit.hd thead th,.plt thead th,.fit thead th{background:var(--band)}
-.side{background:var(--sb-bg);border-color:var(--sb-bg)}
-.side .tab{color:var(--sb-muted)}.side .tab:hover:not([aria-selected=true]){color:var(--sb-ink)}.side .tab[aria-selected=true]{background:var(--sb-sel);color:var(--sb-ink)}
-.sidetgl{color:var(--sb-muted)}.sidetgl:hover{color:var(--sb-ink)}.sidefoot{border-top-color:var(--sb-line)}.sidefoot .btn{background:transparent;color:var(--sb-ink);border-color:var(--sb-line)}.sidefoot .btn:hover{background:var(--sb-sel)}
+.side{background:var(--card)}
+
+
 .btn.ghost{background:var(--card)}
 @media (min-width:721px){
 body{padding-inline:clamp(24px,3.2vw,60px);padding-block:36px 64px}
@@ -852,8 +852,27 @@ body{padding-inline:clamp(24px,3.2vw,60px);padding-block:36px 64px}
 }
 .gsc.play .ra{animation:none!important;stroke-dashoffset:0}.gsc .ra{stroke-dashoffset:0}.gsc .rd{opacity:1;animation:none!important}.gsc .rb{transform:none;animation:none!important}.gsc .rp{opacity:1;transform:none;animation:none!important}.gst .gi{animation:none!important}
 .gmon3d{animation:none!important}
-.sidefoot .btn.ghost{background:transparent;color:var(--sb-ink);border-color:var(--sb-line)}.sidefoot .btn.ghost:hover{background:var(--sb-sel)}
+
 .gtip{background:color-mix(in srgb,var(--ink) 6%,var(--bg))}
+
+/* ---------- 18 Nov: an attached, full-height left panel like the Canary product: logo on top, a divider, a section label, rows with icons ---------- */
+.sidelogo,.sidesec{display:none}
+@media (min-width:721px){
+body{padding:0}.wrap{max-width:none;margin:0}
+.shell{display:grid;grid-template-columns:var(--sbw,248px) minmax(0,1fr);gap:0;align-items:start;min-height:100vh}.shell.col{--sbw:76px}
+.side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:0;padding:0;border-radius:0;border:0;border-right:1px solid var(--line);background:var(--card);overflow-x:hidden;overflow-y:auto}
+.sidelogo{display:flex;align-items:center;height:76px;padding:0 24px;border-bottom:1px solid var(--line);flex:none;overflow:hidden}.sidelogo .clogo{height:34px;color:var(--ink)}.sblogo{display:flex}
+.sidesec{display:block;padding:22px 24px 8px;font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.side .tabs{padding:0 12px;gap:4px}.side .tab{height:48px;padding:0 14px;color:var(--muted);border-radius:12px;font-size:14.5px}
+.side .tab:hover:not([aria-selected=true]){background:color-mix(in srgb,var(--ink) 5%,transparent);color:var(--ink)}
+.side .tab[aria-selected=true]{background:color-mix(in srgb,var(--blue) 14%,var(--card));color:var(--ink);font-weight:600}.side .tab[aria-selected=true] .ti{color:var(--blue)}
+.sidefoot{margin-top:auto;padding:12px;border-top:1px solid var(--line);gap:6px}.sidefoot .btn.ghost,.sidefoot .sidetgl{width:100%;height:44px;justify-content:flex-start;padding:0 14px;gap:12px;border-radius:12px;background:transparent;color:var(--muted);border:0;font:500 14px var(--sans);letter-spacing:0;text-transform:none}
+.sidefoot .btn.ghost:hover,.sidefoot .sidetgl:hover{background:color-mix(in srgb,var(--ink) 5%,transparent);color:var(--ink)}
+.main{padding:28px clamp(24px,3vw,52px) 64px}.hdr{margin:0 0 26px;gap:16px}.hdr .brandbar{display:none}
+.shell.col .sidelogo{padding:0;justify-content:center}.shell.col .sblogo{width:22px;overflow:hidden}.shell.col .sidelogo .clogo{width:114px;height:34px;flex:none}.shell.col .sidesec{font-size:0;padding:14px 0 6px;text-align:center}.shell.col .sidesec::after{content:"";display:block;margin:0 auto;width:20px;height:1px;background:var(--line)}
+.shell.col .side .tab,.shell.col .sidefoot .btn.ghost,.shell.col .sidefoot .sidetgl{justify-content:center;padding:0}
+}
+.hr{margin:0}
 </style>
 
 <script>
@@ -899,14 +918,10 @@ body{padding-inline:clamp(24px,3.2vw,60px);padding-block:36px 64px}
 </div>
 
 <div class="wrap">
-  <header class="hdr"><div class="brandbar"><svg class="clogo" role="img" aria-label="Canary" viewBox="0 0 703 209"><use href="#canary"/></svg></div><div class="hdrend" id="hdrend"></div><div class="hr"><div class="rfcard" aria-live="polite">
-      <span class="dot" id="rfdot"></span>
-      <div><span class="fl">Last refreshed<button class="ibtn" type="button" data-tip="@refresh" aria-label="Refresh limits">i</button></span><div class="rfv" id="rfval">Loading</div></div>
-      <button class="btn" id="rfbtn" type="button" aria-label="Refresh data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span id="rfbtxt">Refresh</span></button>
-    </div><button class="btn ghost" id="guidebtn" type="button" title="Take a guided tour of the dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.6 2.2c-.8.4-1.2 1-1.2 1.8"/><path d="M12 17h.01"/></svg>Guide</button></div></header>
   <div class="shell" id="shell">
     <nav class="side" id="side" aria-label="Dashboard sections">
-      <button class="sidetgl" id="sidetgl" type="button" aria-label="Collapse the side panel" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg><span class="sdl">Menu</span></button>
+      <div class="sidelogo"><div class="sblogo"><svg class="clogo" role="img" aria-label="Canary" viewBox="0 0 703 209"><use href="#canary"/></svg></div></div>
+      <div class="sidesec">Workflow</div>
       <div class="tabs" role="tablist" id="tabs">
       <button class="tab" role="tab" data-tab="map" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="tl" data-s="Map">Map</span></button>
       <button class="tab" role="tab" data-tab="cap" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg><span class="tl" data-s="Capacity">Capacity</span></button>
@@ -916,9 +931,14 @@ body{padding-inline:clamp(24px,3.2vw,60px);padding-block:36px 64px}
       <button class="tab" role="tab" data-tab="who" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3 3 0 0 1 0 6M18 14.5c1.8.8 3 2.6 3 5.5"/></svg><span class="tl" data-s="Roles">Stakeholders</span></button>
       <button class="tab" role="tab" data-tab="how" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></svg><span class="tl" data-s="How">How it works</span></button>
     </div>
-      <div class="sidefoot" id="sidefoot"><button class="btn ghost" id="themebtn" type="button" title="Switch between the dark and the light theme" aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sdl" id="themelab">Light theme</span></button><button class="btn ghost" id="signout" type="button" title="Sign out of this browser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span class="sdl">Sign out</span></button></div>
+      <div class="sidefoot" id="sidefoot"><button class="sidetgl" id="sidetgl" type="button" aria-label="Collapse the side panel" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg><span class="sdl">Collapse</span></button><button class="btn ghost" id="themebtn" type="button" title="Switch between the dark and the light theme" aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sdl" id="themelab">Light theme</span></button><button class="btn ghost" id="signout" type="button" title="Sign out of this browser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span class="sdl">Sign out</span></button></div>
     </nav>
     <main class="main">
+  <header class="hdr"><div class="brandbar"><svg class="clogo" role="img" aria-label="Canary" viewBox="0 0 703 209"><use href="#canary"/></svg></div><div class="hdrend" id="hdrend"></div><div class="hr"><div class="rfcard" aria-live="polite">
+      <span class="dot" id="rfdot"></span>
+      <div><span class="fl">Last refreshed<button class="ibtn" type="button" data-tip="@refresh" aria-label="Refresh limits">i</button></span><div class="rfv" id="rfval">Loading</div></div>
+      <button class="btn" id="rfbtn" type="button" aria-label="Refresh data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span id="rfbtxt">Refresh</span></button>
+    </div><button class="btn ghost" id="guidebtn" type="button" title="Take a guided tour of the dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.6 2.2c-.8.4-1.2 1-1.2 1.8"/><path d="M12 17h.01"/></svg>Guide</button></div></header>
   <div class="bar" id="bar">
     <div class="field" id="fsprint"><span class="fl">Sprint</span>
       <div class="dd"><button class="ctl" id="ddbtn" type="button" aria-haspopup="listbox" aria-expanded="false"><span id="ddlab">Sprint</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4.5 6 8l4-3.5"/></svg></button>
@@ -1523,7 +1543,7 @@ const TT = {   // every (i): one short line, then a formula and a worked example
   left: { h: 'Time left in the sprint (h)', p: 'Working hours still to come, after leave.', rows: [['blue', 'Formula', '(capacity) − (hours passed)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Hours passed', '40 h'], ['Time left', '(64 h) − (40 h) = 24 h']] }] },
   leave: { h: 'Leave (h)', p: 'Hours away. Lowers capacity only.', rows: [['blue', 'Formula', '(capacity) − (leave)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Leave', '6 h'], ['After leave', '(64 h) − (6 h) = 58 h']] }] },
   missing: { h: 'Pace gap (h)', p: 'How far logged time is under the pace target. The target is a prediction from the original estimates.', mk: 'tag', rows: [['blue', 'Formula', '(pace target) − (logged)'], ['warn', 'Up to 8 h', 'Behind pace'], ['bad', 'More than 8 h', 'Well behind pace']], math: [{ h: 'Example', rows: [['Pace target', '24 h'], ['Logged', '18 h'], ['Pace gap', '(24 h) − (18 h) = 6 h']] }] },
-  expected: { h: 'Pace target by now (h)', p: 'Hours the original estimate predicts should be logged by now. A prediction, not a count.', rows: [['blue', 'Formula', '(original estimate / capacity days) × (capacity days passed)'], ['warn', 'Leave', 'Days on leave are not counted']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Daily pace target', '(48 h) / (8 days) = 6 h'], ['Capacity days passed', '4'], ['Pace target', '(6 h × 4) = 24 h']] }] },
+  expected: { h: 'Pace target by now (h)', p: 'Hours the original estimate predicts should be logged by now. A prediction, not a count.', rows: [['blue', 'Formula', '(original estimate / capacity days) × (capacity days passed)'], ['blue', 'Capacity days', '(working days) − (leave days). 8 h of leave is 1 day, 4 h is half a day.']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Capacity days', '(8 days) − (0.5 day leave) = 7.5 days'], ['Daily pace target', '(48 h) / (7.5 days) = 6.4 h'], ['Capacity days passed', '4'], ['Pace target', '(6.4 h) × (4) = 25.6 h']] }] },
   over: { h: 'Over estimate (h)', p: 'Hours logged beyond the original estimate.', rows: [['blue', 'Formula', '(logged) − (counted against estimates)']], math: [{ h: 'Example', rows: [['Original estimate', '10 h'], ['Logged', '14 h'], ['Over estimate', '(14 h) − (10 h) = 4 h']] }] },
   ideal: { h: 'Ideal pace', p: 'Dashed line: every capacity day covers one equal chunk of the original estimate.', rows: [['blue', 'Formula', '(total) − ((total / capacity days) × days passed)'], ['warn', 'Leave', 'Days on leave carry no planned work']], math: [{ h: 'Example', rows: [['Original estimate', '10 h'], ['Capacity days', '5'], ['Chunk per day', '(10 h) / (5) = 2 h'], ['Left after day 3', '(10 h) − (2 h × 3) = 4 h']] }] },
   remaining: { h: 'Remaining estimate', p: 'Blue line: the work still left.', rows: [['blue', 'Formula', '(original estimate) − (logged), never below 0']], math: [{ h: 'Example', rows: [['Sub-task A', '(6 h) − (2 h) = 4 h'], ['Sub-task B', '(3 h) − (5 h) = 0 h'], ['Remaining', '(4 h) + (0 h) = 4 h']] }] },
@@ -1570,7 +1590,7 @@ function calcFor(key) {
     left: () => [['Capacity', h(Sm('capP'))], ['Hours passed', h(Sm('used'))], ['Time left', `(${h(Sm('capP'))}) − (${h(Sm('used'))}) = ${h(Sm('left'))}`]],
     leave: () => [['Capacity', h(CAP * rs.length)], ['Leave', h(CAP * rs.length - Sm('capP'))], ['After leave', `(${h(CAP * rs.length)}) − (${h(CAP * rs.length - Sm('capP'))}) = ${h(Sm('capP'))}`]],
     missing: () => [['Pace target', h(Sm('exp'))], ['Logged', h(Sm('logged'))], ['Pace gap', Sm('exp') - Sm('logged') > .05 ? `(${h(Sm('exp'))}) − (${h(Sm('logged'))}) = ${h(Sm('exp') - Sm('logged'))}` : '0 h (logged is ahead)']],
-    expected: () => one ? [['Original estimate', h(rs[0].E)], ['Daily pace target', `(${h(rs[0].E)}) / (${f1(rs[0].capDays)} days) = ${h(rs[0].dailyT)}`], ['Capacity days passed', f1(rs[0].daysPassed) + ' days'], ['Pace target', `(${h(rs[0].dailyT)}) × (${f1(rs[0].daysPassed)}) = ${h(rs[0].exp)}`]] : null,
+    expected: () => one ? [['Original estimate', h(rs[0].E)], ['Capacity days', `(${CALC.wd} days) − (${f1(rs[0].leaveH / DH)} day leave) = ${f1(rs[0].capDays)} days`], ['Daily pace target', `(${h(rs[0].E)}) / (${f1(rs[0].capDays)} days) = ${h(rs[0].dailyT)}`], ['Capacity days passed', f1(rs[0].daysPassed) + ' days'], ['Pace target', `(${h(rs[0].dailyT)}) × (${f1(rs[0].daysPassed)}) = ${h(rs[0].exp)}`]] : null,
     over: () => [['Logged', h(Sm('logged'))], ['Counted against estimates', h(burned)], ['Over estimate', one ? `(${h(Sm('logged'))}) − (${h(burned)}) = ${h(Sm('over'))}` : h(Sm('over'))]],
     remaining: () => [['Original estimate', h(Sm('E'))], ['Counted against estimates', h(burned)], ['Remaining', `(${h(Sm('E'))}) − (${h(burned)}) = ${h(Sm('remain'))}`]],
     ideal: () => [['Original estimate', h(Sm('E'))], ['Pace target by now', h(Sm('exp'))], ['Ideal pace', `(${h(Sm('E'))}) − (${h(Sm('exp'))}) = ${h(Sm('E') - Sm('exp'))}`]],
@@ -1587,7 +1607,7 @@ function ttHtml(d, key) {   // the same card as the graph hover: a title, short 
   const lsec = list.length ? `<div class="tps"><div class="tpt">${d.mk ? 'What each one means' : 'Good to know'}</div><table class="mt lg"><tbody>${list.map(r => `<tr class="ttr"><td><span class="ttn">${mark(d.mk, r[0], r[1])}</span><small class="ttd">${esc(r[2])}</small></td></tr>`).join('')}</tbody></table></div>` : '';
   const gsec = (d.groups || []).map(g => `<div class="tps ttg"><div class="tpt ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('');
   const msec = m ? `<div class="tps ttm"><div class="tpt"><span class="tmk${m.live ? ' live' : ''}">${m.live ? 'Calculation' : 'Example'}</span></div><table class="mt ttmt">${m.live ? `<thead><tr><th>${esc(m.who)}</th><th></th></tr></thead>` : ''}<tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>` : '';
-  return `<div class="tt tc">${head}${fsec}${lsec}${gsec}${msec}${d.note ? `<div class="tf ttnote">${esc(d.note)}</div>` : ''}</div>`;
+  return `<div class="tt ttc">${head}${fsec}${lsec}${gsec}${msec}${d.note ? `<div class="tf ttnote">${esc(d.note)}</div>` : ''}</div>`;
 }
 const lab = (text, key) => `${text}<button type="button" class="ibtn" data-tip="@${key}" aria-label="What do the values mean?">i</button>`;
 const tip = key => `<button type="button" class="ibtn" data-tip="@${key}" aria-label="What does this mean?">i</button>`;
@@ -1662,7 +1682,7 @@ const LIMIT = 100, RESERVE = 5, DAY = 864e5;   // Vercel free plan: 100 deployme
 function usage() { const now = Date.now(), all = (RUNS || []).filter(x => now - Date.parse(x.at) < DAY), r = all.map(x => Date.parse(x.at)).sort((a, b) => a - b); return { n: r.length, sched: all.filter(x => x.trigger === 'schedule').length, resetAt: r.length ? r[0] + DAY : null }; }
 function refreshTip() {
   const u = usage();
-  return `<div class="tt tc"><div class="tph"><div class="tpd tth">Refresh limit</div><div class="tpl">Pulls from Jira are limited by the free Vercel plan.</div></div>
+  return `<div class="tt ttc"><div class="tph"><div class="tpd tth">Refresh limit</div><div class="tpl">Pulls from Jira are limited by the free Vercel plan.</div></div>
     <div class="tps"><div class="tpt">Limit</div><table class="mt"><tbody><tr class="ttr"><td>Limit</td><td>100 pulls in 24 hours</td></tr><tr class="ttr"><td>Used</td><td><b>${u.n} of ${LIMIT}</b>, whole team</td></tr><tr class="ttr"><td>Two clicks</td><td>Under 2 minutes apart: skipped</td></tr></tbody></table></div>
     <div class="tps"><div class="tpt">The dot beside the time</div><table class="mt lg"><tbody><tr class="ttr"><td><span class="ttn"><i class="td ok"></i> Green</span><small class="ttd">Under 14 hours old</small></td></tr><tr class="ttr"><td><span class="ttn"><i class="td warn"></i> Orange</span><small class="ttd">Older than 14 hours</small></td></tr><tr class="ttr"><td><span class="ttn"><i class="td blue"></i> Blue, pulsing</span><small class="ttd">Refreshing now</small></td></tr></tbody></table></div></div>`;
 }

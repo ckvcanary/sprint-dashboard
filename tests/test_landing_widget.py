@@ -26,8 +26,10 @@ def test_widget_starts_again_after_the_page_locks(ctx_factory, mock):
 
 
 def test_canary_logo_top_left_on_the_landing_page_and_the_dashboard(ctx_factory, mock):
-    for signed, sel in ((False, "#gate .glogo .clogo"), (True, ".brandbar .clogo")):
+    for signed, sel in ((False, "#gate .glogo .clogo"), (True, ".sidelogo .clogo")):
         for w in (1440, 390):
+            if signed and w < 500: sel = ".brandbar .clogo"
+            if signed and w > 500: sel = ".sidelogo .clogo"
             pg = ctx_factory(width=w, height=900 if w > 500 else 844, signed_in=signed); pg.goto(mock.url + "/index.html"); pg.wait_for_selector(sel, state="attached"); pg.wait_for_timeout(300)
             b = pg.locator(sel).bounding_box(); assert b["x"] < 100 and b["y"] < 70 and 20 <= b["height"] <= 40 and b["width"] > 70, (signed, w, b)
             assert pg.evaluate("document.querySelector('#canary') !== null && document.querySelector('%s use').getAttribute('href') === '#canary'" % sel)

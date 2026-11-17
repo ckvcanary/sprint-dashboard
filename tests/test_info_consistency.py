@@ -81,3 +81,22 @@ def test_without_data_the_box_shows_an_example_and_with_data_a_calculation(page)
     page.click('[data-tab="bd"]'); page.wait_for_timeout(400)
     live = page.evaluate("ttHtml(TT.remaining, 'remaining')"); assert ">Calculation<" in live and ">Example<" not in live
     page.evaluate("CALC = null"); ex = page.evaluate("ttHtml(TT.remaining, 'remaining')"); assert ">Example<" in ex and ">Calculation<" not in ex and "(6 h) − (2 h) = 4 h" in ex
+
+
+def test_pace_target_divides_by_capacity_days_after_leave(ctx_factory, mock):
+    """half a day of leave: 8 working days become 7.5 capacity days, so the daily pace target is E / 7.5, and the formula says so"""
+    import json
+    pg = ctx_factory(width=1440, height=900)
+    pg.route("**/data/leave.json*", lambda r: r.fulfill(body=json.dumps({"S24": [{"name": "Nikita", "date": "2026-11-12", "hours": 4}]}), content_type="application/json"))
+    pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); pg.click('[data-tab="bd"]'); pg.click('[data-bdview="person"]'); pg.wait_for_selector("#bdwho"); pg.select_option("#bdwho", "Nikita"); pg.wait_for_timeout(400)
+    r = pg.evaluate("(() => { const r = CALC.rs.find(x => x.name === 'Nikita'); return {E: r.E, capDays: r.capDays, daily: r.dailyT, passed: r.daysPassed, exp: r.exp, leave: r.leaveH}; })()")
+    assert abs(r["capDays"] - 7.5) < 1e-6 and abs(r["daily"] - r["E"] / 7.5) < 1e-6 and r["leave"] == 4
+    # an independent model: capacity hours passed over capacity hours in the sprint, with the leave hours taken out of the day they fall on
+    days = ["2026-11-11", "2026-11-12", "2026-11-13", "2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20"]; avail = [4 if d == "2026-11-12" else 8 for d in days]
+    el = pg.evaluate("(() => { const s = BD.S24; return elapsed(workDays(s.win), asOfIST().slice(0, 10) + 'T' + asOfIST().slice(11, 16)); })()")
+    passed_h, left = 0, el
+    for a in avail:
+        t = min(8, left); passed_h += a * t / 8; left -= t
+    assert abs(r["exp"] - r["E"] * passed_h / sum(avail)) < .01, (r, passed_h, sum(avail))
+    b = pg.locator("th:has-text('Pace target by now') .ibtn").first; b.scroll_into_view_if_needed(); pg.wait_for_timeout(300); b.hover(); pg.wait_for_selector("#gtip:not([hidden])"); x = pg.inner_text("#gtip")
+    assert "(8 days) − (0.5 day leave) = 7.5 days" in x and f"(18 h) / (7.5 days) = 2.4 h" in x and "calculation" in x.lower()
