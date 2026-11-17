@@ -99,19 +99,21 @@ def test_the_budget_counts_every_refresh_from_every_person(ctx_factory, mock):
     t = pg.locator("#budget").inner_text(); assert pg.inner_text("#bleft") == "71" and "Used 24" in t and "Left 71" in t
 
 
-def test_status_dots_tell_upcoming_and_not_scheduled_apart(page):
+def test_status_legend_uses_the_same_chips_as_the_table(page):
     open_log(page); page.hover(".plt th:has-text('10:50 AM') .ibtn"); tip = page.locator("#gtip"); tip.wait_for()
-    dots = page.evaluate("() => Object.fromEntries([...document.querySelectorAll('#gtip .ttr')].map(r => { const d = r.querySelector('.td'), c = getComputedStyle(d); return [r.querySelector('.ttn').innerText.trim(), [d.className.replace('td ', ''), c.backgroundColor, c.borderTopWidth]] }))")
-    assert dots["Upcoming"][0] == "up" and dots["Upcoming"][2] == "2px" and dots["Upcoming"][1] == "rgba(0, 0, 0, 0)", "Upcoming is a ring"
-    assert dots["Not scheduled"][0] == "nil" and dots["Not scheduled"][2] == "0px" and dots["Not scheduled"][1] != "rgba(0, 0, 0, 0)", "Not scheduled is a grey dot"
-    assert len({dots[k][1] for k in ("Pulled", "Failed", "Missed", "Not scheduled")}) == 4
+    st = page.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#gtip .ttr .chip')].map(c => { const d = getComputedStyle(c.querySelector('i')); return [c.innerText.trim(), [c.className, d.backgroundColor, d.borderTopWidth]]; }))""")
+    assert set(st) == {"Pulled", "Failed", "Missed", "Upcoming", "Not scheduled"}
+    assert "up" in st["Upcoming"][0].split() and st["Upcoming"][2] == "2px" and st["Upcoming"][1] == "rgba(0, 0, 0, 0)", "Upcoming is a ring"
+    assert "na" in st["Not scheduled"][0].split() and st["Not scheduled"][2] == "0px" and st["Not scheduled"][1] != "rgba(0, 0, 0, 0)", "Not scheduled is a grey dot"
+    assert len({st[k][1] for k in ("Pulled", "Failed", "Missed", "Not scheduled")}) == 4
+    assert page.locator("#gtip .td").count() == 0
 
 
 def test_pull_log_cards_use_clean_accent_colours(page):
     open_log(page); cards = page.locator(".sched3 .stat")
     bg = cards.evaluate_all("els => els.map(e => getComputedStyle(e).backgroundImage + '|' + getComputedStyle(e).backgroundColor)")
-    assert "linear-gradient" in bg[1] and all("linear-gradient" not in b for i, b in enumerate(bg) if i != 1), bg
-    assert page.evaluate("getComputedStyle(document.querySelector('.sched3 .s2 b')).color") == "rgb(255, 255, 255)", "white text on the gradient card"
+    assert all("linear-gradient" not in b for b in bg), bg
+    assert page.evaluate("getComputedStyle(document.querySelector('.sched3 .s2 b')).color") == "rgb(255, 255, 255)", "white text on the blue Next scheduled pull card (blue means upcoming)"
     tops = cards.evaluate_all("els => els.map(e => getComputedStyle(e).borderTopColor)"); assert len(set(tops)) >= 3
 
 

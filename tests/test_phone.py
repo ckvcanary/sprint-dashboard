@@ -128,8 +128,8 @@ def test_phone_labels_are_tapped_not_dotted_with_circles(ctx_factory, mock):
     assert pg.locator("#tlog td .ci, #tplan td .ci").count() == 0 or pg.evaluate("[...document.querySelectorAll('#tlog td .ci, #tplan td .ci')].every(e => getComputedStyle(e).display === 'none')")
     u = pg.evaluate("getComputedStyle(document.querySelector('#tlog tbody tr td[data-tip]'), '::before').textDecorationLine"); assert "underline" in u, "the label of a tappable field is underlined with dots"
     cell = pg.locator("#tlog tbody tr:first-child td[data-tip]").nth(1); cell.scroll_into_view_if_needed(); cell.click(); tip = pg.locator("#gtip"); tip.wait_for()
-    assert "sheet" in (tip.get_attribute("class") or "") and "Formula" in tip.inner_text()
-    b = tip.bounding_box(); nav = pg.locator("#tabs").bounding_box(); assert b["x"] >= 0 and b["x"] + b["width"] <= 390 and b["y"] + b["height"] <= nav["y"] + 1, "the explanation is a sheet above the tab bar"
-    pg.mouse.click(200, 40); pg.wait_for_timeout(150); assert not tip.is_visible()
+    assert "pop" in (tip.get_attribute("class") or "") and "Formula" in tip.inner_text()
+    b = tip.bounding_box(); nav = pg.locator("#tabs").bounding_box(); assert b["x"] >= 0 and b["x"] + b["width"] <= 390 and b["y"] + b["height"] <= nav["y"] + 1, "the explanation is a popover that stays above the tab bar"
+    pg.mouse.click(5, 440 if tip.bounding_box()['y'] < 400 else 120); pg.wait_for_timeout(150); assert not tip.is_visible()
     # the phone card keeps one right edge for every value
     v = pg.evaluate("[...document.querySelectorAll('#tlog tbody tr:first-child td .v')].map(e => Math.round(e.getBoundingClientRect().right))"); assert len(set(v)) == 1, v

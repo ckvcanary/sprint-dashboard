@@ -263,7 +263,7 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .tcl{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}.tcn{margin-top:8px;color:var(--faint);font-size:11.5px}
 .tchips{display:flex;flex-wrap:wrap;gap:5px}.tchip{border-radius:999px;padding:3px 9px;font-size:11.5px;line-height:1.35;background:color-mix(in srgb,currentColor 11%,transparent);border:1px solid color-mix(in srgb,currentColor 18%,transparent);white-space:nowrap}
 .tt{font-size:12.5px}.tth{font-weight:700;font-size:13px;margin-bottom:6px}.ttp{margin:0 0 6px;line-height:1.5;opacity:.85}
-.ttr{margin:9px 0}.ttn{display:flex;align-items:center;gap:7px;font-weight:600}.ttd{display:block;margin:1px 0 0 15px;opacity:.8;line-height:1.45}
+.ttr{margin:9px 0}.ttn{display:flex;align-items:center;gap:7px;font-weight:600}.ttd{display:block;margin:2px 0 0 0;opacity:.8;line-height:1.45}
 .td{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none;background:currentColor;opacity:.5}.td.ok{background:var(--green);opacity:1}.td.warn{background:var(--amber);opacity:1}.td.bad{background:var(--red);opacity:1}.td.blue{background:var(--blue);opacity:1}.td.up{background:transparent;border:1.5px dashed currentColor;opacity:.8}
 .ttg{margin-top:10px;padding-top:9px;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent)}.ttgl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-bottom:6px}.ttnote{margin:10px 0 0;font-size:11.5px;opacity:.75;line-height:1.45}
 .glance{margin-bottom:0}.gloss{display:grid;grid-template-columns:130px 1fr;gap:8px 16px;margin:0;padding:6px 0 12px;font-size:13.5px}.gloss dt{font-weight:600}.gloss dd{margin:0;color:var(--muted)}
@@ -656,6 +656,60 @@ h4.sub{margin:22px 0 10px;font:600 12px var(--sans);letter-spacing:.07em;text-tr
 @media (prefers-reduced-motion:reduce){.gdh{transition:none}}
 
 @media (max-width:430px){.rfcard #rfbtn{padding:0 13px;gap:0}.rfcard #rfbtxt{font-size:0}.rfcard{gap:8px;padding-left:12px}.rfv{font-size:13px}.fl{letter-spacing:.05em}}
+
+/* ---------- 17 Nov: phone explanations are a popover with an arrow at the tapped (i) ---------- */
+@media (max-width:720px){
+.gtip.pop{pointer-events:auto;position:fixed;overflow-y:auto;border-radius:14px;padding:13px 15px;font-size:14px;line-height:1.5;box-shadow:0 14px 40px rgba(0,0,0,.28);opacity:0;transform:scale(.92);-webkit-overflow-scrolling:touch}
+.gtip.pop.shown{animation:popin .16s ease-out forwards}
+.gtipa{position:fixed;z-index:301;width:12px;height:12px;transform:rotate(45deg);background:color-mix(in srgb,var(--ink) 9%,var(--card));pointer-events:none;animation:popar .16s ease-out}
+.gtipa.down{border-left:1px solid var(--lineStrong);border-top:1px solid var(--lineStrong)}
+.gtipa.up{border-right:1px solid var(--lineStrong);border-bottom:1px solid var(--lineStrong)}
+@keyframes popin{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes popar{from{opacity:0}to{opacity:1}}
+}
+@media (pointer:coarse){.ibtn::after{inset:-15px}}
+@media (prefers-reduced-motion:reduce){.gtip.pop.shown,.gtipa{animation:none}.gtip.pop{opacity:1;transform:none}}
+
+/* ---------- 17 Nov: landing widget plays short scenes with video-style transitions, and starts again every time the sign-in page appears (first visit and after Sign out) ---------- */
+.gprev{position:relative;overflow:hidden}.gst{position:relative;height:170px;perspective:700px}
+.gsc{position:absolute;inset:0;opacity:0;visibility:hidden;display:flex;flex-direction:column;justify-content:flex-end}.gsc.on,.gsc.leave{visibility:visible}.gsc.on{opacity:1}
+.gcap{position:absolute;left:2px;top:0;font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.gsc svg{margin-top:14px}
+.gsc .ra{stroke-dasharray:420;stroke-dashoffset:420}.gsc .rd{opacity:0;transform-box:fill-box;transform-origin:center}.gsc .rb{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0)}.gsc .rp{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(0)}
+.gsc.play .ra{animation:rdraw 1.5s .5s cubic-bezier(.3,.7,.2,1) forwards}.gsc.play .rd{animation:rpop .5s 1.9s cubic-bezier(.2,1.6,.4,1) forwards,rpulse 1.6s 2.4s ease-in-out infinite}
+.gsc.play .rb{animation:rgrow .7s cubic-bezier(.2,.9,.3,1.2) forwards}.gsc.play .rb:nth-of-type(3){animation-delay:.1s}.gsc.play .rb:nth-of-type(4){animation-delay:.25s}.gsc.play .rb:nth-of-type(5){animation-delay:.4s}.gsc.play .rb:nth-of-type(6){animation-delay:.55s;animation-name:rgrow}
+.gsc.play .rp{animation:rpop2 .45s cubic-bezier(.2,1.6,.4,1) forwards}.gsc.play .rp:nth-of-type(2){animation-delay:.25s}.gsc.play .rp:nth-of-type(3){animation-delay:.5s}.gsc.play .rp:nth-of-type(4){animation-delay:.75s}.gsc.play .rp:nth-of-type(5){animation-delay:1s}.gsc.play .rp:nth-of-type(6){animation-delay:1.25s}
+@keyframes rdraw{to{stroke-dashoffset:0}}@keyframes rpop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}@keyframes rpulse{50%{transform:scale(1.35);opacity:.75}}@keyframes rgrow{to{transform:scaleY(1);opacity:1}}@keyframes rpop2{to{opacity:1;transform:scale(1)}}
+.gst .gi{animation:gdash 1.6s linear infinite}
+.gst[data-t=wipe] .gsc.enter{animation:t-wipe .8s cubic-bezier(.7,0,.2,1) both}
+.gst[data-t=zoom] .gsc.enter{animation:t-zoom .8s cubic-bezier(.2,.8,.2,1) both}
+.gst[data-t=slide] .gsc.enter{animation:t-slide .7s cubic-bezier(.2,.9,.2,1) both}
+.gst[data-t=iris] .gsc.enter{animation:t-iris .9s cubic-bezier(.6,0,.2,1) both}
+.gst[data-t=flip] .gsc.enter{animation:t-flip .8s cubic-bezier(.2,.8,.2,1) both}
+.gsc.leave{animation:t-out .55s ease-in both}
+@keyframes t-wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes t-zoom{from{opacity:0;transform:scale(1.35);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+@keyframes t-slide{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+@keyframes t-iris{from{clip-path:circle(0% at 50% 50%)}to{clip-path:circle(80% at 50% 50%)}}
+@keyframes t-flip{from{opacity:0;transform:rotateX(-80deg) translateY(20px)}to{opacity:1;transform:none}}
+@keyframes t-out{to{opacity:0;transform:scale(.94);filter:blur(4px)}}
+@media (prefers-reduced-motion:reduce){.gsc.play .ra,.gsc.play .rd,.gsc.play .rb,.gsc.play .rp,.gst .gi,.gsc.enter,.gsc.leave{animation:none!important}.gsc .ra{stroke-dashoffset:0}.gsc .rd,.gsc .rp{opacity:1;transform:none}.gsc .rb{transform:none}}
+
+/* ---------- 17 Nov, colour rule: a colour is used only where it means something (green = done, pulled or used; blue = left, next or upcoming; amber = warning; red = failed). Everything else is neutral. ---------- */
+.dwc,.dwc.cp{border-left-color:var(--lineStrong);background:var(--card)}.dwc.sp b,.dwc.cp b{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--ink)}
+.sched3 .s1{border-top-color:var(--lineStrong);border-left-color:var(--lineStrong);background:var(--card)}.sched3 .s1 .fl{color:var(--muted)}
+.sched3 .s2{background:var(--blue);border-left-color:var(--blue)}
+.sched3 .s4{border-left-color:var(--lineStrong)}
+.gfeat b,.gfeat li:nth-child(2) b,.gfeat li:nth-child(3) b{color:var(--ink)}
+.ghero h2 span{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--blue)}
+.gmark,.gsub{background:var(--blue)}
+.gbg .o1{background:#7c9cff}.gbg .o2{background:#9db8ff}.gbg .o3{background:#b9cdfa}
+.gbadge{display:none}
+
+/* ---------- 17 Nov: the rounded header band floats with a gap above the first row; no hairline glued to the band's edge ---------- */
+.fit thead th,.plt thead th,.hwt thead th{border-bottom:0}
+.fit tbody tr:first-child td,.plt tbody tr:first-child td,.hwt tbody tr:first-child td{padding-top:calc(var(--rowpad,10px) + 8px)}
+.fit,.plt,.hwt{border-collapse:separate;border-spacing:0}
 </style>
 
 <script>
@@ -676,7 +730,11 @@ h4.sub{margin:22px 0 10px;font:600 12px var(--sans);letter-spacing:.07em;text-tr
         <li><b>Clear</b><span>capacity and pace per person</span></li>
         <li><b>Honest</b><span>numbers that add up</span></li>
       </ul>
-      <div class="gprev" aria-hidden="true"><svg viewBox="0 0 360 150" fill="none"><path d="M10 20H350" stroke="currentColor" stroke-opacity=".12"/><path d="M10 70H350" stroke="currentColor" stroke-opacity=".12"/><path d="M10 120H350" stroke="currentColor" stroke-opacity=".12"/><path class="gi" d="M20 24 340 126" stroke="currentColor" stroke-opacity=".45" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/><path class="ga" d="M20 24H90C130 24 150 44 190 62S270 100 300 112" stroke="url(#gg)" stroke-width="4" stroke-linecap="round"/><circle class="gd" cx="300" cy="112" r="6" fill="#0a84ff"/><defs><linearGradient id="gg" x1="20" y1="0" x2="300" y2="0"><stop stop-color="#5e5ce6"/><stop offset="1" stop-color="#0a84ff"/></linearGradient></defs></svg></div>
+      <div class="gprev" aria-hidden="true"><div class="gst" data-t="wipe">
+        <div class="gsc" data-n="0"><span class="gcap">Work delivered</span><svg viewBox="0 0 360 150" fill="none"><path d="M10 30H350M10 80H350M10 130H350" stroke="currentColor" stroke-opacity=".12"/><path class="gi" d="M20 126 340 26" stroke="currentColor" stroke-opacity=".45" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/><path class="ra" d="M20 126H90C130 126 150 110 190 92S270 50 320 32" stroke="#32d74b" stroke-width="4" stroke-linecap="round"/><circle class="rd" cx="320" cy="32" r="6" fill="#32d74b"/></svg></div>
+        <div class="gsc" data-n="1"><span class="gcap">Capacity by person: used and left</span><svg viewBox="0 0 360 150" fill="none"><path d="M10 130H350" stroke="currentColor" stroke-opacity=".18"/><path d="M10 40H350" stroke="currentColor" stroke-opacity=".3" stroke-dasharray="5 5"/><rect class="rb" x="34" y="40" width="38" height="90" rx="7" fill="#0a84ff"/><rect class="rb" x="34" y="84" width="38" height="46" rx="7" fill="#32d74b"/><rect class="rb" x="108" y="40" width="38" height="90" rx="7" fill="#0a84ff"/><rect class="rb" x="108" y="64" width="38" height="66" rx="7" fill="#32d74b"/><rect class="rb" x="182" y="40" width="38" height="90" rx="7" fill="#0a84ff"/><rect class="rb" x="182" y="76" width="38" height="54" rx="7" fill="#32d74b"/><rect class="rb" x="256" y="40" width="38" height="90" rx="7" fill="#0a84ff"/><rect class="rb" x="256" y="58" width="38" height="72" rx="7" fill="#32d74b"/></svg></div>
+        <div class="gsc" data-n="2"><span class="gcap">Scheduled pulls</span><svg viewBox="0 0 360 150" fill="none"><path d="M10 100H350" stroke="currentColor" stroke-opacity=".14"/><circle class="rp" cx="40" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="100" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="160" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="220" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="280" cy="100" r="9" fill="#32d74b"/><circle class="rp" cx="330" cy="100" r="8" stroke="#0a84ff" stroke-width="3"/><text x="40" y="60" font-size="13" fill="currentColor" fill-opacity=".6" font-family="inherit">10:50 AM</text><text x="250" y="60" font-size="13" fill="currentColor" fill-opacity=".6" font-family="inherit">6:50 PM</text></svg></div>
+      </div></div>
     </section>
     <div class="gcard">
       <div class="gmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7"/></svg></div>
@@ -1284,8 +1342,8 @@ window.matchMedia('(max-width:720px)').addEventListener('change', () => { if (ta
 const TASK_CLOSED = ['Technical Review', 'Done', 'Fixed', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod', 'Invalid', 'Deferred'], STORY_CLOSED = ['Deployed to UAT', 'Deployed to Prod'], EPIC_CLOSED = ['Done'];
 const OPEN_STATUSES = ['Backlog', 'Research', 'Spec_Completed', 'Accepted by Developer', 'Ready for Development', 'In Progress', 'Code_Review', 'In Testing', 'On-Hold', 'New', 'Triaged', 'Reopened', 'Verified', 'ACTIVE', 'Duplicate', "Won't Fix"];
 const TT = {   // every (i): one short line, then a formula and a worked example laid out as rows
-  flag: { h: 'Flag', rows: [['nil', 'Not started', 'Work has not begun'], ['ok', 'On track', 'Logged is equal to or more than expected'], ['warn', 'Behind on logging', 'Up to 8 h short'], ['bad', 'Time log missing', 'More than 8 h short']] },
-  verdict: { h: 'Verdict', p: 'Can the remaining work fit in the time left?', rows: [['blue', 'Formula', '(remaining estimate) − (time left)'], ['ok', 'Achievable', 'Result is 0 or less'], ['bad', 'Not achievable', 'Result is above 0'], ['ok', 'Completed', 'Sprint over, no work left'], ['bad', 'Not completed', 'Sprint over, work left']], math: [{ h: 'Example', rows: [['Remaining estimate', '36 h'], ['Time left', '33.5 h'], ['Short by', '(36 h) − (33.5 h) = 2.5 h']] }] },
+  flag: { h: 'Flag', mk: 'tag', rows: [['nil', 'Not started', 'Work has not begun'], ['ok', 'On track', 'Logged is equal to or more than expected'], ['warn', 'Behind on logging', 'Up to 8 h short'], ['bad', 'Time log missing', 'More than 8 h short']] },
+  verdict: { h: 'Verdict', mk: 'tag', p: 'Can the remaining work fit in the time left?', rows: [['blue', 'Formula', '(remaining estimate) − (time left)'], ['ok', 'Achievable', 'Result is 0 or less'], ['bad', 'Not achievable', 'Result is above 0'], ['ok', 'Completed', 'Sprint over, no work left'], ['bad', 'Not completed', 'Sprint over, work left']], math: [{ h: 'Example', rows: [['Remaining estimate', '36 h'], ['Time left', '33.5 h'], ['Short by', '(36 h) − (33.5 h) = 2.5 h']] }] },
   left: { h: 'Time left in the sprint (h)', p: 'Working hours still to come, after leave.', rows: [['blue', 'Formula', '(capacity) − (hours passed)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Hours passed', '40 h'], ['Time left', '(64 h) − (40 h) = 24 h']] }] },
   leave: { h: 'Leave (h)', p: 'Hours away. Lowers capacity only.', rows: [['blue', 'Formula', '(capacity) − (leave)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Leave', '6 h'], ['After leave', '(64 h) − (6 h) = 58 h']] }] },
   missing: { h: 'Missing log (h)', p: 'Hours expected but not logged.', rows: [['blue', 'Formula', '(expected log) − (logged)'], ['warn', 'Orange', 'Up to 8 h'], ['bad', 'Red', 'More than 8 h']], math: [{ h: 'Example', rows: [['Expected', '24 h'], ['Logged', '18 h'], ['Missing', '(24 h) − (18 h) = 6 h']] }] },
@@ -1293,7 +1351,7 @@ const TT = {   // every (i): one short line, then a formula and a worked example
   over: { h: 'Over estimate (h)', p: 'Hours logged beyond the original estimate.', rows: [['blue', 'Formula', '(logged) − (original estimate)']], math: [{ h: 'Example', rows: [['Original estimate', '10 h'], ['Logged', '14 h'], ['Over estimate', '(14 h) − (10 h) = 4 h']] }] },
   ideal: { h: 'Ideal pace', p: 'Dashed line: every capacity day covers one equal chunk of the original estimate.', rows: [['blue', 'Formula', '(total) − ((total / capacity days) × days passed)'], ['warn', 'Leave', 'Days on leave carry no planned work']], math: [{ h: 'Example', rows: [['Original estimate', '10 h'], ['Capacity days', '5'], ['Chunk per day', '(10 h) / (5) = 2 h'], ['Left after day 3', '(10 h) − (2 h × 3) = 4 h']] }] },
   remaining: { h: 'Remaining estimate', p: 'Blue line: the work still left.', rows: [['blue', 'Formula', '(original estimate) − (logged), never below 0']], math: [{ h: 'Example', rows: [['Sub-task A', '(6 h) − (2 h) = 4 h'], ['Sub-task B', '(3 h) − (5 h) = 0 h'], ['Remaining', '(4 h) + (0 h) = 4 h']] }] },
-  slot: { h: 'Pull status', rows: [['ok', 'Pulled', 'The pull ran'], ['bad', 'Failed', 'Could not read Jira'], ['warn', 'Missed', 'No pull within 3 hours'], ['up', 'Upcoming', 'Not yet'], ['nil', 'Not scheduled', 'Before 13 Nov']] },
+  slot: { h: 'Pull status', mk: 'chip', rows: [['ok', 'Pulled', 'The pull ran'], ['bad', 'Failed', 'Could not read Jira'], ['warn', 'Missed', 'No pull within 3 hours'], ['up', 'Upcoming', 'Not yet'], ['nil', 'Not scheduled', 'Before 13 Nov']] },
   pulled: { h: 'Pulled', p: 'The scheduled pull ran.' }, failed: { h: 'Failed', p: 'The pull ran but could not read Jira.' },
   missed: { h: 'Missed', p: 'No scheduled pull within 3 hours of the slot.' }, upcoming: { h: 'Upcoming', p: 'The slot has not come yet.' },
   latest: { h: 'Latest scheduled pull', p: 'The last scheduled pull that worked.' },
@@ -1324,8 +1382,10 @@ function jiraPop() {
   const groups = jiraTab === 'status' ? [['Epic', ST_EPIC], ['User story', ST_STORY], ['Sub-task, Story sub-task, New Feature sub-task', ST_STORY], ['Bug sub-task', ST_BUG]] : [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]];
   return `<div class="tt jp"><div class="tth">Jira status</div>${tabs}${groups.map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}</div>`;
 }
+// A marker beside a legend row appears only when the page really shows it: a coloured tag (Flag, Verdict), a chip with a dot (Pull status), or nothing.
+const mark = (mk, c, t) => mk === 'tag' && ['ok', 'bad', 'warn', 'nil'].includes(c) ? `<span class="tag ${c}">${esc(t)}</span>` : mk === 'chip' ? `<span class="chip ${c === 'nil' ? 'na' : c}"><i></i>${esc(t)}</span>` : esc(t);
 function ttHtml(d) {
-  return `<div class="tt"><div class="tth">${esc(d.h)}</div>${d.p ? `<p class="ttp">${esc(d.p)}</p>` : ''}${(d.rows || []).map(r => `<div class="ttr"><span class="ttn"><i class="td ${r[0]}"></i>${esc(r[1])}</span><span class="ttd">${esc(r[2])}</span></div>`).join('')}${(d.groups || []).map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${(d.math || []).map(m => `<div class="ttm"><div class="ttmh">${esc(m.h)}</div><table class="ttmt"><tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>`).join('')}${d.note ? `<p class="ttnote">${esc(d.note)}</p>` : ''}</div>`;
+  return `<div class="tt"><div class="tth">${esc(d.h)}</div>${d.p ? `<p class="ttp">${esc(d.p)}</p>` : ''}${(d.rows || []).map(r => `<div class="ttr"><span class="ttn">${mark(d.mk, r[0], r[1])}</span><span class="ttd">${esc(r[2])}</span></div>`).join('')}${(d.groups || []).map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${(d.math || []).map(m => `<div class="ttm"><div class="ttmh">${esc(m.h)}</div><table class="ttmt"><tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>`).join('')}${d.note ? `<p class="ttnote">${esc(d.note)}</p>` : ''}</div>`;
 }
 const lab = (text, key) => `${text}<button type="button" class="ibtn" data-tip="@${key}" aria-label="What do the values mean?">i</button>`;
 const tip = key => `<button type="button" class="ibtn" data-tip="@${key}" aria-label="What does this mean?">i</button>`;
@@ -1333,11 +1393,32 @@ const tip = key => `<button type="button" class="ibtn" data-tip="@${key}" aria-l
 /* ---------- tooltips: hover or focus an (i) button; tap on touch screens ---------- */
 const gtip = document.createElement('div'); gtip.id = 'gtip'; gtip.className = 'gtip'; gtip.setAttribute('role', 'tooltip'); gtip.hidden = true; document.body.appendChild(gtip);
 const tipOf = b => { const k = b.dataset.tip; if (k === '@refresh') return refreshTip(); if (k === '@jira') return jiraPop(); return k[0] === '@' ? ttHtml(TT[k.slice(1)]) : `<p class="ttp" style="margin:0">${esc(k)}</p>`; };
+const gtipA = document.createElement('div'); gtipA.id = 'gtipA'; gtipA.className = 'gtipa'; gtipA.hidden = true; gtipA.setAttribute('aria-hidden', 'true'); document.body.appendChild(gtipA);
+// Phone: a popover that opens beside the tapped (i) with an arrow pointing at it and a small gap. It opens below the button, or above when there is no room.
+function placePop(b) {
+  const GAP = 12, EDGE = 12, AR = 12, vw = innerWidth, vh = innerHeight;
+  let r = b.getBoundingClientRect();
+  if (b.tagName === 'TD') r = { left: r.left + 14, right: r.left + 54, top: r.top, bottom: r.top + Math.min(r.height, 36), width: 40, height: Math.min(r.height, 36) };   // a tapped label: the arrow points at the start of the label
+  const w = Math.min(340, vw - 2 * EDGE); gtip.style.maxWidth = w + 'px'; gtip.style.width = w + 'px'; gtip.style.right = 'auto'; gtip.style.bottom = 'auto';
+  const h = gtip.offsetHeight, nav = document.getElementById('tabs'), floor = nav ? nav.getBoundingClientRect().top - 8 : vh - 8;
+  const cx = r.left + r.width / 2, left = Math.min(Math.max(EDGE, cx - w / 2), vw - w - EDGE);
+  const below = r.bottom + GAP + AR / 2, roomBelow = floor - below, roomAbove = r.top - GAP - AR / 2 - 8;
+  let up = false, top;
+  if (h <= roomBelow || roomBelow >= roomAbove) { top = below; gtip.style.maxHeight = Math.max(120, roomBelow) + 'px'; }
+  else { up = true; const mh = Math.max(120, roomAbove); gtip.style.maxHeight = mh + 'px'; top = r.top - GAP - AR / 2 - Math.min(h, mh); }
+  gtip.style.left = left + 'px'; gtip.style.top = top + 'px';
+  const ax = Math.min(Math.max(cx, left + 18), left + w - 18), hh = Math.min(h, parseFloat(gtip.style.maxHeight));
+  gtipA.className = 'gtipa ' + (up ? 'up' : 'down'); gtipA.style.left = (ax - AR / 2) + 'px'; gtipA.style.top = (up ? top + hh - AR / 2 : top - AR / 2) + 'px';
+  gtip.style.transformOrigin = (ax - left) + 'px ' + (up ? '100%' : '0'); gtipA.hidden = false;
+  gtip.classList.remove('shown'); void gtip.offsetWidth; gtip.classList.add('shown');
+}
 function showTip(b) {
   { const bt = document.getElementById('tip'); if (bt) bt.hidden = true; }
+  document.querySelectorAll('[aria-describedby="gtip"]').forEach(x => { if (x !== b) { x.removeAttribute('aria-describedby'); x.removeAttribute('aria-expanded'); } });
   gtip.classList.toggle('jt', b.dataset.tip === '@jira');
   gtip.innerHTML = tipOf(b); gtip.hidden = false;
-  gtip.classList.toggle('sheet', isNarrow()); if (isNarrow()) { gtip.style.left = ''; gtip.style.top = ''; b.setAttribute('aria-describedby', 'gtip'); return; }
+  gtip.classList.remove('sheet'); gtip.style.width = gtip.style.maxHeight = gtip.style.maxWidth = ''; gtip.classList.toggle('pop', isNarrow()); gtipA.hidden = !isNarrow();
+  if (isNarrow()) { placePop(b); b.setAttribute('aria-describedby', 'gtip'); b.setAttribute('aria-expanded', 'true'); return; }
   const r = b.getBoundingClientRect(), w = gtip.offsetWidth, h = gtip.offsetHeight, vw = innerWidth, vh = innerHeight;
   let left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), vw - w - 8), top = r.bottom + 8;
   if (top + h > vh - 8) top = r.top - h - 8;                       // not enough room below: above the button
@@ -1348,14 +1429,14 @@ function showTip(b) {
   gtip.style.left = left + 'px'; gtip.style.top = top + 'px'; b.setAttribute('aria-describedby', 'gtip');
 }
 let hideT = null; const hideSoon = () => { clearTimeout(hideT); hideT = setTimeout(hideTip, 140); };
-gtip.addEventListener('mouseenter', () => clearTimeout(hideT)); gtip.addEventListener('mouseleave', hideSoon);
+gtip.addEventListener('mouseenter', () => clearTimeout(hideT)); gtip.addEventListener('mouseleave', () => { if (canHover()) hideSoon(); });      // on a touch screen only a tap closes it
 gtip.addEventListener('click', e => { e.stopPropagation(); const t = e.target.closest('[data-jtab]'); if (t) { jiraTab = t.dataset.jtab; gtip.innerHTML = jiraPop(); } });
-const hideTip = () => { clearTimeout(hideT); gtip.hidden = true; document.querySelectorAll('.ibtn[aria-describedby]').forEach(b => b.removeAttribute('aria-describedby')); };
+const hideTip = () => { clearTimeout(hideT); gtip.hidden = true; gtipA.hidden = true; gtip.classList.remove('shown', 'pop'); gtip.style.width = gtip.style.maxHeight = gtip.style.maxWidth = ''; document.querySelectorAll('[aria-describedby="gtip"]').forEach(b => { b.removeAttribute('aria-describedby'); b.removeAttribute('aria-expanded'); }); };
 const canHover = () => window.matchMedia('(hover: hover)').matches;   // on a touch screen a tap opens and closes the explanation; hover and focus do not
 document.addEventListener('mouseover', e => { if (!canHover()) return; const b = e.target.closest('.ibtn[data-tip]'); if (b) { clearTimeout(hideT); showTip(b); } });
-document.addEventListener('mouseout', e => { if (e.target.closest('.ibtn[data-tip]')) hideSoon(); });
+document.addEventListener('mouseout', e => { if (canHover() && e.target.closest('.ibtn[data-tip]')) hideSoon(); });
 document.addEventListener('focusin', e => { if (!canHover()) return; const b = e.target.closest && e.target.closest('.ibtn[data-tip]'); if (b) showTip(b); });
-document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('.ibtn[data-tip]') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#gtip'))) hideTip(); });
+document.addEventListener('focusout', e => { if (canHover() && e.target.closest && e.target.closest('.ibtn[data-tip]') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#gtip'))) hideTip(); });
 document.addEventListener('click', e => { const b = e.target.closest('.ibtn[data-tip], td[data-tip]'); if (b && b.tagName === 'TD' && !window.matchMedia('(max-width:1120px)').matches) return hideTip(); if (b) { e.stopPropagation(); (!gtip.hidden && b.getAttribute('aria-describedby')) ? hideTip() : showTip(b); } else hideTip(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') hideTip(); });
 window.addEventListener('scroll', hideTip, { passive: true });
@@ -1379,7 +1460,7 @@ const LIMIT = 100, RESERVE = 5, DAY = 864e5;   // Vercel free plan: 100 deployme
 function usage() { const now = Date.now(), all = (RUNS || []).filter(x => now - Date.parse(x.at) < DAY), r = all.map(x => Date.parse(x.at)).sort((a, b) => a - b); return { n: r.length, sched: all.filter(x => x.trigger === 'schedule').length, resetAt: r.length ? r[0] + DAY : null }; }
 function refreshTip() {
   const u = usage();
-  return `<div class="tt"><div class="tth">Refresh limit</div><div class="ttr"><span class="ttn"><i class="td blue"></i>Limit</span><span class="ttd">100 pulls in 24 hours</span></div><div class="ttr"><span class="ttn"><i class="td ok"></i>Used</span><span class="ttd"><b>${u.n} of ${LIMIT}</b> in the last 24 hours, whole team</span></div><div class="ttr"><span class="ttn"><i class="td nil"></i>Two clicks</span><span class="ttd">Under 2 minutes apart: skipped</span></div><div class="ttg"><div class="ttgl">The dot beside the time</div><div class="ttr"><span class="ttn"><i class="td ok"></i>Green</span><span class="ttd">Under 14 hours old</span></div><div class="ttr"><span class="ttn"><i class="td warn"></i>Amber</span><span class="ttd">Older than 14 hours</span></div><div class="ttr"><span class="ttn"><i class="td blue"></i>Blue, pulsing</span><span class="ttd">Refreshing now</span></div></div></div>`;
+  return `<div class="tt"><div class="tth">Refresh limit</div><div class="ttr"><span class="ttn">Limit</span><span class="ttd">100 pulls in 24 hours</span></div><div class="ttr"><span class="ttn">Used</span><span class="ttd"><b>${u.n} of ${LIMIT}</b> in the last 24 hours, whole team</span></div><div class="ttr"><span class="ttn">Two clicks</span><span class="ttd">Under 2 minutes apart: skipped</span></div><div class="ttg"><div class="ttgl">The dot beside the time</div><div class="ttr"><span class="ttn"><i class="td ok"></i>Green</span><span class="ttd">Under 14 hours old</span></div><div class="ttr"><span class="ttn"><i class="td warn"></i>Amber</span><span class="ttd">Older than 14 hours</span></div><div class="ttr"><span class="ttn"><i class="td blue"></i>Blue, pulsing</span><span class="ttd">Refreshing now</span></div></div></div>`;
 }
 
 /* ---------- messages ---------- */
@@ -1464,6 +1545,24 @@ async function startRefresh() {
   notify({ kind: 'error', title: 'No new data yet', text: 'The refresh did not produce newer data. If someone refreshed a moment ago the data may already be current. Try again in a minute.', meta: 'Still showing data from ' + was });
 }
 // sign-in gate (a light team password, checked in the browser). The browser keeps you signed in until you press Sign out.
+
+/* landing widget: scenes with a different transition each time; restarts whenever the sign-in page is shown */
+(function () {
+  const box = document.querySelector('.gst'); if (!box) return;
+  const sc = [...box.querySelectorAll('.gsc')], TR = ['wipe', 'zoom', 'slide', 'iris', 'flip'], root = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches; let i = -1, t = null, k = 0;
+  const play = el => { el.classList.remove('play'); void el.getBoundingClientRect(); el.classList.add('play'); };
+  function go(n, first) {
+    const old = sc[i]; i = n; const el = sc[n];
+    if (old && old !== el) { old.classList.remove('on', 'enter'); old.classList.add('leave'); setTimeout(() => old.classList.remove('leave', 'play'), 560); }
+    box.dataset.t = TR[k++ % TR.length]; el.classList.remove('leave'); el.classList.add('on'); if (!reduce) { el.classList.remove('enter'); void el.getBoundingClientRect(); el.classList.add('enter'); }
+    play(el); clearTimeout(box._c); box._c = setTimeout(() => el.classList.remove('enter'), 1000);
+  }
+  function tick() { clearTimeout(t); if (!root.classList.contains('locked') || document.hidden) { t = setTimeout(tick, 1000); return; } go((i + 1) % sc.length); t = setTimeout(tick, reduce ? 6000 : 4600); }
+  function restart() { clearTimeout(t); sc.forEach(e => e.classList.remove('on', 'leave', 'enter', 'play')); i = -1; k = 0; go(0); t = setTimeout(tick, reduce ? 6000 : 4600); }
+  let was = root.classList.contains('locked'); if (was) restart();
+  new MutationObserver(() => { const now = root.classList.contains('locked'); if (now && !was) restart(); was = now; }).observe(root, { attributes: true, attributeFilter: ['class'] });
+})();
 const lockPage = () => { document.documentElement.classList.add('locked'); closeD(); hideTip(); $('#toasts').innerHTML = ''; $('#gpw').value = ''; };
 $('#signout').onclick = () => { try { localStorage.removeItem('sd_auth'); } catch (x) {} lockPage(); notify({ kind: 'info', title: 'Signed out', text: 'Enter the team password to open the dashboard again.' }); };
 window.addEventListener('storage', e => { if (e.key !== 'sd_auth' && e.key !== null) return; let ok = false; try { ok = localStorage.getItem('sd_auth') === GATE_V; } catch (x) {} if (!ok) lockPage(); else document.documentElement.classList.remove('locked'); });
