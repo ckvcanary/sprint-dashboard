@@ -37,15 +37,16 @@ def browser():
 @pytest.fixture
 def ctx_factory(browser, mock):
     made = []
-    def make(width=1440, height=900, scheme="light", signed_in=True, rf=None, now=NOW, tz=None):
-        c = browser.new_context(viewport={"width": width, "height": height}, color_scheme=scheme, **({"timezone_id": tz} if tz else {}))
+    def make(width=1440, height=900, scheme="light", signed_in=True, rf=None, now=NOW, tz=None, touch=False):
+        c = browser.new_context(viewport={"width": width, "height": height}, color_scheme=scheme, **({"timezone_id": tz} if tz else {}), **({"has_touch": True, "is_mobile": True} if touch else {}))
         init = ""
         if signed_in: init += "localStorage.setItem('sd_auth', 'fa9304349b9d');"
         if rf: init += "window.RF_TEST = " + rf + ";"
         if init: c.add_init_script(init)
         pg = c.new_page(); pg.errors = []; pg.set_default_timeout(12000)
+        pg.route("https://fonts.googleapis.com/**", lambda r: r.fulfill(status=200, body="", content_type="text/css")); pg.route("https://fonts.gstatic.com/**", lambda r: r.abort())      # tests never depend on the network for fonts
         pg.on("pageerror", lambda e: pg.errors.append(str(e)))
-        pg.on("console", lambda m: pg.errors.append(m.text) if m.type == "error" and "favicon" not in m.text else None)
+        pg.on("console", lambda m: pg.errors.append(m.text) if m.type == "error" and "favicon" not in m.text and "ERR_NETWORK_CHANGED" not in m.text and "ERR_INTERNET_DISCONNECTED" not in m.text else None)
         if now: pg.clock.install(time=now)
         made.append(c); return pg
     mock.reset()

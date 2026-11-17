@@ -128,7 +128,7 @@ td.ok{color:var(--green);font-weight:600}td.warn{color:var(--amber);font-weight:
 .tag.ok{background:var(--greenBg);color:var(--green)}.tag.warn{background:var(--amberBg);color:var(--amber)}.tag.bad{background:var(--redBg);color:var(--red)}.tag.nil{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
 .key{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:12px}.key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
 /* capacity */
-.capgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start}
+.capgrid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:18px;align-items:start}
 .chart{width:100%;height:auto;display:block}
 /* burndown */
 .info{margin-bottom:18px}.info th,.info td{text-align:left!important;padding:10px 14px}.info td{font-weight:500;font-size:14px}
@@ -285,7 +285,6 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .hr{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .btn.ghost#signout{height:52px;border-radius:12px;padding:0 18px}.btn.ghost{background:transparent;color:var(--ink);border-color:var(--lineStrong)}.btn.ghost:hover{background:var(--soft);opacity:1}
 .gtip{position:fixed;z-index:300;max-width:340px;background:color-mix(in srgb,var(--ink) 13%,var(--bg));color:var(--ink);border:1px solid var(--lineStrong);border-radius:10px;padding:10px 13px;font-size:12.5px;line-height:1.5;box-shadow:var(--shadow);pointer-events:none}.gtip[hidden]{display:none}.gtip b{font-weight:600}
-.lgc{width:100%;border-collapse:collapse;table-layout:fixed}.lgc td,.lgc th{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left;font-size:13px;line-height:1.45;white-space:normal;overflow-wrap:anywhere}.lgc.rules th:nth-child(1){width:15%}.lgc.rules th:nth-child(2){width:13%}.lgc.rules th:nth-child(4){width:20%}
 .seg{display:inline-flex;gap:2px;padding:4px;background:var(--soft);border:1px solid var(--line);border-radius:12px;margin-bottom:18px}
 .seg button{font:500 14px var(--sans);border:0;background:transparent;color:var(--muted);padding:8px 18px;border-radius:9px;cursor:pointer}
 .seg button[aria-selected=true]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
@@ -317,7 +316,7 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .chip{display:inline-flex;align-items:center;gap:8px;font:600 12px var(--sans);padding:4px 11px;border-radius:999px}
 .chip i{width:7px;height:7px;border-radius:50%;background:currentColor}
 .chip.ok{background:var(--greenBg);color:var(--green)}.chip.bad{background:var(--redBg);color:var(--red)}.chip.warn{background:var(--amberBg);color:var(--amber)}
-.chip.up{border:1px dashed var(--lineStrong);color:var(--muted)}.chip.na{background:var(--soft);border:1px solid var(--line);color:var(--faint)}
+.chip.up{border:1px dashed color-mix(in srgb,var(--blue) 55%,var(--line));color:var(--blue);background:color-mix(in srgb,var(--blue) 7%,transparent)}.chip.up i{background:transparent;border:2px solid var(--blue);box-sizing:border-box}.chip.na{background:var(--soft);border:1px solid var(--line);color:var(--muted)}.chip.na i{background:var(--faint)}
 .plt td:nth-child(n+2),.plt th:nth-child(n+2){text-align:left}
 .plt .wk td{background:transparent}
 .note{color:var(--muted);font-size:13px;margin:0 0 14px}
@@ -335,7 +334,7 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .arr svg{width:28px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 .startsec{margin-top:44px;margin-bottom:36px}.startsec h3{font:600 13px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}.sn{color:var(--muted);font-size:13px;margin:0 0 14px}.sl{display:none}
-.sc{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}.sc .chipc{min-width:230px;max-width:340px}.or{color:var(--faint);align-self:center;font-size:13px}
+.sc{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:stretch}.sc .chipc{min-width:0;max-width:none}.or{color:var(--faint);align-self:center;justify-self:center;font-size:13px}
 .lim .scroll{margin-top:8px}.hw a.link{color:var(--blue)}
 .acc details{border:1px solid var(--line);border-radius:12px;background:var(--soft);margin-bottom:10px;padding:0 16px}
 .acc summary{cursor:pointer;padding:13px 0;font-weight:600;font-size:14px}
@@ -349,6 +348,10 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .rfph span{font-weight:500;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
 .rfprog .bar{width:100%;margin:0}
 .rfps{font-size:12px;color:var(--muted)}
+.rfw{display:flex;align-items:center;gap:8px}.rfw .spark{width:18px;height:18px;flex:none;stroke:var(--blue);fill:none;stroke-width:2.4;stroke-linecap:round;animation:sparkr 2.4s linear infinite}
+.rfw .dots::after{content:'';animation:dotsa 1.4s steps(4,end) infinite}
+@keyframes sparkr{to{transform:rotate(360deg)}}@keyframes dotsa{0%{content:''}25%{content:'.'}50%{content:'..'}75%,100%{content:'...'}}
+@media (prefers-reduced-motion:reduce){.rfw .spark{animation:none}.rfw .dots::after{animation:none;content:'...'}}
 #stack{position:fixed;right:max(16px,env(safe-area-inset-right,0px));top:var(--stk,16px);width:min(360px,calc(100vw - 32px));display:flex;flex-direction:column;gap:10px;z-index:100;pointer-events:none}
 #stack>*{pointer-events:auto}#toasts{display:flex;flex-direction:column;gap:10px}
 .tst{pointer-events:auto;display:grid;grid-template-columns:28px 1fr 22px;gap:12px;align-items:start;background:var(--bg);border:1px solid var(--lineStrong);border-radius:14px;box-shadow:var(--shadow);padding:14px 14px 14px 16px;opacity:0;transform:translateY(-10px);transition:opacity .2s,transform .2s}
@@ -358,59 +361,372 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .tst.success .ic{background:var(--greenBg);color:var(--green)}.tst.error .ic{background:var(--redBg);color:var(--red)}.tst.info .ic{background:var(--task);color:var(--taskInk)}
 .tst b{display:block;font-size:14px;margin-bottom:2px}.tst p{margin:0;font-size:13px;color:var(--muted);line-height:1.45}.tst small{display:block;margin-top:6px;font-size:12px;color:var(--faint)}
 .tst .cl2{border:0;background:none;color:var(--faint);cursor:pointer;font-size:18px;line-height:1;padding:0}
-@media (max-width:860px){.cw,.gb,.capl{overflow-x:auto}.cw svg,.gb svg{min-width:740px}.capl .chart{min-width:480px}.flow{flex-direction:column;align-items:stretch}.arr{flex:0 0 28px;transform:rotate(90deg)}.cnt{grid-template-columns:repeat(2,minmax(0,1fr))}.tgrid{grid-template-columns:1fr}.tk{border-bottom:0;padding-bottom:0}.bar .legend{margin-left:0}}
+@media (max-width:860px){.flow{flex-direction:column;align-items:stretch}.arr{flex:0 0 28px;transform:rotate(90deg)}.cnt{grid-template-columns:repeat(2,minmax(0,1fr))}.tgrid{grid-template-columns:1fr}.tk{border-bottom:0;padding-bottom:0}.bar .legend{margin-left:0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.card:hover{transform:none}}
+
+/* ---------- burndown redesign: overview rows, three capacity bars, hover card, day list, fitted tables ---------- */
+.tgrid.ov{grid-template-columns:220px 1fr}.tgrid.ov .tv{font-family:var(--sans);font-size:14px}
+.capwrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:start}
+.capbars{display:flex;flex-direction:column;gap:18px;min-width:0}.capbars .capt{margin-bottom:0}
+.cb .cbt{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-bottom:8px;font-size:13px}.cb .cbt b{font-size:14px}.cb .cbt span{color:var(--muted);font-variant-numeric:tabular-nums}
+.meter3{display:block;height:14px;border-radius:7px;overflow:hidden;background:var(--line)}.meter3 i{display:block;height:100%;border-radius:7px}
+.meter3 .g{background:var(--green)}.meter3 .b{background:var(--blue)}.meter3 .a{background:#5e5ce6}.meter3 .r{background:var(--red)}
+.cb .cbn{margin-top:6px;font-size:12.5px;color:var(--muted)}
+.calc{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.calch{font:600 12px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.calc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}.calc li{display:flex;flex-direction:column;gap:3px}.calc li b{font-size:13px}.calc li span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.ln{display:inline-block;width:22px;height:0;border-top:3px solid var(--blue);vertical-align:middle;margin-right:8px;border-radius:2px}.ln.d{border-top:2px dashed var(--faint)}
+.key i.ln{width:22px;height:0;border-radius:2px;background:none;border-top:3px solid var(--blue);margin-right:8px;vertical-align:middle}.key i.ln.d{border-top:2px dashed var(--faint)}
+.tip{width:340px;padding:14px 16px}
+.tip .tph{display:block;margin-bottom:8px}.tip .tpd{font-size:16px;margin-bottom:4px}.tip .tpl{font-size:12px;color:var(--muted);line-height:1.5}
+.tpv{margin:10px 0 2px;font-size:15px}.tpv b{font-size:18px;font-weight:700}.tpv.ok{color:var(--green)}.tpv.bad{color:var(--red)}
+.tpx{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.tip .tps{padding:12px 0 0;border-top:0;margin-top:6px}.tip .tpt{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.tip .mt td{border:0;padding:5px 0}.tip .mt th{padding:0 0 4px;font-weight:600;border:0}
+.tip .tf{margin-top:12px;border-top:0;padding-top:0}
+.dsum{margin:4px 0 14px;max-width:560px}.dsum th{text-align:right;font-size:11px}.dsum th:first-child,.dsum td:first-child{text-align:left}.dsum td{font-weight:600}.dsum td:first-child{font-weight:500;color:var(--muted)}
+.dlist table.dtab{table-layout:fixed;width:100%}.dtab th,.dtab td{text-align:left!important;white-space:normal;overflow-wrap:anywhere}.dtab td.num,.dtab th.num{text-align:right!important}.dtab td.num{white-space:nowrap}.dtab tr.rnone td{text-align:left!important}
+.dtab td.ttl{min-width:0}.dtab tr.dgrp td{background:var(--soft);font-size:13px;padding:10px;border-top:1px solid var(--lineStrong)}.dtab tr.dgrp b{font-size:13px}.dtab .gn{margin-left:10px;background:var(--bg);border:1px solid var(--lineStrong);border-radius:999px;padding:1px 9px;font-size:12px;font-weight:600;color:var(--muted)}
+.dtab tr.dgrp td.num{font-weight:700;color:var(--ink)}.dtab tr.rnone td{color:var(--faint);font-size:12.5px}
+table.fit{table-layout:fixed;width:100%}.fit th,.fit td{white-space:normal;overflow-wrap:anywhere;vertical-align:middle}.fit th:first-child,.fit td:first-child{text-align:left;width:15%}
+.fit td.vd{text-align:right}.vsm{display:block;margin-top:3px;font-size:11.5px;color:var(--muted)}
+.fit.lvt th,.fit.lvt td{text-align:left!important}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:16px}.bnum b{display:block;font-size:30px;font-weight:600;letter-spacing:-.01em}.bnum span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+@media (max-width:720px){.sched3.lvs{grid-template-columns:1fr}}
+@media (max-width:860px){.capwrap{grid-template-columns:1fr}.tgrid.ov{grid-template-columns:1fr}}
+
+/* ---------- phone layout (720px and narrower): bottom navigation, card tables, a chart sized for the screen ---------- */
+.tab .ti{display:none}
+.cardhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px 12px;flex-wrap:wrap}.cardhead h3{margin-bottom:12px;display:block}a.lnk{color:var(--blue);font-size:13px;font-weight:600;text-decoration:none}a.lnk:hover{text-decoration:underline}
+.lvs{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:720px){
+  body{padding-block:14px calc(86px + env(safe-area-inset-bottom,0px))}
+  .top{margin-bottom:12px;gap:10px}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;height:auto;max-width:none;border-radius:0;border-width:1px 0 0;background:var(--bg);padding:6px max(6px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));gap:2px;overflow:visible;box-shadow:0 -6px 18px rgba(0,0,0,.06)}
+  .tab{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;padding:6px 2px;font-size:0;border-radius:10px}
+  .tab .ti{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .tab .tl{font-size:0}.tab .tl::after{content:attr(data-s);font-size:10.5px;font-weight:500;letter-spacing:0}
+  .tab[aria-selected=true]{background:color-mix(in srgb,var(--blue) 12%,var(--bg));color:var(--blue);box-shadow:none}
+  .hr{display:flex;width:100%;gap:8px}.hr .rfcard{flex:1;min-width:0}.hr #signout{flex:none;width:52px;height:52px;padding:0;justify-content:center;font-size:0;gap:0}.hr #signout svg{width:20px;height:20px}
+  .rfcard{padding-left:12px;gap:10px}.rfv{font-size:13px}
+  .seg{display:flex;width:100%}.seg button{flex:1;min-height:44px}
+  .ctl,select.ctl,.dd .ctl{min-height:46px;font-size:15px}
+  .panel{padding:14px}.panel h3{font-size:15px}
+  .tgrid.ov .tk{padding:10px 14px 0;border-bottom:0}.tgrid.ov .tv{padding:2px 14px 10px}
+  .capwrap{gap:16px}.calc{padding:14px}
+  .cw{overflow:visible}.cw svg{min-width:0!important;width:100%}
+  .tip{width:min(340px,calc(100% - 8px))}
+  .key{gap:12px 18px}.key .ibtn,.ibtn{min-width:24px;min-height:24px}
+  .gb{display:none}
+  .gbm{display:flex;flex-direction:column;gap:16px}.gbr{display:flex;flex-direction:column;gap:6px}.gbr>b{font-size:14px}
+  .gbl{display:grid;grid-template-columns:118px 1fr 56px;gap:8px;align-items:center;font-size:12px;color:var(--muted)}.gbl em{font-style:normal;text-align:right;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+  .gbt{height:10px;border-radius:5px;background:var(--line);overflow:hidden;display:block}.gbt i{display:block;height:100%;border-radius:5px}
+  .fit thead,.dtab thead,.dtab colgroup{display:none}
+  table.fit,.fit tbody,.fit tr,.fit td,table.dtab,.dtab tbody,.dtab tr,.dtab td{display:block;width:100%}
+  .fit tr,.dtab tr:not(.dgrp):not(.rnone){border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--bg)}
+  .fit tr.tot{background:var(--soft)}
+  .fit td,.dtab td{display:flex;justify-content:space-between;align-items:baseline;gap:14px;border:0;padding:5px 0;text-align:right!important;width:auto!important;white-space:normal}
+  .fit td::before,.dtab td::before{content:attr(data-l);color:var(--muted);font-size:12px;flex:none;text-align:left;max-width:58%}
+  .fit td:first-child,.dtab td:not([data-l]){display:block;text-align:left!important}.fit td:first-child::before,.dtab td:not([data-l])::before{content:none}
+  .fit td:first-child{font-size:15px;padding-bottom:8px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+  .dtab td.ttl{font-weight:600;font-size:14px;padding:2px 0 6px}
+  .dtab tr.dgrp{display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px;padding:2px 4px;border:0;border-radius:10px;background:var(--soft)}.dtab tr.dgrp td{display:flex;width:auto!important;padding:8px 8px;background:none;border-radius:0}.dtab tr.dgrp td:first-child{flex:1}.dtab tr.dgrp td::before{content:none}.dtab tr.dgrp td.num:empty{display:none}
+  .dtab tr.rnone{display:block;border:0;padding:0}.dtab tr.rnone td{display:block;padding:4px 2px}.dtab tr.rnone td::before{content:none}
+  .dlist{max-height:70vh;border:0;background:transparent;overflow:auto}.dsum{max-width:none;table-layout:fixed}.dsum th{white-space:normal;font-size:10.5px;letter-spacing:.02em;padding:0 2px 6px;vertical-align:bottom}.dsum td{padding:8px 2px}.dsum th:first-child,.dsum td:first-child{width:27%}
+  .tipin{padding:4px 2px 10px}.tipin .tph{display:block}
+  .dtabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.dtabs button{flex:none;min-height:40px}
+  .sched3{grid-template-columns:1fr 1fr}.bgrid{grid-template-columns:1fr 1fr}.bnum b{font-size:26px}
+  .plt{font-size:12.5px}
+  #stack{left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));width:auto}
+}
+
+/* ---------- 17 Nov round: aligned headers, dotted swatch, select arrow, status pop-up, maths blocks, contrast ---------- */
+select.ctl{appearance:none;-webkit-appearance:none;padding-right:38px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%236b7280' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 4.5 6 8l4-3.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:12px}
+.ln.d,.key i.ln.d{border-top:0;height:3px;width:26px;background:repeating-linear-gradient(90deg,var(--faint) 0 5px,transparent 5px 9px)}
+.key i.ln{width:26px}
+.btn.sm{height:32px;padding:0 12px;font-size:13px;border-radius:8px}
+.cardhead .btn{flex:none}
+.fit th{white-space:nowrap;vertical-align:middle;line-height:1.2;height:42px}.fit td{vertical-align:middle}
+.fit th .ibtn{vertical-align:middle;margin-left:6px}
+table.fit{table-layout:auto}.fit th:first-child,.fit td:first-child{width:auto}
+.fit th:nth-child(n+2),.fit td:nth-child(n+2){text-align:right;padding-right:16px}
+.fit.lvt th:nth-child(n+2),.fit.lvt td:nth-child(n+2){text-align:right!important}
+.fit.hd thead th{background:color-mix(in srgb,var(--blue) 9%,var(--soft));color:var(--ink)}
+.fit td.lv{color:var(--amber);font-weight:700}.fit td.af{color:var(--blue);font-weight:700}
+.acc-amber{border-left:4px solid var(--amber)}.acc-blue{border-left:4px solid var(--blue)}.acc-green{border-left:4px solid var(--green)}
+.sched3 .stat{border-left:4px solid var(--lineStrong)}.sched3 .s1{border-left-color:var(--blue);background:color-mix(in srgb,var(--blue) 7%,var(--soft))}.sched3 .s2{border-left-color:var(--green);background:color-mix(in srgb,var(--green) 8%,var(--soft))}.sched3 .s3{border-left-color:var(--amber);background:color-mix(in srgb,var(--amber) 9%,var(--soft))}.sched3 .s4{border-left-color:var(--faint)}
+.cnt .stat.ok{background:var(--greenBg);border-color:color-mix(in srgb,var(--green) 35%,var(--line))}.cnt .stat.bad{background:var(--redBg);border-color:color-mix(in srgb,var(--red) 35%,var(--line))}.cnt .stat.warn{background:var(--amberBg);border-color:color-mix(in srgb,var(--amber) 40%,var(--line))}.cnt .stat.up{background:color-mix(in srgb,var(--blue) 8%,var(--soft));border-color:color-mix(in srgb,var(--blue) 30%,var(--line))}.cnt .stat.up b{color:var(--blue)}
+.plt thead th{background:color-mix(in srgb,var(--blue) 9%,var(--soft));color:var(--ink)}
+.bhead{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}.bhead b{font-size:40px;font-weight:600;letter-spacing:-.02em;color:var(--blue)}.bhead span{color:var(--muted);font-size:14px}
+.budget .meter2 .u{background:var(--blue)}
+.startsec h3{margin:0 0 14px}
+.hwt{width:100%}.hwt th,.hwt td{white-space:normal;text-align:left!important;vertical-align:top}.hwt th:nth-child(1){width:24%}.hwt th:nth-child(2){width:36%}
+.ttm{margin-top:10px;padding-top:9px;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent)}.ttmh{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;opacity:.7;margin-bottom:6px}
+.ttmt{width:100%;border-collapse:collapse;font-size:12px}.ttmt td{border:0;padding:3px 0;white-space:normal;vertical-align:top}.ttmt td:first-child{text-align:left;opacity:.8;padding-right:14px}.ttmt td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.gtip.jt{pointer-events:auto}
+.jtabs{display:flex;gap:6px;margin:4px 0 10px}.jtabs button{flex:1;border:1px solid var(--lineStrong);background:var(--bg);color:var(--muted);border-radius:8px;padding:7px 10px;font:600 12px var(--sans);cursor:pointer;min-height:34px}.jtabs button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tt.jp .ttg:first-of-type{margin-top:4px}
+@media (max-width:1120px){
+  .fit thead{display:none}
+  table.fit,.fit tbody,.fit tr,.fit td{display:block;width:100%}
+  .fit tr{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--bg)}.fit tr.tot{background:var(--soft)}
+  .fit td{display:flex;justify-content:space-between;align-items:baseline;gap:14px;border:0;padding:5px 0;text-align:right!important;width:auto!important;white-space:normal}
+  .fit td::before{content:attr(data-l);color:var(--muted);font-size:12px;flex:none;text-align:left;max-width:58%}
+  .fit td:first-child{display:block;text-align:left!important;font-size:15px;padding-bottom:8px;margin-bottom:4px;border-bottom:1px solid var(--line)}.fit td:first-child::before{content:none}
+}
+
+/* day list: every row on one line (ticket key and number together), never a sideways scroll */
+.dlist{overflow-x:hidden;overflow-y:auto}
+.dtab th,.dtab td{white-space:nowrap;overflow-wrap:normal}
+.dtab td.ttl{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.dtab td:first-child a.link{white-space:nowrap}
+.dtab th.num,.dtab td.num{padding-right:14px}
+@media (max-width:720px){.dtab td,.dtab th{white-space:normal;overflow-wrap:anywhere}.dtab td:first-child a.link{white-space:nowrap}.dtab td.ttl{overflow:visible;text-overflow:clip}}
+
+/* ---------- (i) buttons: one size, centred on the text line, a bigger touch area that is not drawn ---------- */
+.ibtn{position:relative;width:16px;height:16px;min-width:16px;min-height:16px;margin-left:6px;vertical-align:middle;flex:none}
+.ibtn::after{content:"";position:absolute;inset:-9px}
+.fl .ibtn,.cardhead h3 .ibtn,.tk .ibtn,.key .ibtn{vertical-align:middle}
+.key span{display:inline-flex;align-items:center}
+/* table headers: the text ends exactly where the numbers end; the (i) sits in the space kept at the right edge of every numeric column */
+.fit th:nth-child(n+2),.fit td:nth-child(n+2){padding-right:38px}
+.fit th{position:relative}
+.fit th:nth-child(n+2) .ibtn{position:absolute;right:14px;top:50%;margin:0;transform:translateY(-50%)}
+.fit td .ci{display:none}
+.fit td .v{display:inline-block}
+@media (max-width:1000px){
+  .fit th:nth-child(n+2),.fit td:nth-child(n+2){padding-right:0}
+  .fit td{justify-content:flex-start}
+  .fit td::before{max-width:none}
+  .fit td .ci{display:inline-grid;margin:0 0 0 8px;align-self:center}
+  .fit td .v{margin-left:auto;text-align:right}
+  .fit td:first-child{display:block}
+}
+@media (max-width:720px){.key .ibtn,.ibtn{min-width:16px;min-height:16px}}
+
+.gtip.jt{max-height:calc(100vh - 16px);overflow-y:auto;pointer-events:auto}
+.sc .chipc{display:flex;flex-direction:column;justify-content:flex-start}
+.chipc .nh{align-items:center;gap:10px}.chipc .nh b{margin:0}
+@media (max-width:900px){.sc{grid-template-columns:1fr;gap:10px}.or{justify-self:start;padding-left:4px}}
+.startsec{margin-top:40px;margin-bottom:36px}.startsec h3{margin:0 0 16px}
+
+.nw{white-space:nowrap}.fl{white-space:nowrap}
+h2.pgtitle{margin-bottom:14px}
+
+/* ---------- responsive: every table turns into labelled cards on a phone; charts and cards never scroll sideways ---------- */
+.capx th{white-space:normal;vertical-align:bottom;line-height:1.25;height:auto;padding-top:8px;padding-bottom:8px}
+.capx th:nth-child(n+2),.capx td:nth-child(n+2){padding-right:10px}
+.hwt thead th{white-space:nowrap!important}.lim td:first-child{white-space:nowrap}
+@media (max-width:1320px){
+  .mapwrap{overflow:visible}.map{display:none}.mlist{display:block}
+  .mlist .ep{margin:0 0 30px}.mlist .ep>.card{margin-bottom:12px}
+  .mlist .sp{font-size:12px;font-weight:600;color:var(--muted);margin:16px 0 8px}.mlist .cell{margin-left:14px}
+}
+@media (max-width:720px){
+  .sched3{grid-template-columns:1fr}.sched3 .stat b{font-size:20px}
+  .plt thead,.hwt thead{display:none}
+  table.plt,.plt tbody,.plt tr,.plt td,table.hwt,.hwt tbody,.hwt tr,.hwt td{display:block;width:100%}
+  .plt tr,.hwt tr{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--bg)}
+  .plt td,.hwt td{display:flex;justify-content:flex-start;align-items:baseline;gap:14px;border:0;padding:5px 0;text-align:right!important;width:auto!important;white-space:normal}
+  .plt td .v,.hwt td .v{margin-left:auto;text-align:right}
+  .plt td::before,.hwt td::before{content:attr(data-l);color:var(--muted);font-size:12px;flex:none;text-align:left}
+  .plt td:first-child,.hwt td:first-child{display:block;text-align:left!important;font-size:15px;padding-bottom:8px;margin-bottom:4px;border-bottom:1px solid var(--line)}.plt td:first-child::before,.hwt td:first-child::before{content:none}
+  .hwt td{white-space:normal}
+}
+
+/* ---------- day widgets and the Rules view ---------- */
+.dw{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.dwc{border-radius:14px;border:1px solid var(--line);border-left:5px solid var(--blue);padding:16px 20px;background:color-mix(in srgb,var(--blue) 8%,var(--soft))}
+.dwc.cp{border-left-color:var(--green);background:color-mix(in srgb,var(--green) 9%,var(--soft))}
+.dwc .fl{display:block;margin-bottom:4px}.dwc b{display:block;font-size:44px;line-height:1.05;font-weight:600;letter-spacing:-.02em}.dwc.sp b{color:var(--blue)}.dwc.cp b{color:var(--green)}
+.dwc b small{font-size:18px;font-weight:500;color:var(--muted);letter-spacing:0}.dwc em{display:block;font-style:normal;color:var(--muted);font-size:13px;margin-top:6px}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.rc{background:var(--soft);border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:12px;padding:14px 16px;min-width:0}
+.rc h4{margin:0 0 6px;font:600 14px var(--sans)}.rc p{margin:0 0 10px;font-size:13px;line-height:1.45;color:var(--muted)}
+.rc .ttmt td{font-size:12.5px}.rc .ttmt td:first-child{opacity:.75}
+@media (max-width:1100px){.rules{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){.rules{grid-template-columns:1fr}.dwc b{font-size:34px}.dwc{padding:14px 16px}}
+
+/* ---------- visual pass: grey page, white cards for what matters, quiet tinted cards for the rest (clarity, depth, deference) ---------- */
+:root{--page:#f5f5f7;--card:#ffffff;--track:#e8e8ed;--cardShadow:0 1px 2px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.05);--sans:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Inter',system-ui,'Segoe UI',Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0b0b0d;--card:#1c1c1e;--track:#2c2c2e;--cardShadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--page:#0b0b0d;--card:#1c1c1e;--track:#2c2c2e;--cardShadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35)}
+body{background:var(--page);letter-spacing:-.003em;-webkit-font-smoothing:antialiased}
+.panel,.stat,.node,.chipc,.feat>div,.rfcard,.rc,.gcard{background:var(--card);border:1px solid var(--line);box-shadow:var(--cardShadow)}
+.panel{border-radius:16px}.stat{border-radius:16px}
+.panel.term{background:var(--soft);box-shadow:none}.panel .panel,.panel .stat,.panel .rc{box-shadow:none}
+.tabs,.seg{background:var(--track);border-color:transparent}
+.tab[aria-selected=true],.seg button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+select.ctl,.ctl,input.ctl{background-color:var(--card)}.ctl.ro{background-color:var(--soft)}
+.calc{background:var(--soft)}
+.dwc{background:var(--card);box-shadow:var(--cardShadow)}.dwc.sp,.dwc.cp{background:var(--card)}
+.dwc b{font-size:48px}
+.sched3 .s1{background:color-mix(in srgb,var(--blue) 8%,var(--card))}.sched3 .s2{background:color-mix(in srgb,var(--green) 9%,var(--card))}.sched3 .s3{background:color-mix(in srgb,var(--amber) 9%,var(--card))}.sched3 .s4{background:var(--card)}
+.cnt .stat.up{background:color-mix(in srgb,var(--blue) 8%,var(--card))}
+.fit.hd thead th,.fit thead th,.plt thead th,.hwt thead th,.dsum thead th{background:color-mix(in srgb,var(--blue) 7%,var(--card));color:var(--ink);border-bottom-color:var(--lineStrong)}
+.fit thead th:first-child,.plt thead th:first-child,.hwt thead th:first-child{border-radius:10px 0 0 10px}.fit thead th:last-child,.plt thead th:last-child,.hwt thead th:last-child{border-radius:0 10px 10px 0}
+.tag{font-weight:700}
+.pgtitle,h2.pgtitle{font-size:28px;letter-spacing:-.02em;font-weight:700}
+.panel h3,.cardhead h3{font-size:16px;font-weight:650;letter-spacing:-.01em}
+.btn.ghost{background:var(--card)}
+.acc details,.lim{background:var(--card)}
+.dlist{background:var(--card)}
+.dtab tr.dgrp td{background:var(--soft)}
+.gtip{background:color-mix(in srgb,var(--ink) 9%,var(--card));box-shadow:0 12px 36px rgba(0,0,0,.2)}
+@media (max-width:1000px){.fit tr{background:var(--soft)}.fit tr.tot{background:var(--page)}}
+@media (max-width:720px){
+  .tabs{background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--line)}
+  .tab[aria-selected=true]{background:color-mix(in srgb,var(--blue) 12%,transparent);box-shadow:none;color:var(--blue)}
+  .plt tr,.hwt tr{background:var(--soft)}
+}
+
+/* ---------- landing page: soft colour, glass card, a small preview of what is inside ---------- */
+html.locked #gate{position:fixed;inset:0;overflow:auto;padding:0;background:var(--page)}
+.gbg{position:absolute;inset:0;z-index:0;overflow:hidden}.gbg i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;animation:gfloat 14s ease-in-out infinite}
+.gbg .o1{width:520px;height:520px;left:-120px;top:-140px;background:#7c9cff}.gbg .o2{width:460px;height:460px;right:-100px;top:12%;background:#b794f6;animation-delay:-5s}.gbg .o3{width:420px;height:420px;left:30%;bottom:-200px;background:#5ad1c4;animation-delay:-9s}
+@keyframes gfloat{50%{transform:translate(30px,-24px) scale(1.06)}}
+.gwrap{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,430px);gap:72px;align-items:center;width:100%;max-width:1120px;padding:48px 32px}
+.ghero{min-width:0}
+.gbadge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:color-mix(in srgb,var(--card) 70%,transparent);border:1px solid var(--line);font-size:12.5px;font-weight:600;color:var(--muted);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.gbadge i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 22%,transparent)}
+.ghero h2{margin:0 0 14px;font-size:clamp(40px,5.2vw,64px);line-height:1.04;font-weight:750;letter-spacing:-.035em;color:var(--ink)}
+.ghero h2 span{background:linear-gradient(100deg,#0a84ff,#5e5ce6 55%,#bf5af2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gsub2{margin:0 0 28px;max-width:440px;font-size:18px;line-height:1.5;color:var(--muted)}
+.gfeat{list-style:none;margin:0 0 30px;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.gfeat li{display:flex;flex-direction:column;gap:2px;min-width:140px;padding:12px 16px;border-radius:14px;background:color-mix(in srgb,var(--card) 78%,transparent);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.gfeat b{font-size:15px;font-weight:700;color:var(--blue)}.gfeat li:nth-child(2) b{color:var(--green)}.gfeat li:nth-child(3) b{color:#bf5af2}.gfeat span{font-size:12.5px;color:var(--muted)}
+.gprev{max-width:420px;padding:16px 18px;border-radius:18px;background:color-mix(in srgb,var(--card) 80%,transparent);border:1px solid var(--line);box-shadow:var(--cardShadow);color:var(--ink);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.gprev svg{display:block;width:100%;height:auto}.gprev .ga{stroke-dasharray:420;stroke-dashoffset:420;animation:gdraw 2.6s .4s ease-out forwards}.gprev .gd{opacity:0;animation:gpop .4s 2.8s ease-out forwards}
+@keyframes gdraw{to{stroke-dashoffset:0}}@keyframes gpop{to{opacity:1}}
+.gcard{max-width:none;width:100%;padding:40px 36px 30px;border-radius:24px;background:color-mix(in srgb,var(--card) 82%,transparent);border:1px solid color-mix(in srgb,var(--lineStrong) 70%,transparent);box-shadow:0 24px 64px rgba(30,40,90,.18),0 2px 6px rgba(0,0,0,.05);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%)}
+.gmark{width:56px;height:56px;border-radius:16px;background:linear-gradient(145deg,#0a84ff,#5e5ce6);box-shadow:0 10px 24px rgba(10,132,255,.35);margin-bottom:20px}.gmark svg{width:26px;height:26px}
+.gcard h1{font-size:26px;letter-spacing:-.02em}.gcard p{font-size:15px}
+.gpw input{height:50px;border-radius:12px;font-size:16px;background:var(--card)}
+.gsub{height:50px;border-radius:12px;background:linear-gradient(135deg,#0a84ff,#5e5ce6);color:#fff;font-size:16px;box-shadow:0 8px 20px rgba(10,132,255,.32);transition:transform .15s,box-shadow .15s}.gsub:hover{filter:none;transform:translateY(-1px);box-shadow:0 12px 26px rgba(10,132,255,.4)}.gsub:active{transform:none}
+@media (max-width:900px){.gwrap{grid-template-columns:1fr;gap:28px;padding:36px 20px 28px;max-width:520px}.ghero h2{font-size:42px;margin-top:16px}.gsub2{font-size:16px;margin-bottom:18px}.gprev{display:none}.gfeat{gap:8px;margin-bottom:0}.gfeat li{min-width:0;flex:1 1 30%;padding:10px 12px}.gcard{padding:32px 24px 24px}}
+@media (max-width:420px){.gfeat li span{display:none}.gfeat li{flex:1 1 28%;text-align:center}}
+@media (prefers-reduced-motion:reduce){.gbg i,.gprev .ga,.gprev .gd{animation:none}.gprev .ga{stroke-dashoffset:0}.gprev .gd{opacity:1}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gbg i{opacity:.3}:root:not([data-theme="light"]) .gcard{box-shadow:0 24px 64px rgba(0,0,0,.5)}}
+html.locked #gate{min-height:0}
+
+.meter3 .a{background:#5e5ce6}
+
+/* ---------- 17 Nov, round 3: calmer landing page, aligned leave tables, equal chips, better Pull log colours, phone map, tap-the-label ---------- */
+.gbg i{opacity:.35;animation-duration:22s}
+.gprev .ga{stroke-dasharray:420;stroke-dashoffset:420;animation:gloop 7s ease-in-out .4s infinite}
+.gprev .gd{opacity:0;transform-box:fill-box;transform-origin:center;animation:gdot 7s ease-in-out .4s infinite}
+.gprev .gi{stroke-dashoffset:0;animation:gdash 1.6s linear infinite}
+@keyframes gloop{0%{stroke-dashoffset:420}38%,86%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes gdot{0%,36%{opacity:0;transform:scale(.4)}42%{opacity:1;transform:scale(1.35)}48%,86%{opacity:1;transform:scale(1)}100%{opacity:0}}
+@keyframes gdash{to{stroke-dashoffset:-13}}
+@media (prefers-reduced-motion:reduce){.gprev .ga,.gprev .gd,.gprev .gi{animation:none}.gprev .ga{stroke-dashoffset:0;opacity:1}.gprev .gd{opacity:1;transform:none}}
+@media (max-width:900px){.gwrap{padding:32px 20px calc(48px + env(safe-area-inset-bottom,0px))}.ghero h2{margin-top:0}}
+html.locked #gate{padding-bottom:env(safe-area-inset-bottom,0px)}
+.lvg{table-layout:fixed;width:100%}.lvg th,.lvg td{white-space:normal;overflow-wrap:anywhere;padding-right:16px!important}.lvg th:first-child,.lvg td:first-child{width:20%!important}
+.lvg th:nth-child(n+2),.lvg td:nth-child(n+2){text-align:right!important}
+.lvg tbody tr:last-child td{border-bottom:0}
+h4.sub{margin:22px 0 10px;font:600 12px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}.cardhead+h4.sub{margin-top:6px}
+.fit td.vd .v{display:inline-flex;flex-direction:column;align-items:center;gap:4px}.fit td.vd .tag{min-width:124px;text-align:center}.fit td.fg .tag{min-width:136px;text-align:center}
+.fit td .ci{display:none!important}
+.sched3 .stat{border-left-width:0;border-top:4px solid var(--lineStrong);background:var(--card)}
+.sched3 .s1{border-top-color:#5e5ce6;background:var(--card)}.sched3 .s1 .fl{color:#5e5ce6}
+.sched3 .s2{background:linear-gradient(135deg,#0a84ff,#5e5ce6);border-color:transparent;border-top-color:transparent;color:#fff}.sched3 .s2 .fl,.sched3 .s2 small{color:rgba(255,255,255,.82)}.sched3 .s2 b{color:#fff}.sched3 .s2 .ibtn{color:#fff;border-color:rgba(255,255,255,.7)}
+.sched3 .s3{border-top-color:#30a46c;background:var(--card)}.sched3 .s3 .fl{color:#1f8a57}
+.sched3 .s4{border-top-color:var(--faint);background:var(--card)}
+.dwc.sp b{background:linear-gradient(135deg,#0a84ff,#5e5ce6);-webkit-background-clip:text;background-clip:text;color:transparent}.dwc.cp b{background:linear-gradient(135deg,#30a46c,#0ea5a0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.td.up{background:transparent;border:2px solid var(--blue);opacity:1;box-sizing:border-box}.td.nil{background:var(--faint);opacity:.9}
+.mm{display:none}
+.mmtabs{display:flex;gap:2px;padding:4px;background:var(--track);border-radius:12px;margin-bottom:16px}.mmtabs button{flex:1;min-height:44px;font:500 14px var(--sans);border:0;background:transparent;color:var(--muted);border-radius:9px;cursor:pointer}.mmtabs button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.mme{margin:0 0 20px}.mmh,.mms{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;font:inherit;color:inherit;cursor:pointer;box-shadow:var(--cardShadow)}
+.mmh{border-color:var(--epicLine);background:var(--epic)}.mms{border-color:var(--storyLine);background:var(--story)}
+.mmn{flex:none;min-width:30px;height:30px;padding:0 8px;border-radius:15px;display:grid;place-items:center;font:700 13px var(--sans);color:#fff;font-variant-numeric:tabular-nums}.mmn.p{background:var(--epicInk)}.mmn.g{background:var(--storyInk);min-width:38px}
+.mmb{display:flex;flex-direction:column;gap:3px;min-width:0}.mmb b{font:600 14px/1.3 var(--sans)}.mmb small{color:var(--muted);font-size:12px;overflow-wrap:anywhere}.mmt{font-size:12px;color:var(--epicInk);font-weight:600}
+.mmc{position:relative;margin:8px 0 0 15px;padding-left:22px;display:flex;flex-direction:column;gap:8px;border-left:2px solid var(--storyLine)}.mmc.flat{margin:0;padding:0;border:0}
+.mmc>.mms{position:relative}.mmc:not(.flat)>.mms::before{content:"";position:absolute;left:-22px;top:26px;width:20px;border-top:2px solid var(--storyLine)}
+@media (max-width:720px){.mlist{display:none!important}.mm{display:block}}
+@media (max-width:1120px){.fit td[data-tip]::before{text-decoration:underline dotted;text-decoration-color:var(--faint);text-underline-offset:4px}}
+.gtip.sheet{position:fixed;left:8px!important;right:8px;top:auto!important;bottom:calc(78px + env(safe-area-inset-bottom,0px));max-width:none;width:auto;max-height:55vh;overflow-y:auto;border-radius:16px;padding:14px 16px;box-shadow:0 -8px 40px rgba(0,0,0,.25)}
+
+/* ---------- guided tour ---------- */
+.gdo{position:fixed;inset:0;z-index:500}
+.gdh{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px rgba(8,10,22,.6);outline:3px solid #0a84ff;outline-offset:-1px;pointer-events:none;transition:left .25s,top .25s,width .25s,height .25s}
+.gdp{position:fixed;width:min(380px,calc(100vw - 24px));background:var(--card);color:var(--ink);border-radius:18px;padding:18px 18px 14px;box-shadow:0 24px 70px rgba(0,0,0,.4);border:1px solid var(--line)}
+.gdp.mid{left:50%;top:50%;transform:translate(-50%,-50%)}
+.gdn{font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}.gdp h4{margin:0 0 6px;font:700 18px/1.25 var(--sans);letter-spacing:-.01em}.gdp p{margin:0 0 14px;font-size:14px;line-height:1.5;color:var(--muted)}
+.gdd{display:flex;gap:5px;margin-bottom:14px}.gdd i{height:4px;flex:1;border-radius:2px;background:var(--line)}.gdd i.dn{background:color-mix(in srgb,var(--blue) 45%,var(--line))}.gdd i.on{background:linear-gradient(90deg,#0a84ff,#5e5ce6)}
+.gdb{display:flex;align-items:center;gap:8px}.gds{flex:1}.gdb .btn.sm{height:36px}.gdb .btn[disabled]{opacity:.4}
+@media (max-width:720px){.gdp{left:12px!important;right:12px!important;top:auto!important;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:auto;border-radius:20px}.gdp.mid{transform:none;left:12px;top:auto}.gdb .btn.sm{height:44px}.gdb{flex-wrap:wrap}.gds{display:none}.gdb [data-gd=leave]{flex:1 1 100%;order:3}.gdb [data-gd=back],.gdb [data-gd=next]{flex:1}}
+.hr #guidebtn{height:52px;border-radius:12px;padding:0 18px}
+@media (max-width:720px){.hr #guidebtn{flex:none;width:52px;padding:0;justify-content:center;font-size:0;gap:0}.hr #guidebtn svg{width:20px;height:20px}}
+@media (prefers-reduced-motion:reduce){.gdh{transition:none}}
+
+@media (max-width:430px){.rfcard #rfbtn{padding:0 13px;gap:0}.rfcard #rfbtxt{font-size:0}.rfcard{gap:8px;padding-left:12px}.rfv{font-size:13px}.fl{letter-spacing:.05em}}
 </style>
 
 <script>
 (function(){try{if(localStorage.getItem('sd_auth')!=='fa9304349b9d')document.documentElement.classList.add('locked');}catch(e){document.documentElement.classList.add('locked');}})();
 </script>
 <div id="stack" aria-live="polite">
-<div class="rfprog" id="rfprog" hidden><div class="rfph"><div id="rfptxt">Refreshing data from Jira</div><span id="rfpt"></span></div><div class="bar" id="rfpbarwrap" role="progressbar" aria-label="Refresh progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="rfpbar"></i></div><div class="rfps" id="rfps"></div></div>
+<div class="rfprog" id="rfprog" hidden><div class="rfph"><div class="rfw"><svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5v19M3.8 7.2l16.4 9.6M3.8 16.8 20.2 7.2"/></svg><span id="rfptxt">Tinkering</span><span class="dots" aria-hidden="true"></span></div><span id="rfpt"></span></div><div class="bar" id="rfpbarwrap" role="progressbar" aria-label="Refresh progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="rfpbar"></i></div><div class="rfps" id="rfps"></div></div>
   <div id="toasts"></div>
 </div>
 <div id="gate" role="main">
-  <div class="gcard">
-    <div class="gmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7"/></svg></div>
-    <h1>Sprint Dashboard</h1>
-    <p>Sign in with the team password to continue.</p>
-    <form id="gform" autocomplete="off">
-      <label for="gpw">PASSWORD</label>
-      <div class="gpw"><input id="gpw" type="password" autocomplete="current-password" required autofocus><button type="button" id="gshow" aria-label="Show password">Show</button></div>
-      <div class="gerr" id="gerr" role="alert"></div>
-      <button class="gsub" id="gsub" type="submit">Sign in</button>
-    </form>
-    <div class="gfoot">Canary Hiring Technologies · Engineering, India</div>
+  <div class="gbg" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i></div>
+  <div class="gwrap">
+    <section class="ghero">
+      <h2>Your sprint,<br><span>at a glance.</span></h2>
+      <p class="gsub2">Capacity, burndown, leave and the Jira pull, in one place for the whole team.</p>
+      <ul class="gfeat">
+        <li><b>Live</b><span>from Jira, twice a day</span></li>
+        <li><b>Clear</b><span>capacity and pace per person</span></li>
+        <li><b>Honest</b><span>numbers that add up</span></li>
+      </ul>
+      <div class="gprev" aria-hidden="true"><svg viewBox="0 0 360 150" fill="none"><path d="M10 20H350" stroke="currentColor" stroke-opacity=".12"/><path d="M10 70H350" stroke="currentColor" stroke-opacity=".12"/><path d="M10 120H350" stroke="currentColor" stroke-opacity=".12"/><path class="gi" d="M20 24 340 126" stroke="currentColor" stroke-opacity=".45" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/><path class="ga" d="M20 24H90C130 24 150 44 190 62S270 100 300 112" stroke="url(#gg)" stroke-width="4" stroke-linecap="round"/><circle class="gd" cx="300" cy="112" r="6" fill="#0a84ff"/><defs><linearGradient id="gg" x1="20" y1="0" x2="300" y2="0"><stop stop-color="#5e5ce6"/><stop offset="1" stop-color="#0a84ff"/></linearGradient></defs></svg></div>
+    </section>
+    <div class="gcard">
+      <div class="gmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7"/></svg></div>
+      <h1>Sprint Dashboard</h1>
+      <p>Sign in with the team password to continue.</p>
+      <form id="gform" autocomplete="off">
+        <label for="gpw">PASSWORD</label>
+        <div class="gpw"><input id="gpw" type="password" autocomplete="current-password" required autofocus><button type="button" id="gshow" aria-label="Show password">Show</button></div>
+        <div class="gerr" id="gerr" role="alert"></div>
+        <button class="gsub" id="gsub" type="submit">Sign in</button>
+      </form>
+      <div class="gfoot">Canary Hiring Technologies · Engineering, India</div>
+    </div>
   </div>
 </div>
 
 <div class="wrap">
   <div class="top">
     <div class="tabs" role="tablist" id="tabs">
-      <button class="tab" role="tab" data-tab="map" aria-selected="true">Map</button>
-      <button class="tab" role="tab" data-tab="cap" aria-selected="false">Capacity</button>
-      <button class="tab" role="tab" data-tab="bd" aria-selected="false">Burndown</button>
-      <button class="tab" role="tab" data-tab="log" aria-selected="false">Pull log</button>
-      <button class="tab" role="tab" data-tab="who" aria-selected="false">Stakeholders</button>
-      <button class="tab" role="tab" data-tab="how" aria-selected="false">How it works</button>
+      <button class="tab" role="tab" data-tab="map" aria-selected="true"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="tl" data-s="Map">Map</span></button>
+      <button class="tab" role="tab" data-tab="cap" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-7"/></svg><span class="tl" data-s="Capacity">Capacity</span></button>
+      <button class="tab" role="tab" data-tab="bd" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5v14h18"/><path d="m6 9 4 4 3-3 5 5"/></svg><span class="tl" data-s="Burndown">Burndown</span></button>
+      <button class="tab" role="tab" data-tab="leave" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="tl" data-s="Leave">Leave</span></button>
+      <button class="tab" role="tab" data-tab="log" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="tl" data-s="Pull log">Pull log</span></button>
+      <button class="tab" role="tab" data-tab="who" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3 3 0 0 1 0 6M18 14.5c1.8.8 3 2.6 3 5.5"/></svg><span class="tl" data-s="Roles">Stakeholders</span></button>
+      <button class="tab" role="tab" data-tab="how" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></svg><span class="tl" data-s="How">How it works</span></button>
     </div>
     <div class="hr"><div class="rfcard" aria-live="polite">
       <span class="dot" id="rfdot"></span>
       <div><span class="fl">Last refreshed<button class="ibtn" type="button" data-tip="@refresh" aria-label="Refresh limits">i</button></span><div class="rfv" id="rfval">Loading</div></div>
-      <button class="btn" id="rfbtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span id="rfbtxt">Refresh</span></button>
-    </div><button class="btn ghost" id="signout" type="button" title="Sign out of this browser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>Sign out</button></div>
+      <button class="btn" id="rfbtn" type="button" aria-label="Refresh data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg><span id="rfbtxt">Refresh</span></button>
+    </div><button class="btn ghost" id="guidebtn" type="button" title="Take a guided tour of the dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.6 2.2c-.8.4-1.2 1-1.2 1.8"/><path d="M12 17h.01"/></svg>Guide</button><button class="btn ghost" id="signout" type="button" title="Sign out of this browser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>Sign out</button></div>
   </div>
   <div class="bar" id="bar">
     <div class="field" id="fsprint"><span class="fl">Sprint</span>
       <div class="dd"><button class="ctl" id="ddbtn" type="button" aria-haspopup="listbox" aria-expanded="false"><span id="ddlab">Sprint</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4.5 6 8l4-3.5"/></svg></button>
         <div class="ddpop" id="ddpop" hidden><input class="ddsearch" id="ddsearch" placeholder="Search sprint" aria-label="Search sprint" autocomplete="off"><div class="ddlist" id="ddlist"></div><div class="ddact" id="ddact"><button type="button" data-q="all">Select all</button><button type="button" data-q="none">Clear</button></div></div></div></div>
-    <div class="field" id="fasof" hidden><span class="fl">As of<button class="ibtn" id="asinfo" type="button" data-tip="As of is the time of the latest Jira pull. Every figure on this page reflects Jira at that moment, not the current time." aria-label="What does As of mean?">i</button></span><div class="ctl ro" id="asof" role="status" aria-label="Time of the latest Jira pull">Loading</div></div>
+    <div class="field" id="fasof" hidden><span class="fl">As of<button class="ibtn" id="asinfo" type="button" data-tip="Time of the latest Jira pull, not the current time." aria-label="What does As of mean?">i</button></span><div class="ctl ro" id="asof" role="status" aria-label="Time of the latest Jira pull">Loading</div></div>
     <div class="legend" id="legend"><span><i style="background:var(--epicInk)"></i>Epic</span><span><i style="background:var(--storyInk)"></i>User story</span><span><i style="background:var(--taskInk)"></i>Task, opens inside a user story</span></div>
   </div>
   <div class="loaderr" id="loaderr" role="alert" hidden><b>Could not load the dashboard data</b><p>Check your connection, then press Refresh or reload the page.</p><p class="hint">If it keeps happening, the latest scheduled update may have failed. The Pull log shows every update.</p></div>
-  <section id="v-map">    <div class="mapwrap"><div class="map" id="map"></div><div class="mlist" id="mlist"></div></div></section>
+  <section id="v-map">    <div class="mapwrap"><div class="map" id="map"></div><div class="mlist" id="mlist"></div><div class="mm" id="mm"></div></div></section>
   <section id="v-cap" hidden></section>
   <section id="v-bd" hidden></section>
+  <section id="v-leave" hidden></section>
   <section id="v-log" hidden></section>
   <section id="v-who" hidden></section>
   <section id="v-how" hidden></section>
@@ -420,10 +736,10 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 
 <script>
 let D = /*DATA*/{sprints:[],epics:[],stories:[],desc:{}};
-let BD = /*BD*/{}, META = /*META*/null, RUNS = /*RUNS*/[];
+let BD = /*BD*/{}, META = /*META*/null, RUNS = /*RUNS*/[], LEAVE = /*LEAVE*/{};
 const REFRESH_URL = 'https://sprint-dashboard-umber.vercel.app/api/refresh';   // address of the refresh relay (relay/worker.js); it holds the GitHub token, the page holds none
 const SHOW = ['S20', 'S21', 'S22', 'S23', 'S24'];          // sprints offered in the dashboard
-const CAP = 64, WH0 = 11, DH = 8, SCHED_START = '2026-11-13', SLOTS = [[10, 45], [18, 45]];
+const CAP = 64, WH0 = 11, DH = 8, SCHED_START = '2026-11-13', SLOTS = [[10, 50], [18, 50]];
 const TEAM = ['Nikita', 'Sumit', 'Aditi', 'Abhishek', 'Rushikesh', 'Chetan', 'Nitin', 'Rujin'];
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const J = k => 'https://canaryai.atlassian.net/browse/' + k;
@@ -495,6 +811,17 @@ function epicCard(r) {
   return `<button class="card epic" data-e="${esc(r.e.key)}" data-r="${esc(r.e.key)}"><div class="k">${esc(r.e.key)}</div><div class="t">${esc(r.e.title)}</div>
     <div class="m">${who(r.e.a)}${p ? `<span class="pill n" title="Total story points of all the user stories in this epic">${p + (p === 1 ? ' pt' : ' pts')} total</span>` : ''}</div></button>`;
 }
+let mmMode = 'epics';
+function mobileMap(out, win) {
+  const seg = `<div class="mmtabs" role="tablist" aria-label="Show"><button type="button" role="tab" data-mm="epics" aria-selected="${mmMode === 'epics'}">Epics</button><button type="button" role="tab" data-mm="stories" aria-selected="${mmMode === 'stories'}">User stories</button></div>`;
+  const sp = id => (win.find(w => w.id === id) || {}).name || '';
+  const stories = out.flatMap((r, i) => r.st.map(s => ({ s, n: r.e ? i + 1 : null, e: r.e })));
+  const storyBtn = (s, num, tag) => `<button type="button" class="mms" data-s="${esc(s.key)}"><span class="mmn g">${num}</span><span class="mmb"><b>${esc(s.title)}</b><small>${esc(s.key)} · ${esc(sp(s.sprint))} · ${esc(s.a || 'Unassigned')}${s.sp != null ? ' · ' + pts(s) : ''}</small>${tag || ''}</span></button>`;
+  const body = mmMode === 'epics'
+    ? out.map((r, i) => `<section class="mme"><button type="button" class="mmh" ${r.e ? `data-e="${esc(r.e.key)}"` : ''}><span class="mmn p">${i + 1}</span><span class="mmb"><b>${esc(r.e ? r.e.title : 'No epic')}</b><small>${r.e ? esc(r.e.key) + ' · ' + esc(r.e.a || 'Unassigned') : 'User stories without an epic'} · ${r.st.length} user ${r.st.length === 1 ? 'story' : 'stories'}</small></span></button><div class="mmc">${r.st.map((s, j) => storyBtn(s, (i + 1) + '.' + (j + 1))).join('')}</div></section>`).join('')
+    : `<div class="mmc flat">${stories.map((x, j) => storyBtn(x.s, j + 1, `<span class="mmt">${x.e ? 'Epic ' + x.n + ' · ' + esc(x.e.title) : 'No epic'}</span>`)).join('')}</div>`;
+  return seg + body;
+}
 function renderMap() {
   const { win, out } = rowsModel();
   $('#map').style.setProperty('--n', Math.max(1, win.length)); $('#map').style.setProperty('--gap', ({ 1: 150, 2: 110 })[win.length] ? ({ 1: 150, 2: 110 })[win.length] + 'px' : '70px');
@@ -505,6 +832,7 @@ function renderMap() {
     win.forEach((w, c) => h += `<div class="cell" style="grid-row:${i + 2};grid-column:${c + 2}">${r.st.filter(s => s.sprint === w.id).map(storyCard).join('')}</div>`);
   });
   $('#map').innerHTML = h;
+  $('#mm').innerHTML = mobileMap(out, win);
   $('#mlist').innerHTML = out.map(r => `<div class="ep">${epicCard(r)}${win.map(w => { const ss = r.st.filter(s => s.sprint === w.id); return ss.length ? `<div class="sp">${esc(w.name)}</div><div class="cell">${ss.map(storyCard).join('')}</div>` : ''; }).join('')}</div>`).join('');
   requestAnimationFrame(lines);
 }
@@ -526,26 +854,32 @@ function lines() {
 }
 
 /* ---------- capacity ---------- */
+function leaveDaysIn(name, sp) { const b = BD[sp]; if (!b || !b.win) return 0; const wd = workDays(b.win); return new Set((LEAVE[sp] || []).filter(x => x.name === name && wd.includes(x.date) && +x.hours > 0).map(x => x.date)).size; }
+function leaveInSprint(name, sp) {
+  const b = BD[sp]; if (!b || !b.win) return 0; const wd = workDays(b.win), perDay = {};
+  (LEAVE[sp] || []).filter(x => x.name === name && wd.includes(x.date)).forEach(x => { perDay[x.date] = Math.min(DH, (perDay[x.date] || 0) + (+x.hours || 0)); });
+  return Object.values(perDay).reduce((a, h) => a + h, 0);
+}
 function renderCap() {
   const by = {}; D.stories.filter(s => s.sprint === selOne).forEach(s => (s.tasks.length ? s.tasks : [{ a: s.a, h: s.own }]).forEach(t => by[t.a] = (by[t.a] || 0) + (t.h || 0)));
   const names = selOne === 'S24' ? ['Nikita', 'Sumit', 'Aditi', 'Abhishek', 'Rushikesh', 'Nitin'] : TEAM.filter(n => (by[n] || 0) > 0);
-  const rows = names.map(n => ({ n, h: by[n] || 0 }));
+  const rows = names.map(n => { const lv = leaveInSprint(n, selOne); return { n, h: by[n] || 0, lv, cap: CAP - lv }; });
   if (!rows.length) { $('#v-cap').innerHTML = `<div class="empty">No estimated team work recorded for ${esc(spName(selOne))}.</div>`; return; }
-  const top = Math.ceil(Math.max(CAP, ...rows.map(r => r.h)) * 1.1 / 16) * 16, W = 640, H = 330, L = 36, R = 8, Tp = 24, B = 34, ph = H - Tp - B, pw = W - L - R;
-  const y = v => Tp + ph - v / top * ph, gw = pw / rows.length, bw = Math.min(30, gw * .3);
+  const avail = $('#v-cap').clientWidth || 1300, W = Math.max(300, Math.min(760, Math.floor((avail >= 1101 ? (avail - 18) * 5 / 11 : avail) - 36))), top = Math.ceil(Math.max(CAP, ...rows.map(r => r.h)) * 1.1 / 16) * 16, H = W < 560 ? 330 : 330, L = 36, R = 8, Tp = 24, B = W < 560 ? 70 : 34, ph = H - Tp - B, pw = W - L - R;
+  const y = v => Tp + ph - v / top * ph, gw = pw / rows.length, bw = Math.min(30, gw * (W < 560 ? .26 : .3));
   let g = ''; for (let v = 0; v <= top; v += top / 4) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${Math.round(v)}</text>`;
   rows.forEach((r, i) => { const cx = L + gw * i + gw / 2;
-    g += `<rect x="${cx - bw - 2}" y="${y(CAP)}" width="${bw}" height="${y(0) - y(CAP)}" rx="4" fill="var(--green)"/><text x="${cx - bw / 2 - 2}" y="${y(CAP) - 6}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${CAP}</text>
+    g += `<rect x="${cx - bw - 2}" y="${y(r.cap)}" width="${bw}" height="${y(0) - y(r.cap)}" rx="4" fill="var(--green)"/><text x="${cx - bw / 2 - 2}" y="${y(r.cap) - 6}" text-anchor="middle" font-size="${W < 560 ? 10.5 : 12}" font-weight="600" fill="var(--ink)">${f1(r.cap)}</text>
       <rect x="${cx + 2}" y="${y(r.h)}" width="${bw}" height="${Math.max(0, y(0) - y(r.h))}" rx="4" fill="var(--blue)"/>
-      <text x="${cx + 2 + bw / 2}" y="${y(r.h) - 6}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${f1(r.h)}</text>
-      <text x="${cx}" y="${H - 10}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${esc(r.n)}</text>`; });
-  const tot = rows.reduce((a, r) => a + r.h, 0), tc = CAP * rows.length;
+      <text x="${cx + 2 + bw / 2}" y="${y(r.h) - 6}" text-anchor="middle" font-size="${W < 560 ? 10.5 : 12}" font-weight="600" fill="var(--ink)">${f1(r.h)}</text>
+      ${W < 560 ? `<text transform="translate(${cx + 6} ${Tp + ph + 16}) rotate(-35)" text-anchor="end" font-size="12" font-weight="600" fill="var(--ink)">${esc(r.n)}</text>` : `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${esc(r.n)}</text>`}`; });
+  const tot = rows.reduce((a, r) => a + r.h, 0), tc = rows.reduce((a, r) => a + r.cap, 0), tl = rows.reduce((a, r) => a + r.lv, 0);
   $('#v-cap').innerHTML = `<div class="capgrid"><div class="panel capl">
-    <div class="key keytop"><span><i style="background:var(--blue)"></i>Original estimate</span><span><i style="background:var(--green)"></i>Capacity: ${CAP} h per person (8 days × 8 hours)</span></div>
+    <div class="key keytop"><span><i style="background:var(--blue)"></i>Original estimate</span><span><i style="background:var(--green)"></i>Capacity: ${CAP} h per person, less leave</span></div>
     <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Original estimate and capacity per person">${g}</svg></div>
-    <div class="panel capr"><div class="scroll"><table><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Capacity (h)</th><th>Over (+) / under (−) (h)</th></tr></thead><tbody>
-    ${rows.map(r => `<tr><td><b>${esc(r.n)}</b></td><td>${f1(r.h)}</td><td>${CAP}</td><td><b>${sg(r.h - CAP)}</b></td></tr>`).join('')}
-    <tr class="tot"><td>Team</td><td>${f1(tot)}</td><td>${f1(tc)}</td><td>${sg(tot - tc)}</td></tr></tbody></table></div></div></div>`;
+    <div class="panel capr"><div><table class="fit capx"><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Leave (h)</th><th>Capacity (h)</th><th>Over (+) / under (−) (h)</th></tr></thead><tbody>
+    ${rows.map(r => `<tr><td><b>${esc(r.n)}</b></td><td data-l="Original estimate (h)">${f1(r.h)}</td><td data-l="Leave (h)">${f1(r.lv)}</td><td data-l="Capacity (h)">${f1(r.cap)}</td><td data-l="Over (+) / under (−) (h)"><b>${sg(r.h - r.cap)}</b></td></tr>`).join('')}
+    <tr class="tot"><td>Team</td><td data-l="Original estimate (h)">${f1(tot)}</td><td data-l="Leave (h)">${f1(tl)}</td><td data-l="Capacity (h)">${f1(tc)}</td><td data-l="Over (+) / under (−) (h)">${sg(tot - tc)}</td></tr></tbody></table></div></div></div>`;
 }
 
 /* ---------- burndown ---------- */
@@ -561,81 +895,102 @@ const asOfIST = () => new Date(asOfMs() + 5.5 * 3600e3).toISOString().slice(0, 1
 function workDays(w) { const a = []; for (let ms = dUTC(w[0]); ms <= dUTC(w[1]); ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) a.push(dStr(ms)); } return a; }
 function sprintDays(s) { const a = []; for (let ms = dUTC(s.start && s.start < s.win[0] ? s.start : s.win[0]); a.length < 10; ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) a.push(dStr(ms)); } return a; }   // a sprint has 10 working days
 function elapsed(days, at) { const d = at.slice(0, 10), hh = +at.slice(11, 13) + (+at.slice(14, 16)) / 60; let e = 0; days.forEach(x => { if (x < d) e += DH; else if (x === d) e += Math.max(0, Math.min(DH, hh - WH0)); }); return e; }
-function person(name, p, days, at, today) {
-  const tot = days.length * DH, el = elapsed(days, at), ad = at.slice(0, 10), bn = p.burn || p.logs;
+function leaveFor(name) { return (LEAVE[selOne] || []).filter(x => x.name === name); }
+function person(name, p, days, at, today, leave) {
+  const tot = days.length * DH, el = elapsed(days, at), ad = at.slice(0, 10), bn = p.burn || p.logs, k = CAP / tot;
+  const lv = {}; (leave || []).forEach(x => { if (days.includes(x.date)) lv[x.date] = Math.min(DH, (lv[x.date] || 0) + (+x.hours || 0)); });   // hours of leave per working day
+  const avail = days.map(d => Math.max(0, DH - (lv[d] || 0)) * k), capP = avail.reduce((a, b) => a + b, 0), leaveH = Object.values(lv).reduce((a, b) => a + b, 0);
+  const usedAt = h => { let u = 0, rest = Math.max(0, h); for (let i = 0; i < avail.length && rest > 1e-9; i++) { const t = Math.min(DH, rest); u += avail[i] * t / DH; rest -= t; } return u; };   // capacity hours passed after h working hours
   const ent = Object.entries(p.logs).filter(([d]) => d <= ad), logged = ent.reduce((a, [, h]) => a + h, 0);
   const be = Object.entries(bn).filter(([d]) => d <= ad).sort(), burned = be.reduce((a, [, h]) => a + h, 0);
   let cum = be.filter(([d]) => d < days[0]).reduce((a, [, h]) => a + h, 0); const pts = [[0, Math.max(0, p.E - cum)]];
   days.forEach((d, i) => { if (d > ad) return; cum += be.filter(([x]) => x > (days[i - 1] || '0000') && x <= d && x >= days[0]).reduce((a, [, h]) => a + h, 0); pts.push([d === ad ? el : (i + 1) * DH, Math.max(0, p.E - cum)]); });
-  const exp = CAP * el / tot, miss = Math.max(0, exp - logged), remain = Math.max(0, p.E - burned), over = Math.max(0, logged - burned), left = CAP * (tot - el) / tot, late = (today || ad) > days[days.length - 1];
+  const used = usedAt(el), exp = capP > 0 ? p.E * used / capP : 0, miss = Math.max(0, exp - logged),   // expected log = (original estimate / capacity days) x capacity days passed; leave days are not capacity days
+    dayH = CAP / days.length, capDays = capP / dayH, daysPassed = used / dayH, dailyT = capDays > 0 ? p.E / capDays : 0, remain = Math.max(0, p.E - burned), over = Math.max(0, logged - burned), left = Math.max(0, capP - used), late = (today || ad) > days[days.length - 1];
   let st = 'On track', cl = 'ok';
-  if (el <= 0) st = 'Not started'; else if (miss > 8) { st = 'Time log missing'; cl = 'bad'; } else if (miss > 2) { st = 'Behind on logging'; cl = 'warn'; }
-  if (el > 0 && remain > left + .05 && !late && cl === 'ok') { st = 'Cannot finish in time'; cl = 'warn'; }
-  return { name, E: p.E, logged, remain, over, exp, miss, left, pts, tot, el, st, cl };
+  if (el <= 0) st = 'Not started'; else if (miss > 8) { st = 'Time log missing'; cl = 'bad'; } else if (miss > .05) { st = 'Behind on logging'; cl = 'warn'; }
+  const gap = remain - left; let vd, vc;   // the verdict compares the work still to do with the working time still to come
+  if (late) { vd = remain > .05 ? 'Not completed' : 'Completed'; vc = remain > .05 ? 'bad' : 'ok'; } else { vd = gap > .05 ? 'Not achievable' : 'Achievable'; vc = gap > .05 ? 'bad' : 'ok'; }
+  return { name, E: p.E, logged, remain, over, exp, miss, left, pts, tot, el, st, cl, vd, vc, gap, capP, used, leaveH, lv, usedAt, capDays, daysPassed, dailyT };
 }
+let CHW = 1000;   // width of the chart area in pixels, measured when the page is drawn
+const chartW = (el, pad) => Math.max(300, Math.min(1000, Math.floor((el.clientWidth || 1000) - pad)));
 let BDV = null, bdDay = null, bdTab = 'today';   // chart data for the hover, the day that is pinned, the tab of the day panel
 function lineChart(rs, ctx) {
-  const { sd, plan, wd, s, tasks, stories, epics, el, tot, ad } = ctx, retro = hasRetro(s, sd), slots = sd.length + (retro ? 1 : 0);
-  const sumE = rs.reduce((a, r) => a + r.E, 0), W = 1000, H = 330, L = 60, R = 16, Tp = 16, B = 76, pw = W - L - R, ph = H - Tp - B, top = Math.max(16, Math.ceil(sumE / 16) * 16);
+  const { sd, plan, wd, s, tasks, stories, epics, el, tot, ad, at, late } = ctx, retro = hasRetro(s, sd), slots = sd.length + (retro ? 1 : 0);
+  const W = CHW, nw = W < 560, fs = nw ? 13 : 11, sumE = rs.reduce((a, r) => a + r.E, 0), H = nw ? 300 : 330, L = nw ? 44 : 60, R = nw ? 12 : 16, Tp = 16, B = nw ? 52 : 76, pw = W - L - R, ph = H - Tp - B, top = Math.max(16, Math.ceil(sumE / 16) * 16);
   const X = k => L + k / slots * pw, Y = v => Tp + ph - v / top * ph;
+  const idealAt = h => rs.reduce((a, r) => a + (r.capP > 0 ? r.E * Math.max(0, 1 - r.usedAt(h) / r.capP) : r.E), 0);   // the estimate burns evenly over each person's capacity days; the estimate itself never changes with leave
   const xs = [...new Set(rs.flatMap(r => r.pts.map(p => p[0])))].sort((a, b) => a - b);
   const remAt = h => rs.reduce((a, r) => { const p = r.pts.filter(q => q[0] <= h + 1e-9).pop(); return a + (p ? p[1] : r.E); }, 0);
   const act = xs.map(x => [plan + x / DH, remAt(x)]);
   let g = '';
-  const band = (a, b, label) => `<rect x="${X(a)}" y="${Tp}" width="${X(b) - X(a)}" height="${ph}" fill="var(--line)" opacity=".55"/><text x="${(X(a) + X(b)) / 2}" y="${Tp + ph - 10}" text-anchor="middle" font-size="11" fill="var(--muted)">${label}</text>`;
+  const band = (a, b, label) => `<rect x="${X(a)}" y="${Tp}" width="${X(b) - X(a)}" height="${ph}" fill="var(--line)" opacity=".55"/><text x="${(X(a) + X(b)) / 2}" y="${Tp + ph - 10}" text-anchor="middle" font-size="${fs}" fill="var(--muted)">${nw ? label.replace('Sprint ', '').replace('Retrospective', 'Retro') : label}</text>`;
   if (plan) g += band(0, plan, 'Sprint Planning');
   if (retro) g += band(sd.length, slots, 'Retrospective');
-  for (let i = 0; i <= 4; i++) { const v = top / 4 * i; g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${Math.round(v)}</text>`; }
+  for (let i = 0; i <= 4; i++) { const v = top / 4 * i; g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="${fs}" fill="var(--muted)">${Math.round(v)}</text>`; }
   for (let i = 0; i < slots; i++) { const d = i < sd.length ? sd[i] : s.end, end = i >= sd.length;
-    g += `<text x="${X(i + .5)}" y="${Tp + ph + 18}" text-anchor="middle" font-size="11" fill="var(--ink)" font-weight="600">${dayName(d)}</text><text x="${X(i + .5)}" y="${Tp + ph + 33}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(fmtD(d))}</text><text x="${X(i + .5)}" y="${Tp + ph + 48}" text-anchor="middle" font-size="10" fill="var(--faint)">${end ? 'Retro' : 'Day ' + (i + 1)}</text>`; }
-  g += `<text x="${L + pw / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--muted)" letter-spacing=".06em">SPRINT DAY</text><text transform="translate(14 ${Tp + ph / 2}) rotate(-90)" text-anchor="middle" font-size="11" fill="var(--muted)" letter-spacing=".06em">REMAINING ESTIMATE (HOURS)</text>`;
-  g += `<polyline points="${X(0)},${Y(sumE)} ${X(plan)},${Y(sumE)} ${X(sd.length)},${Y(0)}" fill="none" stroke="var(--faint)" stroke-width="2" stroke-dasharray="6 5"/>`;
-  const line = [[0, act[0] ? act[0][1] : sumE]].concat(act);
-  g += `<polyline points="${line.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>` + act.map(p => `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="4" fill="var(--blue)"/>`).join('');
-  g += `<line id="guide" x1="0" x2="0" y1="${Tp}" y2="${Tp + ph}" stroke="var(--ink)" stroke-opacity=".35" visibility="hidden"/>`;
+    g += `<text x="${X(i + .5)}" y="${Tp + ph + 18}" text-anchor="middle" font-size="${fs}" fill="var(--ink)" font-weight="600">${nw ? dayName(d).slice(0, 1) : dayName(d)}</text><text x="${X(i + .5)}" y="${Tp + ph + 18 + fs + 5}" text-anchor="middle" font-size="${fs}" fill="var(--muted)">${nw ? new Date(dUTC(d)).getUTCDate() : esc(fmtD(d))}</text>${nw ? '' : `<text x="${X(i + .5)}" y="${Tp + ph + 48}" text-anchor="middle" font-size="10" fill="var(--faint)">${end ? 'Retro' : 'Day ' + (i + 1)}</text>`}`; }
+  if (!nw) g += `<text x="${L + pw / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="var(--muted)" letter-spacing=".06em">SPRINT DAY</text><text transform="translate(14 ${Tp + ph / 2}) rotate(-90)" text-anchor="middle" font-size="11" fill="var(--muted)" letter-spacing=".06em">REMAINING ESTIMATE (HOURS)</text>`;
+  const ip = [[0, sumE], [plan, sumE]].concat(wd.map((_, j) => [plan + j + 1, idealAt((j + 1) * DH)]));
+  g += `<polyline id="idealline" points="${ip.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="none" stroke="var(--faint)" stroke-width="2" stroke-dasharray="6 5"/>`;
+  const line = [[0, act[0] ? act[0][1] : sumE]].concat(act), last = act[act.length - 1] || [plan, sumE];
+  g += `<polyline id="actline" points="${line.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const nx = X(last[0]), nl = (late ? 'End' : 'Now') + ' · ' + f1(last[1]) + ' h';   // one marker only, where the line ends: the latest Jira pull
+  g += `<circle id="nowdot" cx="${nx}" cy="${Y(last[1])}" r="5" fill="var(--blue)" stroke="var(--bg)" stroke-width="2"/><text id="nowlbl" x="${nx + (nx > W - 150 ? -12 : 10)}" y="${Y(last[1]) + (nx > W - 150 ? 26 : -10)}" text-anchor="${nx > W - 150 ? 'end' : 'start'}" font-size="${nw ? 14 : 12}" font-weight="700" fill="var(--blue)" stroke="var(--bg)" stroke-width="3" paint-order="stroke">${nl}</text>`;
+  g += `<rect id="guide" x="0" y="${Tp}" width="0" height="${ph}" fill="var(--ink)" opacity=".06" visibility="hidden"/>`;
   const days = []; for (let i = 0; i < slots; i++) {
-    const d = i < sd.length ? sd[i] : s.end, future = d > ad, n = i - plan + 1, h = i < plan ? 0 : Math.min(Math.max(0, n) * DH, el), idealH = i < plan ? 0 : Math.min(n * DH, tot);
-    days.push({ d, i, end: i >= sd.length, future, total: sumE, rem: remAt(h), ideal: sumE * (1 - idealH / tot), burn: sumE * idealH / tot, wdn: i < plan ? 0 : Math.min(n, wd.length), nwd: wd.length });
+    const d = i < sd.length ? sd[i] : s.end, future = d > ad, n = i - plan + 1, h = i < plan ? 0 : Math.min(Math.max(0, n) * DH, el);
+    const partial = d === ad && i >= plan && h < Math.min(n * DH, tot) - 1e-9, rem = remAt(h), id = idealAt(h), hx = i < plan ? i + 1 : plan + h / DH;
+    days.push({ d, i, end: i >= sd.length, future, partial, atTxt: partial ? hmText(at) : '', total: sumE, rem, ideal: id, px: X(hx), py: Y(rem), pi: Y(id), wdn: i < plan ? 0 : Math.min(n, wd.length), nwd: wd.length });
   }
   BDV = { days, L, pw, W, slots, tasks, stories, epics };
   return `<div class="cw" id="cw"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Burndown: remaining estimate by sprint day. Hover a day for a summary, click it to list the tickets.">${g}</svg><div class="tip" id="tip" hidden></div></div>`;
 }
+const hmText = at => { const h = +at.slice(11, 13), m = at.slice(14, 16); return (h % 12 || 12) + ':' + m + ' ' + (h < 12 ? 'AM' : 'PM'); };
 const finishedBy = (r, d) => r.d && r.d <= d;
 function dayCounts(x) {
   const T_ = BDV.tasks, S_ = BDV.stories, E_ = BDV.epics, one = (L, d) => ({ today: L.filter(r => r.d === d).length, closed: L.filter(r => finishedBy(r, d)).length, total: L.length });
   return { tasks: one(T_, x.d), stories: one(S_, x.d), epics: one(E_, x.d) };
 }
-const dayHead = x => `${dayName(x.d)} ${fmtD(x.d)} · ${x.end ? 'Sprint retrospective' : 'Day ' + (x.i + 1) + ' of 10'}`;
-const workDayLine = x => x.end ? '' : (x.wdn ? `Working day ${x.wdn} of ${x.nwd}` : 'Sprint Planning, no capacity counted');
+const dayHead = x => `${dayName(x.d)} ${fmtD(x.d)}, ${x.end ? 'Sprint retrospective' : 'Sprint day ' + (x.i + 1) + ' of 10'}`;
+const touchOnly = () => window.matchMedia('(hover: none)').matches;
 function tipHtml(x) {
-  const date = `${dayName(x.d)} ${fmtD(x.d)}`, badges = x.end ? '<span class="bdg">Retrospective</span>' : `<span class="bdg">Day ${x.i + 1} of 10</span>${x.wdn ? `<span class="bdg blue">Working day ${x.wdn} of ${x.nwd}</span>` : '<span class="bdg">Sprint Planning</span>'}`;
-  const head = `<div class="tph"><div class="tpd">${esc(date)}</div><div class="tpb">${badges}</div></div>`;
-  if (x.future) return head + `<p class="tpn">Not happened yet.</p>`;
-  const c = dayCounts(x), done = Math.max(0, x.total - x.rem), diff = done - x.burn;
-  const pill = !x.wdn ? '' : Math.abs(diff) < .05 ? '<span class="pill2 ok">On ideal pace</span>' : diff > 0 ? `<span class="pill2 ok">${f1(diff)} h ahead</span>` : `<span class="pill2 bad">${f1(-diff)} h behind</span>`;
-  const how = x.wdn ? `${f1(x.total)} h × ${x.wdn} / ${x.nwd}` : 'Planning, no capacity';
+  const dl = x.end ? 'Sprint retrospective' : `Sprint day ${x.i + 1} of 10`, wk = x.end ? '' : x.wdn ? `Working day ${x.wdn} of ${x.nwd}` : 'Sprint Planning, no capacity counted';
+  const head = `<div class="tph"><div class="tpd">${esc(dayName(x.d) + ' ' + fmtD(x.d))}</div><div class="tpl">${dl}</div>${wk ? `<div class="tpl">${wk}</div>` : ''}</div>`;
+  if (x.future) return head + `<p class="tpn">This day has not happened yet.</p>`;
+  const c = dayCounts(x), diff = x.ideal - x.rem;
+  let verdict;
+  if (!x.wdn && !x.end) verdict = `<p class="tpx">Sprint Planning days carry no capacity, so there is no ideal pace to compare with.</p>`;
+  else if (Math.abs(diff) < .05) verdict = `<div class="tpv ok"><b>On ideal pace</b></div>`;
+  else if (diff > 0) verdict = `<div class="tpv ok"><b>${f1(diff)} h ahead</b> of the ideal pace</div><p class="tpx">The work left is ${f1(diff)} h lower than the ideal pace line.</p>`;
+  else verdict = `<div class="tpv bad"><b>${f1(-diff)} h behind</b> the ideal pace</div><p class="tpx">The work left is ${f1(-diff)} h higher than the ideal pace line.</p>`;
   const tr = (l, o) => `<tr><td>${l}</td><td>${o.today}</td><td>${o.closed} of ${o.total}</td><td>${o.total - o.closed}</td></tr>`;
-  return head + `<div class="tps"><div class="tpt"><span>Hours</span>${pill}</div>
-      <table class="mt"><thead><tr><th></th><th>Done</th><th>Remaining</th></tr></thead><tbody><tr><td>Ideal pace<small>${esc(how)}</small></td><td>${f1(x.burn)} h</td><td>${f1(x.ideal)} h</td></tr><tr><td>Actual</td><td>${f1(done)} h</td><td>${f1(x.rem)} h</td></tr></tbody></table></div>
-    <div class="tps"><div class="tpt"><span>Tickets</span></div>
-      <table class="mt"><thead><tr><th></th><th>Closed today</th><th>Closed so far</th><th>Open</th></tr></thead><tbody>${tr('Epics', c.epics)}${tr('User stories', c.stories)}${tr('Tasks', c.tasks)}</tbody></table></div>
+  return head + verdict + `<div class="tps"><div class="tpt">Work left${x.partial ? ' · as of ' + esc(x.atTxt) + ' IST' : ''}</div>
+      <table class="mt"><tbody><tr><td><i class="ln d"></i>Ideal pace<small>work that should be left</small></td><td>${f1(x.ideal)} h</td></tr><tr><td><i class="ln b"></i>Remaining estimate<small>work actually left</small></td><td>${f1(x.rem)} h</td></tr></tbody></table></div>
+    <div class="tps"><div class="tpt">Tickets closed</div>
+      <table class="mt"><thead><tr><th></th><th>On this day</th><th>Up to this day</th><th>Still open</th></tr></thead><tbody>${tr('Epics', c.epics)}${tr('User stories', c.stories)}${tr('Sub-tasks', c.tasks)}</tbody></table></div>
     <div class="tf">Click the day for the ticket list</div>`;
 }
 function slotAt(ev) {
   const cw = $('#cw'); if (!cw || !BDV) return null; const r = cw.querySelector('svg').getBoundingClientRect();
   const vx = (ev.clientX - r.left) / r.width * BDV.W, k = Math.floor((vx - BDV.L) / BDV.pw * BDV.slots); return { k, r };
 }
-function setGuide(k, show) { const gd = $('#guide'); if (!gd || !BDV) return; const cx = BDV.L + (k + .5) / BDV.slots * BDV.pw; gd.setAttribute('x1', cx); gd.setAttribute('x2', cx); gd.setAttribute('visibility', show ? 'visible' : 'hidden'); }
+function setGuide(k, show) {
+  const gd = $('#guide'); if (!gd || !BDV) return; if (!BDV.days[k]) return;
+  gd.setAttribute('x', BDV.L + k / BDV.slots * BDV.pw); gd.setAttribute('width', BDV.pw / BDV.slots); gd.setAttribute('visibility', show ? 'visible' : 'hidden');
+}
 function hideBdTip() { const t = $('#tip'); if (t) t.hidden = true; if (BDV) setGuide(bdDay == null ? 0 : bdDay, bdDay != null); }
 function hoverBd(ev) {
   const s = slotAt(ev); if (!s) return; const tip = $('#tip');
   if (s.k < 0 || s.k >= BDV.slots) { tip.hidden = true; setGuide(bdDay == null ? 0 : bdDay, bdDay != null); return; }
   const x = BDV.days[s.k]; tip.innerHTML = tipHtml(x); tip.hidden = false; setGuide(s.k, true);
-  const cx = BDV.L + (s.k + .5) / BDV.slots * BDV.pw, px = cx / BDV.W * s.r.width, tw = tip.offsetWidth;
-  tip.style.left = Math.max(4, Math.min(s.r.width - tw - 4, px + 14 > s.r.width - tw ? px - tw - 14 : px + 14)) + 'px'; tip.style.top = '24px';
+  const sc = s.r.width / BDV.W, bl = (BDV.L + s.k / BDV.slots * BDV.pw) * sc, br = (BDV.L + (s.k + 1) / BDV.slots * BDV.pw) * sc, tw = tip.offsetWidth, gap = 18;   // the card sits beside the shaded day with a gap, so both stay visible
+  const room = s.r.width, right = br + gap, left = bl - gap - tw;
+  tip.style.left = Math.max(4, Math.min(room - tw - 4, right + tw <= room - 4 ? right : left >= 4 ? left : (room - br > bl ? right : left))) + 'px'; tip.style.top = '8px';
 }
 function dayRows(x, which) {
-  const row = (r, kind) => { const k = TK[r.k] || {}; return { key: r.k, kind, ty: kind === 'Task' ? (r.ty || 'Task') : kind === 'Story' ? 'Story' : 'Epic', t: k.t || r.k, a: r.a || k.a || 'Unassigned', s: k.s || '–', h: kind === 'Task' ? (k.h != null ? k.h : null) : null, d: r.d }; };
+  const row = (r, kind) => { const k = TK[r.k] || {}; return { key: r.k, kind, ty: kind === 'Task' ? (r.ty || 'Sub-task') : kind === 'Story' ? 'User story' : 'Epic', t: k.t || r.k, a: r.a || k.a || 'Unassigned', s: k.s || '–', h: kind === 'Task' ? (k.h != null ? k.h : null) : null, d: r.d }; };
   const all = BDV.tasks.map(r => row(r, 'Task')).concat(BDV.stories.map(r => row(r, 'Story'))).concat(BDV.epics.map(r => row(r, 'Epic')));
   const f = which === 'today' ? r => r.d === x.d : which === 'closed' ? r => r.d && r.d <= x.d : r => !(r.d && r.d <= x.d);
   const rank = { Epic: 0, Story: 1, Task: 2 };
@@ -645,13 +1000,15 @@ function renderDay() {
   const box = $('#dayd'); if (!box) return; if (bdDay == null || !BDV || !BDV.days[bdDay]) { box.hidden = true; box.innerHTML = ''; return; }
   const x = BDV.days[bdDay]; box.hidden = false;
   const hd = `<div class="dh"><h3>${esc(dayHead(x))}${tip('closed')}</h3><button type="button" class="dx" data-dayclose>Close</button></div>`;
-  if (x.future) { box.innerHTML = hd + `<p class="note" style="margin:0">Not happened yet.</p>`; return; }
-  const tabs = [['today', 'Closed this day'], ['closed', 'Closed so far'], ['open', 'Still open']], rows = dayRows(x, bdTab), n = w => dayRows(x, w).length;
-  const seg = ([k, label]) => { const rs2 = rows.filter(r => r.kind === k), hsum = rs2.reduce((a, r) => a + (r.h || 0), 0), isT = k === 'Task';
-    const th = `<tr><th>Ticket</th><th>Title</th><th>${lab('Type', 'type')}</th><th>Owner</th><th>${lab('Status', 'jira')}</th><th>Estimate (h)</th></tr>`;
-    const tb = rs2.map(r => `<tr><td><a class="link" target="_blank" rel="noopener" href="${J(r.key)}">${esc(r.key)}</a></td><td class="ttl">${esc(r.t)}</td><td>${esc(r.ty)}</td><td>${esc(r.a)}</td><td>${esc(r.s)}</td><td>${isT && r.h != null ? f1(r.h) : '–'}</td></tr>`).join('');
-    return `<div class="dseg"><div class="dsh"><b>${label}</b><span class="dn">${rs2.length}</span>${isT && hsum ? `<span class="dhh">${f1(hsum)} h original estimate</span>` : ''}</div>${rs2.length ? `<div class="dlist"><table><thead>${th}</thead><tbody>${tb}</tbody></table></div>` : '<div class="dnone">None</div>'}</div>`; };
-  box.innerHTML = hd + `<div class="dtabs" role="tablist">${tabs.map(([w, l]) => `<button type="button" role="tab" data-dtab="${w}" aria-selected="${w === bdTab}">${l} <b>${n(w)}</b></button>`).join('')}</div>${[['Epic', 'Epics'], ['Story', 'User stories'], ['Task', 'Tasks']].map(seg).join('')}`;
+  if (x.future) { box.innerHTML = hd + `<p class="note" style="margin:0">This day has not happened yet.</p>`; return; }
+  const c = dayCounts(x), tabs = [['today', 'Closed on this day'], ['closed', 'Closed up to this day'], ['open', 'Still open']], rows = dayRows(x, bdTab);
+  const sum = `<table class="dsum"><thead><tr><th></th><th>Closed on this day</th><th>Closed up to this day</th><th>Still open</th></tr></thead><tbody>${[['Epics', c.epics], ['User stories', c.stories], ['Sub-tasks', c.tasks]].map(([l, o]) => `<tr><td>${l}</td><td>${o.today}</td><td>${o.closed} of ${o.total}</td><td>${o.total - o.closed}</td></tr>`).join('')}</tbody></table>`;
+  const th = `<tr><th>Ticket</th><th>Title</th><th>${lab('Type', 'type')}</th><th>Owner</th><th>${lab('Status', 'jira')}</th><th class="num">Original estimate (h)</th></tr>`;
+  const tr = r => `<tr><td><a class="link" target="_blank" rel="noopener" href="${J(r.key)}">${esc(r.key)}</a></td><td class="ttl" title="${esc(r.t)}">${esc(r.t)}</td><td data-l="Type">${esc(r.ty)}</td><td data-l="Owner">${esc(r.a)}</td><td data-l="Status">${esc(r.s)}</td><td class="num" data-l="Original estimate (h)">${r.kind === 'Task' && r.h != null ? f1(r.h) : '–'}</td></tr>`;
+  const body = [['Epic', 'Epics'], ['Story', 'User stories'], ['Task', 'Sub-tasks']].map(([k, label]) => { const rs2 = rows.filter(r => r.kind === k), hs = rs2.reduce((a, r) => a + (r.h || 0), 0);
+    return `<tr class="dgrp"><td colspan="5"><b>${label}</b><span class="gn">${rs2.length}</span></td><td class="num">${k === 'Task' ? f1(hs) : ''}</td></tr>` + (rs2.length ? rs2.map(tr).join('') : `<tr class="rnone"><td colspan="6">None</td></tr>`); }).join('');
+  const lead = touchOnly() ? `<div class="tipin">${tipHtml(x).replace('<div class="tf">Click the day for the ticket list</div>', '')}</div>` : '';
+  box.innerHTML = hd + lead + sum + `<div class="dtabs" role="tablist">${tabs.map(([w, l]) => `<button type="button" role="tab" data-dtab="${w}" aria-selected="${w === bdTab}">${l}</button>`).join('')}</div><div class="dlist"><table class="dtab"><colgroup><col style="width:116px"><col><col style="width:160px"><col style="width:110px"><col style="width:170px"><col style="width:186px"></colgroup><thead>${th}</thead><tbody>${body}</tbody></table></div>`;
 }
 function pinDay(ev) {
   const s = slotAt(ev); if (!s || s.k < 0 || s.k >= BDV.slots) return;
@@ -659,16 +1016,22 @@ function pinDay(ev) {
   if (bdDay != null) $('#dayd').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 function groupBars(rs) {
-  const ser = [['Original estimate', 'E', 'var(--blue)'], ['Logged', 'logged', 'var(--green)'], ['Expected logged by now', 'exp', 'var(--faint)']];
-  const top = Math.max(16, Math.ceil(Math.max(...rs.map(r => Math.max(r.E, r.logged, r.exp))) * 1.15 / 16) * 16), W = 1000, H = 300, L = 44, R = 12, Tp = 24, B = 34, ph = H - Tp - B, pw = W - L - R;
+  const ser = [['Original estimate', 'E', 'var(--blue)'], ['Logged', 'logged', 'var(--green)'], ['Expected log by now', 'exp', 'var(--faint)']];
+  const top = Math.max(16, Math.ceil(Math.max(...rs.map(r => Math.max(r.E, r.logged, r.exp))) * 1.15 / 16) * 16), W = CHW, H = 300, L = 44, R = 12, Tp = 24, B = 34, ph = H - Tp - B, pw = W - L - R;
   const y = v => Tp + ph - v / top * ph, gw = pw / rs.length, bw = Math.min(34, gw / 5);
   let g = ''; for (let i = 0; i <= 4; i++) { const v = top / 4 * i; g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--muted)">${Math.round(v)}</text>`; }
   rs.forEach((r, i) => { const cx = L + gw * i + gw / 2; ser.forEach(([, k, c], j) => { const x = cx + (j - 1) * (bw + 4) - bw / 2, v = r[k];
       g += `<rect x="${x}" y="${y(v)}" width="${bw}" height="${Math.max(0, y(0) - y(v))}" rx="3" fill="${c}"/><text x="${x + bw / 2}" y="${y(v) - 5}" text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)">${f1(v)}</text>`; });
     g += `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${esc(r.name)}</text>`; });
-  return `<div class="key" style="margin-bottom:8px">${ser.map(s => `<span><i style="background:${s[2]}"></i>${s[0]} (h)</span>`).join('')}</div><div class="gb"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Original estimate, logged and expected logged hours per person">${g}</svg></div>`;
+  return `<div class="key" style="margin-bottom:8px">${ser.map(s => `<span><i style="background:${s[2]}"></i>${s[0]} (h)${s[1] === 'exp' ? tip('expected') : ''}</span>`).join('')}</div><div class="gb"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Original estimate, logged and expected log by now, in hours per person">${g}</svg></div>`;
 }
 let bdView = 'overall';
+function dayWidgets(sd, wd, plan, ad) {
+  const sdn = sd.filter(d => d <= ad).length, cdn = wd.filter(d => d <= ad).length, over = ad > sd[sd.length - 1], nm = wd.length, d1 = sd[Math.max(0, Math.min(sd.length, sdn) - 1)];
+  const sprintBig = !sdn ? 'Not started' : over ? 'Complete' : String(sdn), capBig = !sdn ? 'Not started' : over ? 'Complete' : !cdn ? 'Planning' : String(cdn);
+  const sprintSub = !sdn ? '' : over ? '10 of 10' : dayName(d1) + ' ' + fmtD(d1), capSub = !sdn ? '' : over ? nm + ' of ' + nm : !cdn ? 'Sprint Planning, no capacity' : dayName(wd[cdn - 1]) + ' ' + fmtD(wd[cdn - 1]);
+  return `<div class="dw" id="daywidgets"><div class="dwc sp" id="wsprint"><span class="fl">Sprint day${tip('day')}</span><b>${sprintBig}${sdn && !over ? '<small> of 10</small>' : ''}</b><em>${esc(sprintSub)}</em></div><div class="dwc cp" id="wcap"><span class="fl">Capacity day${tip('capday')}</span><b>${capBig}${cdn && !over ? '<small> of ' + nm + '</small>' : ''}</b><em>${esc(capSub)}</em></div></div>`;
+}
 function capBlock(label, sub, used, cap) {
   const pu = cap ? used / cap * 100 : 0, left = cap - used;
   return `<div class="capb"><div class="capt"><b>${esc(label)}</b><span>${esc(sub)}</span></div>
@@ -676,96 +1039,82 @@ function capBlock(label, sub, used, cap) {
     <div class="capl2"><span><i class="u"></i>Used <b>${f1(used)} h</b> (${Math.round(pu)}%)</span><span><i class="l"></i>Left <b>${f1(left)} h</b> (${Math.round(100 - pu)}%)</span><span class="of">of ${f1(cap)} h</span></div></div>`;
 }
 
-/* ---------- logic page: the rules behind every number on the Burndown page, with the live value and a self-check ---------- */
-function logicHtml(s, rs, c) {
-  const { wd, sd, plan, el, tot, ad, at } = c, sum = k => rs.reduce((a, r) => a + r[k], 0), n = rs.length, pk = Object.entries(s.people);
-  const tasks = (s.tasks || []).filter(t => !t.y), au = s.audit || { noEstimate: [], unassigned: [], overrun: [], afterWindow: 0 };
-  const dayNo = sd.filter(d => d <= ad).length, done = Math.max(0, sum('E') - sum('remain'));
-  const rowsT = [
-    ['Original estimate', 'Per person and table', 'Jira original estimate of every task, added up. Tasks are all sub-task types and any Task, Bug or New Feature that has no sub-tasks in the sprint. A story with sub-tasks is skipped, so hours are never counted twice. For a task with hours logged before the sprint start, those hours are taken off, never below 0 h. A task with no assignee is left out and listed under Data checks.', f1(sum('E')) + ' h'],
-    ['Logged', 'Table, Hours by person', 'Jira worklogs, counted for the person who logged them, on the day they were logged. Hours logged before the sprint start belong to the earlier sprint. Hours after the last working day are not counted.', f1(sum('logged')) + ' h'],
-    ['Remaining estimate', 'Table, chart line', 'For each task: original estimate minus hours logged on it, never below 0 h. The results are added up per person. Hours beyond one task\'s estimate never reduce another task.', f1(sum('remain')) + ' h'],
-    ['Over estimate', 'Table', 'Hours logged on a task beyond its own estimate: logged minus the hours that reduced the remaining estimate.', f1(sum('over')) + ' h'],
-    ['Capacity', 'Capacity bars', `${CAP} h per person = ${wd.length} working days × ${DH} h. Sprint Planning days are sprint days with no capacity. Public holidays are not removed.`, f1(n * CAP) + ' h (' + n + ' people)'],
-    ['Time elapsed (bar: Used)', 'Capacity bars', `Capacity × working hours passed / ${f1(tot)} h. A full day counts ${DH} h; today counts the hours between 11:00 and 19:00 IST up to the latest Jira pull. The bar shows time, not logged hours.`, f1(n * CAP * el / tot) + ' h (' + (tot ? Math.round(el / tot * 100) : 0) + '%)'],
-    ['Expected logged by now', 'Table, Hours by person', `Capacity × working hours passed / ${f1(tot)} h, per person.`, f1(sum('exp')) + ' h'],
-    ['Missing log', 'Table', 'Expected logged by now minus logged, never below 0 h. Orange above 2 h, red above 8 h.', f1(sum('miss')) + ' h'],
-    ['Time left in sprint', 'Table', `Capacity × working hours still to come / ${f1(tot)} h.`, f1(sum('left')) + ' h'],
-    ['Flag', 'Table', 'First rule that fits: Not started (no working time yet); Time log missing (missing log above 8 h); Behind on logging (above 2 h); Cannot finish in time (remaining estimate above time left, only while the sprint runs); On track.', rs.map(r => r.name + ': ' + r.st).join(' · ')],
-    ['Ideal pace', 'Chart, hover', `Starts at the total original estimate and falls in a straight line to 0 h over the ${wd.length} working days. Remaining on working day n = total × (1 − n / ${wd.length}).`, f1(sum('E')) + ' h at start, 0 h on Day ' + (plan + wd.length)],
-    ['Done (hover)', 'Hover card', 'Total original estimate minus remaining estimate on that day. Ahead or behind = done minus the ideal pace done.', f1(done) + ' h so far'],
-    ['Closed today, so far, open', 'Hover card, day panel', 'Closed today: tickets that entered their closed status on that day (IST). Closed so far: that day or earlier. Open: all others. A ticket closed before the sprint counts from Day 1.', tasks.filter(t => t.d && t.d <= ad).length + ' of ' + tasks.length + ' tasks closed'],
-    ['Sprint day', 'Overview', 'Working days from the sprint start, Monday to Friday, 10 in total. The retrospective day shows only when Jira\'s end date is the working day after Day 10.', dayNo ? dayNo + ' of 10' : 'Not started'],
-    ['As of', 'Overview', 'Time of the latest Jira pull. The page never shows a day or hour after it.', at.replace('T', ' ') + ' IST']
-  ];
-  const allT = s.tasks || [], sumTask = allT.reduce((a, t) => a + t.e, 0), sumPeople = pk.reduce((a, [, p]) => a + p.E, 0), byP = {}; allT.forEach(t => { byP[t.a] = (byP[t.a] || 0) + t.e; });   // a story with no sub-tasks counts as a task for hours
-  const hasList = allT.length > 0, ok = (a, b) => Math.abs(a - b) < .06;
-  const chk = [
-    ['Estimates of all tasks add up to the estimates of all people', !hasList || ok(sumTask, sumPeople), hasList ? f1(sumTask) + ' h and ' + f1(sumPeople) + ' h' : 'No ticket list for this sprint'],
-    ['Each person\'s estimate equals the estimates of their own tasks', !hasList || pk.every(([nm, p]) => ok(p.E, byP[nm] || 0)), hasList ? pk.length + ' people compared' : 'No ticket list for this sprint'],
-    ['Remaining estimate is never above the original estimate', rs.every(r => r.remain <= r.E + .01), n + ' people'],
-    ['Original estimate = hours burned + remaining estimate', pk.every(([nm, p]) => { const r = rs.find(x => x.name === nm); const b = Object.entries(p.burn || p.logs).filter(([d]) => d <= at.slice(0, 10)).reduce((a, [, h]) => a + h, 0); return !r || ok(p.E, b + r.remain); }), n + ' people'],
-    ['Logged hours are never below burned hours', pk.every(([nm, p]) => { const b = Object.values(p.burn || p.logs).reduce((a, h) => a + h, 0), l = Object.values(p.logs).reduce((a, h) => a + h, 0); return l + .01 >= b; }), n + ' people'],
-    ['Capacity of the team = people × ' + CAP + ' h', ok(n * CAP, rs.reduce((a, r) => a + CAP, 0)), f1(n * CAP) + ' h'],
-    ['No ticket is closed after the latest Jira pull', tasks.every(t => !t.d || t.d <= ad), 'Latest pull ' + ad],
-    ['Sprint has 10 working days and ' + wd.length + ' of them carry capacity', sd.length === 10 && sd.slice(plan).length === wd.length, plan + ' planning + ' + wd.length + ' working']
-  ];
-  const bulk = []; pk.forEach(([nm, p]) => Object.entries(p.logs).forEach(([d, h]) => { if (h > 2 * DH) bulk.push(nm + ' ' + fmtD(d) + ' ' + f1(h) + ' h'); }));
-  const warn = [
-    ['Tasks with no original estimate', au.noEstimate.length, au.noEstimate.join(', ')],
-    ['Tasks with no assignee (left out of the burndown)', au.unassigned.length, au.unassigned.map(u => u.k + ' ' + f1(u.e) + ' h').join(', ')],
-    ['Tasks logged over their own estimate', au.overrun.length, au.overrun.map(o => o.k + ' ' + o.a + ' ' + f1(o.l) + ' of ' + f1(o.e) + ' h').join(', ')],
-    ['Hours logged after the last working day (not counted)', au.afterWindow > 0 ? 1 : 0, au.afterWindow > 0 ? f1(au.afterWindow) + ' h' : ''],
-    ['Days with more than ' + 2 * DH + ' h logged by one person (bulk logging)', bulk.length, bulk.join(', ')]
-  ];
-  const tag = (okk, t) => `<span class="tag ${okk ? 'ok' : 'bad'}">${t}</span>`;
-  return `<div class="panel"><div class="cardhead"><h3>Rules behind every number</h3></div><p class="note" style="margin:0 0 12px">${esc(s.name)}. Values are for everyone in the sprint and come from the latest Jira pull.</p>
-    <div class="scroll"><table class="lgc rules"><thead><tr><th>Number</th><th>Where shown</th><th>Rule</th><th>Value now</th></tr></thead><tbody>${rowsT.map(r => `<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td></tr>`).join('')}</tbody></table></div></div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Closed means</h3></div><div class="scroll"><table class="lgc"><tbody><tr><td><b>Tasks</b></td><td>${TASK_CLOSED.map(esc).join(', ')}</td></tr><tr><td><b>User stories</b></td><td>${STORY_CLOSED.map(esc).join(', ')}</td></tr><tr><td><b>Epics</b></td><td>${EPIC_CLOSED.map(esc).join(', ')}</td></tr></tbody></table></div></div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Self-checks on this sprint</h3></div><div class="scroll"><table class="lgc" id="lgchk"><tbody>${chk.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[2])}</td><td>${tag(r[1], r[1] ? 'Pass' : 'Fail')}</td></tr>`).join('')}</tbody></table></div></div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Data checks</h3></div><div class="scroll"><table class="lgc" id="lgwarn"><tbody>${warn.map(r => `<tr><td>${esc(r[0])}</td><td><b>${r[1]}</b></td><td>${esc(r[2] || 'None')}</td></tr>`).join('')}</tbody></table></div></div>`;
+/* ---------- capacity: three bars (used, left, remaining estimate) and the working-out in plain words ---------- */
+const isNarrow = () => window.matchMedia('(max-width:720px)').matches;
+function groupBarsM(rs) {
+  const top = Math.max(1, ...rs.map(r => Math.max(r.E, r.logged, r.exp))), ser = [['Original estimate', 'E', 'var(--blue)'], ['Logged', 'logged', 'var(--green)'], ['Expected log by now', 'exp', 'var(--faint)']];
+  return `<div class="key" style="margin-bottom:10px">${ser.map(x => `<span><i style="background:${x[2]}"></i>${x[0]}${x[1] === 'exp' ? tip('expected') : ''}</span>`).join('')}</div><div class="gbm" id="gbm">${rs.map(r => `<div class="gbr"><b>${esc(r.name)}</b>${ser.map(([l, k, c]) => `<div class="gbl"><span>${l}</span><span class="gbt"><i style="width:${r[k] / top * 100}%;background:${c}"></i></span><em>${f1(r[k])} h</em></div>`).join('')}</div>`).join('')}</div>`;
 }
+const hoursTxt = v => f1(v) + (Math.abs(v - 1) < .05 ? ' hour' : ' hours');
+function aggOf(list) { const sum = k => list.reduce((a, r) => a + r[k], 0); return { n: list.length, cap: sum('capP'), used: sum('used'), left: sum('left'), remain: sum('remain'), leave: sum('leaveH'), logged: sum('logged') }; }
+function capBars(label, sub, c, wdn) {
+  const pc = v => c.cap > 0 ? Math.max(0, Math.min(100, v / c.cap * 100)) : 0, gap = c.remain - c.left, fits = gap <= .05;
+  const bar = (cls, name, val, note) => `<div class="cb"><div class="cbt"><b>${name}</b><span>${f1(val)} h of ${f1(c.cap)} h (${Math.round(pc(val))}%)</span></div><div class="meter3" role="img" aria-label="${esc(name)}: ${f1(val)} hours of ${f1(c.cap)} hours"><i class="${cls}" style="width:${pc(val)}%"></i></div><div class="cbn">${note}</div></div>`;
+  const nom = c.n * CAP, who = c.n === 1 ? '1 person' : c.n + ' people';
+  const calc = [['Capacity per person', `(${wdn} working days) × (${DH} hours a day) = ${hoursTxt(CAP)}`]].concat(c.n > 1 ? [['Team capacity', `(${who}) × (${hoursTxt(CAP)} each) = ${hoursTxt(nom)}`]] : [])
+    .concat(c.leave > .05 ? [['Leave taken off', `(${hoursTxt(nom)}) − (${hoursTxt(c.leave)} of leave) = ${hoursTxt(c.cap)}`]] : [])
+    .concat([['Capacity used', `Working hours that have passed since the sprint started = ${hoursTxt(c.used)}`], ['Capacity left', `(${hoursTxt(c.cap)}) − (${hoursTxt(c.used)} used) = ${hoursTxt(c.left)}`], ['Remaining estimate', `(original estimate) − (hours logged on each sub-task, never below 0) = ${hoursTxt(c.remain)}`]]);
+  return `<div class="capwrap"><div class="capbars"><div class="capt"><b>${esc(label)}</b><span>${esc(sub)}</span></div>
+      ${bar('g', 'Capacity used', c.used, 'Working hours that have passed')}${bar('b', 'Capacity left', c.left, 'Working hours still to come')}${bar(fits ? 'a' : 'r', 'Remaining estimate', c.remain, fits ? `Fits in the time left, with ${f1(-gap)} h to spare` : `${f1(gap)} h more than the time left`)}</div>
+    <div class="calc"><div class="calch">How this is worked out</div><ol>${calc.map(([k, v]) => `<li><b>${k}</b><span>${v}</span></li>`).join('')}</ol></div></div>`;
+}
+function leavePanel(sel) {
+  const names = sel.map(r => r.name), rows = (LEAVE[selOne] || []).filter(x => names.includes(x.name)).sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
+  const eff = sel.filter(r => r.leaveH > .05), head = `<div class="cardhead"><h3>Leave and time off${tip('leave')}</h3><button type="button" class="btn ghost sm" data-gotab="leave">Open Leave page</button></div>`;
+  if (!rows.length) return `<div class="panel" id="leavep" style="margin-top:16px">${head}<div class="empty" style="padding:8px 0">No leave in ${esc(BD[selOne] ? BD[selOne].name : 'this sprint')}</div></div>`;
+  const G = '<colgroup><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"></colgroup>', sdl = sprintDays(BD[selOne]);
+  return `<div class="panel" id="leavep" style="margin-top:16px">${head}
+    <h4 class="sub">Days on leave</h4><table class="fit lvg">${G}<thead><tr><th>Person</th><th>Date</th><th>Sprint day</th><th>Hours on leave</th><th>Hours available that day</th></tr></thead><tbody>${rows.map(x => { const i = sdl.indexOf(x.date); return `<tr><td><b>${esc(x.name)}</b></td><td data-l="Date">${esc(dayName(x.date) + ' ' + fmtD(x.date))}</td><td data-l="Sprint day">${i >= 0 ? 'Day ' + (i + 1) + ' of 10' : '–'}</td><td data-l="Hours on leave">${f1(x.hours)}</td><td data-l="Hours available that day">${f1(Math.max(0, DH - x.hours))}</td></tr>`; }).join('')}</tbody></table>
+    <h4 class="sub">Capacity</h4><table class="fit lvg" id="leavecap">${G}<thead><tr><th>Person</th><th>Capacity (h)</th><th>Days with leave</th><th>Leave (h)</th><th>Capacity after leave (h)</th></tr></thead><tbody>${eff.map(r => `<tr><td><b>${esc(r.name)}</b></td><td data-l="Capacity (h)">${f1(CAP)}</td><td data-l="Days with leave">${leaveDaysIn(r.name, selOne)}</td><td data-l="Leave (h)">${f1(r.leaveH)}</td><td data-l="Capacity after leave (h)" class="af">${f1(r.capP)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+// one table cell: the label for the phone card, then the value; on a phone the label itself is the tap target (like a field name on a trading screen)
+const cl = (label, key, val, cls) => `<td data-l="${label}"${key ? ` data-tip="@${key}"` : ''}${cls ? ` class="${cls}"` : ''}><span class="v">${val}</span></td>`;
 function renderBd() {
+  CHW = chartW($('#v-bd'), isNarrow() ? 28 : 36);
   const s = BD[selOne];
   if (!s || !s.win) { $('#v-bd').innerHTML = `<div class="empty">No time-logging data for ${esc(spName(selOne))}.</div>`; return; }
   const wd = workDays(s.win), sd = sprintDays(s), plan = sd.filter(d => d < wd[0]).length, at0 = asOfIST(), ad = at0.slice(0, 10), lastT = wd[wd.length - 1] + 'T19:00', at = at0 > lastT ? lastT : at0;
   $('#asof').textContent = META ? tfmt(asOfMs()) : 'Unknown';
-  const rs = Object.entries(s.people).filter(([, p]) => p.E > 0 || Object.keys(p.logs).length).map(([n, p]) => person(n, p, wd, at, ad)).sort((a, b) => b.miss - a.miss || b.E - a.E);
-  const el = rs[0] ? rs[0].el : 0, tot = wd.length * DH, dayNo = sd.filter(d => d <= ad).length;
+  const rs = Object.entries(s.people).filter(([, p]) => p.E > 0 || Object.keys(p.logs).length).map(([n, p]) => person(n, p, wd, at, ad, leaveFor(n))).sort((a, b) => b.miss - a.miss || b.E - a.E);
+  const el = rs[0] ? rs[0].el : 0, tot = wd.length * DH, dayNo = sd.filter(d => d <= ad).length, late = ad > wd[wd.length - 1];
+  if (bdView === 'logic') bdView = 'overall';
   if (bdWho !== 'Team' && !rs.some(r => r.name === bdWho)) bdWho = 'Team';
   if (renderBd.lastWho !== bdWho || renderBd.lastSp !== selOne || renderBd.lastView !== bdView) bdDay = null; renderBd.lastWho = bdWho; renderBd.lastSp = selOne; renderBd.lastView = bdView;
-  const dayTxt = !dayNo ? 'Not started' : (ad > sd[sd.length - 1] ? 'Sprint complete, 10 of 10' : dayNo + ' of 10 · ' + dayName(sd[dayNo - 1]) + ' ' + fmtD(sd[dayNo - 1]));
+  const dayTxt = !dayNo ? 'Not started' : (ad > sd[sd.length - 1] ? 'Sprint complete (10 of 10)' : `Day ${dayNo} of 10 (${dayName(sd[dayNo - 1])} ${fmtD(sd[dayNo - 1])})`);
   const d3 = wd[0], dEnd = wd[wd.length - 1], startTxt = dayName(d3) + ' ' + fmtD(d3), endTxt = dayName(dEnd) + ' ' + fmtD(dEnd);
-  const seg = `<div class="seg" role="tablist" aria-label="Burndown view"><button type="button" role="tab" data-bdview="overall" aria-selected="${bdView === 'overall'}">Overall</button><button type="button" role="tab" data-bdview="person" aria-selected="${bdView === 'person'}">Per person</button><button type="button" role="tab" data-bdview="logic" aria-selected="${bdView === 'logic'}">Logic</button></div>`;
-  TT.chart = { h: 'About this chart', rows: [['blue', 'Ideal pace', `From Day ${plan + 1} (${startTxt}) to Day ${plan + wd.length} (${endTxt}). Days 1 to ${plan} are Sprint Planning.`], ['ok', 'Remaining estimate', 'Original estimate minus time logged.']], groups: [['Epics are closed in', EPIC_CLOSED], ['User stories are closed in', STORY_CLOSED], ['Tasks are closed in', TASK_CLOSED]], note: 'Tasks are every sub-task type and any Task, Bug or New Feature.' };
+  const seg = `<div class="seg" role="tablist" aria-label="Burndown view"><button type="button" role="tab" data-bdview="overall" aria-selected="${bdView === 'overall'}">Overall</button><button type="button" role="tab" data-bdview="person" aria-selected="${bdView === 'person'}">Per person</button></div>`;
+  TT.chart = { h: 'About this chart', rows: [['blue', 'Blue line: Remaining estimate', 'The work still left.'], ['nil', 'Dashed line: Ideal pace', 'Where the work would be if the same hours were done every working day.']], note: 'Hover or tap a day to compare it with the ideal pace. Click or tap a day for its tickets.' };
   let body;
-  if (bdView === 'logic') { BDV = null; body = logicHtml(s, rs, { wd, sd, plan, el, tot, ad, at }); }
-  else if (bdView === 'overall') {
+  if (bdView === 'rules') bdView = 'overall';
+  if (bdView === 'overall') {
     BDV = null;
-    body = `<div class="panel term"><div class="tgrid">
-      <div class="tk">Sprint</div><div class="tv">${esc(s.name)} · ${esc(fmtD(s.start || sd[0]))} to ${esc(fmtD(s.end || sd[sd.length - 1]))}, 10 working days</div>
-      <div class="tk">Sprint day${tip('day')}</div><div class="tv"><b>${esc(dayTxt)}</b></div>
-      ${plan ? `<div class="tk">Planning</div><div class="tv">Days 1 to ${plan} · ${sd.slice(0, plan).map(d => dayName(d) + ' ' + fmtD(d)).join(', ')} · no capacity counted</div>` : ''}
-      <div class="tk">Working time</div><div class="tv">11:00 to 19:00 IST · ${DH} h a day · ${wd.length} working days (days ${plan + 1} to ${plan + wd.length})</div>
-      <div class="tk">Capacity</div><div class="tv">${CAP} h per person = ${wd.length} days × ${DH} h</div></div>
-      ${capBlock('Whole team', rs.length + ' people × ' + CAP + ' h', rs.length * CAP * el / tot, rs.length * CAP)}</div>
+    const ov = [['Sprint', esc(s.name)], ['Dates', `${esc(fmtD(s.start || sd[0]))} to ${esc(fmtD(s.end || sd[sd.length - 1]))}`], ['Length', '10 working days']]
+      .concat(plan ? [['Sprint Planning', `Day${plan > 1 ? 's' : ''} 1${plan > 1 ? ' to ' + plan : ''} (${sd.slice(0, plan).map(d => dayName(d) + ' ' + fmtD(d)).join(' and ')}), no capacity counted`]] : [])
+      .concat([['Working time', '11:00 to 19:00 IST'], ['Hours a day', DH + ' hours'], ['Working days', `${wd.length} (days ${plan + 1} to ${plan + wd.length})`], ['Capacity per person', `${CAP} hours = (${wd.length} days) × (${DH} hours)`]]);
+    body = dayWidgets(sd, wd, plan, ad) + `<div class="panel term"><div class="tgrid ov">${ov.map(([k, v]) => `<div class="tk">${k}</div><div class="tv">${v}</div>`).join('')}</div></div>
+      <div class="panel" id="capov">${capBars('Whole team', rs.length + ' people', aggOf(rs), wd.length)}</div>
     ${s.note ? `<p class="note">${esc(s.note)}</p>` : ''}
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Hours by person</h3></div>${groupBars(rs)}</div>`;
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Hours by person</h3></div>${isNarrow() ? groupBarsM(rs) : groupBars(rs)}</div>${leavePanel(rs)}`;
   } else {
-    const sel = bdWho === 'Team' ? rs : rs.filter(r => r.name === bdWho), n = sel.length;
+    const sel = bdWho === 'Team' ? rs : rs.filter(r => r.name === bdWho), n = sel.length, nm = bdWho === 'Team' ? 'Everyone' : bdWho;
     const tasks = (s.tasks || []).filter(t => !t.y && (bdWho === 'Team' || t.a === bdWho)), stories = (s.stories || []).filter(t => bdWho === 'Team' || t.a === bdWho), epics = (s.epics || []).filter(t => bdWho === 'Team' || t.a === bdWho);
-    const sum = k => sel.reduce((a, r) => a + r[k], 0);
-    body = `<div class="pick"><label class="field"><span class="fl">Person</span><select id="bdwho" class="ctl" aria-label="Person">${['Team'].concat(rs.map(r => r.name)).map(x => `<option value="${esc(x)}" ${x === bdWho ? 'selected' : ''}>${x === 'Team' ? 'Everyone' : esc(x)}</option>`).join('')}</select></label>
-        <div class="panel pcap">${capBlock(bdWho === 'Team' ? 'Everyone' : bdWho, bdWho === 'Team' ? n + ' people × ' + CAP + ' h' : CAP + ' h = ' + wd.length + ' days × ' + DH + ' h', n * CAP * el / tot, n * CAP)}</div></div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Remaining work vs ideal pace · ${esc(bdWho === 'Team' ? 'Everyone' : bdWho)}${tip('chart')}</h3></div><div class="key" style="margin-bottom:6px"><span><i style="background:var(--blue)"></i>Remaining estimate (h)${tip('remaining')}</span><span><i style="background:var(--faint)"></i>Ideal pace${tip('ideal')}</span></div>${lineChart(sel, { sd, plan, wd, s, tasks, stories, epics, el, tot, ad })}<div class="dayd" id="dayd" hidden></div></div>
-    <div class="panel" style="margin-top:16px"><div class="scroll"><table><thead><tr><th>Name</th><th>Original estimate (h)</th><th>Logged (h)</th><th>Remaining estimate (h)</th><th>${lab('Over estimate (h)', 'over')}</th><th>${lab('Expected logged by now (h)', 'expected')}</th><th>${lab('Missing log (h)', 'missing')}</th><th>Time left in sprint (h)</th><th>${lab('Flag', 'flag')}</th></tr></thead><tbody>
-    ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td><td>${f1(r.E)}</td><td>${f1(r.logged)}</td><td>${f1(r.remain)}</td><td>${r.over > .05 ? f1(r.over) : '0'}</td><td>${f1(r.exp)}</td><td class="${r.cl}">${r.miss > .05 ? f1(r.miss) : '0'}</td><td>${f1(r.left)}</td><td><span class="tag ${r.cl === 'ok' && r.st === 'Not started' ? 'nil' : r.cl}">${esc(r.st)}</span></td></tr>`).join('')}
-    ${n > 1 ? `<tr class="tot"><td>Everyone</td><td>${f1(sum('E'))}</td><td>${f1(sum('logged'))}</td><td>${f1(sum('remain'))}</td><td>${f1(sum('over'))}</td><td>${f1(sum('exp'))}</td><td>${f1(sum('miss'))}</td><td>${f1(sum('left'))}</td><td></td></tr>` : ''}</tbody></table></div></div>`;
+    const sum = k => sel.reduce((a, r) => a + r[k], 0), tot_ = n > 1;
+    const vcell = r => `<span class="tag ${r.vc}">${r.vd}</span><small class="vsm">${r.vd === 'Completed' ? 'Nothing left' : r.gap > .05 ? 'Short by ' + f1(r.gap) + ' h' : 'Room of ' + f1(-r.gap) + ' h'}</small>`;
+    body = dayWidgets(sd, wd, plan, ad) + `<div class="pick"><label class="field"><span class="fl">Person</span><select id="bdwho" class="ctl" aria-label="Person">${['Team'].concat(rs.map(r => r.name)).map(x => `<option value="${esc(x)}" ${x === bdWho ? 'selected' : ''}>${x === 'Team' ? 'Everyone' : esc(x)}</option>`).join('')}</select></label></div>
+    <div class="panel" id="capper" style="margin-top:14px">${capBars(nm, n === 1 ? '1 person' : n + ' people', aggOf(sel), wd.length)}</div>
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Remaining work vs ideal pace · ${esc(nm)}${tip('chart')}</h3></div><div class="key" style="margin-bottom:6px"><span><i class="ln b"></i>Remaining estimate${tip('remaining')}</span><span><i class="ln d"></i>Ideal pace${tip('ideal')}</span></div>${lineChart(sel, { sd, plan, wd, s, tasks, stories, epics, el, tot, ad, at, late })}<div class="dayd" id="dayd" hidden></div></div>
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Can the work be finished?</h3></div><table class="fit" id="tplan"><thead><tr><th>Name</th><th>Original estimate (h)</th><th>${lab('Remaining estimate (h)', 'remaining')}</th><th>${lab('Time left in the sprint (h)', 'left')}</th><th>${lab('Verdict', 'verdict')}</th></tr></thead><tbody>
+    ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td>${cl('Original estimate (h)', '', f1(r.E))}${cl('Remaining estimate (h)', 'remaining', f1(r.remain))}${cl('Time left in the sprint (h)', 'left', f1(r.left))}${cl('Verdict', 'verdict', vcell(r), 'vd')}</tr>`).join('')}
+    ${tot_ ? `<tr class="tot"><td>Everyone</td>${cl('Original estimate (h)', '', f1(sum('E')))}${cl('Remaining estimate (h)', 'remaining', f1(sum('remain')))}${cl('Time left in the sprint (h)', 'left', f1(sum('left')))}${cl('Verdict', 'verdict', (() => { const g = sum('remain') - sum('left'); return late ? '' : `<span class="tag ${g > .05 ? 'bad' : 'ok'}">${g > .05 ? 'Not achievable' : 'Achievable'}</span><small class="vsm">${g > .05 ? 'Short by ' + f1(g) + ' h' : 'Room of ' + f1(-g) + ' h'}</small>`; })(), 'vd')}</tr>` : ''}</tbody></table></div>
+    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Time logging</h3></div><table class="fit" id="tlog"><thead><tr><th>Name</th><th>Logged (h)</th><th>${lab('Over estimate (h)', 'over')}</th><th>${lab('Expected log by now (h)', 'expected')}</th><th>${lab('Missing log (h)', 'missing')}</th><th>${lab('Leave (h)', 'leave')}</th><th>${lab('Flag', 'flag')}</th></tr></thead><tbody>
+    ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td>${cl('Logged (h)', '', f1(r.logged))}${cl('Over estimate (h)', 'over', r.over > .05 ? f1(r.over) : '0')}${cl('Expected log by now (h)', 'expected', f1(r.exp))}${cl('Missing log (h)', 'missing', r.miss > .05 ? f1(r.miss) : '0', r.cl)}${cl('Leave (h)', 'leave', r.leaveH > .05 ? f1(r.leaveH) : '0')}${cl('Flag', 'flag', `<span class="tag ${r.cl === 'ok' && r.st === 'Not started' ? 'nil' : r.cl}">${esc(r.st)}</span>`, 'fg')}</tr>`).join('')}
+    ${tot_ ? `<tr class="tot"><td>Everyone</td>${cl('Logged (h)', '', f1(sum('logged')))}${cl('Over estimate (h)', 'over', f1(sum('over')))}${cl('Expected log by now (h)', 'expected', f1(sum('exp')))}${cl('Missing log (h)', 'missing', f1(sum('miss')))}${cl('Leave (h)', 'leave', f1(sum('leaveH')))}<td></td></tr>` : ''}</tbody></table></div>${leavePanel(sel)}`;
   }
   $('#v-bd').innerHTML = seg + body;
   renderDay(); if (bdDay != null && BDV) setGuide(bdDay, true);
 }
 $('#v-bd').addEventListener('change', e => { if (e.target.id === 'bdwho') { bdWho = e.target.value; renderBd(); } });
+$('#v-log').addEventListener('change', e => { if (e.target.id === 'plsel') { selOne = e.target.value; saveSel(); } });
 $('#v-bd').addEventListener('click', e => { const v = e.target.closest('[data-bdview]'); if (v) { bdView = v.dataset.bdview; renderBd(); } });
 $('#v-bd').addEventListener('mousemove', e => { if (e.target.closest('#cw')) hoverBd(e); else hideBdTip(); });
 $('#v-bd').addEventListener('mouseover', e => { if (e.target.closest('.ibtn')) hideBdTip(); });
@@ -777,17 +1126,39 @@ $('#v-bd').addEventListener('click', e => {
   if (e.target.closest('#cw')) pinDay(e);
 });
 $('#v-bd').addEventListener('mouseleave', () => { const t = $('#tip'); if (t) t.hidden = true; if (BDV) setGuide(bdDay == null ? 0 : bdDay, bdDay != null); });
+/* ---------- leave page: pick a person, see only the days they were on leave, and how leave changes the numbers ---------- */
+let lvWho = 'Team';
+function renderLeave() {
+  const s = BD[selOne], list = LEAVE[selOne] || [], box = $('#v-leave');
+  if (!s || !s.win) { box.innerHTML = `<h2 class="pgtitle">Leave</h2><div class="empty">No time-logging data for ${esc(spName(selOne))}.</div>`; return; }
+  const wd = workDays(s.win), sd = sprintDays(s), real = n => s.people[n] && (s.people[n].E > 0 || Object.keys(s.people[n].logs).length);
+  const names = [...new Set(Object.keys(s.people).filter(real).concat(list.map(x => x.name)))].sort();
+  if (lvWho !== 'Team' && !names.includes(lvWho)) lvWho = 'Team';
+  const who = lvWho === 'Team' ? names : [lvWho], who1 = lvWho === 'Team' ? 'Everyone' : lvWho;
+  const cap = who.map(n => { const lv = leaveInSprint(n, selOne); return { n, lv, after: CAP - lv }; });
+  const days = list.filter(x => who.includes(x.name) && wd.includes(x.date)).sort((a, b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
+  const tl = cap.reduce((a, r) => a + r.lv, 0), ta = cap.reduce((a, r) => a + r.after, 0);
+  const pick = `<label class="field"><span class="fl">Person</span><select id="lvwho" class="ctl" aria-label="Person">${['Team'].concat(names).map(x => `<option value="${esc(x)}" ${x === lvWho ? 'selected' : ''}>${x === 'Team' ? 'Everyone' : esc(x)}</option>`).join('')}</select></label>`;
+  box.innerHTML = `<h2 class="pgtitle">Leave</h2><div class="pick" style="margin-bottom:14px">${pick}</div>
+    <div class="panel acc-amber" id="lvcap"><div class="cardhead"><h3>Capacity · ${esc(who1)}${tip('leave')}</h3></div><table class="fit hd lvg"><colgroup><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"></colgroup><thead><tr><th>Person</th><th>Capacity (h)</th><th>Days with leave</th><th>Leave (h)</th><th>Capacity after leave (h)</th></tr></thead><tbody>
+      ${cap.map(r => `<tr><td><b>${esc(r.n)}</b></td><td data-l="Capacity (h)">${f1(CAP)}</td><td data-l="Days with leave">${leaveDaysIn(r.n, selOne)}</td><td data-l="Leave (h)" class="${r.lv > 0 ? 'lv' : ''}">${f1(r.lv)}</td><td data-l="Capacity after leave (h)" class="af">${f1(r.after)}</td></tr>`).join('')}
+      ${cap.length > 1 ? `<tr class="tot"><td>Total</td><td data-l="Capacity (h)">${f1(CAP * cap.length)}</td><td data-l="Days with leave">${cap.reduce((a, r) => a + leaveDaysIn(r.n, selOne), 0)}</td><td data-l="Leave (h)" class="${tl > 0 ? 'lv' : ''}">${f1(tl)}</td><td data-l="Capacity after leave (h)" class="af">${f1(ta)}</td></tr>` : ''}</tbody></table></div>
+    <div class="panel acc-blue" id="lvtable" style="margin-top:16px"><div class="cardhead"><h3>Days on leave · ${esc(who1)}</h3></div>${days.length ? `<table class="fit hd lvg"><colgroup><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"></colgroup><thead><tr><th>Person</th><th>Date</th><th>Sprint day</th><th>Hours on leave</th><th>Hours available that day</th></tr></thead><tbody>${days.map(x => { const i = sd.indexOf(x.date); return `<tr><td><b>${esc(x.name)}</b></td><td data-l="Date">${esc(dayName(x.date) + ' ' + fmtD(x.date))}</td><td data-l="Sprint day">Day ${i + 1} of 10</td><td data-l="Hours on leave" class="lv">${f1(x.hours)}</td><td data-l="Hours available that day">${f1(Math.max(0, DH - x.hours))}</td></tr>`; }).join('')}</tbody></table>` : `<div class="empty" style="padding:8px 0">No leave in ${esc(s.name)}</div>`}</div>`;
+}
+$('#v-leave').addEventListener('change', e => { if (e.target.id === 'lvwho') { lvWho = e.target.value; renderLeave(); } });
+document.addEventListener('click', e => { const g = e.target.closest('[data-gotab]'); if (g) { e.preventDefault(); tab = g.dataset.gotab; closeD(); show(); window.scrollTo(0, 0); } });
+
 /* ---------- pull log: scheduled runs only, sprint by sprint ---------- */
 const slotMs = (d, h, m) => Date.parse(`${d}T${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00+05:30`);
 const istDay = ms => new Date(ms + 5.5 * 3600e3).toISOString().slice(0, 10);
 const tfmt = ms => { const d = new Date(ms + 5.5 * 3600e3), h = d.getUTCHours(); return d.getUTCDate() + ' ' + MON[d.getUTCMonth()] + ', ' + (h % 12 || 12) + ':' + String(d.getUTCMinutes()).padStart(2, '0') + ' ' + (h < 12 ? 'AM' : 'PM') + ' IST'; };
 const tonly = ms => { const d = new Date(ms + 5.5 * 3600e3), h = d.getUTCHours(); return (h % 12 || 12) + ':' + String(d.getUTCMinutes()).padStart(2, '0') + ' ' + (h < 12 ? 'AM' : 'PM'); };
-const SLOTN = ['10:45 AM', '6:45 PM'];
+const SLOTN = ['10:50 AM', '6:50 PM'];
 function spRange(id) { const b = BD[id]; if (b && b.start && b.end) return [b.start, b.end]; if (b && b.win) return b.win; return null; }
 function pullModel() {
   const runs = (RUNS || []).filter(r => r.trigger === 'schedule').map(r => Object.assign({ ms: Date.parse(r.at) }, r)).sort((a, b) => a.ms - b.ms), now = Date.now(), used = new Set(), st = {};
   const first = dUTC(SCHED_START), lastMs = Math.max(now, ...runs.map(r => r.ms)) + 70 * 864e5, all = [];
-  for (let ms = first; ms <= lastMs; ms += 864e5) { const g = new Date(ms).getUTCDay(); if (g > 0 && g < 6) SLOTS.forEach((sl, i) => all.push({ d: dStr(ms), i, t: slotMs(dStr(ms), sl[0], sl[1]) })); }
+  for (let ms = first; ms <= lastMs; ms += 864e5) SLOTS.forEach((sl, i) => all.push({ d: dStr(ms), i, t: slotMs(dStr(ms), sl[0], sl[1]) }));   // the timers run every day, weekends included
   all.forEach(sl => { const run = runs.find(r => !used.has(r) && r.ms >= sl.t - 15 * 60e3 && r.ms <= sl.t + 180 * 60e3);
     if (run) { used.add(run); st[sl.d + '|' + sl.i] = { c: run.ok ? 'ok' : 'bad', t: run.ok ? 'Pulled' : 'Failed', run }; }
     else st[sl.d + '|' + sl.i] = sl.t + 180 * 60e3 < now ? { c: 'warn', t: 'Missed' } : { c: 'up', t: 'Upcoming' }; });
@@ -799,21 +1170,19 @@ function renderLog() {
   const cell = (d, i) => d < SCHED_START ? { c: 'na', t: 'Not scheduled' } : (m.st[d + '|' + i] || { c: 'na', t: '–' });
   const cnt = { ok: 0, bad: 0, warn: 0, up: 0 }; days.forEach(d => [0, 1].forEach(i => { const c = cell(d, i).c; if (cnt[c] != null) cnt[c]++; }));
   const inM = ms => { const x = Math.max(0, Math.round((ms - m.now) / 60000)); return x < 1 ? 'less than a minute' : x < 60 ? x + ' min' : Math.floor(x / 60) + ' h' + (x % 60 ? ' ' + (x % 60) + ' min' : ''); };
-  const sumRows = SHOW.slice().reverse().map(id => { const r = spRange(id); if (!r) return null; let pl = 0, ok = 0, bad = 0, ms = 0;
-    for (let x = dUTC(r[0]); x <= dUTC(r[1]); x += 864e5) { const d = dStr(x), g = new Date(x).getUTCDay(); if (g > 0 && g < 6 && d >= SCHED_START) [0, 1].forEach(i => { pl++; const c = (m.st[d + '|' + i] || {}).c; if (c === 'ok') ok++; else if (c === 'bad') bad++; else if (c === 'warn') ms++; }); }
-    return { id, pl, ok, bad, ms }; }).filter(Boolean);
   const u = usage(), pu = Math.min(100, u.n / LIMIT * 100);
-  $('#v-log').innerHTML = `<div class="sched3">
-      <div class="stat"><span class="fl">Cron schedule</span><b>Weekdays, twice a day</b><small>10:45 AM and 6:45 PM IST</small></div>
-      <div class="stat"><span class="fl">${lab('Next scheduled pull', 'next')}</span><b>${m.next ? esc(tfmt(m.next.t)) : '–'}</b><small>${m.next ? 'in ' + inM(m.next.t) : ''}</small></div>
-      <div class="stat"><span class="fl">${lab('Latest scheduled pull', 'latest')}</span><b>${m.lastOk ? esc(tfmt(m.lastOk.ms)) : 'None yet'}</b><small>${m.lastOk ? Number(m.lastOk.issues).toLocaleString('en-US') + ' issues read from Jira' : ''}</small></div>
-      <div class="stat"><span class="fl">${lab('Runs under', 'cron')}</span><b>GitHub: ckvcanary</b><small>Owner: chetan@canaryai.com</small></div></div>
-    <div class="panel budget"><div class="capb"><div class="capt"><b>${lab('Team refreshes', 'budget')}</b><span>Last 24 hours</span></div>
-      <div class="mk"><div class="meter2" role="img" aria-label="${u.n} of ${LIMIT} refreshes used; the Refresh button stops at ${LIMIT - RESERVE}"><i class="u" style="width:${pu}%"></i><i class="l" style="width:${100 - pu}%"></i></div><i class="stopm" style="left:${LIMIT - RESERVE}%"></i></div>
-      <div class="capl2"><span><i class="u"></i>Used <b>${u.n}</b></span><span><i class="l"></i>Left <b>${Math.max(0, LIMIT - u.n)}</b></span><span class="of">of ${LIMIT} · Refresh stops at <b>${LIMIT - RESERVE}</b></span></div></div></div>
-    <div class="cnt"><div class="stat ok"><span class="fl">${lab('Pulled', 'pulled')}</span><b>${cnt.ok}</b></div><div class="stat bad"><span class="fl">${lab('Failed', 'failed')}</span><b>${cnt.bad}</b></div><div class="stat warn"><span class="fl">${lab('Missed', 'missed')}</span><b>${cnt.warn}</b></div><div class="stat"><span class="fl">${lab('Upcoming', 'upcoming')}</span><b>${cnt.up}</b></div></div>
-    <div class="panel"><div class="cardhead"><h3>${esc(name)}: scheduled pulls by working day</h3></div>${days.length ? `<div class="scroll"><table class="plt"><thead><tr><th>Day</th><th>Date</th><th>${lab('10:45 AM', 'slot')}</th><th>${lab('6:45 PM', 'slot')}</th></tr></thead><tbody>${days.map(d => `<tr><td><b>${dayName(d)}</b></td><td>${esc(fmtD(d))}</td>${[0, 1].map(i => { const c = cell(d, i); return `<td><span class="chip ${c.c}"><i></i>${c.t}${c.run ? ' · ' + tonly(c.run.ms) : ''}</span></td>`; }).join('')}</tr>`).join('')}</tbody></table></div>` : '<div class="empty">No dates are recorded for this sprint.</div>'}</div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>All sprints${tip('manual')}</h3></div><div class="scroll"><table class="plt"><thead><tr><th>Sprint</th><th>Planned</th><th>Pulled</th><th>Failed</th><th>Missed</th></tr></thead><tbody>${sumRows.map(r => `<tr><td><b>${esc(spName(r.id))}</b></td><td>${r.pl || '–'}</td><td>${r.pl ? r.ok : '–'}</td><td>${r.pl ? r.bad : '–'}</td><td>${r.pl ? r.ms : '–'}</td></tr>`).join('')}</tbody></table></div></div>`;
+  const picker = `<div class="pick" style="margin-bottom:14px"><label class="field"><span class="fl">Sprint</span><select id="plsel" class="ctl" aria-label="Sprint">${SHOW.slice().reverse().map(id => `<option value="${esc(id)}" ${id === selOne ? 'selected' : ''}>${esc(spName(id))}</option>`).join('')}</select></label></div>`;
+  $('#v-log').innerHTML = picker + `<div class="sched3">
+      <div class="stat s1"><span class="fl">Timers</span><b>Every day, twice a day</b><small>10:50 AM and 6:50 PM IST</small></div>
+      <div class="stat s2"><span class="fl">${lab('Next scheduled pull', 'next')}</span><b>${m.next ? esc(tfmt(m.next.t)) : '–'}</b><small>${m.next ? 'in ' + inM(m.next.t) : ''}</small></div>
+      <div class="stat s3"><span class="fl">${lab('Latest scheduled pull', 'latest')}</span><b>${m.lastOk ? esc(tfmt(m.lastOk.ms)) : 'None yet'}</b><small>${m.lastOk ? Number(m.lastOk.issues).toLocaleString('en-US') + ' issues read from Jira' : ''}</small></div>
+      <div class="stat s4"><span class="fl">${lab('Runs under', 'cron')}</span><b>GitHub and cron-job.org</b><small>Owner: chetan@canaryai.com</small></div></div>
+    <div class="panel budget acc-blue" id="budget"><div class="cardhead"><h3>Refresh button${tip('budget')}</h3></div>
+      <div class="bhead"><b id="bleft">${Math.max(0, LIMIT - RESERVE - u.n)}</b><span>refreshes left of ${LIMIT - RESERVE}</span></div>
+      <div class="meter2" role="img" aria-label="${u.n} of ${LIMIT - RESERVE} refreshes used in the last 24 hours"><i class="u" style="width:${Math.min(100, u.n / (LIMIT - RESERVE) * 100)}%"></i><i class="l" style="width:${Math.max(0, 100 - u.n / (LIMIT - RESERVE) * 100)}%"></i></div>
+      <div class="capl2"><span><i class="u"></i>Used <b>${u.n}</b></span><span><i class="l"></i>Left <b>${Math.max(0, LIMIT - RESERVE - u.n)}</b></span><span class="of">Last 24 hours</span></div></div>
+    <div class="cnt"><div class="stat ok"><span class="fl">${lab('Pulled', 'pulled')}</span><b>${cnt.ok}</b></div><div class="stat bad"><span class="fl">${lab('Failed', 'failed')}</span><b>${cnt.bad}</b></div><div class="stat warn"><span class="fl">${lab('Missed', 'missed')}</span><b>${cnt.warn}</b></div><div class="stat up"><span class="fl">${lab('Upcoming', 'upcoming')}</span><b>${cnt.up}</b></div></div>
+    <div class="panel"><div class="cardhead"><h3>${esc(name)}: scheduled pulls by working day</h3></div>${days.length ? `<table class="plt"><thead><tr><th>Day</th><th>Date</th><th>${lab('10:50 AM', 'slot')}</th><th>${lab('6:50 PM', 'slot')}</th></tr></thead><tbody>${days.map(d => `<tr><td><b>${dayName(d)}</b></td><td data-l="Date">${esc(fmtD(d))}</td>${[0, 1].map(i => { const c = cell(d, i); return `<td data-l="${SLOTN[i]}"><span class="chip ${c.c}"><i></i>${c.t}${c.run ? ' · ' + tonly(c.run.ms) : ''}</span></td>`; }).join('')}</tr>`).join('')}</tbody></table>` : '<div class="empty">No dates are recorded for this sprint.</div>'}</div>`;
 }
 
 /* ---------- stakeholders ---------- */
@@ -837,18 +1206,19 @@ const LINKS = [['Use', [['Team dashboard (Vercel)', 'https://sprint-dashboard-um
 function renderHow() {
   const u = usage(), pu = Math.min(100, u.n / LIMIT * 100);
   $('#v-how').innerHTML = `<div class="hw"><h2>How it works</h2><p class="sub">Jira to this dashboard, with no one needed.</p>
-    <div class="feat glance"><div><b>Cron schedule</b>Weekdays, 10:45 AM and 6:45 PM IST</div><div><b>Refresh button</b>Anyone, any time</div><div><b>Hosted on Vercel</b>No laptop needs to be on</div></div>
+    <div class="feat glance"><div><b>Two timers</b>GitHub Actions and cron-job.org, every day at 10:50 AM and 6:50 PM IST</div><div><b>Refresh button</b>Anyone, any time</div><div><b>Hosted on Vercel</b>No laptop needs to be on</div></div>
     <div class="flow" style="margin-top:18px">${node(1, 'Jira', 'Tickets', 'n1')}${ARW}${node(2, 'GitHub Actions', 'Reads the Jira REST API', 'n2')}${ARW}${node(3, 'GitHub repository', 'Commits JSON data', 'n3')}${ARW}${node(4, 'Vercel', 'Deploys the page', 'n4')}${ARW}${node(5, 'Dashboard', 'Your browser', 'n5')}</div>
-    <section class="startsec"><h3>What starts GitHub Actions</h3><div class="sc">${chip('Cron schedule', 'Weekdays, twice a day', 'c1')}<span class="or">or</span>${chip('Refresh button', 'Anyone on the team', 'c2')}</div></section>
-    <div class="acc"><details><summary>Accounts and renewal</summary><div class="scroll"><table><thead><tr><th>What</th><th>Account</th><th>${lab('Renew by', 'renew')}</th></tr></thead><tbody>
-      <tr><td><b>Cron schedule</b></td><td>GitHub: ckvcanary</td><td>No expiry</td></tr>
-      <tr><td><b>Jira API token</b> (read-only)</td><td>Jira: dashboard owner</td><td><b>12 Nov 2027</b></td></tr>
-      <tr><td><b>GitHub token, Refresh button</b></td><td>GitHub: ckvcanary</td><td>No expiry</td></tr>
-      <tr><td><b>GitHub token, publishing</b></td><td>GitHub: ckvcanary</td><td>No expiry</td></tr>
-      <tr><td><b>Hosting</b></td><td>Vercel: chetan-3565 (free plan)</td><td>No expiry</td></tr></tbody></table></div></details>
+    <section class="startsec"><h3>What starts GitHub Actions</h3><div class="sc">${chip('GitHub Actions schedule', 'Every day at 10:50 AM and 6:50 PM IST', 'c1')}<span class="or">or</span>${chip('cron-job.org timer', 'Every day at 10:50 AM and 6:50 PM IST', 'c3')}<span class="or">or</span>${chip('Refresh button', 'Anyone on the team', 'c2')}</div></section>
+    <div class="acc"><details><summary>Accounts and renewal</summary><div><table class="hwt"><thead><tr><th>What</th><th>What it does</th><th>Account</th><th>${lab('Renew by', 'renew')}</th></tr></thead><tbody>
+      <tr><td><b>GitHub Actions schedule</b></td><td data-l="What it does">Starts the pull on a timer</td><td data-l="Account">GitHub: ckvcanary</td><td data-l="Renew by">No expiry</td></tr>
+      <tr><td><b>cron-job.org timer</b></td><td data-l="What it does">Starts the same pull from outside GitHub</td><td data-l="Account">cron-job.org: dashboard owner</td><td data-l="Renew by">No expiry</td></tr>
+      <tr><td><b>Atlassian API token</b> (read-only)</td><td data-l="What it does">Lets the pull read Jira tickets and time logs</td><td data-l="Account">Atlassian: dashboard owner</td><td data-l="Renew by"><b>12 Nov 2027</b></td></tr>
+      <tr><td><b>GitHub token, Refresh button</b></td><td data-l="What it does">Lets the Vercel refresh relay start a GitHub Actions run</td><td data-l="Account">GitHub: ckvcanary</td><td data-l="Renew by">No expiry</td></tr>
+      <tr><td><b>GitHub token, publishing</b></td><td data-l="What it does">Lets the dashboard owner publish changes to the GitHub repository</td><td data-l="Account">GitHub: ckvcanary</td><td data-l="Renew by">No expiry</td></tr>
+      <tr><td><b>Hosting</b></td><td data-l="What it does">Vercel serves this page</td><td data-l="Account">Vercel: chetan-3565 (free plan)</td><td data-l="Renew by">No expiry</td></tr></tbody></table></div></details>
       <details><summary>Refresh limits</summary><div class="lim"><div class="capb" style="padding:12px 0 4px"><div class="capt"><b>Team refreshes, last 24 hours</b><span>${u.n} of ${LIMIT}</span></div><div class="meter2" role="img" aria-label="${u.n} of ${LIMIT} refreshes used"><i class="u" style="width:${pu}%"></i><i class="l" style="width:${100 - pu}%"></i></div></div>
         <div class="scroll"><table><thead><tr><th>Rule</th><th>Value</th></tr></thead><tbody>
-        <tr><td><b>Refresh button</b>${tip('budget')}</td><td>Stops at ${LIMIT - RESERVE} of ${LIMIT} a day</td></tr>
+        <tr><td><b>Refresh button</b>${tip('budget')}</td><td>Stops at ${LIMIT - RESERVE} of ${LIMIT} pulls a day</td></tr>
         <tr><td><b>Pressing twice</b></td><td>One refresh per 2 minutes</td></tr>
         <tr><td><b>GitHub Actions</b></td><td>No limit (public repository)</td></tr>
         <tr><td><b>GitHub API</b></td><td>5,000 requests an hour</td></tr></tbody></table></div></div></details>
@@ -895,85 +1265,126 @@ dr.addEventListener('click', e => {
   const t = e.target.closest('[data-t]'); if (t) return openItem('t', t.dataset.t);
 });
 scrim.onclick = closeD; document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeD(); ddpop.hidden = true; } });
-$('#v-map').addEventListener('click', e => { const c = e.target.closest('[data-e],[data-s]'); if (!c) return; stack = []; c.dataset.e ? openItem('e', c.dataset.e) : openItem('s', c.dataset.s); });
+$('#v-map').addEventListener('click', e => { const mb = e.target.closest('[data-mm]'); if (mb) { mmMode = mb.dataset.mm; return renderMap(); } const c = e.target.closest('[data-e],[data-s]'); if (!c) return; stack = []; c.dataset.e ? openItem('e', c.dataset.e) : openItem('s', c.dataset.s); });
 $('#map').addEventListener('mouseover', e => { const c = e.target.closest('[data-s]'); document.querySelectorAll('#lines path').forEach(p => p.classList.toggle('hl', !!c && p.dataset.a === c.dataset.s)); });
 $('#map').addEventListener('mouseleave', () => document.querySelectorAll('#lines path.hl').forEach(p => p.classList.remove('hl')));
 
 /* ---------- tabs ---------- */
 function show() {
   const dead = LOADFAIL && !(D.stories || []).length; $('#loaderr').hidden = !dead;
-  if (dead) { ['map', 'cap', 'bd', 'log', 'who', 'how'].forEach(x => $('#v-' + x).hidden = true); $('#bar').style.display = 'none'; document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab)); return; }
+  if (dead) { ['map', 'cap', 'bd', 'leave', 'log', 'who', 'how'].forEach(x => $('#v-' + x).hidden = true); $('#bar').style.display = 'none'; document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab)); return; }
   document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
-  ['map', 'cap', 'bd', 'log', 'who', 'how'].forEach(t => $('#v-' + t).hidden = t !== tab);
-  const sp = ['map', 'cap', 'bd', 'log'].includes(tab);
+  ['map', 'cap', 'bd', 'leave', 'log', 'who', 'how'].forEach(t => $('#v-' + t).hidden = t !== tab);
+  const sp = ['map', 'cap', 'bd', 'leave'].includes(tab);
   $('#fsprint').hidden = !sp; $('#fasof').hidden = tab !== 'bd'; $('#legend').style.display = tab === 'map' ? '' : 'none'; $('#bar').style.display = sp ? '' : 'none';
   ddLabel();
-  ({ map: renderMap, cap: renderCap, bd: renderBd, log: renderLog, who: renderWho, how: renderHow })[tab]();
+  ({ map: renderMap, cap: renderCap, bd: renderBd, leave: renderLeave, log: renderLog, who: renderWho, how: renderHow })[tab]();
 }
 $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) { tab = b.dataset.tab; closeD(); show(); } });
 window.addEventListener('resize', () => { if (tab === 'map') lines(); });
+let lastW = innerWidth, rzT = null; window.addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(() => { if (innerWidth === lastW) return; lastW = innerWidth; if (D.stories.length && tab === 'bd') renderBd(); if (D.stories.length && tab === 'cap') renderCap(); }, 150); });
+window.matchMedia('(max-width:720px)').addEventListener('change', () => { if (tab === 'bd' && D.stories.length) renderBd(); });
 
 /* ---------- what each status word means (shown by the (i) next to the column or label) ---------- */
 const TASK_CLOSED = ['Technical Review', 'Done', 'Fixed', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod', 'Invalid', 'Deferred'], STORY_CLOSED = ['Deployed to UAT', 'Deployed to Prod'], EPIC_CLOSED = ['Done'];
 const OPEN_STATUSES = ['Backlog', 'Research', 'Spec_Completed', 'Accepted by Developer', 'Ready for Development', 'In Progress', 'Code_Review', 'In Testing', 'On-Hold', 'New', 'Triaged', 'Reopened', 'Verified', 'ACTIVE', 'Duplicate', "Won't Fix"];
-const TT = {   // every (i) tooltip: a heading, an optional one-line intro, then labelled rows or groups of chips
-  flag: { h: 'Flag', p: 'How time logging compares with the working time that has passed. The first rule that fits is shown.', rows: [['nil', 'Not started', 'The working days have not begun.'], ['bad', 'Time log missing', 'More than 8 h less logged than expected.'], ['warn', 'Behind on logging', 'More than 2 h less logged than expected.'], ['warn', 'Cannot finish in time', 'Logging is fine, but the work left is more than the hours left.'], ['ok', 'On track', 'None of the rules above apply.']] },
-  missing: { h: 'Missing log (h)', p: 'Hours expected to be logged by now, minus hours actually logged.', rows: [['warn', 'Orange', 'More than 2 h missing.'], ['bad', 'Red', 'More than 8 h missing.']] },
-  expected: { h: 'Expected logged by now (h)', p: 'The share of the 64 h capacity that has passed, counted in working hours (11:00 to 19:00 IST, 8 h a day) up to the latest Jira pull.' },
-  slot: { h: 'Scheduled pull status', rows: [['ok', 'Pulled', 'The pull ran and read Jira. The time is when it ran.'], ['bad', 'Failed', 'The pull ran but could not read Jira.'], ['warn', 'Missed', 'More than 3 hours passed and no scheduled pull happened.'], ['up', 'Upcoming', 'That time has not come yet.'], ['nil', 'Not scheduled', 'The day is before scheduled pulls began on 13 Nov.']] },
-  pulled: { h: 'Pulled', p: 'A scheduled pull that ran and read Jira.' }, failed: { h: 'Failed', p: 'A scheduled pull that ran but could not read Jira.' },
-  missed: { h: 'Missed', p: 'A scheduled time that passed more than 3 hours ago with no scheduled pull.' }, upcoming: { h: 'Upcoming', p: 'Scheduled times that have not come yet.' },
-  latest: { h: 'Latest scheduled pull', p: 'The most recent scheduled pull that worked. "None yet" means none has worked since scheduled pulls began on 13 Nov.' },
-  next: { h: 'Next scheduled pull', p: 'The next time on the cron schedule, in India time, and how long until then.' },
-  jira: { h: 'Jira status', groups: [['Epics are closed in', EPIC_CLOSED], ['User stories are closed in', STORY_CLOSED], ['Tasks are closed in', TASK_CLOSED], ['Open, not counted as closed', OPEN_STATUSES]], note: 'An epic stays open in In Documentation, In Testing, In Progress and Backlog.' },
-  type: { h: 'Type', rows: [['blue', 'Epic', 'Holds user stories.'], ['ok', 'Story', 'A user story.'], ['nil', 'Task', 'Sub-task, Story sub-task, Bug sub-task, New Feature sub-task, and any Task, Bug or New Feature.']] },
-  day: { h: 'Sprint day', rows: [['nil', 'Not started', 'Before day 1 of the sprint.'], ['blue', 'N of 10', 'The current working day. Days 1 and 2 are Sprint Planning.'], ['ok', 'Sprint complete', 'After day 10.']] },
-  renew: { h: 'Renew by', rows: [['ok', 'Never, Does not expire, No expiry', 'Nothing to renew.'], ['warn', 'A date', 'Renew the pass before this date, or the dashboard stops reading Jira.']] },
-  closed: { h: 'What counts as closed', groups: [['Epics', EPIC_CLOSED], ['User stories', STORY_CLOSED], ['Tasks', TASK_CLOSED]], note: 'Tasks are every sub-task type (Sub-task, Story sub-task, Bug sub-task, New Feature sub-task) and any Task, Bug or New Feature.' },
-  ideal: { h: 'Ideal pace', p: 'Work that should be done by the end of each day, if the sprint hours burn evenly.', rows: [['blue', 'Formula', 'Total hours × working day / 8 working days'], ['nil', 'Days 1 and 2', 'Sprint Planning, no capacity counted.']] },
-  remaining: { h: 'Remaining estimate', p: 'For each task, original estimate minus the time logged on it (never below 0), added up.' },
-  over: { h: 'Over estimate (h)', p: 'Hours logged beyond a task\'s own estimate. They do not reduce the remaining estimate of other tasks.' },
-  n1: { h: 'Jira', p: 'Where tickets, estimates, time logs, comments and attachments live.', rows: [['ok', 'Read-only', 'The dashboard only reads from Jira. It never writes to it.']] },
-  n2: { h: 'GitHub Actions', p: 'Runs a script that reads Jira through the Jira REST API.', rows: [['blue', 'Where it runs', "On GitHub's servers, not on anyone's laptop."], ['ok', 'Access', 'A read-only Jira API token stored as a GitHub secret.']] },
-  n3: { h: 'GitHub repository', p: 'The script commits the latest data as JSON files.', rows: [['ok', 'History kept', 'Every update is a commit, so older data is never lost.']] },
-  n4: { h: 'Vercel', p: 'Hosts this page and serves the JSON files.', rows: [['blue', 'Team link', 'The Vercel address is the link the team uses.'], ['warn', 'A few seconds of wait', 'After a commit, Vercel needs a few seconds to deploy it. The Refresh button shows a countdown timer with extra time built in.']] },
-  n5: { h: 'This dashboard', p: 'The page in your browser.', rows: [['ok', 'Sign-in', 'Team password.'], ['blue', 'Stays current', "A teammate's refresh appears here within about a minute."]] },
-  c1: { h: 'Cron schedule', rows: [['blue', 'When', 'Weekdays at 10:45 AM and 6:45 PM IST.'], ['ok', 'Who runs it', 'GitHub Actions, under the GitHub account ckvcanary. No Claude job and no laptop is involved.'], ['warn', 'If GitHub skips a slot', 'It is retried 30 and 60 minutes later.']] },
-  c2: { h: 'Refresh button', rows: [['blue', 'What happens', 'A Vercel API route starts the GitHub Actions workflow. The GitHub token stays on Vercel.'], ['warn', 'Not started if', 'A run is already going, or the data is under 2 minutes old.'], ['ok', 'Then', 'After about 40 seconds this page checks the new data and shows "Data refreshed".']] },
-  manual: { h: 'Scheduled pulls only', p: 'Refreshes from the Refresh button are not counted here.' },
-  budget: { h: 'Refresh budget', p: 'Refreshes by the whole team in the last 24 hours.', rows: [['blue', 'Limit', 'Vercel Hobby allows 100 deployments a day, and every refresh is one.'], ['warn', 'Stops at 95', 'The Refresh button stops at 95. The last 5 are kept for the cron schedule.'], ['ok', 'Not counted', 'GitHub Actions runs from the cron schedule have no limit for a public repository.']] },
-  cron: { h: 'Cron schedule account', rows: [['blue', 'GitHub account', 'ckvcanary owns the repository and its schedule.'], ['ok', 'Owner', 'chetan@canaryai.com'], ['warn', 'Claude', 'No Claude routine or Claude cron exists for this dashboard.']] },
+const TT = {   // every (i): one short line, then a formula and a worked example laid out as rows
+  flag: { h: 'Flag', rows: [['nil', 'Not started', 'Work has not begun'], ['ok', 'On track', 'Logged is equal to or more than expected'], ['warn', 'Behind on logging', 'Up to 8 h short'], ['bad', 'Time log missing', 'More than 8 h short']] },
+  verdict: { h: 'Verdict', p: 'Can the remaining work fit in the time left?', rows: [['blue', 'Formula', '(remaining estimate) − (time left)'], ['ok', 'Achievable', 'Result is 0 or less'], ['bad', 'Not achievable', 'Result is above 0'], ['ok', 'Completed', 'Sprint over, no work left'], ['bad', 'Not completed', 'Sprint over, work left']], math: [{ h: 'Example', rows: [['Remaining estimate', '36 h'], ['Time left', '33.5 h'], ['Short by', '(36 h) − (33.5 h) = 2.5 h']] }] },
+  left: { h: 'Time left in the sprint (h)', p: 'Working hours still to come, after leave.', rows: [['blue', 'Formula', '(capacity) − (hours passed)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Hours passed', '40 h'], ['Time left', '(64 h) − (40 h) = 24 h']] }] },
+  leave: { h: 'Leave (h)', p: 'Hours away. Lowers capacity only.', rows: [['blue', 'Formula', '(capacity) − (leave)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Leave', '6 h'], ['After leave', '(64 h) − (6 h) = 58 h']] }] },
+  missing: { h: 'Missing log (h)', p: 'Hours expected but not logged.', rows: [['blue', 'Formula', '(expected log) − (logged)'], ['warn', 'Orange', 'Up to 8 h'], ['bad', 'Red', 'More than 8 h']], math: [{ h: 'Example', rows: [['Expected', '24 h'], ['Logged', '18 h'], ['Missing', '(24 h) − (18 h) = 6 h']] }] },
+  expected: { h: 'Expected log by now (h)', p: 'Hours that should be logged by now.', rows: [['blue', 'Formula', '(original estimate / capacity days) × (capacity days passed)'], ['warn', 'Leave', 'Days on leave are not counted']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Daily target', '(48 h) / (8 days) = 6 h'], ['Capacity days passed', '4'], ['Expected log', '(6 h × 4) = 24 h']] }] },
+  over: { h: 'Over estimate (h)', p: 'Hours logged beyond the original estimate.', rows: [['blue', 'Formula', '(logged) − (original estimate)']], math: [{ h: 'Example', rows: [['Original estimate', '10 h'], ['Logged', '14 h'], ['Over estimate', '(14 h) − (10 h) = 4 h']] }] },
+  ideal: { h: 'Ideal pace', p: 'Dashed line: every capacity day covers one equal chunk of the original estimate.', rows: [['blue', 'Formula', '(total) − ((total / capacity days) × days passed)'], ['warn', 'Leave', 'Days on leave carry no planned work']], math: [{ h: 'Example', rows: [['Original estimate', '10 h'], ['Capacity days', '5'], ['Chunk per day', '(10 h) / (5) = 2 h'], ['Left after day 3', '(10 h) − (2 h × 3) = 4 h']] }] },
+  remaining: { h: 'Remaining estimate', p: 'Blue line: the work still left.', rows: [['blue', 'Formula', '(original estimate) − (logged), never below 0']], math: [{ h: 'Example', rows: [['Sub-task A', '(6 h) − (2 h) = 4 h'], ['Sub-task B', '(3 h) − (5 h) = 0 h'], ['Remaining', '(4 h) + (0 h) = 4 h']] }] },
+  slot: { h: 'Pull status', rows: [['ok', 'Pulled', 'The pull ran'], ['bad', 'Failed', 'Could not read Jira'], ['warn', 'Missed', 'No pull within 3 hours'], ['up', 'Upcoming', 'Not yet'], ['nil', 'Not scheduled', 'Before 13 Nov']] },
+  pulled: { h: 'Pulled', p: 'The scheduled pull ran.' }, failed: { h: 'Failed', p: 'The pull ran but could not read Jira.' },
+  missed: { h: 'Missed', p: 'No scheduled pull within 3 hours of the slot.' }, upcoming: { h: 'Upcoming', p: 'The slot has not come yet.' },
+  latest: { h: 'Latest scheduled pull', p: 'The last scheduled pull that worked.' },
+  next: { h: 'Next scheduled pull', p: 'The next timer slot, in India time.' },
+  type: { h: 'Type', rows: [['blue', 'Epic', 'Holds user stories'], ['ok', 'User story', 'Holds sub-tasks'], ['nil', 'Sub-task', 'Sub-task, Story sub-task, Bug sub-task, New Feature sub-task']] },
+  day: { h: 'Sprint day', p: 'Working days since the sprint started. The first 2 are Sprint Planning.', rows: [['nil', 'Not started', 'Before day 1'], ['blue', 'Day N of 10', 'Counts every working day'], ['ok', 'Complete', 'After day 10']] },
+  capday: { h: 'Capacity day', p: 'Working days that carry capacity. Sprint Planning days are not counted.', rows: [['blue', 'Formula', '(sprint day) − (planning days)']], math: [{ h: 'Example', rows: [['Sprint day', '6'], ['Planning days', '2'], ['Capacity day', '(6) − (2) = 4 of 8']] }] },
+  renew: { h: 'Renew by', rows: [['ok', 'No expiry', 'Nothing to renew'], ['warn', 'A date', 'Renew before that day']] },
+  closed: { h: 'Counted as closed', groups: [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]] },
+  n1: { h: 'Jira', p: 'Where tickets and time logs live.', rows: [['ok', 'Read-only', 'The dashboard never writes to Jira']] },
+  n2: { h: 'GitHub Actions', p: 'Reads Jira with an Atlassian API token.', rows: [['blue', 'Runs on', "GitHub's servers"]] },
+  n3: { h: 'GitHub repository', p: 'Keeps the data as JSON files.', rows: [['ok', 'History', 'Every update is a commit']] },
+  n4: { h: 'Vercel', p: 'Hosts this page.', rows: [['blue', 'Team link', 'The Vercel address']] },
+  n5: { h: 'This dashboard', p: 'The page in your browser.', rows: [['ok', 'Sign-in', 'Team password']] },
+  c1: { h: 'GitHub Actions schedule', rows: [['blue', 'When', 'Every day, 10:50 AM and 6:50 PM IST'], ['warn', 'If skipped', 'Retries 30 and 60 minutes later']] },
+  c3: { h: 'cron-job.org timer', rows: [['blue', 'When', 'Every day, 10:50 AM and 6:50 PM IST'], ['ok', 'Why', 'A second timer outside GitHub'], ['nil', 'Same pull', 'If one timer pulled, the other is skipped']] },
+  c2: { h: 'Refresh button', rows: [['blue', 'Does', 'Starts a pull now'], ['warn', 'Skipped if', 'A pull is running, or data is under 2 minutes old']] },
+  budget: { h: 'Refresh button', p: 'Limited by the free Vercel plan.', rows: [['blue', 'Limit', '100 pulls in 24 hours'], ['warn', 'Button stops at', '95, so timers always have 5'], ['blue', 'Formula', '(95) − (pulls in 24 hours)']], math: [{ h: 'Example', rows: [['Pulls in 24 hours', '3'], ['Refreshes left', '(95) − (3) = 92']] }] },
+  cron: { h: 'Who runs the timers', rows: [['blue', 'GitHub account', 'ckvcanary'], ['ok', 'cron-job.org account', 'Dashboard owner'], ['ok', 'Owner email', 'chetan@canaryai.com'], ['warn', 'Claude', 'No Claude job runs the timers']] }
 };
+const ST_EPIC = ['Backlog', 'In Progress', 'In Testing', 'In Documentation', 'Done'];
+const ST_STORY = ['Backlog', 'Research', 'Spec_Completed', 'Accepted by Developer', 'Ready for Development', 'In Progress', 'Code_Review', 'In Testing', 'Technical Review', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod', 'Done', 'On-Hold'];
+const ST_BUG = ['New', 'Triaged', 'ACTIVE', 'Reopened', 'Code_Review', 'Fixed', 'Verified', 'Deferred', 'Duplicate', "Won't Fix", 'Invalid', 'On-Hold', 'Done'];
+let jiraTab = 'status';
 const chips = a => `<span class="tchips">${a.map(x => `<span class="tchip">${esc(x)}</span>`).join('')}</span>`;
+function jiraPop() {
+  const tabs = `<div class="jtabs" role="tablist"><button type="button" role="tab" data-jtab="status" aria-selected="${jiraTab === 'status'}">Statuses</button><button type="button" role="tab" data-jtab="closed" aria-selected="${jiraTab === 'closed'}">Counted as closed</button></div>`;
+  const groups = jiraTab === 'status' ? [['Epic', ST_EPIC], ['User story', ST_STORY], ['Sub-task, Story sub-task, New Feature sub-task', ST_STORY], ['Bug sub-task', ST_BUG]] : [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]];
+  return `<div class="tt jp"><div class="tth">Jira status</div>${tabs}${groups.map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}</div>`;
+}
 function ttHtml(d) {
-  return `<div class="tt"><div class="tth">${esc(d.h)}</div>${d.p ? `<p class="ttp">${esc(d.p)}</p>` : ''}${(d.rows || []).map(r => `<div class="ttr"><span class="ttn"><i class="td ${r[0]}"></i>${esc(r[1])}</span><span class="ttd">${esc(r[2])}</span></div>`).join('')}${(d.groups || []).map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${d.note ? `<p class="ttnote">${esc(d.note)}</p>` : ''}</div>`;
+  return `<div class="tt"><div class="tth">${esc(d.h)}</div>${d.p ? `<p class="ttp">${esc(d.p)}</p>` : ''}${(d.rows || []).map(r => `<div class="ttr"><span class="ttn"><i class="td ${r[0]}"></i>${esc(r[1])}</span><span class="ttd">${esc(r[2])}</span></div>`).join('')}${(d.groups || []).map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${(d.math || []).map(m => `<div class="ttm"><div class="ttmh">${esc(m.h)}</div><table class="ttmt"><tbody>${m.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table></div>`).join('')}${d.note ? `<p class="ttnote">${esc(d.note)}</p>` : ''}</div>`;
 }
 const lab = (text, key) => `${text}<button type="button" class="ibtn" data-tip="@${key}" aria-label="What do the values mean?">i</button>`;
 const tip = key => `<button type="button" class="ibtn" data-tip="@${key}" aria-label="What does this mean?">i</button>`;
 
 /* ---------- tooltips: hover or focus an (i) button; tap on touch screens ---------- */
 const gtip = document.createElement('div'); gtip.id = 'gtip'; gtip.className = 'gtip'; gtip.setAttribute('role', 'tooltip'); gtip.hidden = true; document.body.appendChild(gtip);
-const tipOf = b => { const k = b.dataset.tip; if (k === '@refresh') return refreshTip(); return k[0] === '@' ? ttHtml(TT[k.slice(1)]) : `<p class="ttp" style="margin:0">${esc(k)}</p>`; };
+const tipOf = b => { const k = b.dataset.tip; if (k === '@refresh') return refreshTip(); if (k === '@jira') return jiraPop(); return k[0] === '@' ? ttHtml(TT[k.slice(1)]) : `<p class="ttp" style="margin:0">${esc(k)}</p>`; };
 function showTip(b) {
   { const bt = document.getElementById('tip'); if (bt) bt.hidden = true; }
-  gtip.innerHTML = tipOf(b); gtip.hidden = false; const r = b.getBoundingClientRect(), w = gtip.offsetWidth, h = gtip.offsetHeight;
-  gtip.style.left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), innerWidth - w - 8) + 'px'; gtip.style.top = (r.bottom + 8 + h > innerHeight - 8 ? Math.max(8, r.top - h - 8) : r.bottom + 8) + 'px'; b.setAttribute('aria-describedby', 'gtip');
+  gtip.classList.toggle('jt', b.dataset.tip === '@jira');
+  gtip.innerHTML = tipOf(b); gtip.hidden = false;
+  gtip.classList.toggle('sheet', isNarrow()); if (isNarrow()) { gtip.style.left = ''; gtip.style.top = ''; b.setAttribute('aria-describedby', 'gtip'); return; }
+  const r = b.getBoundingClientRect(), w = gtip.offsetWidth, h = gtip.offsetHeight, vw = innerWidth, vh = innerHeight;
+  let left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), vw - w - 8), top = r.bottom + 8;
+  if (top + h > vh - 8) top = r.top - h - 8;                       // not enough room below: above the button
+  if (top < 8) {                                                    // neither fits: beside the button, never on top of it
+    top = Math.min(Math.max(8, r.top + r.height / 2 - h / 2), vh - h - 8);
+    left = r.right + 10 + w <= vw - 8 ? r.right + 10 : Math.max(8, r.left - w - 10);
+  }
+  gtip.style.left = left + 'px'; gtip.style.top = top + 'px'; b.setAttribute('aria-describedby', 'gtip');
 }
-const hideTip = () => { gtip.hidden = true; document.querySelectorAll('.ibtn[aria-describedby]').forEach(b => b.removeAttribute('aria-describedby')); };
-document.addEventListener('mouseover', e => { const b = e.target.closest('.ibtn[data-tip]'); if (b) showTip(b); });
-document.addEventListener('mouseout', e => { if (e.target.closest('.ibtn[data-tip]')) hideTip(); });
-document.addEventListener('focusin', e => { const b = e.target.closest && e.target.closest('.ibtn[data-tip]'); if (b) showTip(b); });
-document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('.ibtn[data-tip]')) hideTip(); });
-document.addEventListener('click', e => { const b = e.target.closest('.ibtn[data-tip]'); if (b) { e.stopPropagation(); gtip.hidden || b.getAttribute('aria-describedby') ? hideTip() : showTip(b); } else hideTip(); });
+let hideT = null; const hideSoon = () => { clearTimeout(hideT); hideT = setTimeout(hideTip, 140); };
+gtip.addEventListener('mouseenter', () => clearTimeout(hideT)); gtip.addEventListener('mouseleave', hideSoon);
+gtip.addEventListener('click', e => { e.stopPropagation(); const t = e.target.closest('[data-jtab]'); if (t) { jiraTab = t.dataset.jtab; gtip.innerHTML = jiraPop(); } });
+const hideTip = () => { clearTimeout(hideT); gtip.hidden = true; document.querySelectorAll('.ibtn[aria-describedby]').forEach(b => b.removeAttribute('aria-describedby')); };
+const canHover = () => window.matchMedia('(hover: hover)').matches;   // on a touch screen a tap opens and closes the explanation; hover and focus do not
+document.addEventListener('mouseover', e => { if (!canHover()) return; const b = e.target.closest('.ibtn[data-tip]'); if (b) { clearTimeout(hideT); showTip(b); } });
+document.addEventListener('mouseout', e => { if (e.target.closest('.ibtn[data-tip]')) hideSoon(); });
+document.addEventListener('focusin', e => { if (!canHover()) return; const b = e.target.closest && e.target.closest('.ibtn[data-tip]'); if (b) showTip(b); });
+document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('.ibtn[data-tip]') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#gtip'))) hideTip(); });
+document.addEventListener('click', e => { const b = e.target.closest('.ibtn[data-tip], td[data-tip]'); if (b && b.tagName === 'TD' && !window.matchMedia('(max-width:1120px)').matches) return hideTip(); if (b) { e.stopPropagation(); (!gtip.hidden && b.getAttribute('aria-describedby')) ? hideTip() : showTip(b); } else hideTip(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') hideTip(); });
 window.addEventListener('scroll', hideTip, { passive: true });
 
+/* ---------- keep each label's last word and its (i) on one line, so an (i) is never left alone on the next line ---------- */
+function glueInfo() {
+  document.querySelectorAll('.ibtn').forEach(b => {
+    if (b.closest('th') || b.parentElement.classList.contains('nw') || b.classList.contains('ci')) return;
+    const d = getComputedStyle(b.parentElement).display; if (d.includes('flex') || d.includes('grid')) return;   // a flex or grid parent keeps its items on one line already
+    const p = b.previousSibling; if (!p || p.nodeType !== 3) return; const m = p.textContent.match(/(\S+)\s*$/); if (!m) return;
+    const w = document.createElement('span'); w.className = 'nw'; p.textContent = p.textContent.slice(0, m.index); b.parentNode.insertBefore(w, b); w.appendChild(document.createTextNode(m[1])); w.appendChild(b);
+  });
+}
+function wrapVals() {   // phone cards: the label comes from data-l, the value is wrapped so it can sit at the right edge
+  document.querySelectorAll('td[data-l]').forEach(td => { if (td.querySelector(':scope > .v')) return; const sp = document.createElement('span'); sp.className = 'v'; while (td.firstChild) sp.appendChild(td.firstChild); td.appendChild(sp); });
+}
+let glueT = null; new MutationObserver(() => { cancelAnimationFrame(glueT); glueT = requestAnimationFrame(() => { wrapVals(); glueInfo(); }); }).observe(document.body, { childList: true, subtree: true });
+
 /* ---------- refresh limits ---------- */
 const LIMIT = 100, RESERVE = 5, DAY = 864e5;   // Vercel free plan: 100 deployments in 24 hours, one per refresh; 5 stay free for the scheduled pulls
-function usage() { const now = Date.now(), r = (RUNS || []).map(x => Date.parse(x.at)).filter(ms => now - ms < DAY).sort((a, b) => a - b); return { n: r.length, resetAt: r.length ? r[0] + DAY : null }; }
+function usage() { const now = Date.now(), all = (RUNS || []).filter(x => now - Date.parse(x.at) < DAY), r = all.map(x => Date.parse(x.at)).sort((a, b) => a - b); return { n: r.length, sched: all.filter(x => x.trigger === 'schedule').length, resetAt: r.length ? r[0] + DAY : null }; }
 function refreshTip() {
   const u = usage();
-  return `<div class="tt"><div class="tth">Refresh limit</div><div class="ttr"><span class="ttn"><i class="td blue"></i>Limit</span><span class="ttd">${LIMIT} refreshes in any 24 hours (free Vercel plan).</span></div><div class="ttr"><span class="ttn"><i class="td ok"></i>Used</span><span class="ttd"><b>${u.n} of ${LIMIT}</b> in the last 24 hours, counted for the whole team from every browser and person.</span></div><div class="ttr"><span class="ttn"><i class="td nil"></i>Repeat clicks</span><span class="ttd">A refresh less than 2 minutes after the last one is skipped.</span></div><div class="ttg"><div class="ttgl">The dot beside the time</div><div class="ttr"><span class="ttn"><i class="td ok"></i>Green</span><span class="ttd">Refreshed in the last 14 hours.</span></div><div class="ttr"><span class="ttn"><i class="td warn"></i>Amber</span><span class="ttd">Older than 14 hours.</span></div><div class="ttr"><span class="ttn"><i class="td blue"></i>Blue, pulsing</span><span class="ttd">Refreshing now.</span></div></div></div>`;
+  return `<div class="tt"><div class="tth">Refresh limit</div><div class="ttr"><span class="ttn"><i class="td blue"></i>Limit</span><span class="ttd">100 pulls in 24 hours</span></div><div class="ttr"><span class="ttn"><i class="td ok"></i>Used</span><span class="ttd"><b>${u.n} of ${LIMIT}</b> in the last 24 hours, whole team</span></div><div class="ttr"><span class="ttn"><i class="td nil"></i>Two clicks</span><span class="ttd">Under 2 minutes apart: skipped</span></div><div class="ttg"><div class="ttgl">The dot beside the time</div><div class="ttr"><span class="ttn"><i class="td ok"></i>Green</span><span class="ttd">Under 14 hours old</span></div><div class="ttr"><span class="ttn"><i class="td warn"></i>Amber</span><span class="ttd">Older than 14 hours</span></div><div class="ttr"><span class="ttn"><i class="td blue"></i>Blue, pulsing</span><span class="ttd">Refreshing now</span></div></div></div>`;
 }
 
 /* ---------- messages ---------- */
@@ -997,18 +1408,19 @@ function showMeta() {
   $('#rfval').textContent = tfmt(t); $('#rfval').title = ago(age); $('#rfdot').className = 'dot' + (age > 14 * 3600e3 ? ' old' : '');
   if ($('#asof')) $('#asof').textContent = tfmt(t);
 }
-const RF = Object.assign({ poll: 3000, max: 300000, expect: 40, fresh: 120000 }, window.RF_TEST || {});
+const RF = Object.assign({ poll: 3000, max: 300000, expect: 75, fresh: 120000 }, window.RF_TEST || {});   // a pull takes 18 to 40 s on GitHub (one run took 104 s), plus the Vercel deploy: 75 s keeps a buffer so the countdown never restarts
+const WORDS = ['Tinkering', 'Pondering', 'Brewing', 'Untangling', 'Noodling', 'Percolating', 'Simmering', 'Wrangling', 'Mulling', 'Synthesizing'];
 const getJ = async f => { const r = await fetch('data/' + f + '?v=' + Date.now() + Math.random(), { cache: 'no-store' }); if (!r.ok) throw new Error(f); return r.json(); };
 let LOADFAIL = false;
 const getOpt = async (f, fallback) => { try { return await getJ(f); } catch (e) { return fallback; } };
 // map.json and meta.json are required; burndown.json and runs.json are optional, so a missing one leaves the other pages working
 const validMap = d => !!d && typeof d === 'object' && Array.isArray(d.sprints) && Array.isArray(d.epics) && Array.isArray(d.stories) && !!d.desc && typeof d.desc === 'object';
 async function fetchAll() {   // data of the wrong shape (a half-written or damaged file) is refused before it can reach the page
-  const [d, bd, m, r] = await Promise.all([getJ('map.json'), getOpt('burndown.json', {}), getJ('meta.json'), getOpt('runs.json', [])]);
+  const [d, bd, m, r, lv] = await Promise.all([getJ('map.json'), getOpt('burndown.json', {}), getJ('meta.json'), getOpt('runs.json', []), getOpt('leave.json', {})]);
   if (!validMap(d) || !m || typeof m.refreshedAt !== 'string') throw new Error('The data files are not in the expected shape');
-  return [d, (bd && typeof bd === 'object' && !Array.isArray(bd)) ? bd : {}, m, Array.isArray(r) ? r : []];
+  return [d, (bd && typeof bd === 'object' && !Array.isArray(bd)) ? bd : {}, m, Array.isArray(r) ? r : [], (lv && typeof lv === 'object' && !Array.isArray(lv)) ? lv : {}];
 }
-function apply(d, bd, m, r) { LOADFAIL = false; D = d; BD = bd; META = m; RUNS = r; ingest(); selMap = selMap.filter(i => SHOW.includes(i)); closeD(); show(); showMeta(); }
+function apply(d, bd, m, r, lv) { LOADFAIL = false; D = d; BD = bd; META = m; RUNS = r; LEAVE = lv || {}; ingest(); selMap = selMap.filter(i => SHOW.includes(i)); closeD(); show(); showMeta(); }
 async function loadData() { apply(...await fetchAll()); }
 const limitToast = (n, resetAt) => ({ kind: 'error', title: 'Daily refresh limit reached', text: n + ' of ' + LIMIT + ' refreshes were used in the last 24 hours. The limit comes from the free Vercel plan, and ' + RESERVE + ' are kept for the scheduled pulls.', meta: (resetAt ? 'You can refresh again after ' + tfmt(resetAt) + '. ' : '') + 'The backup copy at ckvcanary.github.io/sprint-dashboard always shows the latest data.', ms: 15000 });
 const verified = (d, bd, m) => d.asOf === m.refreshedAt && d.stories && d.stories.length && bd;
@@ -1024,16 +1436,17 @@ async function startRefresh() {
   let tick = null; const end = () => { clearInterval(tick); prog.hidden = true; pbar.style.width = '0'; idle(); };
   try { const [m, r] = await Promise.all([getJ('meta.json'), getJ('runs.json')]); baseStamp = m.refreshedAt; baseRuns = r.length; } catch (e) {}   // baseline taken now, not at page load
   const was = shownStamp ? tfmt(Date.parse(shownStamp)) : 'an unknown time';
-  const latest = async () => { try { const [d, bd, m, r] = await fetchAll(); if (m.refreshedAt !== shownStamp && verified(d, bd, m)) { apply(d, bd, m, r); return m; } } catch (e) {} return null; };
+  const latest = async () => { try { const [d, bd, m, r, lv] = await fetchAll(); if (m.refreshedAt !== shownStamp && verified(d, bd, m)) { apply(d, bd, m, r, lv); return m; } } catch (e) {} return null; };
   const current = async () => { const m = await latest(); const mm = m || META; return notify({ kind: 'info', title: 'Data is already up to date', text: (mm ? mm.sprint + ' was refreshed ' + ago(Date.now() - Date.parse(mm.refreshedAt)) : 'The data was refreshed a moment ago') + '. Refreshes less than 2 minutes apart are skipped.', meta: mm ? 'Last refreshed ' + tfmt(Date.parse(mm.refreshedAt)) : '' }); };
   const ageMs = Date.now() - Date.parse(baseStamp);
   if (baseStamp && ageMs >= 0 && ageMs < RF.fresh) { idle(); return current(); }   // a computer clock that runs behind must not block refreshing
   const u = usage(); if (u.n >= LIMIT - RESERVE) { idle(); return notify(limitToast(u.n, u.resetAt)); }
   if (u.n >= LIMIT - 15) notify({ kind: 'info', title: 'Close to the daily refresh limit', text: u.n + ' of ' + LIMIT + ' refreshes were used in the last 24 hours. Please refresh only when needed.', ms: 9000 });
-  const t0 = Date.now(); let joined = false;
+  const t0 = Date.now(); let joined = false; const w0 = Math.floor(Math.random() * WORDS.length);
   const paint = () => { const s = (Date.now() - t0) / 1000, left = Math.ceil(RF.expect - s), pct = Math.min(95, s / RF.expect * 95);
-    pbar.style.width = pct + '%'; pwrap.setAttribute('aria-valuenow', Math.round(pct)); pt.textContent = left > 0 ? 'About ' + left + ' s' : 'Taking a little longer · ' + Math.floor(s) + ' s';
-    ps.textContent = joined ? 'Another refresh is already running. Waiting for it to finish.' : 'Reading Jira, publishing the data, then checking it.'; };
+    pbar.style.width = pct + '%'; pwrap.setAttribute('aria-valuenow', Math.round(pct)); pt.textContent = left > 0 ? left + ' s left' : 'Finishing up';
+    const w = WORDS[(w0 + Math.floor(s / 2.4)) % WORDS.length]; if ($('#rfptxt').textContent !== w) $('#rfptxt').textContent = w;
+    ps.textContent = joined ? 'Another refresh is already running. Waiting for it to finish.' : s > RF.expect ? 'Still reading Jira. This can take a little longer.' : 'Reading Jira, publishing the data, then checking it.'; };
   placeStack(); prog.hidden = false; paint(); tick = setInterval(paint, 500);
   let info = {};
   try { const r = await fetch(REFRESH_URL, { method: 'POST' }); info = await r.json().catch(() => ({})); if (info.state === 'limit') { end(); return notify(limitToast(info.used, usage().resetAt)); } if (!r.ok) throw new Error('The refresh service answered ' + r.status); }
@@ -1043,11 +1456,11 @@ async function startRefresh() {
   while (Date.now() - t0 < RF.max) {
     await new Promise(r => setTimeout(r, RF.poll + Math.random() * 800));
     try {
-      const [d, bd, m, r] = await fetchAll();
+      const [d, bd, m, r, lv] = await fetchAll();
       if (r.length > baseRuns && r.slice(baseRuns).some(x => x.ok === false)) { const f = r.slice(baseRuns).find(x => x.ok === false); end(); return notify({ kind: 'error', title: 'Refresh failed', text: 'The refresh ran but could not read Jira' + (f.error ? ' (' + f.error + ')' : '') + '.', meta: 'Still showing data from ' + was }); }
       if (m.refreshedAt === baseStamp) continue;                              // nothing new yet
       if (!verified(d, bd, m)) continue;                                      // stamps differ (cache lag) or data incomplete: not verified yet
-      pbar.style.width = '100%'; apply(d, bd, m, r); end();
+      pbar.style.width = '100%'; apply(d, bd, m, r, lv); end();
       return notify({ kind: 'success', title: 'Data refreshed', text: m.sprint + ' · ' + Number(m.sprintIssues != null ? m.sprintIssues : m.issues).toLocaleString('en-US') + ' issues synced from Jira', meta: 'Last refreshed ' + tfmt(Date.parse(m.refreshedAt)) });
     } catch (e) {}
   }
@@ -1078,12 +1491,70 @@ async function checkNewer() {
   autoBusy = true;
   try {
     const m = await getJ('meta.json');
-    if (m.refreshedAt !== META.refreshedAt) { const [d, bd, mm, r] = await fetchAll(); if (mm.refreshedAt !== META.refreshedAt && verified(d, bd, mm)) { apply(d, bd, mm, r); notify({ kind: 'info', title: 'Data updated', text: 'A refresh by someone on the team brought newer data.', meta: 'Last refreshed ' + tfmt(Date.parse(mm.refreshedAt)) }); } }
+    try { const r = await getJ('runs.json'); const key = x => (x && x.length) + '|' + (x && x.length ? x[x.length - 1].at + x[x.length - 1].ok : ''); if (key(r) !== key(RUNS) && m.refreshedAt === META.refreshedAt) { RUNS = r; if (tab === 'log') renderLog(); } } catch (e) {}      // a pull that failed or was recorded without new data still reaches the Pull log
+    if (m.refreshedAt !== META.refreshedAt) { const [d, bd, mm, r, lv] = await fetchAll(); if (mm.refreshedAt !== META.refreshedAt && verified(d, bd, mm)) { apply(d, bd, mm, r, lv); notify({ kind: 'info', title: 'Data updated', text: 'A refresh by someone on the team brought newer data.', meta: 'Last refreshed ' + tfmt(Date.parse(mm.refreshedAt)) }); } }
   } catch (e) {}
   autoBusy = false;
 }
 setInterval(checkNewer, 60000); document.addEventListener('visibilitychange', () => { if (!document.hidden) checkNewer(); });
 rfb.onclick = startRefresh;
+/* ---------- guided tour: step by step, leave at any time and return to where you were ---------- */
+const GUIDE = [
+  { t: 'Welcome', x: 'A short tour of the dashboard. Use Next to move on, or Leave guide to go back to where you were.' },
+  { sel: '.rfcard', t: 'Last refreshed', x: 'When Jira was last read. Press Refresh to read it again.' },
+  { tab: 'map', sel: '#fsprint', t: 'Choose a sprint', x: 'Every page follows the sprint you choose here.' },
+  { sel: '#tabs', t: 'Pages', x: 'Map, Capacity, Burndown, Leave, Pull log, Stakeholders and How it works.' },
+  { tab: 'map', sel: '#v-map', t: 'Map', x: 'Epics with their user stories, sprint by sprint. Open a card for its details.' },
+  { tab: 'cap', sel: '.capgrid', t: 'Capacity', x: 'Each person\'s original estimate against their capacity, after leave.' },
+  { tab: 'bd', view: 'overall', sel: '#daywidgets', t: 'Sprint day and capacity day', x: 'Sprint Planning days carry no capacity, so capacity day runs behind sprint day.' },
+  { tab: 'bd', view: 'overall', sel: '#capov', t: 'Capacity bars', x: 'Capacity used, capacity left and the remaining estimate. Remaining above left means the work will not fit.' },
+  { tab: 'bd', view: 'person', sel: '#cw', t: 'Remaining work and ideal pace', x: 'The blue line is the work left. The dashed line is the ideal pace. Hover or tap a day for details.' },
+  { tab: 'bd', view: 'person', sel: '#tplan', t: 'Can the work be finished?', x: 'The remaining estimate against the time left gives the verdict.' },
+  { tab: 'bd', view: 'person', sel: '#tlog', t: 'Time logging', x: 'Hours logged against the log expected by now. Equal or more is on track.' },
+  { tab: 'leave', sel: '#lvcap', t: 'Leave', x: 'Leave lowers capacity and nothing else.' },
+  { tab: 'log', sel: '.sched3', t: 'Pull log', x: 'When the dashboard last read Jira and when the next scheduled pull is due.' },
+  { tab: 'how', sel: '.flow', t: 'How it works', x: 'Jira to GitHub Actions to Vercel. Two timers and the Refresh button start it.' },
+];
+let GD = null;
+function startGuide() {
+  if (GD || !D.stories.length) return; closeD(); hideTip();
+  GD = { i: 0, save: { tab, bdView, bdWho, y: window.scrollY } };
+  const o = document.createElement('div'); o.id = 'gd'; o.className = 'gdo'; o.setAttribute('role', 'dialog'); o.setAttribute('aria-label', 'Guided tour');
+  o.innerHTML = '<div class="gdh" id="gdh"></div><div class="gdp" id="gdp"></div>'; document.body.appendChild(o); guideGo(0);
+}
+function guideGo(i) {
+  const st = GUIDE[i]; GD.i = i;
+  if (st.tab) { tab = st.tab; if (st.view) bdView = st.view; closeD(); show(); }
+  requestAnimationFrame(() => requestAnimationFrame(() => guidePlace(st)));
+}
+function guidePlace(st) {
+  if (!GD) return; const h = $('#gdh'), p = $('#gdp'), n = GUIDE.length, i = GD.i, last = i === n - 1, phone = isNarrow();
+  p.innerHTML = `<div class="gdn">Step ${i + 1} of ${n}</div><h4>${esc(st.t)}</h4><p>${esc(st.x)}</p><div class="gdd">${GUIDE.map((_, k) => `<i class="${k === i ? 'on' : k < i ? 'dn' : ''}"></i>`).join('')}</div><div class="gdb"><button type="button" class="btn ghost sm" data-gd="leave">Leave guide</button><span class="gds"></span><button type="button" class="btn ghost sm" data-gd="back" ${i ? '' : 'disabled'}>Back</button><button type="button" class="btn sm" data-gd="next">${last ? 'Done' : 'Next'}</button></div>`;
+  const el = st.sel ? document.querySelector(st.sel) : null, ok = el && el.getBoundingClientRect().width > 0 && el.offsetParent !== null;
+  if (!ok) { h.style.cssText = 'left:50%;top:50%;width:0;height:0'; p.className = 'gdp mid'; p.style.cssText = ''; $('#gdp [data-gd=next]').focus(); return; }
+  window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - (phone ? 76 : 96), behavior: 'instant' });
+  const r = el.getBoundingClientRect(), pad = 8, top = Math.max(6, r.top - pad), bottom = Math.min(innerHeight - 6, r.bottom + pad), left = Math.max(6, r.left - pad), right = Math.min(innerWidth - 6, r.right + pad);
+  h.style.cssText = `left:${left}px;top:${top}px;width:${right - left}px;height:${Math.max(24, bottom - top)}px`;
+  p.className = 'gdp'; p.style.cssText = '';
+  if (!phone) {   // dock the card where it does not cover the highlighted part
+    const ph = p.offsetHeight, pw = p.offsetWidth, below = innerHeight - bottom - 18, spot = { l: left, r: right, t: top, b: bottom };
+    const overlaps = (t) => !(t + ph < spot.t || t > spot.b);
+    p.style.right = '24px'; p.style.left = 'auto';
+    if (below >= ph) p.style.top = (bottom + 14) + 'px';
+    else if (spot.t > ph + 24) p.style.top = (spot.t - ph - 14) + 'px';
+    else { p.style.top = Math.max(12, innerHeight - ph - 24) + 'px'; if (overlaps(innerHeight - ph - 24) && spot.t > 40) p.style.top = '12px'; }
+  }
+  $('#gdp [data-gd=next]').focus({ preventScroll: true });
+}
+function endGuide() {
+  if (!GD) return; const sv = GD.save; GD = null; const o = $('#gd'); if (o) o.remove();
+  tab = sv.tab; bdView = sv.bdView; bdWho = sv.bdWho; closeD(); show(); window.scrollTo({ top: sv.y, behavior: 'instant' });
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-gd]'); if (!b || !GD) return; const a = b.dataset.gd; if (a === 'leave') return endGuide(); if (a === 'back' && GD.i > 0) return guideGo(GD.i - 1); if (a === 'next') return GD.i >= GUIDE.length - 1 ? endGuide() : guideGo(GD.i + 1); });
+document.addEventListener('keydown', e => { if (!GD) return; if (e.key === 'Escape') { e.preventDefault(); endGuide(); } else if (e.key === 'ArrowRight') { e.preventDefault(); GD.i < GUIDE.length - 1 ? guideGo(GD.i + 1) : endGuide(); } else if (e.key === 'ArrowLeft' && GD.i > 0) { e.preventDefault(); guideGo(GD.i - 1); } });
+window.addEventListener('resize', () => { if (GD) guidePlace(GUIDE[GD.i]); });
+$('#guidebtn').onclick = startGuide;
+
 setInterval(() => { if (META) showMeta(); if (tab === 'log') renderLog(); }, 60000);
 showMeta(); show();
 if (!D.stories.length) loadData().catch(() => { LOADFAIL = true; $('#rfval').textContent = 'Could not load data'; show(); });

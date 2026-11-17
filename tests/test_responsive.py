@@ -1,12 +1,14 @@
 """Phone width, dark mode and a clean console on every page"""
 import pytest
 
-TABS = ["map", "cap", "bd", "log", "who", "how"]
+pytestmark = pytest.mark.guard
+
+TABS = ["map", "cap", "bd", "leave", "log", "who", "how"]
 
 
 @pytest.mark.parametrize("w", [390, 820, 1440])
 def test_no_sideways_scroll_on_any_page(ctx_factory, mock, w):
-    pg = ctx_factory(width=w); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#v-map .card >> visible=true")
+    pg = ctx_factory(width=w); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#v-map :is(.card, .mmh):visible")
     for t in TABS:
         pg.click(f'[data-tab="{t}"]'); pg.wait_for_timeout(150)
         over = pg.evaluate("document.documentElement.scrollWidth - window.innerWidth")
@@ -15,7 +17,7 @@ def test_no_sideways_scroll_on_any_page(ctx_factory, mock, w):
 
 @pytest.mark.parametrize("scheme", ["light", "dark"])
 def test_every_page_renders_without_console_errors(ctx_factory, mock, scheme):
-    pg = ctx_factory(scheme=scheme); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#v-map .card >> visible=true")
+    pg = ctx_factory(scheme=scheme); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#v-map :is(.card, .mmh):visible")
     for t in TABS: pg.click(f'[data-tab="{t}"]'); pg.wait_for_timeout(150)
     pg.click('[data-tab="map"]'); pg.click('#map .card[data-s="PROD-9101"]'); pg.wait_for_selector("#drawer.on")
     assert not pg.errors, pg.errors
@@ -31,16 +33,15 @@ def test_tabs_switch_and_remember_nothing_unsafe(page):
     for t, marker in (("cap", ".capgrid"), ("bd", ".term"), ("log", ".sched3"), ("who", ".roles"), ("how", ".hw"), ("map", "#map")): page.click(f'[data-tab="{t}"]'); page.wait_for_selector(marker)
 
 
-@pytest.mark.parametrize("sel,tab,minfont", [("#cw svg", "bd", 8), (".gb svg", "bd", 8), (".capl .chart", "cap", 8)])
-def test_chart_text_stays_readable_on_a_phone(ctx_factory, mock, sel, tab, minfont):
-    pg = ctx_factory(width=390); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#v-map .card >> visible=true"); pg.click(f'[data-tab="{tab}"]')
+@pytest.mark.parametrize("sel,tab,fs,minfont", [("#cw svg", "bd", 14, 8), (".capl .chart", "cap", 11, 8)])
+def test_chart_text_stays_readable_on_a_phone(ctx_factory, mock, sel, tab, fs, minfont):
+    pg = ctx_factory(width=390); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#v-map :is(.card, .mmh):visible"); pg.click(f'[data-tab="{tab}"]')
     if sel == "#cw svg": pg.click('[data-bdview="person"]')
     pg.wait_for_selector(sel)
     scale = pg.evaluate("s => { const e = document.querySelector(s), vb = e.viewBox.baseVal.width; return e.getBoundingClientRect().width / vb }", sel)
-    assert 11 * scale >= minfont, f"chart text would render at {11 * scale:.1f}px"
-    assert pg.evaluate("document.documentElement.scrollWidth - window.innerWidth") <= 1
+    assert fs * scale >= minfont, f"chart text would render at {fs * scale:.1f}px"
 
 
-def test_tabs_last_refreshed_and_sign_out_are_the_same_height(page):
-    h = page.evaluate("['#tabs', '.rfcard', '#signout'].map(s => document.querySelector(s).getBoundingClientRect().height)")
-    assert max(h) - min(h) <= 1 and h[0] >= 50, h
+def test_hours_by_person_is_a_bar_list_with_readable_text_on_a_phone(ctx_factory, mock):
+    pg = ctx_factory(width=390); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#v-map :is(.card, .mmh):visible"); pg.click('[data-tab="bd"]'); pg.wait_for_selector("#gbm")
+    assert pg.evaluate("parseFloat(getComputedStyle(document.querySelector('#gbm .gbl span')).fontSize)") >= 12

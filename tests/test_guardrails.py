@@ -1,6 +1,8 @@
 """Guardrails: what happens when things go wrong, and what must never happen. Run before every deploy."""
 import datetime as dt, json, re, time, urllib.request
 import pytest
+
+pytestmark = pytest.mark.guard
 from conftest import NOW, PASSWORD, ctl, posts
 import test_relay as relay
 
@@ -82,7 +84,7 @@ def test_a_computer_clock_that_runs_behind_does_not_block_refreshing(ctx_factory
 def test_times_are_always_shown_in_india_time_whatever_the_computer_timezone(ctx_factory, mock, tz):
     pg = ctx_factory(tz=tz); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card")
     assert pg.inner_text("#rfval") == "13 Nov, 4:34 PM IST"; pg.click('[data-tab="log"]'); pg.wait_for_selector(".sched3"); t = pg.locator(".sched3").inner_text()
-    assert "13 Nov, 6:45 PM IST" in t and "13 Nov, 10:46 AM IST" in t
+    assert "13 Nov, 6:50 PM IST" in t and "13 Nov, 10:46 AM IST" in t
 
 
 def test_blocked_browser_storage_still_lets_you_sign_in_for_the_visit(ctx_factory, mock):
@@ -131,5 +133,5 @@ def test_a_much_bigger_sprint_still_loads_quickly(ctx_factory, mock):
     (d / "map.json").write_text(json.dumps(m)); (d / "burndown.json").write_text(json.dumps(bd))
     pg = ctx_factory(); t0 = time.time(); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); assert time.time() - t0 < 8, "map with 300 stories and 1,800 tasks"
     t0 = time.time(); pg.click('[data-tab="bd"]'); pg.click('[data-bdview="person"]'); pg.wait_for_selector("#cw svg"); assert time.time() - t0 < 4
-    svg = pg.locator("#cw svg").bounding_box(); pg.mouse.click(svg["x"] + (60 + 4.5 / 11 * 924) / 1000 * svg["width"], svg["y"] + svg["height"] * .4); pg.wait_for_selector("#dayd:not([hidden])"); pg.get_by_role("tab", name="Still open").click(); assert pg.locator("#dayd tbody tr").count() > 1000
+    pg.locator("#cw").scroll_into_view_if_needed(); pg.wait_for_timeout(300); svg = pg.locator("#cw svg").bounding_box(); pg.mouse.click(svg["x"] + (60 + 4.5 / 11 * 924) / 1000 * svg["width"], svg["y"] + svg["height"] * .4); pg.wait_for_selector("#dayd:not([hidden])"); pg.get_by_role("tab", name="Still open").click(); assert pg.locator("#dayd table.dtab tbody tr").count() > 1000
     assert not clean(pg.errors), clean(pg.errors)

@@ -2,13 +2,18 @@ name: Refresh Jira data
 
 on:
   schedule:                  # GitHub does not promise the exact minute, and sometimes drops a run, so each slot is tried three times;
-    - cron: "15 5 * * 1-5"   #   10:45 AM IST, Monday to Friday
-    - cron: "45 5 * * 1-5"   #   retry at 11:15 AM IST (skipped when the 10:45 pull already worked)
-    - cron: "15 6 * * 1-5"   #   retry at 11:45 AM IST
-    - cron: "15 13 * * 1-5"  #   6:45 PM IST, Monday to Friday
-    - cron: "45 13 * * 1-5"  #   retry at 7:15 PM IST
-    - cron: "15 14 * * 1-5"  #   retry at 7:45 PM IST
-  workflow_dispatch:         # manual refresh, started from the dashboard or the Actions tab
+    - cron: "20 5 * * *"   #   10:50 AM IST, every day (same time as the cron-job.org timer)
+    - cron: "50 5 * * *"   #   retry at 11:20 AM IST (skipped when the 10:50 pull already worked)
+    - cron: "20 6 * * *"   #   retry at 11:50 AM IST
+    - cron: "20 13 * * *"  #   6:50 PM IST, every day
+    - cron: "50 13 * * *"  #   retry at 7:20 PM IST
+    - cron: "20 14 * * *"  #   retry at 7:50 PM IST
+  workflow_dispatch:         # manual refresh, started from the dashboard or the Actions tab, or by the cron-job.org timer
+    inputs:
+      source:
+        description: "Set to cron-job.org by the refresh relay when the external timer starts the run"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -39,6 +44,7 @@ jobs:
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_ACTOR: ${{ github.actor }}
+          PULL_SOURCE: ${{ inputs.source }}
         run: python3 scripts/refresh.py
       - name: Save data and the pull log
         if: always()

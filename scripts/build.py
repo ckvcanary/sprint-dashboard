@@ -8,5 +8,6 @@ HEAD = '<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n<meta name="v
 (r / "index.html").write_text(HEAD + t)
 if "--embed" in sys.argv:
     d = {k: (r / f"data/{k}.json").read_text() for k in ("map", "burndown", "meta", "runs")}
-    (r / "artifact.html").write_text(t.replace("/*DATA*/{sprints:[],epics:[],stories:[],desc:{}}", d["map"], 1).replace("/*BD*/{}", d["burndown"], 1).replace("/*META*/null", d["meta"], 1).replace("/*RUNS*/[]", d["runs"], 1))
+    leave = (r / "data/leave.json").read_text() if (r / "data/leave.json").exists() else "{}"
+    (r / "artifact.html").write_text(t.replace("/*DATA*/{sprints:[],epics:[],stories:[],desc:{}}", d["map"], 1).replace("/*BD*/{}", d["burndown"], 1).replace("/*META*/null", d["meta"], 1).replace("/*RUNS*/[]", d["runs"], 1).replace("/*LEAVE*/{}", leave, 1))
 print("built")

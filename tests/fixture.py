@@ -37,6 +37,6 @@ def build(dest):
     runs = [{"at": "2026-11-12T14:10:01Z", "trigger": "manual", "ok": True, "issues": 1064, "sprint": "Sprint 24", "by": "tester"},
             {"at": "2026-11-13T05:16:10Z", "trigger": "schedule", "ok": True, "issues": 1066, "sprint": "Sprint 24", "by": "Scheduler"},
             {"at": ASOF, "trigger": "manual", "ok": True, "issues": 1066, "sprint": "Sprint 24", "by": "tester"}]
-    for n, o in (("map", m), ("burndown", bd), ("meta", meta), ("runs", runs)):
+    for n, o in (("map", m), ("burndown", bd), ("meta", meta), ("runs", runs), ("leave", {})):
         (d / f"{n}.json").write_text(json.dumps(o))
     return d

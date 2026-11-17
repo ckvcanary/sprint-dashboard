@@ -86,7 +86,7 @@ def test_a_ticket_drawer_shows_hours_files_and_comments(pw):
 
 
 def test_phone_width_has_no_sideways_scroll_on_any_page(pw):
-    pg = fresh(pw, width=390); pg.wait_for_selector("#v-map .card >> visible=true")
+    pg = fresh(pw, width=390); pg.wait_for_selector("#v-map :is(.card, .mmh):visible")
     for t in TABS: pg.click(f'[data-tab="{t}"]'); pg.wait_for_timeout(200); assert pg.evaluate("document.documentElement.scrollWidth - window.innerWidth") <= 1, t
 
 

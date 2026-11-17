@@ -1,5 +1,5 @@
 """Refresh button: progress, verification and every outcome"""
-import time
+import re, time
 from conftest import ctl, posts
 
 QUICK = "{poll: 250, max: 6000, expect: 5}"
@@ -12,7 +12,7 @@ def start(ctx_factory, mock, mode="ok", delay=1.5, rf=QUICK, now=None):
 
 def test_success_shows_progress_then_one_verified_toast(ctx_factory, mock):
     pg = start(ctx_factory, mock); pg.click("#rfbtn"); assert pg.is_disabled("#rfbtn")
-    pg.wait_for_selector("#rfprog", state="visible"); assert "About" in pg.inner_text("#rfpt")
+    pg.wait_for_selector("#rfprog", state="visible"); assert re.fullmatch(r"\d+ s left", pg.inner_text("#rfpt"))
     assert pg.locator(".tst.success").count() == 0, "no success before the data is checked"
     t = pg.locator(".tst.success"); t.wait_for(timeout=8000)
     txt = t.inner_text(); assert "Data refreshed" in txt and "Sprint 24 · 14 issues synced from Jira" in txt and "Last refreshed 13 Nov, 4:42 PM IST" in txt
@@ -130,6 +130,6 @@ def test_relay_reporting_the_limit_shows_the_same_toast(ctx_factory, mock):
 
 def test_refresh_card_info_shows_the_limit_and_usage_on_hover(page):
     page.hover(".rfcard .ibtn"); tip = page.locator("#gtip"); tip.wait_for()
-    t = tip.inner_text(); assert "100 refreshes in any 24 hours" in t and "3 of 100" in t and "less than 2 minutes" in t and "whole team from every browser and person" in t
+    t = tip.inner_text(); assert "100 pulls in 24 hours" in t and "3 of 100" in t and "Under 2 minutes apart: skipped" in t and "whole team" in t
     assert tip.locator(".tth").inner_text() == "Refresh limit" and tip.locator(".ttr").count() == 6 and all(w in t for w in ("Green", "Amber", "Blue, pulsing"))
     page.mouse.move(5, 5); tip.wait_for(state="hidden")

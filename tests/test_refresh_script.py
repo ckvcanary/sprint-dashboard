@@ -2,6 +2,8 @@
 import datetime as dt, importlib.util, json, pathlib
 import pytest
 
+pytestmark = pytest.mark.guard
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("refresh", ROOT / "scripts" / "refresh.py"); R = importlib.util.module_from_spec(spec); spec.loader.exec_module(R)
 
@@ -78,3 +80,23 @@ def test_manual_refreshes_never_stand_a_scheduled_slot_down(tmp_path, monkeypatc
 
 def test_the_evening_slot_is_not_blocked_by_the_morning_pull(tmp_path, monkeypatch):
     write_runs(tmp_path, monkeypatch, [{"at": "2026-11-13T05:16:00Z", "trigger": "schedule", "ok": True}]); assert not R.scheduled_pull_done_recently(now=at(13, 16))
+
+
+def test_cron_job_org_dispatch_is_recorded_as_a_scheduled_pull(monkeypatch, tmp_path):
+    monkeypatch.setattr(R, "DATA", tmp_path)
+    for env, trig in (({"GITHUB_EVENT_NAME": "schedule"}, "schedule"),
+                      ({"GITHUB_EVENT_NAME": "workflow_dispatch", "PULL_SOURCE": "cron-job.org"}, "schedule"),
+                      ({"GITHUB_EVENT_NAME": "workflow_dispatch", "PULL_SOURCE": "", "GITHUB_ACTOR": "ckvcanary"}, "manual"),
+                      ({"GITHUB_EVENT_NAME": "workflow_dispatch", "PULL_SOURCE": "someone-else"}, "manual")):
+        monkeypatch.setattr(R, "ENV", env); (tmp_path / "runs.json").unlink(missing_ok=True)
+        R.record(True, 5)
+        rec = json.loads((tmp_path / "runs.json").read_text())[-1]
+        assert rec["trigger"] == trig, env
+        assert rec["by"] == ("Scheduler" if trig == "schedule" else "ckvcanary" if env.get("GITHUB_ACTOR") else "Local run")
+
+
+def test_retries_stand_down_after_a_cron_job_org_pull(monkeypatch, tmp_path):
+    monkeypatch.setattr(R, "DATA", tmp_path); monkeypatch.setattr(R, "ENV", {"GITHUB_EVENT_NAME": "workflow_dispatch", "PULL_SOURCE": "cron-job.org"})
+    assert not R.scheduled_pull_done_recently()
+    R.record(True, 5)
+    assert R.scheduled_pull_done_recently() and R.is_scheduled()

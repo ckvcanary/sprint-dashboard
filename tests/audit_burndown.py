@@ -5,7 +5,7 @@ Needs the Jira login (.env) and Playwright with Chrome. The browser is signed in
 
 Three layers:  Jira  ->  data files (refresh.py)  ->  what the page shows (template.html).
   A. data files against an independent read of Jira (estimates, logged hours by day, burn, over estimate, closed dates)
-  B. the page's tables, bars, chart hover, day panel and Logic page against numbers computed from the rules, not from the page's own code
+  B. the page's tables, bars, chart hover, day panel and capacity bars against numbers computed from the rules, not from the page's own code
   C. edge cases: other sprints' day axis, retrospective day, over-estimate, closed-before-sprint, empty states"""
 import base64, collections, datetime as dt, json, pathlib, re, sys, time, urllib.request
 
@@ -139,14 +139,36 @@ def elapsed(at):
 EL = elapsed(AT)
 
 
+LEAVE = []
+try:
+    import urllib.request
+    LEAVE = json.loads(urllib.request.urlopen(URL + "/data/leave.json?v=1", timeout=20).read()).get("S24", [])
+except Exception:
+    LEAVE = []                    # no leave file means no leave
+
+
 def model(n, p):
+    k = CAP / TOT; lv = {}
+    for x in LEAVE:
+        if x["name"] == n and x["date"] in WD: lv[x["date"]] = min(DH, lv.get(x["date"], 0) + x["hours"])
+    avail = [max(0, DH - lv.get(d, 0)) * k for d in WD]; capP = sum(avail)
+    def used_at(h):
+        u, rest = 0.0, max(0, h)
+        for a_ in avail:
+            if rest <= 1e-9: break
+            t = min(DH, rest); u += a_ * t / DH; rest -= t
+        return u
     burned = sum(h for d, h in p["burn"].items() if d <= AD); logged = sum(h for d, h in p["logs"].items() if d <= AD)
-    exp, remain, left = CAP * EL / TOT, max(0, p["E"] - burned), CAP * (TOT - EL) / TOT; miss = max(0, exp - logged)
-    st = "Not started" if EL <= 0 else "Time log missing" if miss > 8 else "Behind on logging" if miss > 2 else "On track"
-    if EL > 0 and st == "On track" and remain > left + .05 and asof.date().isoformat() <= WD[-1]: st = "Cannot finish in time"
-    return dict(E=p["E"], logged=logged, remain=remain, over=max(0, logged - burned), exp=exp, miss=miss, left=left, st=st)
+    used = used_at(EL); remain, left = max(0, p["E"] - burned), max(0, capP - used); exp = p["E"] * used / capP if capP > 0 else 0; miss = max(0, exp - logged); gap = remain - left     # expected log = (original estimate / capacity days) x capacity days passed
+    st = "Not started" if EL <= 0 else "Time log missing" if miss > 8 else "Behind on logging" if miss > .05 else "On track"
+    late = asof.date().isoformat() > WD[-1]
+    vd = ("Not completed" if remain > .05 else "Completed") if late else ("Not achievable" if gap > .05 else "Achievable")
+    return dict(E=p["E"], logged=logged, remain=remain, over=max(0, logged - burned), exp=exp, miss=miss, left=left, st=st, cap=capP, used=used, leave=sum(lv.values()), vd=vd, used_at=used_at)
 M = {n: model(n, p) for n, p in people.items()}
 tot = lambda k: sum(m[k] for m in M.values())
+
+
+def ideal_at(h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / m["cap"]) if m["cap"] > 0 else m["E"]) for m in M.values())
 
 
 def remaining_at(day_i, who):
@@ -169,14 +191,25 @@ with sync_playwright() as pw:
         pg = c.new_page(); pg.set_default_timeout(20000); pg.errors = []
         pg.on("pageerror", lambda e: pg.errors.append(str(e))); pg.goto(URL + "/"); pg.wait_for_selector('[data-tab="bd"]'); pg.click('[data-tab="bd"]'); pg.wait_for_selector(".seg"); return pg
 
+    def bars(scope):
+        out = {}
+        for x in pg.locator(scope + " .cb").all_inner_texts():
+            m = re.search(r"([\d.]+) h of ([\d.]+) h \((\d+)%\)", x); out[x.split("\n")[0].strip()] = (float(m.group(1)), float(m.group(2)))
+        return out
+
     pg = page_for()
-    check("Burndown has three areas: Overall, Per person, Logic", pg.locator(".seg button").all_inner_texts() == ["Overall", "Per person", "Logic"])
+    check("Burndown has two views: Overall and Per person (no Logic page, no Rules page)", pg.locator(".seg button").all_inner_texts() == ["Overall", "Per person"])
     ov = pg.locator(".term").inner_text()
-    dayno = sum(d <= asof.date().isoformat() for d in SD)
-    check("Overview: sprint day equals the count of working days from the start", (f"{dayno} of 10" in ov) if dayno <= 10 else "10 of 10" in ov, f"expected {dayno} of 10")
-    check("Overview: capacity line says 64 h = 8 days x 8 h", "64 h per person = 8 days × 8 h" in ov)
-    cap = pg.locator(".capb").inner_text(); used = num(re.search(r"Used\s+([\d.]+) h", cap).group(1)); lf = num(re.search(r"Left\s+([\d.]+) h", cap).group(1))
-    n = len(people); check(f"Whole-team capacity bar: used {n * CAP * EL / TOT:.1f} h of {n * CAP} h", close(used, n * CAP * EL / TOT) and close(used + lf, n * CAP), f"page: used {used}, left {lf}")
+    dayno = sum(d <= asof.date().isoformat() for d in SD); capno = sum(d <= asof.date().isoformat() for d in WD)
+    wsp, wcp = pg.locator("#wsprint").inner_text().replace("\n", " "), pg.locator("#wcap").inner_text().replace("\n", " ")
+    check("Widget: sprint day equals the count of working days from the start", (f"{dayno} of 10" in wsp) if dayno <= 10 else "Complete" in wsp, f"expected {dayno} of 10, page {wsp}")
+    check("Widget: capacity day equals the working days passed, planning days not counted", (f"{capno} of {len(WD)}" in wcp) if capno and asof.date().isoformat() <= WD[-1] else True, f"expected {capno} of {len(WD)}, page {wcp}")
+    check("Overview: capacity line says 64 hours = (8 days) x (8 hours)", "64 hours = (8 days) × (8 hours)" in ov)
+    check("Overview: one fact per row (no dot-separated lines)", " · " not in ov)
+    n = len(people); b = bars("#capov")
+    capT = tot("cap"); usedT = tot("used"); leftT = tot("left"); remT = tot("remain")
+    check(f"Whole-team bars: used {usedT:.1f} h, left {leftT:.1f} h, remaining estimate {remT:.1f} h of {capT:.1f} h", close(b["Capacity used"][0], usedT, .15) and close(b["Capacity left"][0], leftT, .15) and close(b["Remaining estimate"][0], remT, .15) and all(close(v[1], capT, .15) for v in b.values()), f"page {b}")
+    check("Whole-team bars: used + left = capacity", close(b["Capacity used"][0] + b["Capacity left"][0], capT, .2))
     gb = pg.evaluate("() => [...document.querySelectorAll('.gb svg text')].map(t => t.textContent)")
     bad = []
     for nm, m in M.items():
@@ -185,64 +218,65 @@ with sync_playwright() as pw:
     check("Hours by person: the bars show original estimate, logged and expected for every person", not bad, bad or f"{len(M)} people compared")
 
     pg.click('[data-bdview="person"]'); pg.wait_for_selector("#cw svg")
-    def table():
-        return pg.evaluate("() => { const t = [...document.querySelectorAll('#v-bd .panel table')].pop(); return [...t.querySelectorAll('tbody tr')].map(r => [...r.cells].map(c => c.innerText.trim())); }")
-    rows = {r[0]: r for r in table()}
-    cols = ["E", "logged", "remain", "over", "exp", "miss", "left"]
+    def table(sel): return {r[0]: r for r in pg.evaluate("s => [...document.querySelectorAll(s + ' tbody tr')].map(r => [...r.cells].map(c => c.innerText.replace(/\\s+/g, ' ').trim()))", sel)}
+    plan_, log_ = table("#tplan"), table("#tlog")
     for nm, m in M.items():
-        r = rows.get(nm); good = bool(r) and all(close(num(r[1 + i]), m[c]) for i, c in enumerate(cols)) and r[8] == m["st"]
-        check(f"{nm}: table row equals the rules (original, logged, remaining, over, expected, missing, left, flag)", good, f"page {r[1:9] if r else None}  rules {[round(m[c], 1) for c in cols] + [m['st']]}")
-    ev = rows.get("Everyone"); check("Everyone row is the sum of the people rows", bool(ev) and all(close(num(ev[1 + i]), tot(c), .15) for i, c in enumerate(cols)), f"page {ev[1:8] if ev else None}")
+        r, l = plan_.get(nm), log_.get(nm)
+        good = bool(r) and close(num(r[1]), m["E"]) and close(num(r[2]), m["remain"]) and close(num(r[3]), m["left"]) and r[4].startswith(m["vd"])
+        check(f"{nm}: plan table equals the rules (original, remaining, time left, verdict {m['vd']})", good, f"page {r[1:5] if r else None}  rules {[round(m[c], 1) for c in ('E', 'remain', 'left')] + [m['vd']]}")
+        good = bool(l) and all(close(num(l[1 + i]), m[c]) for i, c in enumerate(["logged", "over", "exp", "miss", "leave"])) and l[6] == m["st"]
+        check(f"{nm}: logging table equals the rules (logged, over, expected, missing, leave, flag)", good, f"page {l[1:7] if l else None}  rules {[round(m[c], 1) for c in ['logged', 'over', 'exp', 'miss', 'leave']] + [m['st']]}")
+    ev, el_ = plan_.get("Everyone"), log_.get("Everyone")
+    check("Everyone rows are the sum of the people rows", bool(ev) and all(close(num(ev[1 + i]), tot(c), .25) for i, c in enumerate(["E", "remain", "left"])) and all(close(num(el_[1 + i]), tot(c), .25) for i, c in enumerate(["logged", "over", "exp", "miss", "leave"])), f"{ev} {el_}")
+    chk = pg.text_content("#nowlbl"); check("Chart: the label at the end of the blue line equals the team remaining estimate", close(num(chk.split("·")[1]), remT, .1), chk)
+    check("Chart: exactly one dot on the lines (the latest pull)", pg.locator("#cw svg circle:visible").count() == 1)
 
     # hover on every day, Everyone
     svg = pg.locator("#cw svg").bounding_box(); slots = len(SD) + (1 if (WIN and S.get("end") == (dt.date.fromisoformat(SD[-1]) + dt.timedelta(3 if dt.date.fromisoformat(SD[-1]).weekday() == 4 else 1)).isoformat()) else 0)
-    def slot_xy(k): return svg["x"] + (60 + (k + .5) / slots * (1000 - 60 - 16)) / 1000 * svg["width"], svg["y"] + svg["height"] * .4
+    def slot_xy(k):
+        pg.locator("#cw").scroll_into_view_if_needed(); pg.wait_for_timeout(450); sv = pg.locator("#cw svg").bounding_box()      # a scroll hides the hover card, so let it finish first
+        return sv["x"] + (60 + (k + .5) / slots * (1000 - 60 - 16)) / 1000 * sv["width"], sv["y"] + sv["height"] * .4
     sE = tot("E")
     for i in range(slots):
         pg.mouse.move(*slot_xy(i)); pg.wait_for_selector("#tip:not([hidden])")
-        t = pg.evaluate("() => Object.fromEntries([...document.querySelectorAll('#tip .mt tbody tr')].map(r => [r.cells[0].innerText.split(String.fromCharCode(10))[0], [...r.cells].slice(1).map(c => c.innerText.trim())]))")
         d = SD[i] if i < len(SD) else S["end"]
         if d > AD:
-            check(f"Hover {d}: a day that has not happened says so", "Not happened yet" in pg.locator("#tip").inner_text()); continue
+            check(f"Hover {d}: a day that has not happened says so", "has not happened yet" in pg.locator("#tip").inner_text()); continue
+        hm = pg.evaluate("() => [...document.querySelectorAll('#tip .mt')].map(t => [...t.querySelectorAll('tbody tr')].map(r => [...r.cells].map(c => c.innerText.trim())))")
+        hrs, tk = {r[0].split(chr(10))[0]: r[1] for r in hm[0]}, {r[0]: r[1:] for r in hm[1]}
         nn = 0 if d < WD[0] else min(WD.index(d) + 1, len(WD)) if d in WD else len(WD)
-        ideal_done = sE * min(nn * DH, TOT) / TOT; rem = remaining_at(i, list(people))
-        # for today the page uses elapsed hours of today: remaining is the value at the pull time; same as burn up to today
-        got_ideal, got_act = t["Ideal pace"], t["Actual"]
-        ok1 = close(num(got_ideal[0]), ideal_done, .1) and close(num(got_ideal[1]), sE - ideal_done, .1)
-        ok2 = close(num(got_act[1]), rem, .1) and close(num(got_act[0]), sE - rem, .1)
+        h = min(nn * DH, EL); ideal = ideal_at(h) if nn else sE; rem = remaining_at(i, list(people))
+        check(f"Hover {d}: ideal pace and remaining estimate equal the rules", close(num(hrs["Ideal pace"]), ideal, .1) and close(num(hrs["Remaining estimate"]), rem, .1), f"page {hrs}  rules ideal {ideal:.1f} remaining {rem:.1f}")
         cl = lambda m: sum(1 for v in m.values() if v and v <= d); today = lambda m: sum(1 for v in m.values() if v == d)
-        for nm, m in (("Tasks", task_close), ("User stories", story_close), ("Epics", epic_close)):
-            g = t[nm]; ok3 = int(g[0]) == today(m) and g[1] == f"{cl(m)} of {len(m)}" and int(g[2]) == len(m) - cl(m)
-            check(f"Hover {d} {nm}: closed today / so far / open equal Jira's history", ok3, f"page {g}  Jira {today(m)}, {cl(m)} of {len(m)}, {len(m) - cl(m)}")
-        check(f"Hover {d}: ideal pace and actual hours equal the rules", ok1 and ok2, f"page ideal {got_ideal} actual {got_act}  rules ideal {ideal_done:.1f}/{sE - ideal_done:.1f} actual {sE - rem:.1f}/{rem:.1f}")
+        for nm, m in (("Sub-tasks", task_close), ("User stories", story_close), ("Epics", epic_close)):
+            g = tk[nm]; ok3 = int(g[0]) == today(m) and g[1] == f"{cl(m)} of {len(m)}" and int(g[2]) == len(m) - cl(m)
+            check(f"Hover {d} {nm}: closed on the day / up to the day / open equal Jira's history", ok3, f"page {g}  Jira {today(m)}, {cl(m)} of {len(m)}, {len(m) - cl(m)}")
     pg.mouse.move(5, 5); pg.wait_for_selector("#tip", state="hidden")
 
-    # day panel for every past day: the three tabs list exactly Jira's tickets
+    # day panel for every past day: the summary table and the three tabs list exactly Jira's tickets
+    allc = {**task_close, **story_close, **epic_close}
     for i, d in enumerate(SD):
         if d > AD: continue
-        pg.mouse.click(*slot_xy(i)); pg.wait_for_selector("#dayd:not([hidden])")
-        counts = pg.evaluate("() => [...document.querySelectorAll('.dtabs button')].map(b => +b.querySelector('b').innerText)")
-        allc = {**task_close, **story_close, **epic_close}
-        want = [sum(v == d for v in allc.values()), sum(1 for v in allc.values() if v and v <= d), sum(1 for v in allc.values() if not (v and v <= d))]
-        check(f"Day panel {d}: tab counts (closed this day, so far, still open) equal Jira", counts == want, f"page {counts} Jira {want}")
-        pg.mouse.click(*slot_xy(i))
-    pg.click('[data-bdview="logic"]'); pg.wait_for_selector(".lgc")
+        pg.mouse.click(*slot_xy(i)); pg.wait_for_selector("#dayd:not([hidden])"); pg.wait_for_timeout(500)
+        sm = {r[0]: r[1:] for r in pg.evaluate("() => [...document.querySelectorAll('#dayd .dsum tbody tr')].map(r => [...r.cells].map(c => c.innerText.trim()))")}
+        ok = True; why = []
+        for nm, m in (("Sub-tasks", task_close), ("User stories", story_close), ("Epics", epic_close)):
+            c1, c2 = sum(v == d for v in m.values()), sum(1 for v in m.values() if v and v <= d)
+            if not (int(sm[nm][0]) == c1 and sm[nm][1] == f"{c2} of {len(m)}" and int(sm[nm][2]) == len(m) - c2): ok = False; why.append((nm, sm[nm], c1, c2))
+        check(f"Day panel {d}: summary counts (closed on the day, up to the day, still open) equal Jira", ok, why)
+        for tab, want in (("today", sum(v == d for v in allc.values())), ("closed", sum(1 for v in allc.values() if v and v <= d)), ("open", sum(1 for v in allc.values() if not (v and v <= d)))):
+            pg.click(f'[data-dtab="{tab}"]'); nrows = pg.locator("#dayd .dtab tbody tr:not(.dgrp):not(.rnone)").count()
+            check(f"Day panel {d}, tab {tab}: the list holds {want} tickets", nrows == want, f"page {nrows}")
+        xs = pg.evaluate("() => [...new Set([...document.querySelectorAll('#dayd .dtab td.num')].map(c => Math.round(c.getBoundingClientRect().right)))].length")
+        check(f"Day panel {d}: the estimate column lines up across epics, user stories and sub-tasks", xs == 1, f"{xs} different right edges")
+        pg.mouse.click(*slot_xy(i)); pg.wait_for_timeout(300)
 
-    # per-person capacity bar
-    pg.click('[data-bdview="person"]'); pg.wait_for_selector("#bdwho")
+    # per-person capacity bars and tables
+    pg.wait_for_selector("#bdwho")
     for nm, m in M.items():
-        pg.select_option("#bdwho", nm); t = pg.locator(".pcap").inner_text()
-        u = num(re.search(r"Used\s+([\d.]+) h", t).group(1)); check(f"{nm}: capacity bar used = 64 h x time passed / total time", close(u, CAP * EL / TOT), f"page {u}")
-        r = {x[0]: x for x in table()}.get(nm); check(f"{nm}: single-person table matches the rules", bool(r) and close(num(r[1]), m["E"]) and close(num(r[3]), m["remain"]))
-
-    # Logic page
-    pg.click('[data-bdview="logic"]'); pg.wait_for_selector("#lgchk")
-    fails = pg.locator("#lgchk .tag.bad").count(); check("Logic page: every self-check passes", fails == 0 and pg.locator("#lgchk .tag.ok").count() >= 6, f"{pg.locator('#lgchk .tag.ok').count()} pass, {fails} fail")
-    lt = {r[0]: r for r in pg.evaluate("() => [...document.querySelectorAll('.lgc')][0] ? [...document.querySelectorAll('.lgc')][0].tBodies[0] ? [...[...document.querySelectorAll('.lgc')][0].tBodies[0].rows].map(r => [...r.cells].map(c => c.innerText.trim())) : [] : []")}
-    for lab, want in (("Original estimate", tot("E")), ("Logged", tot("logged")), ("Remaining estimate", tot("remain")), ("Over estimate", tot("over")), ("Expected logged by now", tot("exp")), ("Missing log", tot("miss")), ("Time left in sprint", tot("left"))):
-        check(f"Logic page value: {lab}", lab in lt and close(num(lt[lab][3].split()[0]), want, .15), f"page {lt.get(lab, ['', '', '', None])[3]}  rules {want:.1f}")
-    w = pg.evaluate("() => [...document.querySelectorAll('#lgwarn tr')].map(r => [r.cells[0].innerText, r.cells[1].innerText])"); wd_ = {a: b for a, b in w}
-    check("Logic page data checks: over estimate, no estimate and no assignee counts equal Jira", int(wd_["Tasks logged over their own estimate"]) == len(over) and int(wd_["Tasks with no original estimate"]) == len(noest) and int(wd_["Tasks with no assignee (left out of the burndown)"]) == len(unassigned), str(wd_))
+        pg.select_option("#bdwho", nm); bb = bars("#capper")
+        check(f"{nm}: capacity bars equal the rules (used {m['used']:.1f}, left {m['left']:.1f}, remaining {m['remain']:.1f} of {m['cap']:.1f} h)", close(bb["Capacity used"][0], m["used"], .1) and close(bb["Capacity left"][0], m["left"], .1) and close(bb["Remaining estimate"][0], m["remain"], .1) and close(bb["Capacity used"][1], m["cap"], .1), f"page {bb}")
+        r = table("#tplan").get(nm); check(f"{nm}: single-person plan table matches the rules", bool(r) and close(num(r[1]), m["E"]) and close(num(r[2]), m["remain"]) and r[4].startswith(m["vd"]))
     check("No JavaScript errors on the Burndown page", not pg.errors, pg.errors[:2])
 
     # ---------------- C. edge cases on older sprints: the axis must start on the sprint's first working day
@@ -255,10 +289,10 @@ with sync_playwright() as pw:
         check(f"{sp}: the day axis starts on {wd[0]} (Day 1) and has {'a' if retro else 'no'} retrospective slot", dn[0] == "Day 1" and (("Retro" in dn) == retro) and len([x for x in dn if x.startswith("Day")]) == 10, f"{dn}")
         dates = [x for x in labs if re.fullmatch(r"\d+ [A-Z][a-z]{2}", x)]
         want0 = (dt.date.fromisoformat(wd[0])).strftime("%-d %b"); check(f"{sp}: first date label equals the first working day {want0}", dates and dates[0] == want0, f"{dates[:3]}")
-        pe = bsp["people"]; tt = q.evaluate("() => { const t = [...document.querySelectorAll('#v-bd .panel table')].pop(); return [...t.querySelectorAll('tbody tr')].map(r => [...r.cells].map(c => c.innerText.trim())); }")
+        pe = bsp["people"]; tt = [r for r in q.evaluate("() => [...document.querySelectorAll('#tplan tbody tr')].map(r => [...r.cells].map(c => c.innerText.trim()))")]
         bad = [r[0] for r in tt if r[0] in pe and not (close(num(r[1]), pe[r[0]]["E"], .06))]
         check(f"{sp}: every person's original estimate in the table equals the data", not bad, bad)
-        check(f"{sp}: remaining estimate is never above original estimate", all(num(r[3]) <= num(r[1]) + .06 for r in tt if r[0] in pe))
+        check(f"{sp}: remaining estimate is never above original estimate", all(num(r[2]) <= num(r[1]) + .06 for r in tt if r[0] in pe))
         q.context.close()
     br.close()
 

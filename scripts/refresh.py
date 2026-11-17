@@ -317,10 +317,15 @@ def scheduled_pull_done_recently(minutes=150, now=None):
     return False
 
 
+def is_scheduled():
+    """A pull is a scheduled pull when GitHub's own schedule started it, or when the cron-job.org timer did (the relay passes source=cron-job.org only inside a slot window)."""
+    return ENV.get("GITHUB_EVENT_NAME") == "schedule" or (ENV.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and ENV.get("PULL_SOURCE") == "cron-job.org")
+
+
 def record(ok, issues, err=""):
     now = dt.datetime.now(dt.timezone.utc)
     ist = (now + dt.timedelta(hours=5, minutes=30)).date().isoformat()
-    trig = "schedule" if ENV.get("GITHUB_EVENT_NAME") == "schedule" else "manual"
+    trig = "schedule" if is_scheduled() else "manual"
     by = "Scheduler" if trig == "schedule" else (ENV.get("GITHUB_ACTOR") or "Local run")
     rec = {"at": STAMP if ok else now.strftime("%Y-%m-%dT%H:%M:%SZ"), "trigger": trig, "ok": ok, "issues": issues, "sprint": sprint_label(ist), "by": by}
     if err: rec["error"] = err[:200]
@@ -335,11 +340,11 @@ def record(ok, issues, err=""):
 if __name__ == "__main__":
     if not all(ENV.get(k) for k in ("JIRA_BASE", "JIRA_EMAIL", "JIRA_TOKEN")):
         sys.exit("Missing JIRA_BASE, JIRA_EMAIL or JIRA_TOKEN")
-    if ENV.get("GITHUB_EVENT_NAME") == "schedule" and scheduled_pull_done_recently():
+    if is_scheduled() and scheduled_pull_done_recently():
         print("skipped: this slot already has a scheduled pull"); sys.exit(0)
     try:  # cooldown: a manual refresh right after another one is skipped
         mp = DATA / "meta.json"
-        if ENV.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and mp.exists():
+        if ENV.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and not is_scheduled() and mp.exists():
             last = dt.datetime.fromisoformat(json.loads(mp.read_text())["refreshedAt"].replace("Z", "+00:00"))
             if (dt.datetime.now(dt.timezone.utc) - last).total_seconds() < 120:
                 print("skipped: data refreshed less than 2 minutes ago"); sys.exit(0)

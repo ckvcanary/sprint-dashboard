@@ -1,4 +1,7 @@
 """How it works page: plain words for people who are not technical"""
+import pytest
+
+pytestmark = pytest.mark.guard
 import json, re
 
 
@@ -18,7 +21,8 @@ def test_flow_uses_the_real_names_with_arrowheads(page):
 
 def test_what_starts_github_actions_is_two_short_cards(page):
     open_how(page); s = page.locator(".startsec"); t = s.inner_text().lower()
-    assert "what starts github actions" in t and "cron schedule" in t and "weekdays, twice a day" in t and "refresh button" in t and "anyone on the team" in t and s.locator("p").count() == 0
+    assert "what starts github actions" in t and "github actions schedule" in t and "cron-job.org timer" in t and t.count("every day at 10:50 am and 6:50 pm ist") == 2 and "10:45" not in t and "refresh button" in t and "anyone on the team" in t and s.locator("p").count() == 0
+    assert s.locator(".chipc").count() == 3 and s.locator(".or").count() == 2
 
 
 def test_the_page_never_uses_an_invented_name(page):
@@ -30,16 +34,17 @@ def test_the_page_never_uses_an_invented_name(page):
 
 def test_accounts_and_renewal_use_real_terms_and_say_who_owns_what(page):
     open_how(page); page.click("summary:has-text('Accounts and renewal')"); t = page.locator(".hw").inner_text()
-    for w in ["Cron schedule", "Jira API token", "GitHub token, Refresh button", "GitHub token, publishing", "12 Nov 2027", "ckvcanary", "chetan-3565", "No expiry"]: assert w in t, w
+    for w in ["GitHub Actions schedule", "cron-job.org timer", "cron-job.org: dashboard owner", "Atlassian API token", "GitHub token, Refresh button", "GitHub token, publishing", "12 Nov 2027", "ckvcanary", "chetan-3565", "No expiry", "Lets the Vercel refresh relay start a GitHub Actions run", "Lets the pull read Jira tickets and time logs", "Lets the dashboard owner publish changes to the GitHub repository"]: assert w in t, w
+    assert "Jira API token" not in t and "WHAT IT DOES" in t.upper()
 
 
 def test_info_buttons_show_a_tooltip_on_hover_and_never_expand_the_cards(page):
-    open_how(page); btns = page.locator(".hw [data-tip]:visible"); assert btns.count() == 7
+    open_how(page); btns = page.locator(".hw [data-tip]:visible"); assert btns.count() == 8
     h0 = [n.bounding_box()["height"] for n in page.locator(".node").all()]
-    btns.nth(1).hover(); tip = page.locator("#gtip"); tip.wait_for(); assert "GitHub's servers, not on anyone's laptop" in tip.inner_text() and "Jira API token" in tip.inner_text() and page.locator("#gtip .ttr").count() == 2
+    btns.nth(1).hover(); tip = page.locator("#gtip"); tip.wait_for(); assert "GitHub's servers" in tip.inner_text() and "Atlassian API token" in tip.inner_text() and page.locator("#gtip .ttr").count() == 1
     assert [n.bounding_box()["height"] for n in page.locator(".node").all()] == h0, "the cards must not grow"
     page.mouse.move(5, 5); tip.wait_for(state="hidden")
-    btns.nth(6).hover(); assert "Vercel API route starts the GitHub Actions workflow" in tip.inner_text()
+    btns.nth(7).hover(); assert "Starts a pull now" in tip.inner_text() and "data is under 2 minutes old" in tip.inner_text()
 
 
 def test_tooltips_are_grey_and_not_white_like_the_page_is_dark(ctx_factory, mock):
@@ -62,7 +67,7 @@ def test_sections_are_collapsed_and_rows_have_room(page):
 
 def test_usage_limits_use_a_short_table_and_a_live_team_wide_meter(page):
     open_how(page); page.click("summary:has-text('Refresh limits')"); t = page.locator(".lim").inner_text()
-    assert "3 of 100" in t and "Stops at 95 of 100 a day" in t and "One refresh per 2 minutes" in t and "No limit (public repository)" in t and "5,000 requests an hour" in t
+    assert "3 of 100" in t and "Stops at 95 of 100 pulls a day" in t and "One refresh per 2 minutes" in t and "No limit (public repository)" in t and "5,000 requests an hour" in t
     assert [x.upper() for x in page.locator(".lim th").all_inner_texts()] == ["RULE", "VALUE"] and "Limit" not in page.locator(".lim th").all_inner_texts() and "Reason" not in t and len(t) < 330
 
 
@@ -94,14 +99,16 @@ def test_no_secret_values_are_shown(page):
 
 
 def test_intro_is_three_short_cards_and_the_page_is_short(page):
-    open_how(page); g = page.locator(".glance > div"); assert g.count() == 3 and "Cron schedule" in g.nth(0).inner_text() and "Weekdays, 10:45 AM and 6:45 PM IST" in g.nth(0).inner_text()
+    open_how(page); g = page.locator(".glance > div"); assert g.count() == 3 and "Two timers" in g.nth(0).inner_text() and "GitHub Actions and cron-job.org, every day at 10:50 AM and 6:50 PM IST" in g.nth(0).inner_text()
     assert "Refresh button" in g.nth(1).inner_text() and "Hosted on Vercel" in g.nth(2).inner_text()
-    t = page.locator(".hw").inner_text(); assert "Jira to this dashboard, with no one needed." in t and len(t) < 900, len(t)
+    t = page.locator(".hw").inner_text(); assert "Jira to this dashboard, with no one needed." in t and len(t) < 1000, len(t)
     assert page.locator(".gk, .gloss").count() == 0, "no extra bullet list or glossary"
 
 
 def test_cron_and_vercel_facts_sit_under_the_info_buttons(page):
     open_how(page); page.locator(".hw [data-tip]").nth(5).hover(); t = page.locator("#gtip").inner_text()
-    assert "retried 30 and 60 minutes later" in t and "ckvcanary" in t and "No Claude job" in t
+    assert "Retries 30 and 60 minutes later" in t and "10:50 AM and 6:50 PM IST" in t
+    page.locator(".hw [data-tip]").nth(6).hover(); c3 = page.locator("#gtip").inner_text()
+    assert "10:50 AM and 6:50 PM IST" in c3 and "A second timer outside GitHub" in c3 and "If one timer pulled, the other is skipped" in c3
     page.locator(".hw [data-tip]").nth(3).hover(); tip = page.locator("#gtip").inner_text()
-    assert "A few seconds of wait" in tip and "countdown timer with extra time built in" in tip and page.locator("#gtip .ttr").count() == 2
+    assert "Hosts this page." in tip and "Team link" in tip and page.locator("#gtip .ttr").count() == 1

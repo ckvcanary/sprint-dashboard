@@ -1,4 +1,7 @@
 """The Vercel relay (api/refresh.js) run against a pretend GitHub"""
+import pytest
+
+pytestmark = pytest.mark.guard
 import json, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -85,3 +88,94 @@ def test_relay_stops_at_95_refreshes_in_24_hours_and_says_so(page):
 
 def test_joining_a_running_refresh_is_allowed_even_at_the_limit(page):
     r = call(page, runs=[{"status": "in_progress"}], total=99); assert r["a"]["body"]["state"] == "running"
+
+
+HARNESS_CRON = """async ({src, origin, ua, nowIso, runs}) => {
+  const calls = []; const process = {env: {GH_TOKEN: 't'}}; const T = Date.parse(nowIso);
+  class FakeDate extends Date { constructor(...a) { a.length ? super(...a) : super(T); } static now() { return T; } }
+  const fetch = async (url, opt) => { calls.push({url, method: (opt||{}).method || 'GET', body: (opt||{}).body});
+    if (url.includes('/runs')) return {ok: true, status: 200, json: async () => ({workflow_runs: runs, total_count: 3})};
+    return {ok: true, status: 204}; };
+  const module = {exports: {}}; new Function('module', 'process', 'fetch', 'Date', src)(module, process, fetch, FakeDate);
+  const out = {}; const res = {setHeader: () => {}, status: c => (out.code = c, res), json: o => (out.body = o, res), end: () => res};
+  await module.exports({method: 'POST', headers: {origin, 'user-agent': ua}}, res);
+  return {out, dispatch: calls.filter(c => c.method === 'POST').map(c => JSON.parse(c.body))};
+}"""
+CRON_UA = "Mozilla/4.0 (compatible; cron-job.org; http://cron-job.org/abuse/)"
+
+
+def cron_call(page, ua, ist, runs=()):
+    return page.evaluate(HARNESS_CRON, dict(src=SRC, origin=ALLOWED, ua=ua, nowIso=ist, runs=list(runs)))
+
+
+def test_cron_job_call_inside_a_slot_is_a_scheduled_pull(page):
+    for ist in ("2026-11-17T10:45:30+05:30", "2026-11-17T11:10:00+05:30", "2026-11-17T18:45:10+05:30"):   # Tue 17 Nov
+        r = cron_call(page, CRON_UA, ist)
+        assert r["out"]["body"]["state"] == "started" and r["dispatch"] == [{"ref": "main", "inputs": {"source": "cron-job.org"}}], ist
+
+
+def test_cron_job_call_still_starts_when_a_run_is_going_or_data_is_fresh(page):
+    busy = [{"status": "in_progress"}]
+    fresh = [{"status": "completed", "conclusion": "success", "updated_at": "2026-11-17T10:44:50+05:30"}]
+    for runs in (busy, fresh):
+        r = cron_call(page, CRON_UA, "2026-11-17T10:45:00+05:30", runs)
+        assert r["out"]["body"]["state"] == "started" and r["dispatch"][0]["inputs"] == {"source": "cron-job.org"}
+
+
+def test_cron_job_call_outside_a_slot_is_a_plain_manual_refresh(page):
+    for ist in ("2026-11-17T11:32:00+05:30", "2026-11-17T14:00:00+05:30", "2026-11-21T11:40:00+05:30", "2026-11-22T19:40:00+05:30"):   # test run, afternoon, and after the window on a Saturday and a Sunday
+        r = cron_call(page, CRON_UA, ist)
+        assert r["dispatch"] == [{"ref": "main"}], ist
+
+
+def test_a_dashboard_click_inside_a_slot_window_is_not_a_scheduled_pull(page):
+    r = cron_call(page, "Mozilla/5.0 Chrome", "2026-11-17T10:45:00+05:30")
+    assert r["dispatch"] == [{"ref": "main"}]
+
+
+def test_cron_job_org_at_1055_and_1855_ist_counts_as_scheduled(page):
+    for ist in ("2026-11-17T10:50:20+05:30", "2026-11-17T18:55:05+05:30", "2026-11-18T10:45:00+05:30"):
+        r = cron_call(page, CRON_UA, ist); assert r["dispatch"] == [{"ref": "main", "inputs": {"source": "cron-job.org"}}], ist
+
+
+def test_window_edges(page):
+    for ist, scheduled in (("2026-11-17T10:20:00+05:30", True), ("2026-11-17T11:20:00+05:30", True), ("2026-11-17T10:10:00+05:30", False), ("2026-11-17T11:30:00+05:30", False), ("2026-11-17T18:20:00+05:30", True), ("2026-11-17T19:20:00+05:30", True), ("2026-11-17T18:10:00+05:30", False), ("2026-11-17T19:30:00+05:30", False), ("2026-11-22T10:50:00+05:30", True), ("2026-11-21T18:55:00+05:30", True)):
+        r = cron_call(page, CRON_UA, ist); assert (r["dispatch"][0].get("inputs") is not None) == scheduled, ist
+
+
+HARNESS_MODE = """async ({src, origin, ua, nowIso, mode, runs, tokenOk}) => {
+  const calls = []; const process = {env: {GH_TOKEN: 't'}}; const T = Date.parse(nowIso);
+  class FakeDate extends Date { constructor(...a) { a.length ? super(...a) : super(T); } static now() { return T; } }
+  const fetch = async (url, opt) => { calls.push({url, method: (opt||{}).method || 'GET', body: (opt||{}).body});
+    if (url.includes('raw.githubusercontent.com')) return {ok: true, status: 200, json: async () => runs};
+    if (url.endsWith('/repos/ckvcanary/sprint-dashboard')) return {ok: tokenOk, status: tokenOk ? 200 : 401, json: async () => ({})};
+    if (url.includes('/runs')) return {ok: true, status: 200, json: async () => ({workflow_runs: [], total_count: 3})};
+    return {ok: true, status: 204}; };
+  const module = {exports: {}}; new Function('module', 'process', 'fetch', 'Date', 'URL', src)(module, process, fetch, FakeDate, URL);
+  const out = {}; const res = {setHeader: () => {}, status: c => (out.code = c, res), json: o => (out.body = o, res), end: () => res};
+  await module.exports({method: 'POST', url: '/api/refresh' + (mode ? '?mode=' + mode : ''), headers: {origin, 'user-agent': ua}}, res);
+  return {out, dispatch: calls.filter(c => c.method === 'POST').map(c => JSON.parse(c.body)), fetched: calls.map(c => c.url)};
+}"""
+
+
+def mode_call(page, mode, ist="2026-11-17T11:05:00+05:30", runs=(), token_ok=True):
+    return page.evaluate(HARNESS_MODE, dict(src=SRC, origin=ALLOWED, ua=CRON_UA, nowIso=ist, mode=mode, runs=list(runs), tokenOk=token_ok))
+
+
+def test_warm_call_wakes_the_relay_checks_github_and_starts_nothing(page):
+    r = mode_call(page, "warm", "2026-11-17T10:50:00+05:30"); assert r["out"]["code"] == 200 and r["out"]["body"]["state"] == "warm" and r["out"]["body"]["github"] == "ok" and r["dispatch"] == []
+    r = mode_call(page, "warm", "2026-11-17T10:50:00+05:30", token_ok=False); assert r["out"]["code"] == 502 and "token problem (401)" in r["out"]["body"]["github"] and r["dispatch"] == [], "a broken token is visible before the slot"
+
+
+def test_catchup_pulls_only_when_the_slot_was_missed(page):
+    done = [{"at": "2026-11-17T05:26:10Z", "trigger": "schedule", "ok": True}]            # a scheduled pull at 10:56 AM IST
+    r = mode_call(page, "catchup", "2026-11-17T11:05:00+05:30", done); assert r["out"]["body"]["state"] == "already pulled" and r["dispatch"] == []
+    r = mode_call(page, "catchup", "2026-11-17T11:05:00+05:30", []); assert r["out"]["body"]["state"] == "started" and r["dispatch"] == [{"ref": "main", "inputs": {"source": "cron-job.org"}}]
+    old = [{"at": "2026-11-16T13:26:10Z", "trigger": "schedule", "ok": True}]; r = mode_call(page, "catchup", "2026-11-17T11:05:00+05:30", old); assert r["out"]["body"]["state"] == "started", "yesterday's pull does not count"
+    manual = [{"at": "2026-11-17T05:26:10Z", "trigger": "manual", "ok": True}]; r = mode_call(page, "catchup", "2026-11-17T11:05:00+05:30", manual); assert r["out"]["body"]["state"] == "started", "a manual refresh does not fill a scheduled slot"
+    failed = [{"at": "2026-11-17T05:26:10Z", "trigger": "schedule", "ok": False}]; r = mode_call(page, "catchup", "2026-11-17T18:35:00+05:30", failed); assert r["out"]["body"]["state"] == "started"
+
+
+def test_weekend_slots_count_too(page):
+    for ist in ("2026-11-21T10:50:10+05:30", "2026-11-22T18:55:10+05:30"):      # Saturday and Sunday
+        r = cron_call(page, CRON_UA, ist); assert r["dispatch"] == [{"ref": "main", "inputs": {"source": "cron-job.org"}}], ist
