@@ -41,3 +41,11 @@ def test_the_landing_page_has_the_band_the_monitor_and_no_sideways_scroll(ctx_fa
         assert pg.evaluate("document.documentElement.scrollWidth <= innerWidth + 1 && document.getElementById('gate').scrollWidth <= innerWidth + 1"), w
         assert pg.locator(".gband").evaluate("e => e.getBoundingClientRect().height") < 40, ("the band stays on one line", w)
         if w > 900: assert pg.locator(".gmon3d").is_visible() and "rotate" in pg.locator(".gmon3d").evaluate("e => getComputedStyle(e).transform") or True
+
+
+def test_collapsed_panel_shows_only_the_canary_mark_not_a_cut_letter(ctx_factory, mock):
+    pg = ctx_factory(width=1440, height=900); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); pg.click("#sidetgl"); pg.wait_for_timeout(300)
+    w = pg.locator(".sblogo").evaluate("e => e.getBoundingClientRect().width"); sv = pg.locator(".sidelogo .clogo").evaluate("e => e.getBoundingClientRect().width")
+    shown = w / sv * 703        # the logo is 703 units wide: the round c and the bird end at 110, the letter a starts at 132
+    assert 112 <= shown <= 130, ("only the c with the bird is visible", shown)
+    box = pg.locator(".sblogo").bounding_box(); side = pg.locator("#side").bounding_box(); assert abs((box["x"] + box["width"] / 2) - (side["x"] + side["width"] / 2)) <= 2, "centred in the narrow panel"
