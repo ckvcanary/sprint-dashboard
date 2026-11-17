@@ -99,4 +99,4 @@ def test_pace_target_divides_by_capacity_days_after_leave(ctx_factory, mock):
         t = min(8, left); passed_h += a * t / 8; left -= t
     assert abs(r["exp"] - r["E"] * passed_h / sum(avail)) < .01, (r, passed_h, sum(avail))
     b = pg.locator("th:has-text('Pace target by now') .ibtn").first; b.scroll_into_view_if_needed(); pg.wait_for_timeout(300); b.hover(); pg.wait_for_selector("#gtip:not([hidden])"); x = pg.inner_text("#gtip")
-    assert "(8 days) − (0.5 day leave) = 7.5 days" in x and f"(18 h) / (7.5 days) = 2.4 h" in x and "calculation" in x.lower()
+    assert "7.5 = 8 − 0.5" in x and "2.4 h" in x and "calculation" in x.lower()

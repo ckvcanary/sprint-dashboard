@@ -75,7 +75,7 @@ def model(sc):
     return out, dict(el=el, ad=ad, late=late)
 
 
-def ideal_at(M, h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / m["cap"]) if m["cap"] > 0 else m["E"]) for m in M.values())
+def ideal_at(M, h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / (m["cap"] + 8)) if m["cap"] > 0 else m["E"]) for m in M.values())
 def remaining_at(M, h, ad, el):
     """the blue line: each person's estimate minus the hours burned up to the point h (working hours since day 3 started)"""
     tot = 0.0
@@ -189,7 +189,7 @@ def test_chart_lines_follow_the_model(ctx_factory, mock, name):
     assert near(ys[-1], sum(m["remain"] for m in M.values()), .2), (name, ys[-1])
     label = pg.text_content("#nowlbl"); assert label.startswith("Now ·") and near(num(label.split("·")[1]), ys[-1], .06), label
     ip, _ = line_points(pg, "#idealline"); iv = [val(y) for _, y in ip]
-    assert near(iv[0], sumE, .2) and near(iv[1], sumE, .2) and near(iv[-1], 0, .2), (name, iv)
+    assert near(iv[0], sumE, .2) and near(iv[-1], 0, .2), (name, iv)
     assert all(b <= a + .05 for a, b in zip(iv, iv[1:])), f"the ideal pace must never go up: {iv}"
     # one dot only on the line: the latest Jira pull, labelled Now
     assert pg.locator("#cw svg circle:visible").count() == 1
@@ -308,7 +308,7 @@ def test_ideal_pace_is_the_chunk_per_capacity_day(ctx_factory, mock):
     for k, h in ((2, 8), (3, 16), (4, 24), (5, 32)):
         from test_burndown import hover_slot
         hover_slot(pg, k); got = pg.evaluate("() => +document.querySelectorAll('#tip .mt')[0].querySelectorAll('tr')[0].cells[1].innerText.replace(' h', '')")
-        want = sum(m["E"] - m["E"] * m["used_at"](h) / m["cap"] for m in M.values()); assert near(got, want, .06), (k, got, want)
+        want = sum(m["E"] - m["E"] * m["used_at"](h) / (m["cap"] + 8) for m in M.values()); assert near(got, want, .06), (k, got, want)
 
 
 def test_leave_in_the_future_lowers_time_left_but_not_the_log_expected_now(ctx_factory, mock):

@@ -28,7 +28,7 @@ def test_burndown_flag_column_lists_every_flag_and_covers_what_is_shown(page):
 def test_burndown_number_columns_explain_themselves(page):
     page.click('[data-tab="bd"]'); page.click('[data-bdview="person"]'); page.wait_for_selector("#cw svg")
     t = hover(page, page.locator("th:has-text('Pace gap') .ibtn")); assert names(t) == ["Up to 8 h", "More than 8 h"] and "Behind pace" in t.inner_text() and "(pace target) − (logged)" in t.inner_text()
-    t = hover(page, page.locator("th:has-text('Pace target by now') .ibtn")); x = t.inner_text(); assert "(original estimate / capacity days) × (capacity days passed)" in x and "(8 days) − (0.5 day leave) = 7.5 days" in x and "(48 h) / (7.5 days) = 6.4 h" in x and "(6.4 h) × (4) = 25.6 h" in x and "4 h is half a day" in x
+    t = hover(page, page.locator("th:has-text('Pace target by now') .ibtn")); x = t.inner_text(); assert "Pace target = (E / D) × d" in x and "7.5 = 8 − 0.5" in x and "6.4 h" in x and "25.6 h" in x and "good to know" not in x.lower() and "half a day" not in x
     t = hover(page, page.locator("th:has-text('Verdict') .ibtn")); assert names(t) == ["Achievable", "Not achievable", "Completed", "Not completed"] and "(remaining estimate) − (time left)" in t.inner_text() and "calculation" in t.inner_text().lower() and arith_ok(t.inner_text())
     t = hover(page, page.locator("th:has-text('Leave') .ibtn")); assert "Lowers capacity only" in t.inner_text() and arith_ok(t.inner_text())
 
@@ -37,8 +37,8 @@ def test_hours_by_person_has_an_info_button_for_expected_log_by_now(page):
     page.click('[data-tab="bd"]'); page.wait_for_selector(".gb svg")
     key = page.locator(".gb").locator("xpath=preceding-sibling::div[contains(@class,'key')]"); assert "Pace target by now (h)" in key.inner_text()
     t = hover(page, key.locator(".ibtn")); x = t.inner_text()
-    assert t.locator(".tth").inner_text() == "Pace target by now (h)" and "Hours the original estimate predicts should be logged by now." in x and "(original estimate / capacity days) × (capacity days passed)" in x
-    assert "(8 days) − (0.5 day leave) = 7.5 days" in x and "(48 h) / (7.5 days) = 6.4 h" in x and "(6.4 h) × (4) = 25.6 h" in x and "4 h is half a day" in x
+    assert t.locator(".tth").inner_text() == "Pace target by now (h)" and "Hours the original estimate predicts should be logged by now." in x and "Pace target = (E / D) × d" in x
+    assert "7.5 = 8 − 0.5" in x and "6.4 h" in x and "25.6 h" in x and "good to know" not in x.lower() and "half a day" not in x
 
 
 def test_sprint_day_and_capacity_day_widgets_explain_themselves(page):

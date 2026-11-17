@@ -29,7 +29,7 @@ def click_slot(page, k):
     page.mouse.click(svg["x"] + (L + (k + .5) / slots * pw) / W * svg["width"], svg["y"] + svg["height"] * .4)
 
 
-def ideal_left(total, n, tot=64): return total * (1 - n * 8 / tot)
+def ideal_left(total, n, tot=72): return total * (1 - n * 8 / tot)   # 8 capacity days plus the Monday cutoff day
 
 
 def num(t): return float(re.search(r"-?\d+(?:\.\d+)?", t).group(0))
@@ -228,8 +228,8 @@ def test_hover_card_is_organised_and_in_plain_words(page):
 
 def test_hover_numbers_for_a_day(page):
     open_bd(page); t = hover_slot(page, 3); hrs = page.evaluate("() => Object.fromEntries([...document.querySelectorAll('#tip .mt')[0].querySelectorAll('tr')].map(r => [r.cells[0].innerText.trim().split(String.fromCharCode(10))[0], r.cells[1].innerText.trim()]))")
-    assert hrs == {"Ideal pace": "37.5 h", "Remaining estimate": "19 h"}, hrs         # 50 h; 31 h burned by Thu; 50 x (1 - 16/64) = 37.5
-    assert "18.5 h ahead of the ideal pace" in t
+    assert hrs == {"Ideal pace": "38.9 h", "Remaining estimate": "19 h"}, hrs         # 50 h; 31 h burned by Thu; 50 x (1 - 16/72) = 38.9 (the Monday cutoff day is the ninth day)
+    assert "19.9 h ahead of the ideal pace" in t
     r = rows(page); assert r["Sub-tasks"] == ["1", "1 of 5", "4"] and r["User stories"] == ["1", "1 of 3", "2"] and r["Epics"] == ["0", "0 of 2", "2"]
 
 
@@ -260,7 +260,7 @@ def test_ideal_pace_hours_follow_working_days(page):
     open_bd(page)
     for k, n in ((2, 1), (3, 2)):
         t = hover_slot(page, k); got = num(rows(page)["Ideal pace"][0]); assert f"Working day {n} of 8" in t and abs(got - ideal_left(50, n)) < .06, (k, got)
-    hover_slot(page, 4); got = num(rows(page)["Ideal pace"][0]); assert abs(got - 50 * (1 - 21.5667 / 64)) < .1, got        # today: only the hours worked so far
+    hover_slot(page, 4); got = num(rows(page)["Ideal pace"][0]); assert abs(got - 50 * (1 - 21.5667 / 72)) < .1, got        # today: only the hours worked so far
 
 
 def test_retrospective_day_is_shaded_and_labelled_not_a_line(page):

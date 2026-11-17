@@ -173,7 +173,7 @@ M = {n: model(n, p) for n, p in people.items()}
 tot = lambda k: sum(m[k] for m in M.values())
 
 
-def ideal_at(h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / m["cap"]) if m["cap"] > 0 else m["E"]) for m in M.values())
+def ideal_at(h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / (m["cap"] + 8)) if m["cap"] > 0 else m["E"]) for m in M.values())
 
 
 def remaining_at(day_i, who):
