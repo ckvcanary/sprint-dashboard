@@ -17,9 +17,9 @@ def test_a_new_tab_in_the_same_browser_is_already_signed_in(ctx_factory, mock):
     pg = sign_in(ctx_factory, mock); tab = pg.context.new_page(); tab.goto(mock.url + "/index.html"); tab.wait_for_selector("#map .card"); assert not tab.locator("#gate").is_visible()
 
 
-def test_sign_out_button_is_in_the_header_and_only_when_signed_in(ctx_factory, mock):
+def test_sign_out_button_is_in_the_side_panel_and_only_when_signed_in(ctx_factory, mock):
     pg = ctx_factory(signed_in=False); pg.goto(mock.url + "/index.html"); assert not pg.locator("#signout").is_visible()
-    pg = sign_in(ctx_factory, mock); b = pg.locator("#signout"); assert b.is_visible() and b.inner_text().strip() == "Sign out"
+    pg = sign_in(ctx_factory, mock); b = pg.locator("#signout"); assert b.is_visible() and b.inner_text().strip() == "Sign out" and pg.locator("#side #signout").count() == 1
     rf = pg.locator(".rfcard").bounding_box(); bb = b.bounding_box(); assert bb["x"] >= rf["x"] + rf["width"] - 1 or bb["y"] >= rf["y"] + rf["height"] - 1
 
 

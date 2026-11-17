@@ -74,7 +74,7 @@ def test_newer_data_already_on_server_is_shown_honestly(ctx_factory, mock):
 def test_toast_sits_top_right_and_can_be_dismissed(ctx_factory, mock):
     pg = start(ctx_factory, mock, "fail"); pg.click("#rfbtn"); t = pg.locator(".tst.error"); t.wait_for(timeout=8000)
     b = t.bounding_box(); rf = pg.locator(".rfcard").bounding_box()
-    assert b["y"] >= rf["y"] + rf["height"], "the toast sits below the Last refreshed card"; assert b["x"] + b["width"] > pg.viewport_size["width"] - 40
+    assert b["y"] >= rf["y"] + rf["height"], "the toast sits below the Last refreshed card"; assert abs(b["x"] - rf["x"]) <= 2, "and lines up with its left edge"
     t.locator(".cl2").click(); pg.wait_for_selector(".tst", state="detached")
 
 

@@ -25,18 +25,21 @@ def load_phone(ctx_factory, mock, name="leave", w=390):
 def test_tabs_become_a_bottom_navigation_bar(ctx_factory, mock):
     pg = load_phone(ctx_factory, mock); b = pg.locator("#tabs").bounding_box()
     assert pg.evaluate("getComputedStyle(document.querySelector('#tabs')).position") == "fixed" and abs(b["y"] + b["height"] - 844) <= 1 and b["width"] >= 389
-    tabs = pg.locator("#tabs .tab"); assert tabs.count() == 7
-    for i in range(7):
+    tabs = pg.locator("#tabs .tab"); assert tabs.count() == 8
+    for i in range(8):
         t = tabs.nth(i).bounding_box(); assert t["height"] >= 44 and t["width"] >= 44 and t["x"] >= 0 and t["x"] + t["width"] <= 390, (i, t)
     labels = pg.evaluate("[...document.querySelectorAll('#tabs .tl')].map(e => getComputedStyle(e, '::after').content)")
-    assert labels == ['"Map"', '"Capacity"', '"Burndown"', '"Leave"', '"Pull log"', '"Roles"', '"How"']
+    assert labels == ['"Map"', '"Capacity"', '"Burndown"', '"Log time"', '"Leave"', '"Pull log"', '"Roles"', '"How"']
     assert pg.evaluate("getComputedStyle(document.querySelector('.tab .ti')).display") == "block"
 
 
-def test_desktop_keeps_the_top_tabs(ctx_factory, mock):
+def test_desktop_has_a_left_panel_with_icons_and_names(ctx_factory, mock):
     pg = ctx_factory(width=1440); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card")
-    assert pg.evaluate("getComputedStyle(document.querySelector('#tabs')).position") != "fixed" and pg.evaluate("getComputedStyle(document.querySelector('.tab .ti')).display") == "none"
+    assert pg.evaluate("getComputedStyle(document.querySelector('#tabs')).position") != "fixed" and pg.evaluate("getComputedStyle(document.querySelector('.tab .ti')).display") == "block"
     assert pg.evaluate("getComputedStyle(document.querySelector('.tab .tl'), '::after').content") in ("none", "normal")
+    side = pg.locator("#side").bounding_box(); main = pg.locator(".main").bounding_box(); assert side["x"] < 100 and side["width"] > 180 and main["x"] >= side["x"] + side["width"], (side, main)
+    assert pg.locator(".hdr #guidebtn").is_visible() and pg.locator(".hdr #rfbtn").is_visible() and pg.locator("#side #signout").is_visible() and pg.locator("#side #themebtn").is_visible()
+    tabs = [t.strip() for t in pg.locator("#tabs .tab").all_inner_texts()]; assert tabs == ["Map", "Capacity", "Burndown", "Time logging", "Leave", "Pull log", "Stakeholders", "How it works"], tabs
 
 
 @pytest.mark.parametrize("w", [360, 390, 430])

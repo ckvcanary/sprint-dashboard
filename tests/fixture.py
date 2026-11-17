@@ -27,8 +27,12 @@ def build(dest):
              "PROD-9111": {"att": [], "cm": [{"a": "Nikita", "at": "2026-11-12T11:00:00.000+0530", "t": "Started the work."}]}}
     m = {"sprints": sprints, "epics": epics, "stories": stories, "desc": desc, "extra": extra, "asOf": ASOF}
     people = {"Nikita": {"E": 18.0, "logs": {"2026-11-11": 4.0, "2026-11-12": 6.0}}, "Sumit": {"E": 16.0, "logs": {"2026-11-11": 8.0, "2026-11-12": 8.0}}, "Aditi": {"E": 16.0, "logs": {"2026-11-11": 5.0}}}
-    tasks24 = [{"k": "PROD-9111", "a": "Nikita", "e": 8, "d": None}, {"k": "PROD-9112", "a": "Nikita", "e": 4, "d": "2026-11-12"}, {"k": "PROD-9113", "a": "Nikita", "e": 6, "d": None},
-               {"k": "PROD-9121", "a": "Sumit", "e": 16, "d": None}, {"k": "PROD-9122", "a": "Aditi", "e": 12, "d": "2026-11-13"}, {"k": "PROD-9103", "a": "Aditi", "e": 4, "d": "2026-11-12", "y": 1}]
+    tasks24 = [{"k": "PROD-9111", "a": "Nikita", "e": 8, "d": None, "s": "Free plan limits and upgrade popup", "st": "In Progress", "sd": "2026-11-11", "lg": 6, "ll": "2026-11-12"},
+               {"k": "PROD-9112", "a": "Nikita", "e": 4, "d": "2026-11-12", "s": "Login page revamp", "st": "Deployed to UAT", "sd": "2026-11-12", "lg": 4, "ll": "2026-11-12"},
+               {"k": "PROD-9113", "a": "Nikita", "e": 6, "d": None, "s": "Downgrade to Free", "st": "In Progress", "sd": "2026-11-10", "lg": 0, "ll": None},
+               {"k": "PROD-9121", "a": "Sumit", "e": 16, "d": None, "s": "Token service", "st": "In Testing", "sd": "2026-11-09", "lg": 16, "ll": "2026-11-12"},
+               {"k": "PROD-9122", "a": "Aditi", "e": 12, "d": "2026-11-13", "s": "Session tests", "st": "Done", "sd": "2026-11-13", "lg": 0, "ll": None},
+               {"k": "PROD-9103", "a": "Aditi", "e": 4, "d": "2026-11-12", "y": 1, "s": "Tracker story without points", "st": "Deployed to UAT", "sd": "2026-11-12", "lg": 0, "ll": None}]
     bd = {"S20": {"name": "Sprint 20", "win": None, "people": {}}, "S21": {"name": "Sprint 21", "win": None, "people": {}},
           "S22": {"name": "Sprint 22", "win": ["2026-10-12", "2026-10-23"], "start": "2026-10-12", "end": "2026-10-23", "tasks": [], "people": {"Nikita": {"E": 40.0, "logs": {"2026-10-13": 8.0}}}},
           "S23": {"name": "Sprint 23", "win": ["2026-10-26", "2026-11-06"], "start": "2026-10-26", "end": "2026-11-06", "tasks": [{"k": "PROD-9131", "a": "Nikita", "e": 4, "d": "2026-10-30"}], "people": {"Nikita": {"E": 4.0, "logs": {"2026-10-27": 4.0}}}},

@@ -17,7 +17,7 @@ def test_word_icon_and_one_countdown_that_never_restarts(ctx_factory, mock):
     ctl(mock, "ok", 9); pg = ctx_factory(rf="{poll: 250, max: 20000, expect: 4}"); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); pg.click("#rfbtn")
     pg.wait_for_selector("#rfprog", state="visible")
     assert pg.locator(".rfw .spark").is_visible() and pg.locator(".rfw .spark").bounding_box()["width"] > 8
-    b = pg.locator("#rfprog").bounding_box(); assert b["x"] > 1440 / 2, "the card sits at the top right"
+    b = pg.locator("#rfprog").bounding_box(); rf = pg.locator(".rfcard").bounding_box(); assert abs(b["x"] - rf["x"]) <= 2 and b["y"] >= rf["y"] + rf["height"], "the card sits right under the Last refreshed card, same left edge"
     seen, words = [], set()
     for _ in range(30):
         seen.append(pg.inner_text("#rfpt")); words.add(pg.inner_text("#rfptxt")); pg.wait_for_timeout(250)

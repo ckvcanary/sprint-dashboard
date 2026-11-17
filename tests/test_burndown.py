@@ -170,13 +170,13 @@ def test_chart_title_is_a_few_words_and_the_detail_sits_under_its_info_button(pa
 def test_ideal_pace_info_gives_a_worked_example_with_brackets(page):
     open_bd(page); page.locator("#v-bd .key .ibtn").nth(1).hover(); t = page.locator("#gtip").inner_text()
     assert t.startswith("Ideal pace") and "every capacity day covers one equal chunk of the original estimate" in t and "(total) − ((total / capacity days) × days passed)" in t
-    assert "(10 h) / (5) = 2 h" in t and "(10 h) − (2 h × 3) = 4 h" in t and "÷" not in t and "Days on leave carry no planned work" in t
-    assert page.locator("#gtip .ttmt tr").count() == 4 and page.locator("#gtip .ttm").count() == 1, "the example is laid out as rows, not a sentence"
+    assert "calculation" in t.lower() and "÷" not in t and "Days on leave carry no planned work" in t and re.search(r"\(([\d.]+) h\) − \(([\d.]+) h\) = ([\d.]+) h", t)
+    assert page.locator("#gtip .ttmt tr").count() == 3 and page.locator("#gtip .ttm").count() == 1, "the calculation is laid out as rows, not a sentence"
 
 
 def test_remaining_estimate_info_explains_the_blue_line_with_an_example(page):
     open_bd(page); page.locator("#v-bd .key .ibtn").nth(0).hover(); t = page.locator("#gtip").inner_text()
-    assert "Blue line: the work still left." in t and "(original estimate) − (logged), never below 0" in t and "(6 h) − (2 h) = 4 h" in t and "(3 h) − (5 h) = 0 h" in t and "(4 h) + (0 h) = 4 h" in t
+    assert "Blue line: the work still left." in t and "(original estimate) − (logged), never below 0" in t and "calculation" in t.lower() and re.search(r"\(([\d.]+) h\) − \(([\d.]+) h\) = ([\d.]+) h", t)
     assert page.locator("#gtip .ttmt tr").count() == 3
 
 

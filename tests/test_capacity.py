@@ -17,8 +17,8 @@ def test_capacity_number_is_printed_on_every_green_bar(page):
     names = page.locator("#v-cap tbody tr:not(.tot)").count(); assert page.evaluate("[...document.querySelectorAll('#v-cap svg text')].filter(t=>t.textContent==='64').length") == names
 
 
-def test_chart_and_table_panels_have_equal_height(page):
-    open_cap(page); a = page.locator(".capl").bounding_box(); b = page.locator(".capr").bounding_box()
+def test_chart_and_table_panels_have_equal_height(ctx_factory, mock):
+    page = ctx_factory(width=1700, height=1000); page.goto(mock.url + "/index.html"); page.wait_for_selector("#map .card"); page.click('[data-tab="cap"]'); page.wait_for_selector("#v-cap tbody tr"); a = page.locator(".capl").bounding_box(); b = page.locator(".capr").bounding_box()
     assert abs(a["height"] - b["height"]) <= 1, f"{a['height']} vs {b['height']}"
     assert a["height"] > 300, "the chart must not be shrunk"
 
@@ -26,7 +26,7 @@ def test_chart_and_table_panels_have_equal_height(page):
 def test_table_totals(page):
     open_cap(page); rows = {r.locator("td").nth(0).inner_text(): r.locator("td").all_inner_texts() for r in page.locator("#v-cap tbody tr").all()}
     assert rows["Nikita"][1] == "18" and rows["Sumit"][1] == "16" and rows["Team"][1] == "50" and rows["Team"][2] == "0" and rows["Team"][3] == "384"
-    assert [x.upper().rstrip("I").strip() for x in page.locator("#v-cap thead th").all_inner_texts()] == ["NAME", "ORIGINAL ESTIMATE (H)", "LEAVE (H)", "CAPACITY (H)", "OVER (+) / UNDER (−) CAPACITY (H)"]
+    assert [x.upper().rstrip("I").strip() for x in page.locator("#v-cap thead th").all_inner_texts()] == ["NAME", "ORIGINAL ESTIMATE (H)", "LEAVE (H)", "CAPACITY (H)", "OVER (+) / UNDER (−) (H)"]
 
 
 def test_leave_lowers_capacity_and_the_over_under_uses_it(ctx_factory, mock):

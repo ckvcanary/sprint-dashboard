@@ -101,7 +101,7 @@ def test_the_budget_counts_every_refresh_from_every_person(ctx_factory, mock):
 
 def test_status_legend_uses_the_same_chips_as_the_table(page):
     open_log(page); page.hover(".plt th:has-text('10:50 AM') .ibtn"); tip = page.locator("#gtip"); tip.wait_for()
-    st = page.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#gtip .ttr .chip')].map(c => { const d = getComputedStyle(c.querySelector('i')); return [c.innerText.trim(), [c.className, d.backgroundColor, d.borderTopWidth]]; }))""")
+    st = page.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#gtip .chip')].map(c => { const d = getComputedStyle(c.querySelector('i')); return [c.innerText.trim(), [c.className, d.backgroundColor, d.borderTopWidth]]; }))""")
     assert set(st) == {"Pulled", "Failed", "Missed", "Upcoming", "Not scheduled"}
     assert "up" in st["Upcoming"][0].split() and st["Upcoming"][2] == "2px" and st["Upcoming"][1] == "rgba(0, 0, 0, 0)", "Upcoming is a ring"
     assert "na" in st["Not scheduled"][0].split() and st["Not scheduled"][2] == "0px" and st["Not scheduled"][1] != "rgba(0, 0, 0, 0)", "Not scheduled is a grey dot"

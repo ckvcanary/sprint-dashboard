@@ -17,7 +17,7 @@ def open_phone(ctx_factory, mock):
 
 
 def check_one(pg, btn):
-    b = btn.evaluate(BOX); btn.tap(); tip = pg.locator("#gtip"); tip.wait_for(); pg.wait_for_timeout(260)
+    btn.tap(); tip = pg.locator("#gtip"); tip.wait_for(); pg.wait_for_timeout(260); b = btn.evaluate(BOX)      # measured after the tap: a tap can scroll the button into view
     t = tip.evaluate(BOX); a = pg.locator("#gtipA").evaluate(BOX); cx = b["l"] + b["w"] / 2
     assert "pop" in (tip.get_attribute("class") or ""), "phone uses the popover"
     assert t["l"] >= 11 and t["r"] <= 390 - 11, ("inside the screen edges", t)

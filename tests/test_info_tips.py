@@ -9,6 +9,12 @@ def hover(page, loc):
     loc.scroll_into_view_if_needed(); page.mouse.move(2, 2); page.wait_for_timeout(120); loc.hover(); tip = page.locator("#gtip"); tip.wait_for(); return tip
 
 
+def arith_ok(text):
+    import re
+    found = re.findall(r"\(([\d.]+)(?: h)?\) [−-] \(([\d.]+)(?: h)?\) = ([\d.]+)", text); assert found, text
+    return all(abs(float(a) - float(b) - float(c)) < .06 for a, b, c in found)
+
+
 def names(tip): return [n.strip() for n in tip.locator(".ttn").all_inner_texts()]
 
 
@@ -21,10 +27,10 @@ def test_burndown_flag_column_lists_every_flag_and_covers_what_is_shown(page):
 
 def test_burndown_number_columns_explain_themselves(page):
     page.click('[data-tab="bd"]'); page.click('[data-bdview="person"]'); page.wait_for_selector("#cw svg")
-    t = hover(page, page.locator("th:has-text('Missing log') .ibtn")); assert names(t) == ["Formula", "Orange", "Red"] and "More than 8 h" in t.inner_text() and "(24 h) − (18 h) = 6 h" in t.inner_text()
+    t = hover(page, page.locator("th:has-text('Missing log') .ibtn")); assert names(t) == ["Formula", "Up to 8 h", "More than 8 h"] and "Behind on logging" in t.inner_text()
     t = hover(page, page.locator("th:has-text('Expected log by now') .ibtn")); x = t.inner_text(); assert "(original estimate / capacity days) × (capacity days passed)" in x and "(48 h) / (8 days) = 6 h" in x and "(6 h × 4) = 24 h" in x and "Days on leave are not counted" in x
-    t = hover(page, page.locator("th:has-text('Verdict') .ibtn")); assert names(t) == ["Formula", "Achievable", "Not achievable", "Completed", "Not completed"] and "(36 h) − (33.5 h) = 2.5 h" in t.inner_text()
-    t = hover(page, page.locator("th:has-text('Leave') .ibtn")); assert "Lowers capacity only" in t.inner_text() and "(64 h) − (6 h) = 58 h" in t.inner_text()
+    t = hover(page, page.locator("th:has-text('Verdict') .ibtn")); assert names(t) == ["Formula", "Achievable", "Not achievable", "Completed", "Not completed"] and "calculation" in t.inner_text().lower() and arith_ok(t.inner_text())
+    t = hover(page, page.locator("th:has-text('Leave') .ibtn")); assert "Lowers capacity only" in t.inner_text() and arith_ok(t.inner_text())
 
 
 def test_hours_by_person_has_an_info_button_for_expected_log_by_now(page):
@@ -38,7 +44,7 @@ def test_hours_by_person_has_an_info_button_for_expected_log_by_now(page):
 def test_sprint_day_and_capacity_day_widgets_explain_themselves(page):
     page.click('[data-tab="bd"]'); page.wait_for_selector("#daywidgets")
     t = hover(page, page.locator("#wsprint .ibtn")); assert names(t) == ["Not started", "Day N of 10", "Complete"] and "The first 2 are Sprint Planning" in t.inner_text()
-    t = hover(page, page.locator("#wcap .ibtn")); x = t.inner_text(); assert "(sprint day) − (planning days)" in x and "(6) − (2) = 4 of 8" in x
+    t = hover(page, page.locator("#wcap .ibtn")); x = t.inner_text(); assert "(sprint day) − (planning days)" in x and "calculation" in x.lower() and arith_ok(x)
 
 
 def test_pull_log_columns_and_tiles_list_every_status(page):

@@ -16,10 +16,10 @@ def test_no_info_box_has_a_dot_the_page_does_not_show(page):
 
 def test_markers_are_real_tags_and_chips(page):
     t = all_tips(page)
-    for k in ("flag", "verdict"):
+    for k in ("flag", "verdict", "missing"):
         assert '<span class="tag ' in t[k], k
     assert t["slot"].count('<span class="chip ') == 5
-    for k in ("type", "day", "capday", "left", "leave", "missing", "expected", "over", "ideal", "remaining", "renew", "n1", "n2", "n3", "n4", "n5", "c1", "c2", "c3", "cron", "budget"):
+    for k in ("type", "day", "capday", "left", "leave", "expected", "over", "ideal", "remaining", "renew", "n1", "n2", "n3", "n4", "n5", "c1", "c2", "c3", "cron", "budget"):
         assert '<span class="tag' not in t[k] and '<span class="chip' not in t[k], (k, "no marker where the page shows none")
 
 
@@ -75,3 +75,9 @@ def test_every_plain_row_is_a_grey_bullet_and_colour_is_only_a_real_tag_chip_or_
     page.evaluate("document.body.insertAdjacentHTML('beforeend', '<div id=pb class=tt>' + ttHtml(TT.day) + '</div>')")
     cols = page.evaluate("[...document.querySelectorAll('#pb .bl')].map(e => getComputedStyle(e).backgroundColor)")
     assert cols and len(set(cols)) == 1, "all plain bullets share one neutral colour"
+
+
+def test_without_data_the_box_shows_an_example_and_with_data_a_calculation(page):
+    page.click('[data-tab="bd"]'); page.wait_for_timeout(400)
+    live = page.evaluate("ttHtml(TT.remaining, 'remaining')"); assert ">Calculation<" in live and ">Example<" not in live
+    page.evaluate("CALC = null"); ex = page.evaluate("ttHtml(TT.remaining, 'remaining')"); assert ">Example<" in ex and ">Calculation<" not in ex and "(6 h) − (2 h) = 4 h" in ex
