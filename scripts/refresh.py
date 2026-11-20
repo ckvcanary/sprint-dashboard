@@ -14,10 +14,10 @@ SHOW_BD = {"S20", "S21", "S22", "S23", "S24"}    # sprints shown in the dashboar
 DESC_SPRINTS = {"S22", "S23", "S24"}           # descriptions refreshed for these sprints (older ones are kept)
 ROLLOVER_SPRINTS = {"S24"}                     # hours rule: task hours = original estimate minus time logged before the sprint start
 BOARD = 243
-FIELDS = ["summary", "status", "assignee", "issuetype", "parent", "timeoriginalestimate", "worklog", "customfield_10044", "customfield_10020", "created", "updated", "statuscategorychangedate"]
+FIELDS = ["summary", "status", "assignee", "issuetype", "parent", "timeoriginalestimate", "worklog", "customfield_10044", "customfield_10020", "created", "updated", "statuscategorychangedate", "labels", "reporter", "duedate", "timespent", "issuelinks"]
 EXTRA_FIELDS = ["attachment", "comment"]       # names of attached files and the comment history, shown in the ticket drawer (names only, no files are stored)
 # What counts as closed (Chetan, 13 Nov 2026):
-TASK_DONE = {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}   # tasks: every sub-task type and any top-level Task, Bug or New Feature
+TASK_DONE = {"Technical Review", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}   # tasks: every sub-task type and any top-level Task, Bug or New Feature
 STORY_DONE = {"Deployed to UAT", "Deployed to Prod"}                                                                                 # user stories
 EPIC_DONE = {"Done"}                                                                                                                 # epics: the Epic workflow has no Deployed status, Done is its only closing status
 IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
@@ -69,12 +69,28 @@ def search(jql, fields, expand=None):
             return out
 
 
+SEEN_LOGS, SCANNED = set(), set()     # worklog ids and issue ids read in this pull, for the check against Jira's own worklog feed
+
+
 def full_worklogs(x):
     w = x["fields"].get("worklog") or {}
     wl = w.get("worklogs", [])
     if w.get("total", 0) > len(wl):
         wl = api(f"/rest/api/3/issue/{x['key']}/worklog?maxResults=1000").get("worklogs", [])
+    SCANNED.add(str(x.get("id", ""))); SEEN_LOGS.update(str(l["id"]) for l in wl)
     return wl
+
+
+def missing_logs(minutes=20):
+    """Worklogs Jira changed in the last few minutes, on issues this pull read, that the pull did not see. Returns (missing ids, newest worklog time or None).
+    Jira's worklog feed is the source of truth: if it lists a log the pull missed, the pull read Jira too early and is repeated."""
+    since = int((time.time() - minutes * 60) * 1000)
+    ids = [str(v["worklogId"]) for v in api(f"/rest/api/3/worklog/updated?since={since}").get("values", [])]
+    if not ids: return [], None
+    rows = api("/rest/api/3/worklog/list", {"ids": [int(i) for i in ids]})
+    mine = [l for l in rows if str(l.get("issueId")) in SCANNED]
+    newest = max((l.get("updated") or l.get("created") for l in mine), default=None)
+    return [str(l["id"]) for l in mine if str(l["id"]) not in SEEN_LOGS], newest
 
 
 def first(a):
@@ -114,6 +130,12 @@ def adf_md(n, depth=0):
     return kids()
 
 
+def log_date(l):
+    """Date (IST) a worklog belongs to. Jira writes `started` in the API user's own zone (US Eastern, -0500), so the raw text date can be a day off."""
+    try: return ist_date(l["started"])
+    except Exception: return l["started"][:10]
+
+
 def ist_date(s):
     return dt.datetime.strptime(s, "%Y-%m-%dT%H:%M:%S.%f%z").astimezone(IST).date().isoformat()
 
@@ -123,18 +145,17 @@ def is_story_like(x):
     return (not x["fields"]["issuetype"].get("subtask")) and x["fields"]["issuetype"]["name"] in ("Story", "Epic")
 
 
-NONDEV_WORDS = re.compile(r"\b(document|documentation|docs?|demos?|jira|reporting|retrospective|presentation|deck|training|knowledge transfer|u\.?s\.? team)\b", re.I)
-NONDEV_PEOPLE = {"Chetan"}      # the product manager's tickets are Jira management, U.S. team demos, reporting and documentation
+DOC_LABEL = "documentationtask"   # Jira labels cannot contain spaces: documentation-task, documentation_task and DocumentationTask all match (19 Nov 2026)
 
 
-def non_dev(x):
-    """Documentation, demo and Jira work: there is no development or QA step, so Technical Review is its last stage."""
-    f = x["fields"]; return first(f.get("assignee")) in NONDEV_PEOPLE or bool(NONDEV_WORDS.search(f.get("summary") or ""))
+def doc_task(x):
+    """A ticket carrying the label documentation-task: Technical Review is its last stage, so it counts as closed there."""
+    return any(re.sub(r"[\s_-]", "", str(l)).lower() == DOC_LABEL for l in (x["fields"].get("labels") or []))
 
 
 def done_set(x):
     if is_story_like(x): return EPIC_DONE if x["fields"]["issuetype"]["name"] == "Epic" else STORY_DONE
-    return TASK_DONE if non_dev(x) else TASK_DONE - {"Technical Review"}      # a development ticket in Technical Review is not closed
+    return TASK_DONE if doc_task(x) else TASK_DONE - {"Technical Review"}      # Technical Review closes a ticket only with the documentation-task label; In Documentation never closes one
 
 
 def finished(x):
@@ -166,6 +187,31 @@ def extras(x):
         txt = adf_md(c.get("body")).strip() if isinstance(c.get("body"), dict) else str(c.get("body") or "")
         cms.append({"a": (c.get("author") or {}).get("displayName", "Unknown"), "at": c.get("created", ""), "t": txt[:800]})
     return {"att": att, "cm": cms} if (att or cms) else None
+
+
+def infox(x):
+    """What the ticket panel shows besides the description: reporter, labels, due date, original estimate and time logged in Jira (raw, in hours), and linked work items."""
+    f = x["fields"]; lk = []
+    for l in (f.get("issuelinks") or [])[:12]:
+        t = l.get("type") or {}
+        if l.get("outwardIssue"): how, o = t.get("outward") or "relates to", l["outwardIssue"]
+        elif l.get("inwardIssue"): how, o = t.get("inward") or "relates to", l["inwardIssue"]
+        else: continue
+        of = o.get("fields") or {}
+        lk.append({"t": how, "k": o.get("key"), "s": (of.get("summary") or "")[:140], "st": (of.get("status") or {}).get("name", "")})
+    rp = f.get("reporter") or {}
+    return {"rp": rp.get("displayName"), "lb": [str(l) for l in (f.get("labels") or [])], "du": f.get("duedate"),
+            "oe": round((f.get("timeoriginalestimate") or 0) / 3600, 2), "lg": round((f.get("timespent") or 0) / 3600, 2), "lk": lk}
+
+
+def scope_names():
+    """The Jira space and board these tickets live in, as Jira names them (falls back to the known names if a call fails)."""
+    out = {"space": "Product Development", "spaceKey": "PROD", "board": "PROD board", "boardId": 243}
+    try: out["space"] = api("/rest/api/3/project/PROD").get("name") or out["space"]
+    except Exception: pass
+    try: out["board"] = api("/rest/agile/1.0/board/243").get("name") or out["board"]
+    except Exception: pass
+    return out
 
 
 def week_days(a, b):
@@ -211,7 +257,7 @@ def main():
             at += 50
     except Exception as ex:
         print("sprint dates skipped:", ex)
-    extra = {}
+    extra, info = {}, {}
     keys = sorted(sprints, key=lambda k: int(k[1:]))
     stories, epics, desc = {}, {}, {}
     bd = {}
@@ -234,7 +280,7 @@ def main():
                     continue
                 f = x["fields"]; pre = 0.0; inwin = []
                 for l in full_worklogs(x):
-                    d = l["started"][:10]; h = l["timeSpentSeconds"] / 3600
+                    d = log_date(l); h = l["timeSpentSeconds"] / 3600
                     if d < ss: pre += h
                     elif d <= en: inwin.append((d, h, first(l["author"])))
                     else: audit["afterWindow"] += h
@@ -276,11 +322,12 @@ def main():
             for s in sorted((y for y in subs if (y["fields"].get("parent") or {}).get("key") == k), key=lambda y: y["key"]):
                 sf = s["fields"]; oe = (sf.get("timeoriginalestimate") or 0) / 3600
                 if sk in ROLLOVER_SPRINTS:
-                    pre = sum(l["timeSpentSeconds"] / 3600 for l in full_worklogs(s) if l["started"][:10] < SPRINT_START.get(sk, "0000"))
+                    pre = sum(l["timeSpentSeconds"] / 3600 for l in full_worklogs(s) if log_date(l) < SPRINT_START.get(sk, "0000"))
                     oe = max(0.0, oe - pre)
                 tasks.append({"key": s["key"], "t": sf["summary"], "a": first(sf.get("assignee")), "h": round(oe, 2), "s": sf["status"]["name"]})
                 if sk in DESC_SPRINTS and sf.get("description"): desc[s["key"]] = adf_md(sf["description"]).strip()
                 if sk in SHOW_BD and extras(s): extra[s["key"]] = extras(s)
+                info[s["key"]] = infox(s)
             own = round((f.get("timeoriginalestimate") or 0) / 3600, 2) if not tasks else 0
             sp = f.get("customfield_10044")
             stories[k] = {"key": k, "title": clean(f["summary"]), "epic": ep, "sprint": sk, "a": first(f.get("assignee")), "sp": int(sp) if sp else None, "own": own, "s": f["status"]["name"], "tasks": tasks}
@@ -288,11 +335,13 @@ def main():
                 epics.setdefault(ep, {"key": ep, "title": clean(par["fields"]["summary"]), "a": None})
             if sk in DESC_SPRINTS and f.get("description"): desc[k] = adf_md(f["description"]).strip()
             if sk in SHOW_BD and extras(x): extra[k] = extras(x)
+            info[k] = infox(x)
     if total < 200 or not any(s['sprint'] == 'S24' for s in stories.values()):
         raise RuntimeError(f"Jira returned too little data ({total} issues); data files left unchanged")
     # epics: assignee and description
     if epics:
-        for x in search("key in (%s)" % ",".join(sorted(epics)), ["summary", "assignee", "status", "description"] + EXTRA_FIELDS):
+        for x in search("key in (%s)" % ",".join(sorted(epics)), ["summary", "assignee", "status", "description", "reporter", "labels", "duedate", "issuelinks"] + EXTRA_FIELDS):
+            info[x["key"]] = infox(x)
             epics[x["key"]].update({"title": clean(x["fields"]["summary"]), "a": first(x["fields"].get("assignee")), "s": x["fields"]["status"]["name"]})
             if x["fields"].get("description"): desc[x["key"]] = adf_md(x["fields"]["description"]).strip()
             if extras(x): extra[x["key"]] = extras(x)
@@ -310,7 +359,11 @@ def main():
     out = {"sprints": sp_list, "epics": sorted(epics.values(), key=lambda e: e["key"]), "stories": sorted(stories.values(), key=lambda s: (s["sprint"], s["key"])), "desc": merged_desc}
     keep = {k: v for k, v in (old.get("extra") or {}).items() if k in stories or k in epics or any(k == tk["key"] for s in stories.values() for tk in s["tasks"])}
     keep.update(extra); out["extra"] = keep
+    ik = {k: v for k, v in (old.get("info") or {}).items() if k in stories or k in epics or any(k == tk["key"] for s in stories.values() for tk in s["tasks"])}
+    ik.update(info); out["info"] = ik
+    out["scope"] = scope_names()
     out["asOf"] = STAMP
+    for v in bd.values(): v["asOf"] = STAMP          # the page checks map, burndown and meta carry the same stamp before it says "Data refreshed"
     (DATA / "map.json").write_text(json.dumps(out, separators=(",", ":")))
     (DATA / "burndown.json").write_text(json.dumps(bd, separators=(",", ":")))
     return total
@@ -331,6 +384,9 @@ def is_scheduled():
     return ENV.get("GITHUB_EVENT_NAME") == "schedule" or (ENV.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and ENV.get("PULL_SOURCE") == "cron-job.org")
 
 
+LATEST_LOG = [None]
+
+
 def record(ok, issues, err=""):
     now = dt.datetime.now(dt.timezone.utc)
     ist = (now + dt.timedelta(hours=5, minutes=30)).date().isoformat()
@@ -343,7 +399,7 @@ def record(ok, issues, err=""):
     runs.append(rec)
     p.write_text(json.dumps(runs[-2000:], separators=(",", ":")))
     if ok:
-        (DATA / "meta.json").write_text(json.dumps({"refreshedAt": rec["at"], "trigger": trig, "issues": issues, "sprint": rec["sprint"], "sprintIssues": CUR.get(rec["sprint"].replace("Sprint ", "S")), "by": by}))
+        (DATA / "meta.json").write_text(json.dumps({"refreshedAt": rec["at"], "trigger": trig, "issues": issues, "sprint": rec["sprint"], "sprintIssues": CUR.get(rec["sprint"].replace("Sprint ", "S")), "by": by, "latestLogAt": LATEST_LOG[0]}))
 
 
 if __name__ == "__main__":
@@ -351,17 +407,14 @@ if __name__ == "__main__":
         sys.exit("Missing JIRA_BASE, JIRA_EMAIL or JIRA_TOKEN")
     if is_scheduled() and scheduled_pull_done_recently():
         print("skipped: this slot already has a scheduled pull"); sys.exit(0)
-    try:  # cooldown: a manual refresh right after another one is skipped
-        mp = DATA / "meta.json"
-        if ENV.get("GITHUB_EVENT_NAME") == "workflow_dispatch" and not is_scheduled() and mp.exists():
-            last = dt.datetime.fromisoformat(json.loads(mp.read_text())["refreshedAt"].replace("Z", "+00:00"))
-            if (dt.datetime.now(dt.timezone.utc) - last).total_seconds() < 120:
-                print("skipped: data refreshed less than 2 minutes ago"); sys.exit(0)
-    except (ValueError, KeyError, json.JSONDecodeError):
-        pass
     try:
-        n = main()
+        n = main(); newest, tries = None, 0
+        for tries in range(3):               # safety net: repeat the pull while Jira's worklog feed lists a log this pull did not see
+            try: miss, newest = missing_logs()
+            except Exception as ex: print("worklog check skipped:", ex); break
+            if not miss: break
+            print("pull missed", len(miss), "worklog(s); reading Jira again"); time.sleep(15); SEEN_LOGS.clear(); SCANNED.clear(); n = main()
     except Exception as ex:
         record(False, None, str(ex)); raise
-    record(True, n)
+    LATEST_LOG[0] = newest; record(True, n)
     print("refreshed, issues pulled:", n)

@@ -1,10 +1,10 @@
 // Refresh relay on Vercel. The dashboard calls this; it starts the GitHub job.
 // The token is a private Vercel setting named GH_TOKEN (fine-grained: this repo only, Actions: Read and write). The page never sees it.
-// Many people can click at once: a refresh already running is joined (not started again), a pull finished under 2 minutes ago counts as current,
+// A click never waits on a timer. A run that is queued has not read Jira yet, so a click joins it. A run that is already reading Jira may have read it before the new time log, so a new run is queued behind it (GitHub keeps one waiting run at most, so many clicks collapse into one).
 // and refreshes stop at 95 in 24 hours (the free Vercel plan allows 100 deployments a day and every refresh publishes the site once; 5 stay free for the scheduled pulls).
 const REPO = "ckvcanary/sprint-dashboard", WORKFLOW = "refresh.yml";
 const ORIGINS = ["https://ckvcanary.github.io", "https://sprint-dashboard-umber.vercel.app"];
-const FRESH_MS = 120000, ACTIVE = ["queued", "in_progress", "waiting", "pending", "requested"], LIMIT = 100, RESERVE = 5, DAY_MS = 86400000;
+const ACTIVE = ["queued", "in_progress", "waiting", "pending", "requested"], LIMIT = 100, RESERVE = 5, DAY_MS = 86400000;
 const gh = (path, opt = {}) => fetch("https://api.github.com/repos/" + REPO + path, Object.assign({}, opt, {
   headers: { Authorization: "Bearer " + process.env.GH_TOKEN, Accept: "application/vnd.github+json", "User-Agent": "sprint-dashboard-relay", "Content-Type": "application/json" },
 }));
@@ -25,7 +25,26 @@ const modeOf = req => { try { return new URL(req.url || "/", "http://relay").sea
 async function lastScheduledPull() {
   try { const r = await fetch(RUNS_URL + "?v=" + Date.now()); if (!r.ok) return 0; const runs = await r.json(); const ok = runs.filter(x => x.trigger === "schedule" && x.ok).map(x => Date.parse(x.at)); return ok.length ? Math.max(...ok) : 0; } catch (e) { return 0; }
 }
-let lastDispatch = 0;
+// Decides and dispatches one click. Clicks that arrive while this is still being decided share it (no timer): GitHub would only keep one waiting run anyway, so a burst of clicks must not use up the daily run count.
+async function startClick(cron) {
+  const rr = cron ? { ok: false } : await gh("/actions/workflows/" + WORKFLOW + "/runs?per_page=5");
+  let followUp = false;
+  if (rr.ok) {
+    const runs = (await rr.json()).workflow_runs || [];
+    const active = runs.filter(r => ACTIVE.includes(r.status));
+    if (active.length) {
+      const waiting = active.some(r => r.status !== "in_progress");      // queued: it has not read Jira yet, so it will include whatever was logged before this click
+      if (waiting) return [202, { state: "running", since: Date.now() }];
+      followUp = true;     // the running pull already read Jira and may have missed a new log, so one more pull is queued behind it
+    }
+  }
+  const since = new Date(Date.now() - DAY_MS).toISOString().replace(/\.\d+Z$/, "Z");
+  const cr = await gh("/actions/workflows/" + WORKFLOW + "/runs?per_page=1&created=" + encodeURIComponent(">=" + since));
+  if (cr.ok) { const n = (await cr.json()).total_count || 0; if (n >= LIMIT - RESERVE) return [429, { state: "limit", used: n, limit: LIMIT }]; }
+  const r = await gh("/actions/workflows/" + WORKFLOW + "/dispatches", { method: "POST", body: JSON.stringify(cron ? { ref: "main", inputs: { source: "cron-job.org" } } : { ref: "main" }) });
+  return r.ok ? [200, { state: followUp ? "queued" : "started", since: Date.now() }] : [502, { state: "error", detail: "GitHub answered " + r.status }];
+}
+let deciding = null;
 module.exports = async (req, res) => {
   const o = req.headers.origin, ok = ORIGINS.includes(o);
   res.setHeader("Access-Control-Allow-Origin", ok ? o : ORIGINS[0]);
@@ -46,20 +65,9 @@ module.exports = async (req, res) => {
       if (at && Date.now() - at < CATCHUP_MS) return res.status(200).json({ state: "already pulled", at: new Date(at).toISOString() });
     }
     const cron = fromCronJob(req, Date.now());
-    const rr = cron ? { ok: false } : await gh("/actions/workflows/" + WORKFLOW + "/runs?per_page=5");
-    if (rr.ok) {
-      const runs = (await rr.json()).workflow_runs || [];
-      if (runs.some(r => ACTIVE.includes(r.status))) return res.status(202).json({ state: "running" });
-      const done = runs.find(r => r.status === "completed" && r.conclusion === "success");
-      if (done && Date.now() - Date.parse(done.updated_at) < FRESH_MS) return res.status(200).json({ state: "fresh", at: done.updated_at });
-    }
-    const since = new Date(Date.now() - DAY_MS).toISOString().replace(/\.\d+Z$/, "Z");
-    const cr = await gh("/actions/workflows/" + WORKFLOW + "/runs?per_page=1&created=" + encodeURIComponent(">=" + since));
-    if (cr.ok) { const n = (await cr.json()).total_count || 0; if (n >= LIMIT - RESERVE) return res.status(429).json({ state: "limit", used: n, limit: LIMIT }); }
-    if (!cron && Date.now() - lastDispatch < 5000) return res.status(202).json({ state: "running" });   // two clicks in the same moment
-    lastDispatch = Date.now();
-    const r = await gh("/actions/workflows/" + WORKFLOW + "/dispatches", { method: "POST", body: JSON.stringify(cron ? { ref: "main", inputs: { source: "cron-job.org" } } : { ref: "main" }) });
-    return r.ok ? res.status(200).json({ state: "started" }) : res.status(502).json({ state: "error", detail: "GitHub answered " + r.status });
+    if (!cron && deciding) { const [code, out] = await deciding; return code === 200 ? res.status(202).json({ state: "running", since: Date.now() }) : res.status(code).json(out); }
+    const job = startClick(cron); if (!cron) deciding = job;
+    try { const [code, out] = await job; return res.status(code).json(out); } finally { if (deciding === job) deciding = null; }
   } catch (e) {
     return res.status(502).json({ state: "error", detail: "Could not reach GitHub" });
   }

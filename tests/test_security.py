@@ -31,7 +31,7 @@ def clean(pg):
 
 def test_hostile_names_and_titles_stay_text_on_every_page(ctx_factory, mock):
     pg = hostile_page(ctx_factory, mock)
-    for t in ("map", "cap", "bd", "leave", "log", "who", "how"):
+    for t in ("map", "cap", "bd", "leave", "log", "how"):
         pg.click(f'[data-tab="{t}"]'); pg.wait_for_timeout(150)
         if t == "bd":
             for v in ("person", "overall"): pg.click(f'[data-bdview="{v}"]'); pg.wait_for_timeout(150)

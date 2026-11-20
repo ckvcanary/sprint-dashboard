@@ -1,4 +1,5 @@
 """Guardrails: what happens when things go wrong, and what must never happen. Run before every deploy."""
+from test_burndown import only
 import datetime as dt, json, re, time, urllib.request
 import pytest
 
@@ -106,7 +107,7 @@ def test_messages_never_pile_up_beyond_three(page):
 # ---------- accessibility basics
 def test_every_control_has_a_name_and_the_page_declares_its_language(page):
     assert page.get_attribute("html", "lang") == "en"
-    for tab in ("map", "cap", "bd", "log", "who", "how"):
+    for tab in ("map", "cap", "bd", "log", "how"):
         page.click(f'[data-tab="{tab}"]')
         if tab == "bd": page.click('[data-bdview="person"]')
         bad = page.evaluate("""() => [...document.querySelectorAll('button, input, select')].filter(e => e.offsetParent !== null).filter(e => !(e.innerText || '').trim() && !e.getAttribute('aria-label') && !e.title && !(e.labels && e.labels.length)).map(e => e.outerHTML.slice(0, 80))""")
@@ -133,5 +134,5 @@ def test_a_much_bigger_sprint_still_loads_quickly(ctx_factory, mock):
     (d / "map.json").write_text(json.dumps(m)); (d / "burndown.json").write_text(json.dumps(bd))
     pg = ctx_factory(); t0 = time.time(); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); assert time.time() - t0 < 8, "map with 300 stories and 1,800 tasks"
     t0 = time.time(); pg.click('[data-tab="bd"]'); pg.click('[data-bdview="person"]'); pg.wait_for_selector("#cw svg"); assert time.time() - t0 < 4
-    pg.locator("#cw").scroll_into_view_if_needed(); pg.wait_for_timeout(300); svg = pg.locator("#cw svg").bounding_box(); pg.mouse.click(svg["x"] + (60 + 4.5 / 11 * 924) / 1000 * svg["width"], svg["y"] + svg["height"] * .4); pg.wait_for_selector("#dayd:not([hidden])"); pg.get_by_role("tab", name="Still open").click(); assert pg.locator("#dayd table.dtab tbody tr").count() > 1000
+    pg.locator("#cw").scroll_into_view_if_needed(); pg.wait_for_timeout(300); svg = pg.locator("#cw svg").bounding_box(); pg.mouse.click(svg["x"] + (60 + 4.5 / 11 * 924) / 1000 * svg["width"], svg["y"] + svg["height"] * .4); pg.wait_for_selector("#dayd:not([hidden])"); only(pg, "open"); assert pg.locator("#dayd table.dtab tbody tr").count() > 1000
     assert not clean(pg.errors), clean(pg.errors)

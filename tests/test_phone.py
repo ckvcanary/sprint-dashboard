@@ -4,7 +4,7 @@ import pytest
 pytestmark = pytest.mark.guard
 from test_burndown_math import load, SCEN, cells, num
 
-TABS = ["map", "cap", "bd", "leave", "log", "who", "how"]
+TABS = ["map", "cap", "bd", "leave", "log", "how"]
 
 
 def phone(ctx_factory, mock, name="leave", w=390):
@@ -25,11 +25,11 @@ def load_phone(ctx_factory, mock, name="leave", w=390):
 def test_tabs_become_a_bottom_navigation_bar(ctx_factory, mock):
     pg = load_phone(ctx_factory, mock); b = pg.locator("#tabs").bounding_box()
     assert pg.evaluate("getComputedStyle(document.querySelector('#tabs')).position") == "fixed" and abs(b["y"] + b["height"] - 844) <= 1 and b["width"] >= 389
-    tabs = pg.locator("#tabs .tab"); assert tabs.count() == 7
-    for i in range(7):
+    tabs = pg.locator("#tabs .tab"); assert tabs.count() == 6
+    for i in range(6):
         t = tabs.nth(i).bounding_box(); assert t["height"] >= 44 and t["width"] >= 44 and t["x"] >= 0 and t["x"] + t["width"] <= 390, (i, t)
     labels = pg.evaluate("[...document.querySelectorAll('#tabs .tl')].map(e => getComputedStyle(e, '::after').content)")
-    assert labels == ['"Map"', '"Capacity"', '"Burndown"', '"Leave"', '"Pull log"', '"Roles"', '"How"']
+    assert labels == ['"Map"', '"Capacity"', '"Burndown"', '"Leave"', '"Pull log"', '"How"']
     assert pg.evaluate("getComputedStyle(document.querySelector('.tab .ti')).display") == "block"
 
 
@@ -39,7 +39,7 @@ def test_desktop_has_a_left_panel_with_icons_and_names(ctx_factory, mock):
     assert pg.evaluate("getComputedStyle(document.querySelector('.tab .tl'), '::after').content") in ("none", "normal")
     side = pg.locator("#side").bounding_box(); main = pg.locator(".main").bounding_box(); assert side["x"] < 100 and side["width"] > 180 and main["x"] >= side["x"] + side["width"], (side, main)
     assert pg.locator(".hdr #guidebtn").is_visible() and pg.locator(".hdr #rfbtn").is_visible() and pg.locator("#side #signout").is_visible() and pg.locator("#side #themebtn").is_visible()
-    tabs = [t.strip() for t in pg.locator("#tabs .tab").all_inner_texts()]; assert tabs == ["Map", "Capacity", "Burndown", "Leave", "Pull log", "Stakeholders", "How it works"], tabs
+    tabs = [t.strip() for t in pg.locator("#tabs .tab").all_inner_texts()]; assert tabs == ["Map", "Capacity", "Burndown", "Leave", "Pull log", "How it works"], tabs
 
 
 @pytest.mark.parametrize("w", [360, 390, 430])
@@ -80,7 +80,7 @@ def test_tap_a_day_shows_the_verdict_and_the_ticket_counts(ctx_factory, mock):
     vb = pg.evaluate("document.querySelector('#cw svg').viewBox.baseVal.width"); L, pw, slots = 44, vb - 44 - 12, 11; x = b["x"] + (L + (3 + .5) / slots * pw) / vb * b["width"]
     pg.touchscreen.tap(x, b["y"] + b["height"] * .4); pg.wait_for_selector("#dayd:not([hidden])")
     t = pg.locator("#dayd").inner_text()
-    assert "Thu 12 Nov" in t and ("ahead of the ideal pace" in t or "behind the ideal pace" in t or "On ideal pace" in t) and "Sub-tasks" in t and "Closed up to this day" in t, t
+    assert "Thu 12 Nov" in t and ("ahead of the ideal pace" in t or "behind the ideal pace" in t or "On ideal pace" in t) and "Sub-tasks" in t and "closed up to this day" in t.lower(), t
 
 
 def test_tap_targets_are_big_enough(ctx_factory, mock):

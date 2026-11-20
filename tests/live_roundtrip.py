@@ -39,7 +39,7 @@ def read_ui(pg):
     return out
 
 
-def click_refresh(pg, wait_for_age=125):
+def click_refresh(pg, wait_for_age=0):      # no waiting: every click starts a pull
     age = pg.evaluate("(Date.now() - Date.parse(META.refreshedAt)) / 1000")
     if age < wait_for_age: print(f"   waiting {int(wait_for_age - age)} s so the refresh is not skipped as too recent ...", flush=True); time.sleep(wait_for_age - age)
     pg.click("#rfbtn"); t = pg.locator(".tst.success, .tst.error, .tst.info"); t.first.wait_for(timeout=180000)

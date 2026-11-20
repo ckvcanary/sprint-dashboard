@@ -47,9 +47,10 @@ def test_scheduled_runs_are_labelled_and_secrets_come_from_github_secrets():
     assert "GITHUB_EVENT_NAME: ${{ github.event_name }}" in y and "permissions:" in y and "contents: write" in y
 
 
-def test_refresh_script_enforces_the_two_minute_cooldown_and_writes_the_stamp():
+def test_refresh_script_has_no_cooldown_and_writes_the_stamp():
     s = (ROOT / "scripts" / "refresh.py").read_text()
-    assert "scheduled_pull_done_recently" in s and "< 120" in s and 'out["asOf"] = STAMP' in s and '"sprintIssues"' in s and "TASK_DONE" in s and "STORY_DONE" in s
+    assert "cooldown" not in s.lower() and "less than 30 seconds" not in s      # every manual click is a real pull
+    assert "scheduled_pull_done_recently" in s and 'out["asOf"] = STAMP' in s and '"sprintIssues"' in s and "TASK_DONE" in s and "STORY_DONE" in s
 
 
 def statuses(name):
@@ -57,7 +58,7 @@ def statuses(name):
 
 
 def test_closed_statuses_follow_the_agreed_lists():
-    assert statuses("TASK_DONE") == {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}
+    assert statuses("TASK_DONE") == {"Technical Review", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}
     assert statuses("EPIC_DONE") == {"Done"}, "the Epic workflow has no Deployed status"
     assert statuses("STORY_DONE") == {"Deployed to UAT", "Deployed to Prod"}, "user stories close only when deployed"
 

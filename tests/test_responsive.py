@@ -3,7 +3,7 @@ import pytest
 
 pytestmark = pytest.mark.guard
 
-TABS = ["map", "cap", "bd", "leave", "log", "who", "how"]
+TABS = ["map", "cap", "bd", "leave", "log", "how"]
 
 
 @pytest.mark.parametrize("w", [390, 820, 1440])
@@ -30,7 +30,7 @@ def test_toast_stays_inside_a_phone_screen(ctx_factory, mock):
 
 
 def test_tabs_switch_and_remember_nothing_unsafe(page):
-    for t, marker in (("cap", ".capgrid"), ("bd", ".term"), ("log", ".sched3"), ("who", ".roles"), ("how", ".hw"), ("map", "#map")): page.click(f'[data-tab="{t}"]'); page.wait_for_selector(marker)
+    for t, marker in (("cap", ".capgrid"), ("bd", ".term"), ("log", ".sched3"), ("how", ".hw"), ("map", "#map")): page.click(f'[data-tab="{t}"]'); page.wait_for_selector(marker)
 
 
 @pytest.mark.parametrize("sel,tab,fs,minfont", [("#cw svg", "bd", 14, 8), (".capl .chart", "cap", 11, 8)])

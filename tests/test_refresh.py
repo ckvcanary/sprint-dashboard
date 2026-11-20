@@ -15,22 +15,40 @@ def test_success_shows_progress_then_one_verified_toast(ctx_factory, mock):
     pg.wait_for_selector("#rfprog", state="visible"); assert re.fullmatch(r"\d+ s left", pg.inner_text("#rfpt"))
     assert pg.locator(".tst.success").count() == 0, "no success before the data is checked"
     t = pg.locator(".tst.success"); t.wait_for(timeout=8000)
-    txt = t.inner_text(); assert "Data refreshed" in txt and "Sprint 24 · 14 issues synced from Jira" in txt and "Last refreshed 13 Nov, 4:42 PM IST" in txt
+    txt = t.inner_text(); assert "Pulled from Jira" in txt and "1 ticket updated" in txt and "1,077 tickets read" in txt and "other" not in txt.lower()      # counts found by comparing the data before and after the pull
     assert not pg.locator("#rfprog").is_visible() and pg.is_enabled("#rfbtn")
     assert pg.inner_text("#rfval") == "13 Nov, 4:42 PM IST" and not pg.errors
 
 
-def test_fresh_data_does_not_start_another_run(ctx_factory, mock):
-    import json, pathlib
+def test_a_click_always_starts_a_pull_even_when_the_data_is_seconds_old(ctx_factory, mock):
+    import json
     ctl(mock, "ok"); d = mock.site / "data"; m = json.loads((d / "meta.json").read_text()); mp = json.loads((d / "map.json").read_text())
-    m["refreshedAt"] = mp["asOf"] = "2026-11-13T11:09:30Z"; (d / "meta.json").write_text(json.dumps(m)); (d / "map.json").write_text(json.dumps(mp))
+    now = __import__("datetime").datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"); m["refreshedAt"] = mp["asOf"] = now      # the data on screen is a few seconds old
+    (d / "meta.json").write_text(json.dumps(m)); (d / "map.json").write_text(json.dumps(mp))
     pg = ctx_factory(rf=QUICK); pg.goto(mock.url + "/index.html"); pg.wait_for_selector("#map .card"); pg.click("#rfbtn")
-    t = pg.locator(".tst.info"); t.wait_for(); assert "already up to date" in t.inner_text() and posts(mock) == 0 and pg.is_enabled("#rfbtn")
+    pg.wait_for_function("window.__sent === undefined || true"); pg.locator(".tst").first.wait_for(timeout=8000); assert posts(mock) == 1      # no 30 second or 2 minute wait
 
 
-def test_relay_reports_fresh(ctx_factory, mock):
-    pg = start(ctx_factory, mock, "fresh"); pg.click("#rfbtn"); pg.locator(".tst.info").wait_for()
-    assert "already up to date" in pg.locator(".tst.info").inner_text() and posts(mock) == 1 and not pg.locator(".tst.success").count()
+def test_pull_with_nothing_new_in_jira_says_so_by_comparing_before_and_after(ctx_factory, mock):
+    pg = start(ctx_factory, mock, "nochange"); pg.click("#rfbtn"); t = pg.locator(".tst.info"); t.wait_for(timeout=8000)
+    x = t.inner_text(); assert "Pulled from Jira" in x and "No tickets updated" in x and "1,077 tickets read" in x and pg.locator(".tst.success").count() == 0
+    assert pg.inner_text("#rfval") == "13 Nov, 4:42 PM IST"      # the page still shows the new pull time
+
+
+def test_updated_toast_needs_the_pull_to_be_in_the_run_list(ctx_factory, mock):
+    import json
+    pg = start(ctx_factory, mock); pg.evaluate("window.__keep = null")
+    ok = pg.evaluate("""() => { const m = { refreshedAt: '2026-11-13T11:12:00Z' }; return [verified({asOf: m.refreshedAt, stories: [1]}, {S: {win: [1], asOf: m.refreshedAt}}, m, 0, []), verified({asOf: m.refreshedAt, stories: [1]}, {S: {win: [1], asOf: m.refreshedAt}}, m, 0, [{at: m.refreshedAt, ok: true}]), verified({asOf: m.refreshedAt, stories: [1]}, {S: {win: [1], asOf: m.refreshedAt}}, m, 0, [{at: m.refreshedAt, ok: false}])]; }""")
+    assert ok == [False, True, False], ok      # no run record, or a failed one, is never "updated"
+
+
+def test_before_after_comparison_counts_tickets(page):
+    r = page.evaluate("""() => { const a = snapOf(D, BD); const D2 = JSON.parse(JSON.stringify(D));
+      D2.info['PROD-9111'].lg += 3; D2.stories[0].tasks[1].s = 'Done'; D2.stories[0].tasks[2].a = 'Sumit';
+      const one = JSON.parse(JSON.stringify(D)); one.info['PROD-9111'].lg += 1;
+      return { same: diffSnap(a, snapOf(D, BD)), three: diffSnap(a, snapOf(D2, BD)), one: diffSnap(a, snapOf(one, BD)), t3: ticketsText(3), t1: ticketsText(1), t0: ticketsText(0), read: readText({ issues: 1041 }) }; }""")
+    assert r["same"] == {"updated": 0, "same": True} and r["three"]["updated"] == 3 and r["three"]["same"] is False and r["one"]["updated"] == 1      # logged time, a status and an owner each count their own ticket
+    assert r["t3"] == "3 tickets updated" and r["t1"] == "1 ticket updated" and r["t0"] == "No tickets updated" and r["read"] == "1,041 tickets read"      # always in tickets, never "other details"
 
 
 def test_running_refresh_is_joined_and_still_verified(ctx_factory, mock):
@@ -71,10 +89,11 @@ def test_newer_data_already_on_server_is_shown_honestly(ctx_factory, mock):
     assert "Showing the latest data" in t.inner_text() or "already up to date" in t.inner_text(); assert pg.inner_text("#rfval") == "13 Nov, 4:42 PM IST"
 
 
-def test_toast_sits_top_right_and_can_be_dismissed(ctx_factory, mock):
+def test_toast_sits_on_the_right_edge_of_the_screen_and_can_be_dismissed(ctx_factory, mock):
     pg = start(ctx_factory, mock, "fail"); pg.click("#rfbtn"); t = pg.locator(".tst.error"); t.wait_for(timeout=8000)
-    b = t.bounding_box(); rf = pg.locator(".rfcard").bounding_box()
-    assert b["y"] >= rf["y"] + rf["height"], "the toast sits below the Last refreshed card"; assert abs(b["x"] - rf["x"]) <= 2, "and lines up with its left edge"
+    b = t.bounding_box(); rf = pg.locator(".rfcard").bounding_box(); vp = pg.viewport_size
+    assert vp["width"] - (b["x"] + b["width"]) <= 28 and vp["height"] - (b["y"] + b["height"]) <= 28, ("on the right edge, at the bottom", b, vp)
+    assert not (b["x"] < rf["x"] + rf["width"] and b["x"] + b["width"] > rf["x"] and b["y"] < rf["y"] + rf["height"] and b["y"] + b["height"] > rf["y"]), "never on the Last refreshed card"
     t.locator(".cl2").click(); pg.wait_for_selector(".tst", state="detached")
 
 
@@ -130,6 +149,32 @@ def test_relay_reporting_the_limit_shows_the_same_toast(ctx_factory, mock):
 
 def test_refresh_card_info_shows_the_limit_and_usage_on_hover(page):
     page.hover(".rfcard .ibtn"); tip = page.locator("#gtip"); tip.wait_for()
-    t = tip.inner_text(); assert "100 pulls in 24 hours" in t and "3 of 100" in t and "Under 2 minutes apart: skipped" in t and "whole team" in t
+    t = tip.inner_text(); assert "100 pulls in 24 hours" in t and "3 of 100" in t and "Every click starts a pull" in t and "whole team" in t
     assert tip.locator(".tth").inner_text() == "Refresh limit" and tip.locator(".ttr").count() == 6 and all(w in t for w in ("Green", "Orange", "Blue, pulsing"))
     page.mouse.move(5, 5); tip.wait_for(state="hidden")
+
+
+# ---------- "Data refreshed" must be backed by a check (19 Nov 2026)
+def test_no_success_toast_when_a_data_file_is_still_the_old_copy(ctx_factory, mock):
+    pg = start(ctx_factory, mock, "stale_bd"); before = pg.inner_text("#rfval"); pg.click("#rfbtn")
+    pg.locator(".tst.error, .tst.info, .tst.success").first.wait_for(timeout=12000)
+    assert pg.locator(".tst.success").count() == 0, "burndown.json still carried the old stamp, so nothing may be called refreshed"
+    assert pg.inner_text("#rfval") == before and "No new data yet" in pg.locator(".tst").first.inner_text()
+
+
+def test_no_success_toast_when_the_pull_started_before_the_click(ctx_factory, mock):
+    pg = start(ctx_factory, mock, "since_late"); before = pg.inner_text("#rfval"); pg.click("#rfbtn")
+    pg.locator(".tst.error, .tst.info, .tst.success").first.wait_for(timeout=12000)
+    assert pg.locator(".tst.success").count() == 0, "a pull that began before the click may have missed a new time log"
+    assert "began before your click" in pg.locator(".tst").first.inner_text()
+
+
+def test_success_toast_when_the_pull_started_after_the_click(ctx_factory, mock):
+    pg = start(ctx_factory, mock, "since_ok"); pg.click("#rfbtn"); t = pg.locator(".tst.success"); t.wait_for(timeout=8000)
+    assert pg.inner_text("#rfval") == "13 Nov, 4:42 PM IST" and "Pulled from Jira" in t.inner_text()
+
+
+def test_shown_stamp_equals_the_stamp_in_all_three_files_when_success_is_announced(ctx_factory, mock):
+    pg = start(ctx_factory, mock); pg.click("#rfbtn"); pg.locator(".tst.success").wait_for(timeout=8000)
+    got = pg.evaluate("() => ({meta: META.refreshedAt, map: D.asOf, bd: Object.values(BD).filter(v => v && v.win).map(v => v.asOf)})")
+    assert got["meta"] == got["map"] and set(got["bd"]) == {got["meta"]}, got

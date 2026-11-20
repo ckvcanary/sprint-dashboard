@@ -115,6 +115,11 @@ input.ctl{cursor:text;min-width:240px}
 .item.story{background:var(--story);border-color:var(--storyLine);color:var(--storyInk)}.item.task{background:var(--task);border-color:var(--taskLine);color:var(--taskInk)}
 .item .k{font-size:12px;font-weight:600}.item .t{font-weight:500;overflow-wrap:anywhere}.item .h{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
 .item .s{grid-column:2/4;font-size:12px;opacity:.8}
+a.item{text-decoration:none;color:inherit}.item.lkd{background:var(--soft);border-color:var(--lineStrong);color:var(--ink)}.item.lkd .h{font-weight:500;color:var(--muted)}
+.scopebar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 10px;color:var(--muted);font-size:12.5px}.scopebar b{font-weight:600;color:var(--ink)}.scopebar .sep{color:var(--faint)}
+.where{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.where span{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:11.5px;color:var(--muted)}.where b{color:var(--ink);font-weight:600}
+.tbars{display:grid;gap:8px}.tb{display:grid;grid-template-columns:118px minmax(0,1fr) 58px;gap:10px;align-items:center;font-size:13px}.tb>span{color:var(--muted)}.trk{height:10px;border-radius:999px;background:var(--soft);overflow:hidden;border:1px solid var(--line)}.trk i{display:block;height:100%;border-radius:999px}.trk i.est{background:color-mix(in srgb,var(--blue) 45%,var(--bg))}.trk i.log{background:var(--green)}.trk i.log.over{background:var(--red)}.tb b{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}.tpct{font-size:13px;font-weight:600;color:var(--blue)}.tpct.over{color:var(--red)}
+.lbls{display:flex;flex-wrap:wrap;gap:6px}.lbl{border:1px solid var(--lineStrong);border-radius:999px;padding:2px 10px;font-size:12px}.lbl.doc{background:color-mix(in srgb,var(--blue) 12%,var(--bg));border-color:color-mix(in srgb,var(--blue) 40%,transparent);color:var(--blue)}
 /* shared blocks */
 .panel{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:18px}
 .panel h3{margin:0 0 12px;font:600 15px var(--sans)}
@@ -160,15 +165,6 @@ td.ok{color:var(--green);font-weight:600}td.warn{color:var(--amber);font-weight:
 .cl{font-size:13px;font-weight:600}.cc{display:flex;justify-content:center}
 .dotc{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:14px;font-weight:700;border:1.5px solid transparent}
 .dotc.ok{background:var(--green);color:#fff}.dotc.bad{background:var(--red);color:#fff}.dotc.warn{background:var(--amber);color:#fff}.dotc.up{border:1.5px dashed var(--faint)}.dotc.na{background:var(--line)}
-/* stakeholders */
-.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
-.role{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:22px}
-.rhead{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.rnum{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:700;color:#fff}
-.role h3{margin:0;font:600 18px var(--sans)}
-.role ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
-.role li{display:grid;grid-template-columns:20px 1fr;gap:10px;font-size:14px;line-height:1.5}
-.role li svg{width:18px;height:18px;margin-top:2px}
 .pgtitle{font:600 20px var(--sans);margin:0 0 4px}.pgsub{color:var(--muted);margin:0 0 18px;font-size:14px}
 @media (max-width:1100px){.capgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:1500px){.capgrid{grid-template-columns:minmax(0,1fr)}}
@@ -300,9 +296,21 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .capl2{display:flex;gap:20px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}.capl2 i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}.capl2 b{color:var(--ink)}.capl2 .of{margin-left:auto}
 
 
-.dayd{margin-top:16px;border-top:1px solid var(--line);padding-top:16px}.dayd[hidden]{display:none}
-.dh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.dh h3{margin:0;font:600 15px var(--sans)}
-.dx{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 14px;font:500 13px var(--sans);cursor:pointer}
+.dayd{--dayBg:color-mix(in srgb,var(--blue) 7%,var(--bg));margin-top:6px;background:var(--dayBg);border:1px solid color-mix(in srgb,var(--blue) 38%,transparent);border-radius:14px;padding:12px 14px 14px}.dayd[hidden]{display:none}
+.dh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}.dh h3{margin:0;font:600 15px var(--sans)}
+.dx{border:1px solid color-mix(in srgb,var(--blue) 40%,transparent);background:color-mix(in srgb,var(--blue) 12%,var(--bg));color:var(--blue);border-radius:999px;padding:6px 14px 6px 10px;font:600 13px var(--sans);cursor:pointer;display:inline-flex;align-items:center;gap:6px}.dx:hover{background:color-mix(in srgb,var(--blue) 20%,var(--bg))}.dx:focus-visible{outline:3px solid color-mix(in srgb,var(--blue) 40%,transparent);outline-offset:2px}.dx svg{width:11px;height:11px;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round}
+.fsbtn{border:1px solid var(--lineStrong);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 14px 6px 10px;font:500 13px var(--sans);cursor:pointer;display:inline-flex;align-items:center;gap:6px}.fsbtn:hover{background:var(--soft)}.fsbtn svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lchead .cardhead h3{overflow-wrap:anywhere}@media (max-width:520px){.fsbtn{padding:8px 10px;min-width:44px;min-height:44px;justify-content:center}.fsbtn .fst{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.dx,.dfb{min-height:44px}}
+.lchead{display:flex;justify-content:space-between;align-items:center;gap:12px}.lchead .cardhead{margin:0}
+.panel.fs{position:fixed;inset:0;z-index:90;margin:0!important;border-radius:0;border:0;overflow:auto;background:var(--bg);padding:16px max(16px,2.5vw) 20px;display:flex;flex-direction:column;gap:6px}
+.panel.fs .cw{flex:0 0 auto}.panel.fs .dayd{margin-top:2px}.panel.fs .lchead{position:sticky;top:-16px;z-index:6;background:var(--bg);padding:12px 0 6px;margin-top:-16px}.panel.fs .dh{position:sticky;top:44px;z-index:5;background:var(--dayBg);padding:6px 0}
+body.fsopen{overflow:hidden}
+.dbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 8px;position:relative}
+.dfb{border:1px solid var(--lineStrong);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 14px 6px 10px;font:500 13px var(--sans);cursor:pointer;display:inline-flex;align-items:center;gap:6px}.dfb svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}.dfb b{background:var(--ink);color:var(--bg);border-radius:999px;min-width:18px;height:18px;display:inline-grid;place-items:center;font-size:11px;font-weight:600;padding:0 5px}
+.dfm{position:absolute;top:calc(100% + 6px);left:0;z-index:8;background:var(--bg);border:1px solid var(--lineStrong);border-radius:12px;box-shadow:var(--shadow);padding:8px;min-width:230px}.dfm[hidden]{display:none}
+.dfm label{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:13px;cursor:pointer}.dfm label:hover{background:var(--soft)}.dfm input{width:16px;height:16px;accent-color:var(--blue);margin:0}
+.dsel{color:var(--muted);font-size:12px}
+.bdleg{display:flex;flex-wrap:wrap;gap:4px 16px;margin:0 0 6px;color:var(--muted);font-size:11.5px}.bdleg span{display:inline-flex;align-items:center;gap:6px}.bdleg i{width:10px;height:10px;border-radius:3px;background:var(--line);opacity:.8;flex:none}
 .dtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.dtabs button{border:1px solid var(--lineStrong);background:var(--bg);color:var(--muted);border-radius:999px;padding:6px 14px;font:500 13px var(--sans);cursor:pointer}
 .dtabs button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}.dtabs b{font-variant-numeric:tabular-nums;margin-left:4px}
 .dsum{color:var(--muted);font-size:13px;margin:0 0 10px}
@@ -356,14 +364,18 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 @keyframes sparkr{to{transform:rotate(360deg)}}@keyframes dotsa{0%{content:''}25%{content:'.'}50%{content:'..'}75%,100%{content:'...'}}
 @media (prefers-reduced-motion:reduce){.rfw .spark{animation:none}.rfw .dots::after{animation:none;content:'...'}}
 #stack{position:fixed;right:max(16px,env(safe-area-inset-right,0px));top:var(--stk,16px);width:min(360px,calc(100vw - 32px));display:flex;flex-direction:column;gap:10px;z-index:100;pointer-events:none}
-#stack>*{pointer-events:auto}#toasts{display:flex;flex-direction:column;gap:10px}
-.tst{pointer-events:auto;display:grid;grid-template-columns:28px 1fr 22px;gap:12px;align-items:start;background:var(--bg);border:1px solid var(--lineStrong);border-radius:14px;box-shadow:var(--shadow);padding:14px 14px 14px 16px;opacity:0;transform:translateY(-10px);transition:opacity .2s,transform .2s}
+#stack>*{pointer-events:auto}
+#toasts{position:fixed;right:max(20px,env(safe-area-inset-right,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));width:min(340px,calc(100vw - 32px));display:flex;flex-direction:column-reverse;gap:8px;z-index:110;pointer-events:none}#toasts>*{pointer-events:auto}
+@media (max-width:720px){#toasts{left:12px;right:12px;width:auto;bottom:calc(88px + env(safe-area-inset-bottom,0px))}}
+.tst{position:relative;overflow:hidden;pointer-events:auto;display:grid;grid-template-columns:22px 1fr 18px;gap:10px;align-items:start;background:var(--bg);border:1px solid var(--lineStrong);border-radius:12px;box-shadow:var(--shadow);padding:9px 10px 11px 12px;opacity:0;transform:translateY(10px);transition:opacity .2s,transform .2s}
 .tst.on{opacity:1;transform:none}
-.tst .ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center}
-.tst .ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.tst .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center}
+.tst .ic svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .tst.success .ic{background:var(--greenBg);color:var(--green)}.tst.error .ic{background:var(--redBg);color:var(--red)}.tst.info .ic{background:var(--task);color:var(--taskInk)}
-.tst b{display:block;font-size:14px;margin-bottom:2px}.tst p{margin:0;font-size:13px;color:var(--muted);line-height:1.45}.tst small{display:block;margin-top:6px;font-size:12px;color:var(--faint)}
-.tst .cl2{border:0;background:none;color:var(--faint);cursor:pointer;font-size:18px;line-height:1;padding:0}
+.tst b{display:block;font-size:13px;line-height:1.3;margin:0}.tst p{margin:1px 0 0;font-size:12px;color:var(--muted);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.tst small{display:block;margin-top:2px;font-size:11px;line-height:1.3;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tst .tbar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--blue);transform-origin:left;animation:tbar var(--life,3500ms) linear forwards}.tst.success .tbar{background:var(--green)}.tst.error .tbar{background:var(--red)}.tst:hover .tbar{animation-play-state:paused}
+@keyframes tbar{to{transform:scaleX(0)}}
+.tst .cl2{border:0;background:none;color:var(--faint);cursor:pointer;font-size:16px;line-height:1;padding:0}
 @media (max-width:860px){.flow{flex-direction:column;align-items:stretch}.arr{flex:0 0 28px;transform:rotate(90deg)}.cnt{grid-template-columns:repeat(2,minmax(0,1fr))}.tgrid{grid-template-columns:1fr}.tk{border-bottom:0;padding-bottom:0}.bar .legend{margin-left:0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.card:hover{transform:none}}
 
@@ -387,7 +399,8 @@ html.locked #gate{display:flex;min-height:100vh;align-items:center;justify-conte
 .tip .tps{padding:12px 0 0;border-top:0;margin-top:6px}.tip .tpt{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .tip .mt td{border:0;padding:5px 0}.tip .mt th{padding:0 0 4px;font-weight:600;border:0}
 .tip .tf{margin-top:12px;border-top:0;padding-top:0}
-.dsum{margin:4px 0 14px;max-width:560px}.dsum th{text-align:right;font-size:11px}.dsum th:first-child,.dsum td:first-child{text-align:left}.dsum td{font-weight:600}.dsum td:first-child{font-weight:500;color:var(--muted)}
+.dsum{margin:4px 0 14px;max-width:560px;border-collapse:separate;border-spacing:0;border-radius:10px;overflow:hidden;border:1px solid var(--line)}.dsum tbody tr:last-child td{border-bottom:0}
+@media (max-width:1100px){.dsum{width:100%;max-width:none;table-layout:fixed}.dsum th{white-space:normal;vertical-align:bottom;padding:8px 6px}.dsum td{padding:8px 6px}.dsum th:first-child,.dsum td:first-child{width:28%}}.dsum th{text-align:right;font-size:11px}.dsum th:first-child,.dsum td:first-child{text-align:left}.dsum td{font-weight:600}.dsum td:first-child{font-weight:500;color:var(--muted)}
 .dlist table.dtab{table-layout:fixed;width:100%}.dtab th,.dtab td{text-align:left!important;white-space:normal;overflow-wrap:anywhere}.dtab td.num,.dtab th.num{text-align:right!important}.dtab td.num{white-space:nowrap}.dtab tr.rnone td{text-align:left!important}
 .dtab td.ttl{min-width:0}.dtab tr.dgrp td{background:var(--soft);font-size:13px;padding:10px;border-top:1px solid var(--lineStrong)}.dtab tr.dgrp b{font-size:13px}.dtab .gn{margin-left:10px;background:var(--bg);border:1px solid var(--lineStrong);border-radius:999px;padding:1px 9px;font-size:12px;font-weight:600;color:var(--muted)}
 .dtab tr.dgrp td.num{font-weight:700;color:var(--ink)}.dtab tr.rnone td{color:var(--faint);font-size:12.5px}
@@ -538,7 +551,7 @@ h2.pgtitle{margin-bottom:14px}
 }
 
 /* ---------- day widgets and the Rules view ---------- */
-.dw{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.dw{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
 .dwc{border-radius:14px;border:1px solid var(--line);border-left:5px solid var(--blue);padding:16px 20px;background:color-mix(in srgb,var(--blue) 8%,var(--soft))}
 .dwc.cp{border-left-color:var(--green);background:color-mix(in srgb,var(--green) 9%,var(--soft))}
 .dwc .fl{display:block;margin-bottom:4px}.dwc b{display:block;font-size:44px;line-height:1.05;font-weight:600;letter-spacing:-.02em}.dwc.sp b{color:var(--blue)}.dwc.cp b{color:var(--green)}
@@ -548,7 +561,7 @@ h2.pgtitle{margin-bottom:14px}
 .rc h4{margin:0 0 6px;font:600 14px var(--sans)}.rc p{margin:0 0 10px;font-size:13px;line-height:1.45;color:var(--muted)}
 .rc .ttmt td{font-size:12.5px}.rc .ttmt td:first-child{opacity:.75}
 @media (max-width:1100px){.rules{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.dw{grid-template-columns:repeat(2,minmax(0,1fr))}.dw .su{grid-column:1/-1}.rules{grid-template-columns:1fr}.dwc b{font-size:34px}.dwc{padding:14px 16px}}
+@media (max-width:720px){.dw{grid-template-columns:repeat(2,minmax(0,1fr))}.rules{grid-template-columns:1fr}.dwc b{font-size:30px}.dwc.tl b{font-size:20px;line-height:1.4;white-space:normal}.dwc{padding:14px 14px;min-width:0}.dwc .fl{white-space:normal;line-height:1.35;overflow-wrap:anywhere}.dwc b,.dwc em{overflow-wrap:anywhere}}
 
 /* ---------- visual pass: grey page, white cards for what matters, quiet tinted cards for the rest (clarity, depth, deference) ---------- */
 :root{--page:#f5f5f7;--card:#ffffff;--track:#e8e8ed;--cardShadow:0 1px 2px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.05);--sans:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Inter',system-ui,'Segoe UI',Roboto,sans-serif}
@@ -563,7 +576,8 @@ body{background:var(--page);letter-spacing:-.003em;-webkit-font-smoothing:antial
 select.ctl,.ctl,input.ctl{background-color:var(--card)}.ctl.ro{background-color:var(--soft)}
 .calc{background:var(--soft)}
 .dwc{background:var(--card);box-shadow:var(--cardShadow)}.dwc.sp,.dwc.cp{background:var(--card)}
-.dwc b{font-size:48px}
+.dwc b{font-size:clamp(24px,2.6vw,40px)}.dwc.tl b{font-size:clamp(17px,1.65vw,24px);white-space:nowrap;line-height:1.7}
+@media (max-width:1100px){.dw{grid-template-columns:repeat(2,minmax(0,1fr))}.dwc b{font-size:36px}.dwc.tl b{font-size:26px;line-height:1.35}}
 .sched3 .s1{background:color-mix(in srgb,var(--blue) 8%,var(--card))}.sched3 .s2{background:color-mix(in srgb,var(--green) 9%,var(--card))}.sched3 .s3{background:color-mix(in srgb,var(--amber) 9%,var(--card))}.sched3 .s4{background:var(--card)}
 .cnt .stat.up{background:color-mix(in srgb,var(--blue) 8%,var(--card))}
 .fit.hd thead th,.fit thead th,.plt thead th,.hwt thead th,.dsum thead th{background:color-mix(in srgb,var(--blue) 7%,var(--card));color:var(--ink);border-bottom-color:var(--lineStrong)}
@@ -802,9 +816,10 @@ html.locked #gate{background:radial-gradient(900px 620px at 88% 100%,rgba(10,132
 .dgs{display:flex;flex-direction:column;gap:6px}.dgr{display:grid;gap:6px;align-items:center}.dgh span{text-align:center;color:var(--muted);font-size:11px;line-height:1.2}.dgh b{display:block;font-size:12px;color:var(--ink);font-weight:600}.dgh small{display:block}
 .dgn b{font-size:14px}.dgc{height:40px;border-radius:9px;display:grid;place-items:center;font:600 13px var(--sans);font-variant-numeric:tabular-nums;border:1px solid transparent}
 .dgc.ok{background:var(--greenBg);color:var(--green)}.dgc.warn{background:var(--amberBg);color:var(--amber)}.dgc.bad{background:var(--redBg);color:var(--red)}.dgc.na{background:var(--soft);color:var(--faint);border-color:var(--line)}.dgc.now{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.dgc.xtra{background:transparent;border:1px dashed var(--line);color:var(--faint)}.dgc.xtra.has{background:color-mix(in srgb,var(--blue) 12%,var(--bg));border:1px solid color-mix(in srgb,var(--blue) 40%,transparent);color:var(--blue)}.dgnote{display:none}.dgxh b{color:var(--blue)}
 .dgo,.dgt{text-align:center;font-weight:600;font-variant-numeric:tabular-nums;font-size:13px}.dgo{color:var(--muted)}
 @media (max-width:900px){.tlgh{flex-wrap:wrap}.tlm{order:5;flex-basis:100%}.tlq{min-width:0;width:100%}.tlf .field{flex:1 1 100%}}
-@media (max-width:720px){.dgr{grid-template-columns:repeat(var(--dn),minmax(0,1fr)) auto!important}.dgr .dgn{grid-column:1/-1}.dgr .dgo{display:none}.dgh>span:first-child{display:none}.dgc{height:34px;font-size:11px;border-radius:7px}.dgh small{display:none}.dgs{gap:10px}.dgr .dgt{grid-column:1/-1;text-align:left}.dgr.dgh{grid-template-columns:repeat(var(--dn),minmax(0,1fr))!important}.dgr.dgh span:last-child{display:none}}
+@media (max-width:720px){.dgr{grid-template-columns:repeat(var(--dn),minmax(0,1fr)) auto!important}.dgr .dgn{grid-column:1/-1}.dgr .dgo,.dgr .xtra,.dgxh{display:none}.dgr .dgnote{display:block;grid-column:1/-1;font-size:11.5px;color:var(--muted)}.dgh>span:first-child{display:none}.dgc{height:34px;font-size:11px;border-radius:7px}.dgh small{display:none}.dgs{gap:10px}.dgr .dgt{grid-column:1/-1;text-align:left}.dgr.dgh{grid-template-columns:repeat(var(--dn),minmax(0,1fr))!important}.dgr.dgh span:last-child{display:none}}
 @media (min-width:721px) and (max-width:1500px){.fit th:nth-child(n+2),.fit td:nth-child(n+2){padding-right:30px}.fit th{letter-spacing:.04em;padding-left:8px}.fit th:nth-child(n+2) .ibtn{right:8px}}
 .tlt2 th .ibtn{position:static!important;transform:none!important;margin-left:6px;right:auto!important}.tlt2 td:first-child{white-space:nowrap}.tlt2 th:nth-child(n+2),.tlt2 td:nth-child(n+2){padding-right:10px}.tlcs{flex-basis:100%;order:3}
 
@@ -879,6 +894,8 @@ body{padding:0}.wrap{max-width:none;margin:0}
 .gtip .tpsub{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}.gtip .tpn{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
 .gtip .ttn .swl{font-weight:600}.gtip .ttn .swc{display:inline-block;width:26px;height:16px;border-radius:5px;flex:none}
 .swc.dgc{height:16px}
+/* tablets: the day panel's ticket table is wider than its box, so it scrolls sideways instead of being cut off */
+@media (min-width:721px) and (max-width:1100px){.dlist{overflow-x:auto;-webkit-overflow-scrolling:touch}}
 </style>
 
 <script>
@@ -934,7 +951,6 @@ body{padding:0}.wrap{max-width:none;margin:0}
       <button class="tab" role="tab" data-tab="bd" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5v14h18"/><path d="m6 9 4 4 3-3 5 5"/></svg><span class="tl" data-s="Burndown">Burndown</span></button>
       <button class="tab" role="tab" data-tab="leave" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="tl" data-s="Leave">Leave</span></button>
       <button class="tab" role="tab" data-tab="log" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="tl" data-s="Pull log">Pull log</span></button>
-      <button class="tab" role="tab" data-tab="who" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5a3 3 0 0 1 0 6M18 14.5c1.8.8 3 2.6 3 5.5"/></svg><span class="tl" data-s="Roles">Stakeholders</span></button>
       <button class="tab" role="tab" data-tab="how" aria-selected="false"><svg class="ti" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></svg><span class="tl" data-s="How">How it works</span></button>
     </div>
       <div class="sidefoot" id="sidefoot"><button class="sidetgl" id="sidetgl" type="button" aria-label="Collapse the side panel" aria-expanded="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg><span class="sdl">Collapse</span></button><button class="btn ghost" id="themebtn" type="button" title="Switch between the dark and the light theme" aria-label="Switch theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sdl" id="themelab">Light theme</span></button><button class="btn ghost" id="signout" type="button" title="Sign out of this browser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg><span class="sdl">Sign out</span></button></div>
@@ -953,12 +969,11 @@ body{padding:0}.wrap{max-width:none;margin:0}
     <div class="legend" id="legend"><span><i style="background:var(--epicInk)"></i>Epic</span><span><i style="background:var(--storyInk)"></i>User story</span><span><i style="background:var(--taskInk)"></i>Task, opens inside a user story</span></div>
   </div>
   <div class="loaderr" id="loaderr" role="alert" hidden><b>Could not load the dashboard data</b><p>Check your connection, then press Refresh or reload the page.</p><p class="hint">If it keeps happening, the latest scheduled update may have failed. The Pull log shows every update.</p></div>
-  <section id="v-map">    <div class="mapwrap"><div class="map" id="map"></div><div class="mlist" id="mlist"></div><div class="mm" id="mm"></div></div></section>
+  <section id="v-map">    <div class="scopebar" id="scopebar"></div><div class="mapwrap"><div class="map" id="map"></div><div class="mlist" id="mlist"></div><div class="mm" id="mm"></div></div></section>
   <section id="v-cap" hidden></section>
   <section id="v-bd" hidden></section>
   <section id="v-leave" hidden></section>
   <section id="v-log" hidden></section>
-  <section id="v-who" hidden></section>
   <section id="v-how" hidden></section>
     </main>
   </div>
@@ -987,7 +1002,9 @@ function ingest() {
   E = {}; S = {}; T = {}; TK = {}; D.epics.forEach(e => E[e.key] = e); D.epics.forEach(e => TK[e.key] = { t: e.title, s: e.s || '', h: null, a: e.a, k: 'Epic' });
   D.stories.filter(s => SHOW.includes(s.sprint)).forEach(s => { S[s.key] = s; TK[s.key] = { t: s.title, s: s.s || '', h: s.tasks.length ? null : (s.own || 0), a: s.a, k: 'Story' }; s.tasks.forEach(t => { T[t.key] = Object.assign({ story: s.key }, t); TK[t.key] = { t: t.t, s: t.s, h: t.h, a: t.a, k: 'Task' }; }); });
 }
-ingest();
+const SCOPE = () => Object.assign({ space: 'Product Development', board: 'PROD board' }, (D && D.scope) || {});
+function paintScope() { const b = $('#scopebar'); if (!b) return; const c = SCOPE(); b.innerHTML = `<span>Space</span><b>${esc(c.space)}</b><span class="sep" aria-hidden="true">·</span><span>Board</span><b>${esc(c.board)}</b>`; }
+ingest(); paintScope();
 const hrs = s => s.tasks.length ? s.tasks.reduce((a, t) => a + (t.h || 0), 0) : (s.own || 0);
 let tab = 'map', stack = [], selMap = ['S22', 'S23', 'S24'], selOne = 'S24', bdWho = 'Team';
 try { const x = JSON.parse(localStorage.getItem('sprintdash.map') || 'null'); if (Array.isArray(x)) selMap = x.filter(i => SHOW.includes(i)); const y = localStorage.getItem('sprintdash.one'); if (SHOW.includes(y)) selOne = y; } catch (e) {}
@@ -1117,7 +1134,7 @@ function renderCap() {
 
 /* ---------- burndown ---------- */
 const nextWork = d => { let ms = dUTC(d) + 864e5; while ([0, 6].includes(new Date(ms).getUTCDay())) ms += 864e5; return dStr(ms); };   // first working day after d
-const hasRetro = (s, sd) => !!(s.end && s.end === nextWork(sd[sd.length - 1]));   // a retrospective day exists only when Jira's end date is the working day after Day 10
+const hasRetro = () => false;   // the chart ends on Day 10 (Friday). The Monday after is Sprint Retrospective and the next sprint's Planning, so it belongs to the next sprint and is not drawn (decided 20 Nov 2026)
 const dUTC = s => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
 const dStr = ms => new Date(ms).toISOString().slice(0, 10);
 const fmtD = s => { const d = new Date(dUTC(s)); return d.getUTCDate() + ' ' + MON[d.getUTCMonth()]; };
@@ -1143,12 +1160,14 @@ function person(name, p, days, at, today, leave) {
   let st = 'On pace', cl = 'ok';
   if (el <= 0) st = 'Not started'; else if (miss > 8) { st = 'Well behind pace'; cl = 'bad'; } else if (miss > .05) { st = 'Behind pace'; cl = 'warn'; }
   const gap = remain - left; let vd, vc;   // the verdict compares the work still to do with the working time still to come
-  if (late) { vd = remain > .05 ? 'Not completed' : 'Completed'; vc = remain > .05 ? 'bad' : 'ok'; } else { vd = gap > .05 ? 'Not achievable' : 'Achievable'; vc = gap > .05 ? 'bad' : 'ok'; }
+  if (p.E <= .05) { vd = 'No work planned'; vc = 'nil'; }      // nothing was estimated for this person
+  else if (remain <= .05) { vd = 'Completed'; vc = 'ok'; }       // the whole estimate is done: no work left, whether or not the sprint is over
+  else if (late) { vd = 'Not completed'; vc = 'bad'; } else { vd = gap > .05 ? 'Not achievable' : 'Achievable'; vc = gap > .05 ? 'bad' : 'ok'; }
   return { name, E: p.E, logged, remain, over, exp, miss, left, pts, tot, el, st, cl, vd, vc, gap, capP, used, leaveH, lv, usedAt, dayH, capDays, daysPassed, dailyT };
 }
-let CHW = 1000;   // width of the chart area in pixels, measured when the page is drawn
-const chartW = (el, pad) => Math.max(300, Math.min(1000, Math.floor((el.clientWidth || 1000) - pad)));
-let BDV = null, bdDay = null, bdTab = 'today';   // chart data for the hover, the day that is pinned, the tab of the day panel
+let CHW = 1000, CHH = 330;   // width of the chart area in pixels, measured when the page is drawn
+const chartW = (el, pad, cap = 1000) => Math.max(300, Math.min(cap, Math.floor((el.clientWidth || 1000) - pad)));
+let BDV = null, bdDay = null, bdFull = false, bdFilt = { today: true, closed: false, open: false }, bdFiltOpen = false;   // chart data for the hover, the day that is pinned, the tab of the day panel
 
 function dayGrid(sel, sd, wd, plan, ad, s) {
   const dn = sd.length, wk = d => [0, 6].includes(new Date(dUTC(d)).getUTCDay()), rows = sel.map(r => {
@@ -1158,27 +1177,33 @@ function dayGrid(sel, sd, wd, plan, ad, s) {
       if (d > ad) return { c: 'na', t: '', tt: 'Not yet' };
       if (lvh >= DH) return { c: 'na', t: 'L', tt: 'Leave' };
       const tg = r.dailyT * (DH - lvh) / DH;
+      if (d === ad) return { c: 'now', t: lg ? f1(lg) : '', tt: 'Today, in progress: ' + f1(lg) + ' h so far, daily pace target ' + f1(tg) + ' h' };   // today is never judged: outline only
       if (lg + 0.05 >= tg) return { c: 'ok', t: f1(lg), tt: f1(lg) + ' h logged, daily pace target ' + f1(tg) + ' h' };
-      if (d === ad) return { c: 'now', t: lg ? f1(lg) : '', tt: 'Today, in progress: ' + f1(lg) + ' h so far, daily pace target ' + f1(tg) + ' h' };
       return { c: lg > 0 ? 'warn' : 'bad', t: f1(lg), tt: f1(lg) + ' h logged, daily pace target ' + f1(tg) + ' h' }; });
     return { r, cells, other, odd, tot: Object.entries(logs).filter(([d]) => d <= ad).reduce((a, [, h]) => a + h, 0) }; });
-  const allOdd = [...new Set(rows.flatMap(x => x.odd))].sort(), anyOther = rows.some(x => x.other > 0.04), cols = `minmax(96px,128px) repeat(${dn},minmax(0,1fr))${anyOther ? ' minmax(64px,1fr)' : ''} minmax(56px,.9fr)`;
+  const lgOf = (r, d) => ((s.people[r.name] || {}).logs || {})[d] || 0;
+  const allOdd = [...new Set(rows.flatMap(x => x.odd))].sort().filter(d => rows.some(x => lgOf(x.r, d) > 0.04)), anyOther = allOdd.length > 0;
+  const per = anyOther && allOdd.length <= 4;      // each weekend or other day that has time gets its own column, named by its date; more than four are grouped into one
+  const cols = `minmax(96px,128px) repeat(${dn},minmax(0,1fr))${per ? ` repeat(${allOdd.length},minmax(0,1fr))` : anyOther ? ' minmax(64px,1fr)' : ''} minmax(56px,.9fr)`;
   const oLab = !allOdd.length ? '' : (allOdd.every(wk) ? 'Weekend' : 'Other days'), oSub = !allOdd.length ? '' : allOdd.length === 1 ? fmtD(allOdd[0]) : fmtD(allOdd[0]).split(' ')[0] + '–' + fmtD(allOdd[allOdd.length - 1]);
-  const head = `<div class="dgr dgh" style="grid-template-columns:${cols}"><span></span>${sd.map(d => `<span title="${dayName(d)} ${fmtD(d)}"><b><i class="wf">${dayName(d)}</i><i class="wl">${dayName(d).slice(0, 1)}</i></b><small><i class="dnn">${fmtD(d).split(' ')[0]}</i><i class="mn"> ${fmtD(d).split(' ')[1]}</i></small></span>`).join('')}${anyOther ? `<span title="Time logged on days that are not sprint working days, by log date"><b>${oLab}</b><small>${oSub}</small></span>` : ''}<span><b>Total</b><small>logged</small></span></div>`;
-  return `<div class="panel dgrid" id="dgrid"><div class="cardhead"><h3>Time logged each day${tip('dgrid')}</h3></div><div class="dgs" style="--dn:${dn}">${head}${rows.map(x => `<div class="dgr" style="grid-template-columns:${cols}"><span class="dgn"><b>${esc(x.r.name)}</b></span>${x.cells.map(c => `<span class="dgc ${c.c}" title="${esc(c.tt)}">${c.t}</span>`).join('')}${anyOther ? `<span class="dgo" title="${esc(oLab)}">${x.other > 0.04 ? f1(x.other) : ''}</span>` : ''}<span class="dgt">${f1(x.tot)}</span></div>`).join('')}</div></div>`;
+  const head = `<div class="dgr dgh" style="grid-template-columns:${cols}"><span></span>${sd.map(d => `<span title="${dayName(d)} ${fmtD(d)}"><b><i class="wf">${dayName(d)}</i><i class="wl">${dayName(d).slice(0, 1)}</i></b><small><i class="dnn">${fmtD(d).split(' ')[0]}</i><i class="mn"> ${fmtD(d).split(' ')[1]}</i></small></span>`).join('')}${per ? allOdd.map(d => `<span class="dgxh" title="${dayName(d)} ${fmtD(d)}: not a sprint working day"><b>${dayName(d)}</b><small>${esc(fmtD(d))}</small></span>`).join('') : anyOther ? `<span title="Time logged on days that are not sprint working days, by log date"><b>${oLab}</b><small>${oSub}</small></span>` : ''}<span><b>Total</b><small>logged</small></span></div>`;
+  return `<div class="panel dgrid" id="dgrid"><div class="cardhead"><h3>Time logged each day${tip('dgrid')}</h3></div><div class="dgs" style="--dn:${dn}">${head}${rows.map(x => `<div class="dgr" style="grid-template-columns:${cols}"><span class="dgn"><b>${esc(x.r.name)}</b></span>${x.cells.map(c => `<span class="dgc ${c.c}" title="${esc(c.tt)}">${c.t}</span>`).join('')}${per ? allOdd.map(d => { const h = lgOf(x.r, d); return `<span class="dgc xtra${h > 0.04 ? ' has' : ''}" title="${esc(h > 0.04 ? f1(h) + ' h logged on ' + dayName(d) + ' ' + fmtD(d) + ' (not a sprint working day)' : 'Nothing logged')}">${h > 0.04 ? f1(h) : ''}</span>`; }).join('') : anyOther ? `<span class="dgo" title="${esc(oLab)}">${x.other > 0.04 ? f1(x.other) : ''}</span>` : ''}${per && allOdd.some(d => lgOf(x.r, d) > 0.04) ? `<span class="dgnote">Also logged: ${allOdd.filter(d => lgOf(x.r, d) > 0.04).map(d => dayName(d) + ' ' + esc(fmtD(d)) + ' ' + f1(lgOf(x.r, d)) + ' h').join(', ')}</span>` : ''}<span class="dgt">${f1(x.tot)}</span></div>`).join('')}</div></div>`;
 }
 function lineChart(rs, ctx) {
   const { sd, plan, wd, s, tasks, stories, epics, el, tot, ad, at, late } = ctx, retro = hasRetro(s, sd), slots = sd.length + (retro ? 1 : 0);
-  const W = CHW, nw = W < 560, fs = nw ? 13 : 11, sumE = rs.reduce((a, r) => a + r.E, 0), H = nw ? 300 : 330, L = nw ? 44 : 60, R = nw ? 12 : 16, Tp = 16, B = nw ? 52 : 76, pw = W - L - R, ph = H - Tp - B, top = Math.max(16, Math.ceil(sumE / 16) * 16);
+  const W = CHW, nw = W < 560, fs = nw ? 13 : (bdFull ? 13 : 11), sumE = rs.reduce((a, r) => a + r.E, 0), H = nw ? 300 : (bdFull ? CHH : 330), L = nw ? 44 : 60, R = nw ? 12 : 16, Tp = 16, B = nw ? 52 : 76, pw = W - L - R, ph = H - Tp - B, top = Math.max(16, Math.ceil(sumE / 16) * 16);
   const X = k => L + k / slots * pw, Y = v => Tp + ph - v / top * ph;
   const idealAt = h => rs.reduce((a, r) => a + (r.capP > 0 ? r.E * Math.max(0, 1 - r.usedAt(h) / (r.capP + (retro ? r.dayH : 0))) : r.E), 0);   // with a retrospective Monday, developers work on it until 6 PM, so the line reaches 0 at the end of that day:   // the estimate burns evenly over each person's capacity days; the estimate itself never changes with leave
   const xs = [...new Set(rs.flatMap(r => r.pts.map(p => p[0])))].sort((a, b) => a - b);
   const remAt = h => rs.reduce((a, r) => { const p = r.pts.filter(q => q[0] <= h + 1e-9).pop(); return a + (p ? p[1] : r.E); }, 0);
   const act = xs.map(x => [plan + x / DH, remAt(x)]);
   let g = '';
-  const band = (a, b, label, sub) => { const cx = (X(a) + X(b)) / 2, nl = nw ? (sub === 'Retrospective' ? 'Retro' : label.replace('Sprint ', '')) : label; return `<rect x="${X(a)}" y="${Tp}" width="${X(b) - X(a)}" height="${ph}" fill="var(--line)" opacity=".55"/><text x="${cx}" y="${Tp + 18}" text-anchor="middle" font-size="${fs}" font-weight="600" fill="var(--muted)">${nl}</text>${sub && !nw ? `<text x="${cx}" y="${Tp + 33}" text-anchor="middle" font-size="10" fill="var(--muted)">${sub}</text>` : ''}`; };
-  if (plan) g += band(0, plan, 'Sprint Planning');
-  if (retro) g += band(sd.length, slots, 'Sprint', 'Retrospective');
+  const spN = (String(spName(selOne)).match(/\d+/) || [0])[0] | 0, bfs = nw ? 10 : (bdFull ? 11 : 10);
+  const band = (a, b, long, short, tt, tiny) => { const cx = (X(a) + X(b)) / 2, wpx = X(b) - X(a) - 8, cw = t => t.length * (bfs * .62 + .8);   // slim band: a light tint and small spaced capitals at the top
+    const fit = L2 => L2 && L2.every(t => cw(t) <= wpx), pick = fit(long) ? long : fit(short) ? short : fit(tiny) ? tiny : [];
+    return `<g class="bnd"><title>${esc(tt)}</title><rect x="${X(a)}" y="${Tp}" width="${X(b) - X(a)}" height="${ph}" fill="var(--line)" opacity=".38"/>${pick.map((t, i) => `<text x="${cx}" y="${Tp + 14 + i * (bfs + 4)}" text-anchor="middle" font-size="${bfs}" font-weight="600" letter-spacing=".8" fill="var(--muted)">${esc(t)}</text>`).join('')}</g>`; };
+  if (plan) g += band(0, plan, ['SPRINT PLANNING'], ['PLANNING'], 'Sprint Planning', ['PLAN']);
+  g += band(sd.length - 1, sd.length, ['SPRINT END'], ['END'], 'Sprint end: ' + dayName(sd[sd.length - 1]) + ' ' + fmtD(sd[sd.length - 1]) + ', Day ' + sd.length, ['END']);   // the last working day, Friday, is marked as the end of the sprint
   for (let i = 0; i <= 4; i++) { const v = top / 4 * i; g += `<line x1="${L}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L - 8}" y="${Y(v) + 4}" text-anchor="end" font-size="${fs}" fill="var(--muted)">${Math.round(v)}</text>`; }
   for (let i = 0; i < slots; i++) { const d = i < sd.length ? sd[i] : s.end, end = i >= sd.length;
     g += `<text x="${X(i + .5)}" y="${Tp + ph + 18}" text-anchor="middle" font-size="${fs}" fill="var(--ink)" font-weight="600">${nw ? dayName(d).slice(0, 1) : dayName(d)}</text><text x="${X(i + .5)}" y="${Tp + ph + 18 + fs + 5}" text-anchor="middle" font-size="${fs}" fill="var(--muted)">${nw ? new Date(dUTC(d)).getUTCDate() : esc(fmtD(d))}</text>${nw ? '' : `<text x="${X(i + .5)}" y="${Tp + ph + 48}" text-anchor="middle" font-size="10" fill="var(--faint)">${end ? 'Retro' : 'Day ' + (i + 1)}</text>`}`; }
@@ -1189,14 +1214,15 @@ function lineChart(rs, ctx) {
   g += `<polyline id="actline" points="${line.map(p => X(p[0]) + ',' + Y(p[1])).join(' ')}" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
   const nx = X(last[0]), nl = (late ? 'End' : 'Now') + ' · ' + f1(last[1]) + ' h';   // one marker only, where the line ends: the latest Jira pull
   g += `<circle id="nowdot" cx="${nx}" cy="${Y(last[1])}" r="5" fill="var(--blue)" stroke="var(--bg)" stroke-width="2"/><text id="nowlbl" x="${nx + (nx > W - 150 ? -12 : 10)}" y="${Y(last[1]) + (nx > W - 150 ? 26 : -10)}" text-anchor="${nx > W - 150 ? 'end' : 'start'}" font-size="${nw ? 14 : 12}" font-weight="700" fill="var(--blue)" stroke="var(--bg)" stroke-width="3" paint-order="stroke">${nl}</text>`;
-  g += `<rect id="guide" x="0" y="${Tp}" width="0" height="${ph}" fill="var(--ink)" opacity=".06" visibility="hidden"/>`;
+  g += `<rect id="guide" x="0" y="${Tp}" width="0" height="${ph}" fill="var(--ink)" opacity=".06" visibility="hidden"/><g id="guidelbl" visibility="hidden" pointer-events="none">${(nw ? ['Open'] : ['Currently', 'open']).map((t, i, a) => `<text x="0" y="${Tp + 14 + i * (bfs + 4)}" text-anchor="middle" font-size="${bfs}" font-weight="600" letter-spacing=".8" fill="var(--blue)" stroke="var(--bg)" stroke-width="3" paint-order="stroke">${t.toUpperCase()}</text>`).join('')}</g>`;
   const days = []; for (let i = 0; i < slots; i++) {
     const d = i < sd.length ? sd[i] : s.end, future = d > ad, n = i - plan + 1, h = i < plan ? 0 : Math.min(Math.max(0, n) * DH, el);
     const partial = d === ad && i >= plan && h < Math.min(n * DH, tot) - 1e-9, rem = remAt(h), id = idealAt(h), hx = i < plan ? i + 1 : plan + h / DH;
     days.push({ d, i, end: i >= sd.length, future, partial, atTxt: partial ? hmText(at) : '', total: sumE, rem, ideal: id, px: X(hx), py: Y(rem), pi: Y(id), wdn: i < plan ? 0 : Math.min(n, wd.length), nwd: wd.length });
   }
-  BDV = { days, L, pw, W, slots, tasks, stories, epics };
-  return `<div class="cw" id="cw"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Burndown: remaining estimate by sprint day. Hover a day for a summary, click it to list the tickets.">${g}</svg><div class="tip" id="tip" hidden></div></div>`;
+  BDV = { days, L, pw, W, slots, plan, Tp, bfs, tasks, stories, epics };
+  const leg = `<div class="bdleg">${plan ? `<span><i></i>Sprint Planning · ${esc(fmtD(sd[0]))}${plan > 1 ? ' to ' + esc(fmtD(sd[plan - 1])) : ''}</span>` : ''}<span><i></i>Sprint end · ${esc(dayName(sd[sd.length - 1]) + ' ' + fmtD(sd[sd.length - 1]))}</span></div>`;
+  return `<div class="cw" id="cw">${leg}<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Burndown: remaining estimate by sprint day. Hover a day for a summary, click it to list the tickets.">${g}</svg><div class="tip" id="tip" hidden></div></div>`;
 }
 const hmText = at => { const h = +at.slice(11, 13), m = at.slice(14, 16); return (h % 12 || 12) + ':' + m + ' ' + (h < 12 ? 'AM' : 'PM'); };
 const finishedBy = (r, d) => r.d && r.d <= d;
@@ -1229,13 +1255,19 @@ function slotAt(ev) {
 }
 function setGuide(k, show) {
   const gd = $('#guide'); if (!gd || !BDV) return; if (!BDV.days[k]) return;
-  gd.setAttribute('x', BDV.L + k / BDV.slots * BDV.pw); gd.setAttribute('width', BDV.pw / BDV.slots); gd.setAttribute('visibility', show ? 'visible' : 'hidden');
+  const x0 = BDV.L + k / BDV.slots * BDV.pw, pinned = show && bdDay === k;
+  gd.setAttribute('x', x0); gd.setAttribute('width', BDV.pw / BDV.slots); gd.setAttribute('visibility', show ? 'visible' : 'hidden');
+  gd.setAttribute('fill', pinned ? 'var(--blue)' : 'var(--ink)'); gd.setAttribute('opacity', pinned ? '.13' : '.06');   // the clicked day is light blue and says it is open; a hover stays grey
+  const gl = $('#guidelbl'); if (gl) { gl.setAttribute('visibility', pinned ? 'visible' : 'hidden'); const inBand = k < BDV.plan || k === BDV.slots - 1, dy = inBand ? (BDV.bfs + 4) * 2 + 8 : 0;   // on a Planning or Retrospective day the label sits under that day's caption
+    gl.querySelectorAll('text').forEach((t, i) => { t.setAttribute('x', x0 + BDV.pw / BDV.slots / 2); t.setAttribute('y', BDV.Tp + 14 + dy + i * (BDV.bfs + 4)); }); }
 }
 function hideBdTip() { const t = $('#tip'); if (t) t.hidden = true; if (BDV) setGuide(bdDay == null ? 0 : bdDay, bdDay != null); }
+let tipSkip = -1;
 function hoverBd(ev) {
   const s = slotAt(ev); if (!s) return; const tip = $('#tip');
   if (s.k < 0 || s.k >= BDV.slots) { tip.hidden = true; setGuide(bdDay == null ? 0 : bdDay, bdDay != null); return; }
-  const x = BDV.days[s.k]; tip.innerHTML = tipHtml(x); tip.hidden = false; setGuide(s.k, true);
+  if (s.k === tipSkip) { tip.hidden = true; return; }      // the day was just clicked: its details are open below, so the hover card stays out of the way until the pointer moves to another day
+  tipSkip = -1; const x = BDV.days[s.k]; tip.innerHTML = tipHtml(x); tip.hidden = false; setGuide(s.k, true);
   const sc = s.r.width / BDV.W, bl = (BDV.L + s.k / BDV.slots * BDV.pw) * sc, br = (BDV.L + (s.k + 1) / BDV.slots * BDV.pw) * sc, tw = tip.offsetWidth, gap = 18;   // the card sits beside the shaded day with a gap, so both stay visible
   const room = s.r.width, right = br + gap, left = bl - gap - tw;
   tip.style.left = Math.max(4, Math.min(room - tw - 4, right + tw <= room - 4 ? right : left >= 4 ? left : (room - br > bl ? right : left))) + 'px'; tip.style.top = '8px';
@@ -1243,28 +1275,28 @@ function hoverBd(ev) {
 function dayRows(x, which) {
   const row = (r, kind) => { const k = TK[r.k] || {}; return { key: r.k, kind, ty: kind === 'Task' ? (r.ty || 'Sub-task') : kind === 'Story' ? 'User story' : 'Epic', t: k.t || r.k, a: r.a || k.a || 'Unassigned', s: k.s || '–', h: kind === 'Task' ? (k.h != null ? k.h : null) : null, d: r.d }; };
   const all = BDV.tasks.map(r => row(r, 'Task')).concat(BDV.stories.map(r => row(r, 'Story'))).concat(BDV.epics.map(r => row(r, 'Epic')));
-  const f = which === 'today' ? r => r.d === x.d : which === 'closed' ? r => r.d && r.d <= x.d : r => !(r.d && r.d <= x.d);
+  const f = r => (which.today && r.d === x.d) || (which.closed && r.d && r.d <= x.d) || (which.open && !(r.d && r.d <= x.d));   // the union of the ticked groups; a ticket appears once
   const rank = { Epic: 0, Story: 1, Task: 2 };
   return all.filter(f).sort((a, b) => rank[a.kind] - rank[b.kind] || a.key.localeCompare(b.key));
 }
 function renderDay() {
   const box = $('#dayd'); if (!box) return; if (bdDay == null || !BDV || !BDV.days[bdDay]) { box.hidden = true; box.innerHTML = ''; return; }
   const x = BDV.days[bdDay]; box.hidden = false;
-  const hd = `<div class="dh"><h3>${esc(dayHead(x))}${tip('closed')}</h3><button type="button" class="dx" data-dayclose>Close</button></div>`;
+  const hd = `<div class="dh"><h3>${esc(dayHead(x))}${tip('closed')}</h3><button type="button" class="dx" data-dayclose aria-label="Close the day details"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8"/></svg>Close</button></div>`;
   if (x.future) { box.innerHTML = hd + `<p class="note" style="margin:0">This day has not happened yet.</p>`; return; }
-  const c = dayCounts(x), tabs = [['today', 'Closed on this day'], ['closed', 'Closed up to this day'], ['open', 'Still open']], rows = dayRows(x, bdTab);
+  const c = dayCounts(x), FL = [['today', 'Closed on this day'], ['closed', 'Closed up to this day'], ['open', 'Still open']], rows = dayRows(x, bdFilt), nsel = FL.filter(f => bdFilt[f[0]]).length;
   const sum = `<table class="dsum"><thead><tr><th></th><th>Closed on this day</th><th>Closed up to this day</th><th>Still open</th></tr></thead><tbody>${[['Epics', c.epics], ['User stories', c.stories], ['Sub-tasks', c.tasks]].map(([l, o]) => `<tr><td>${l}</td><td>${o.today}</td><td>${o.closed} of ${o.total}</td><td>${o.total - o.closed}</td></tr>`).join('')}</tbody></table>`;
   const th = `<tr><th>Ticket</th><th>Title</th><th>${lab('Type', 'type')}</th><th>Owner</th><th>${lab('Status', 'jira')}</th><th class="num">Original estimate (h)</th></tr>`;
   const tr = r => `<tr><td><a class="link" target="_blank" rel="noopener" href="${J(r.key)}">${esc(r.key)}</a></td><td class="ttl" title="${esc(r.t)}">${esc(r.t)}</td><td data-l="Type">${esc(r.ty)}</td><td data-l="Owner">${esc(r.a)}</td><td data-l="Status">${esc(r.s)}</td><td class="num" data-l="Original estimate (h)">${r.kind === 'Task' && r.h != null ? f1(r.h) : '–'}</td></tr>`;
   const body = [['Epic', 'Epics'], ['Story', 'User stories'], ['Task', 'Sub-tasks']].map(([k, label]) => { const rs2 = rows.filter(r => r.kind === k), hs = rs2.reduce((a, r) => a + (r.h || 0), 0);
-    return `<tr class="dgrp"><td colspan="5"><b>${label}</b><span class="gn">${rs2.length}</span></td><td class="num">${k === 'Task' ? f1(hs) : ''}</td></tr>` + (rs2.length ? rs2.map(tr).join('') : `<tr class="rnone"><td colspan="6">None</td></tr>`); }).join('');
+    return `<tr class="dgrp"><td colspan="5"><b>${label}</b><span class="gn">${rs2.length}</span></td><td class="num">${k === 'Task' ? f1(hs) : ''}</td></tr>` + (rs2.length ? rs2.map(tr).join('') : `<tr class="rnone"><td colspan="6">${nsel ? 'None' : 'Tick a group in Filter to list tickets'}</td></tr>`); }).join('');
   const lead = touchOnly() ? `<div class="tipin">${tipHtml(x).replace('<div class="tf">Click the day for the ticket list</div>', '')}</div>` : '';
-  box.innerHTML = hd + lead + sum + `<div class="dtabs" role="tablist">${tabs.map(([w, l]) => `<button type="button" role="tab" data-dtab="${w}" aria-selected="${w === bdTab}">${l}</button>`).join('')}</div><div class="dlist"><table class="dtab"><colgroup><col style="width:116px"><col><col style="width:160px"><col style="width:110px"><col style="width:170px"><col style="width:186px"></colgroup><thead>${th}</thead><tbody>${body}</tbody></table></div>`;
+  box.innerHTML = hd + lead + sum + `<div class="dbar"><button type="button" class="dfb" data-dfilter aria-haspopup="true" aria-expanded="${bdFiltOpen}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>Filter<b>${nsel}</b></button><span class="dsel">${esc(nsel ? FL.filter(f => bdFilt[f[0]]).map(f => f[1]).join(', ') : 'Nothing ticked')}</span><div class="dfm" id="dfm" role="group" aria-label="Filter the ticket list"${bdFiltOpen ? '' : ' hidden'}>${FL.map(([k, l]) => `<label><input type="checkbox" data-dfk="${k}"${bdFilt[k] ? ' checked' : ''}>${l}</label>`).join('')}</div></div><div class="dlist"><table class="dtab"><colgroup><col style="width:116px"><col><col style="width:160px"><col style="width:110px"><col style="width:170px"><col style="width:186px"></colgroup><thead>${th}</thead><tbody>${body}</tbody></table></div>`;
 }
 function pinDay(ev) {
   const s = slotAt(ev); if (!s || s.k < 0 || s.k >= BDV.slots) return;
-  bdDay = bdDay === s.k ? null : s.k; setGuide(s.k, bdDay != null); renderDay();
-  if (bdDay != null) $('#dayd').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  bdDay = bdDay === s.k ? null : s.k; tipSkip = bdDay != null ? s.k : -1; { const t = $('#tip'); if (t && bdDay != null) t.hidden = true; } setGuide(s.k, bdDay != null); renderDay();
+  if (bdDay != null) { const r = $('#dayd').getBoundingClientRect(); if (!bdFull || r.top > innerHeight - 110) $('#dayd').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }   // in full screen the detail is already under the chart, so the page does not jump   // the detail opens right under the chart, so it is on screen with it
 }
 function groupBars(rs) {
   const ser = [['Original estimate', 'E', 'var(--blue)'], ['Logged', 'logged', 'var(--green)'], ['Pace target by now', 'exp', 'var(--faint)']];
@@ -1282,7 +1314,8 @@ function dayWidgets(sd, wd, plan, ad, s) {
   const sdn = sd.filter(d => d <= ad).length, cdn = wd.filter(d => d <= ad).length, over = ad > sd[sd.length - 1], nm = wd.length, d1 = sd[Math.max(0, Math.min(sd.length, sdn) - 1)];
   const sprintBig = !sdn ? 'Not started' : over ? 'Complete' : String(sdn), capBig = !sdn ? 'Not started' : over ? 'Complete' : !cdn ? 'Planning' : String(cdn);
   const sprintSub = !sdn ? '' : over ? '10 of 10' : dayName(d1) + ' ' + fmtD(d1), capSub = !sdn ? '' : over ? nm + ' of ' + nm : !cdn ? 'Sprint Planning, no capacity' : dayName(wd[cdn - 1]) + ' ' + fmtD(wd[cdn - 1]);
-  return `<div class="dw" id="daywidgets"><div class="dwc sp" id="wsprint"><span class="fl">Sprint day${tip('day')}</span><b>${sprintBig}${sdn && !over ? '<small> of 10</small>' : ''}</b><em>${esc(sprintSub)}</em></div><div class="dwc cp" id="wcap"><span class="fl">Capacity day${tip('capday')}</span><b>${capBig}${cdn && !over ? '<small> of ' + nm + '</small>' : ''}</b><em>${esc(capSub)}</em></div><div class="dwc sp su" id="wsuccess"><span class="fl">Sprint success${tip('success')}</span><b>${nT ? pct + '<small>%</small>' : 'No tasks'}</b><em>${nT ? nC + ' closed / ' + nT + ' committed' : ''}</em></div></div>`;
+  const t0 = sd[0], t1 = sd[sd.length - 1], a0 = fmtD(t0), a1 = fmtD(t1), span = a0.split(' ')[1] === a1.split(' ')[1] ? a0.split(' ')[0] + ' – ' + a1 : a0 + ' – ' + a1;
+  return `<div class="dw" id="daywidgets"><div class="dwc sp tl" id="wtimeline"><span class="fl">Sprint timeline${tip('timeline')}</span><b>${esc(span)}</b><em>${esc(((s && s.name) || '') + (s && s.name ? ' · ' : '') + sd.length + ' working days')}</em></div><div class="dwc sp" id="wsprint"><span class="fl">Sprint day${tip('day')}</span><b>${sprintBig}${sdn && !over ? '<small> of 10</small>' : ''}</b><em>${esc(sprintSub)}</em></div><div class="dwc cp" id="wcap"><span class="fl">Capacity day${tip('capday')}</span><b>${capBig}${cdn && !over ? '<small> of ' + nm + '</small>' : ''}</b><em>${esc(capSub)}</em></div><div class="dwc sp su" id="wsuccess"><span class="fl">Sprint success${tip('success')}</span><b>${nT ? pct + '<small>%</small>' : 'No tasks'}</b><em>${nT ? nC + ' closed / ' + nT + ' committed' : ''}</em></div></div>`;
 }
 function capBlock(label, sub, used, cap) {
   const pu = cap ? used / cap * 100 : 0, left = cap - used;
@@ -1322,7 +1355,7 @@ function leavePanel(sel) {
 // one table cell: the label for the phone card, then the value; on a phone the label itself is the tap target (like a field name on a trading screen)
 const cl = (label, key, val, cls) => `<td data-l="${label}"${key ? ` data-tip="@${key}"` : ''}${cls ? ` class="${cls}"` : ''}><span class="v">${val}</span></td>`;
 function renderBd() {
-  CHW = chartW($('#v-bd'), isNarrow() ? 28 : 36);
+  CHW = bdFull ? chartW(document.documentElement, 2 * Math.max(16, innerWidth * .025) + 4, 1700) : chartW($('#v-bd'), isNarrow() ? 28 : 36); CHH = Math.max(280, Math.min(420, Math.round(innerHeight * .38)));   // leaves room for the day detail under the chart on one screen
   const s = BD[selOne];
   if (!s || !s.win) { $('#v-bd').innerHTML = `<div class="empty">No time-logging data for ${esc(spName(selOne))}.</div>`; return; }
   const wd = workDays(s.win), sd = sprintDays(s), plan = sd.filter(d => d < wd[0]).length, at0 = asOfIST(), ad = at0.slice(0, 10), lastT = wd[wd.length - 1] + 'T19:00', at = at0 > lastT ? lastT : at0;
@@ -1352,11 +1385,11 @@ function renderBd() {
     const sel = bdWho === 'Team' ? rs : rs.filter(r => r.name === bdWho), n = sel.length, nm = bdWho === 'Team' ? 'Everyone' : bdWho;
     const tasks = (s.tasks || []).filter(t => !t.y && (bdWho === 'Team' || t.a === bdWho)), stories = (s.stories || []).filter(t => bdWho === 'Team' || t.a === bdWho), epics = (s.epics || []).filter(t => bdWho === 'Team' || t.a === bdWho);
     const sum = k => sel.reduce((a, r) => a + r[k], 0), tot_ = n > 1;
-    const vcell = r => `<span class="tag ${r.vc}">${r.vd}</span><small class="vsm">${r.vd === 'Completed' ? 'Nothing left' : r.gap > .05 ? 'Short by ' + f1(r.gap) + ' h' : 'Room of ' + f1(-r.gap) + ' h'}</small>`;
+    const vcell = r => `<span class="tag ${r.vc}">${r.vd}</span><small class="vsm">${r.vd === 'Completed' ? 'No work left' : r.vd === 'No work planned' ? 'No estimate' : r.gap > .05 ? 'Short by ' + f1(r.gap) + ' h' : 'Room of ' + f1(-r.gap) + ' h'}</small>`;
     body = dayWidgets(sd, wd, plan, ad, s) + `<div class="pick"><label class="field"><span class="fl">Person</span><select id="bdwho" class="ctl" aria-label="Person">${['Team'].concat(rs.map(r => r.name)).map(x => `<option value="${esc(x)}" ${x === bdWho ? 'selected' : ''}>${x === 'Team' ? 'Everyone' : esc(x)}</option>`).join('')}</select></label></div>
     <div class="panel" id="capper" style="margin-top:14px">${capBars(nm, n === 1 ? '1 person' : n + ' people', aggOf(sel), wd.length)}</div>
     <div style="margin-top:16px">${dayGrid(sel, sd, wd, plan, ad, s)}</div>
-    <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Remaining work vs ideal pace · ${esc(nm)}${tip('chart')}</h3></div><div class="key" style="margin-bottom:6px"><span><i class="ln b"></i>Remaining estimate${tip('remaining')}</span><span><i class="ln d"></i>Ideal pace${tip('ideal')}</span></div>${lineChart(sel, { sd, plan, wd, s, tasks, stories, epics, el, tot, ad, at, late })}<div class="dayd" id="dayd" hidden></div></div>
+    <div class="panel${bdFull ? ' fs' : ''}" id="lcpanel" style="margin-top:16px"><div class="lchead"><div class="cardhead"><h3>Remaining work vs ideal pace · ${esc(nm)}${tip('chart')}</h3></div><button type="button" class="fsbtn" id="fsbtn" data-fs aria-pressed="${bdFull}"><svg viewBox="0 0 24 24" aria-hidden="true">${bdFull ? '<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>' : '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'}</svg><span class="fst">${bdFull ? 'Exit full screen' : 'Full screen'}</span></button></div><div class="key" style="margin-bottom:6px"><span><i class="ln b"></i>Remaining estimate${tip('remaining')}</span><span><i class="ln d"></i>Ideal pace${tip('ideal')}</span></div>${lineChart(sel, { sd, plan, wd, s, tasks, stories, epics, el, tot, ad, at, late })}<div class="dayd" id="dayd" hidden></div></div>
     <div class="panel" style="margin-top:16px"><div class="cardhead"><h3>Can the work be finished?</h3></div><table class="fit" id="tplan"><thead><tr><th>Name</th><th>Original estimate (h)</th><th>${lab('Remaining estimate (h)', 'remaining')}</th><th>${lab('Time left in the sprint (h)', 'left')}</th><th>${lab('Verdict', 'verdict')}</th></tr></thead><tbody>
     ${sel.map(r => `<tr><td><b>${esc(r.name)}</b></td>${cl('Original estimate (h)', '', f1(r.E))}${cl('Remaining estimate (h)', 'remaining', f1(r.remain))}${cl('Time left in the sprint (h)', 'left', f1(r.left))}${cl('Verdict', 'verdict', vcell(r), 'vd')}</tr>`).join('')}
     ${tot_ ? `<tr class="tot"><td>Everyone</td>${cl('Original estimate (h)', '', f1(sum('E')))}${cl('Remaining estimate (h)', 'remaining', f1(sum('remain')))}${cl('Time left in the sprint (h)', 'left', f1(sum('left')))}${cl('Verdict', 'verdict', (() => { const g = sum('remain') - sum('left'); return late ? '' : `<span class="tag ${g > .05 ? 'bad' : 'ok'}">${g > .05 ? 'Not achievable' : 'Achievable'}</span><small class="vsm">${g > .05 ? 'Short by ' + f1(g) + ' h' : 'Room of ' + f1(-g) + ' h'}</small>`; })(), 'vd')}</tr>` : ''}</tbody></table></div>
@@ -1365,6 +1398,7 @@ function renderBd() {
     ${tot_ ? `<tr class="tot"><td>Everyone</td>${cl('Logged (h)', '', f1(sum('logged')))}${cl('Over estimate (h)', 'over', f1(sum('over')))}${cl('Pace target by now (h)', 'expected', f1(sum('exp')))}${cl('Pace gap (h)', 'missing', f1(sum('miss')))}${cl('Leave (h)', 'leave', f1(sum('leaveH')))}<td></td></tr>` : ''}</tbody></table></div>${leavePanel(sel)}`;
   }
   $('#v-bd').innerHTML = seg + body;
+  if (!$('#lcpanel')) bdFull = false; document.body.classList.toggle('fsopen', bdFull);
   renderDay(); if (bdDay != null && BDV) setGuide(bdDay, true);
 }
 $('#v-bd').addEventListener('change', e => { if (e.target.id === 'bdwho') { bdWho = e.target.value; renderBd(); } });
@@ -1374,9 +1408,14 @@ $('#v-bd').addEventListener('mousemove', e => { if (e.target.closest('#cw')) hov
 $('#v-bd').addEventListener('mouseover', e => { if (e.target.closest('.ibtn')) hideBdTip(); });
 document.addEventListener('mouseleave', hideBdTip); window.addEventListener('blur', hideBdTip); window.addEventListener('scroll', hideBdTip, { passive: true }); document.addEventListener('pointerdown', e => { if (!e.target.closest('#cw')) hideBdTip(); });
 $('#v-bd').addEventListener('mouseout', e => { if (e.target.closest('#cw') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#cw'))) hideBdTip(); });
+$('#v-bd').addEventListener('change', e => { const k = e.target.dataset && e.target.dataset.dfk; if (!k) return; bdFilt[k] = e.target.checked; renderDay(); });   // at least one group stays ticked
+function setFull(on) { bdFull = on; document.body.classList.toggle('fsopen', on); hideBdTip(); renderBd(); const b = $('#fsbtn'); if (b) b.focus({ preventScroll: true }); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && bdFiltOpen) { bdFiltOpen = false; renderDay(); } else if (e.key === 'Escape' && bdFull) setFull(false); });
 $('#v-bd').addEventListener('click', e => {
-  if (e.target.closest('[data-dayclose]')) { bdDay = null; if (BDV) setGuide(0, false); return renderDay(); }
-  const tb = e.target.closest('[data-dtab]'); if (tb) { bdTab = tb.dataset.dtab; return renderDay(); }
+  if (e.target.closest('[data-dayclose]')) { bdDay = null; tipSkip = -1; if (BDV) setGuide(0, false); return renderDay(); }
+  if (e.target.closest('[data-dfilter]')) { bdFiltOpen = !bdFiltOpen; return renderDay(); }
+  if (e.target.closest('[data-fs]')) { setFull(!bdFull); return; }
+  if (bdFiltOpen && !e.target.closest('#dfm')) { bdFiltOpen = false; renderDay(); }
   if (e.target.closest('#cw')) pinDay(e);
 });
 $('#v-bd').addEventListener('mouseleave', () => { const t = $('#tip'); if (t) t.hidden = true; if (BDV) setGuide(bdDay == null ? 0 : bdDay, bdDay != null); });
@@ -1439,15 +1478,6 @@ function renderLog() {
     <div class="panel"><div class="cardhead"><h3>${esc(name)}: scheduled pulls by working day</h3></div>${days.length ? `<table class="plt"><thead><tr><th>Day</th><th>Date</th><th>${lab('10:50 AM', 'slot')}</th><th>${lab('6:50 PM', 'slot')}</th></tr></thead><tbody>${days.map(d => `<tr><td><b>${dayName(d)}</b></td><td data-l="Date">${esc(fmtD(d))}</td>${[0, 1].map(i => { const c = cell(d, i); return `<td data-l="${SLOTN[i]}"><span class="chip ${c.c}"><i></i>${c.t}${c.run ? ' · ' + tonly(c.run.ms) : ''}</span></td>`; }).join('')}</tr>`).join('')}</tbody></table>` : '<div class="empty">No dates are recorded for this sprint.</div>'}</div>`;
 }
 
-/* ---------- stakeholders ---------- */
-const ROLES = [['Developers', '#1967d2', ['Whatever estimate is given in Sprint Planning is completed by the end of the sprint', 'Original estimates are not changed once given to the PM', 'Time is logged daily, before the evening Daily Scrum call', 'A document with the technical approach (a file or an artifact link) is added to the ticket before development starts']],
-  ['QA', '#2e9e6b', ['Test cases are prepared from the user story while development is in progress', 'Bugs are logged under the product tracker story with a P0 to P4 priority in the title', 'A task moves to UAT only after QA sign-off; demos need BVTs passing']],
-  ['PM', '#a0205f', ['The sprint is locked on day 2, after day 1 is spent creating epics and user stories in Jira', "On day 2, last sprint's retrospective report goes to the CTO", 'Every ticket has an estimate and a due date before the sprint is locked', 'Work added mid-sprint is recorded in Jira with a reason']],
-  ['CTO', '#b06000', ['Reviews the technical document and approach for each task with the developers, before they formally start development', 'Attends the internal demos and accepts the result when BVTs pass', "Heads all engineering activities and the developers' work"]]];
-const TICK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8.5" opacity=".35"/><path d="m6.5 10.3 2.3 2.3 4.7-5"/></svg>';
-function renderWho() {
-  $('#v-who').innerHTML = `<h2 class="pgtitle">Stakeholders and rules</h2><p class="pgsub">Four stakeholders run the sprint. Each one agrees to the rules below.</p><div class="roles">${ROLES.map((r, i) => `<div class="role"><div class="rhead"><span class="rnum" style="background:${r[1]}">${i + 1}</span><h3>${r[0]}</h3></div><ul>${r[2].map(x => `<li><span style="color:${r[1]}">${TICK}</span><span>${esc(x)}</span></li>`).join('')}</ul></div>`).join('')}</div>`;
-}
 
 /* ---------- how it works ---------- */
 const ARW = '<div class="arr"><svg viewBox="0 0 30 14"><path d="M2 7h24"/><path d="m21 2 5 5-5 5"/></svg></div>';
@@ -1473,7 +1503,7 @@ function renderHow() {
       <details><summary>Refresh limits</summary><div class="lim"><div class="capb" style="padding:12px 0 4px"><div class="capt"><b>Team refreshes, last 24 hours</b><span>${u.n} of ${LIMIT}</span></div><div class="meter2" role="img" aria-label="${u.n} of ${LIMIT} refreshes used"><i class="u" style="width:${pu}%"></i><i class="l" style="width:${100 - pu}%"></i></div></div>
         <div class="scroll"><table><thead><tr><th>Rule</th><th>Value</th></tr></thead><tbody>
         <tr><td><b>Refresh button</b>${tip('budget')}</td><td>Stops at ${LIMIT - RESERVE} of ${LIMIT} pulls a day</td></tr>
-        <tr><td><b>Pressing twice</b></td><td>One refresh per 2 minutes</td></tr>
+        <tr><td><b>Pressing twice</b></td><td>Ignored while your refresh is running</td></tr>
         <tr><td><b>GitHub Actions</b></td><td>No limit (public repository)</td></tr>
         <tr><td><b>GitHub API</b></td><td>5,000 requests an hour</td></tr></tbody></table></div></div></details>
       <details><summary>Links</summary><div class="lgrp">${LINKS.map(g => `<div><h4>${g[0]}</h4>${g[1].map(l => `<a target="_blank" rel="noopener" href="${l[1]}">${l[0]}</a>`).join('')}</div>`).join('')}</div></details></div></div>`;
@@ -1486,6 +1516,29 @@ const descBlock = k => { const t = D.desc[k]; return `<div class="sec"><div clas
 const CLIP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 11-8.6 8.6a5 5 0 0 1-7-7l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.7 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9"/></svg>';
 const fact = (v, l, hi) => `<div class="fact${hi ? ' hi' : ''}"><b>${v}</b><span>${l}</span></div>`;
 const dtfmt = s => { const ms = Date.parse(s); return isNaN(ms) ? '' : tfmt(ms); };
+const INFO = k => (D.info || {})[k] || null;
+const dueFmt = d => d && !isNaN(Date.parse(d)) ? dayName(d) + ' ' + fmtD(d) : 'None';
+const isDocLabel = l => String(l).replace(/[\s_-]/g, '').toLowerCase() === 'documentationtask';
+// time: the original estimate and the time logged as two bars on one scale, with the share logged written beside them
+function timeBlock(est, lg) {
+  if (!(est > 0) && !(lg > 0)) return '<span class="nodesc">No estimate and no time logged yet.</span>';
+  const base = Math.max(est, lg), pe = est / base * 100, pl = lg / base * 100, pct = est > 0 ? Math.round(lg / est * 100) : null, over = est > 0 && lg > est + 0.005;
+  return `<div class="tbars"><div class="tb"><span>Original estimate</span><div class="trk"><i class="est" style="width:${pe}%"></i></div><b>${f1(est)} h</b></div><div class="tb"><span>Time logged</span><div class="trk"><i class="log${over ? ' over' : ''}" style="width:${pl}%"></i></div><b>${f1(lg)} h</b></div><div class="tpct${over ? ' over' : ''}" data-pct="${pct == null ? '' : pct}">${pct == null ? 'No estimate to compare with' : pct + '% logged'}</div></div>`;
+}
+const taskTime = ts => ts.reduce((a, t) => { const i = INFO(t.key); return [a[0] + (i ? i.oe : (t.h || 0)), a[1] + (i ? i.lg : 0)]; }, [0, 0]);
+function infoBlocks(key, est, lg) {
+  if (!D.info) return `<div class="sec"><div class="lb">Time</div><span class="nodesc">Reporter, labels, time logged and linked work items appear after the next refresh.</span></div>`;
+  const i = INFO(key) || { lb: [], lk: [] };
+  const lbl = i.lb.length ? `<div class="lbls">${i.lb.map(l => `<span class="lbl${isDocLabel(l) ? ' doc' : ''}"${isDocLabel(l) ? ' title="In Technical Review this counts as closed"' : ''}>${esc(l)}</span>`).join('')}</div>` : '<span class="nodesc">No labels.</span>';
+  return `<div class="sec"><div class="lb">Time logged against the original estimate</div>${timeBlock(est, lg)}</div><div class="sec"><div class="lb">Labels</div>${lbl}</div>`;
+}
+function linkBlock(key) {
+  if (!D.info) return '';
+  const lk = (INFO(key) || { lk: [] }).lk;
+  return `<div class="sec"><div class="lb">Linked work items (${lk.length})</div>${lk.length ? `<div class="list">${lk.map(l => `<a class="item lkd" target="_blank" rel="noopener" href="${J(l.k)}"><span class="k">${esc(l.k)}</span><span class="t">${esc(l.s)}</span><span class="h">${esc(l.t)}</span><span class="s">${esc(l.st || '')}</span></a>`).join('')}</div>` : '<span class="nodesc">No linked work items in Jira.</span>'}</div>`;
+}
+const whereLine = () => { const c = SCOPE(); return `<div class="where"><span>Space <b>${esc(c.space)}</b></span><span>Board <b>${esc(c.board)}</b></span></div>`; };
+const whoFacts = key => { const i = INFO(key); return (D.info ? fact(esc((i && i.rp) || 'Unknown'), 'Reporter') + fact(esc(dueFmt(i && i.du)), 'Due date') : ''); };
 function extraBlocks(key) {
   if (!D.extra) return '';                                   // data from before attachments and comments were collected
   const x = D.extra[key] || { att: [], cm: [] };
@@ -1499,15 +1552,15 @@ function openItem(kind, key) {
   if (kind === 'e') {
     const ss = D.stories.filter(s => s.epic === key && SHOW.includes(s.sprint)).sort((a, b) => IDX[a.sprint] - IDX[b.sprint]), hh = ss.reduce((a, s) => a + hrs(s), 0), pp = ss.reduce((a, s) => a + (s.sp || 0), 0);
     h += `<span class="kind epic">Epic</span><h2>${esc(o.title)}</h2><a class="link" target="_blank" rel="noopener" href="${J(key)}">${esc(key)} in Jira</a>
-      <div class="facts">${fact(esc(o.a || 'Unassigned'), 'Assignee')}${fact(ss.length, 'User stories')}${fact(f1(hh) + ' h', 'Original estimate', true)}${pp ? fact(pp, 'Story points, total of its user stories', true) : ''}</div>
-      ${descBlock(key)}<div class="sec"><div class="lb">User stories (${ss.length})</div><div class="list">${ss.map(s => `<button class="item story" data-s="${esc(s.key)}"><span class="k">${esc(s.key)}</span><span class="t">${esc(s.title)}</span><span class="h">${f1(hrs(s))} h${s.sp != null ? ' · ' + pts(s) : ''}</span><span class="s">${esc(spName(s.sprint))} · ${esc(s.a)}</span></button>`).join('')}</div></div>${extraBlocks(key)}`;
+      ${whereLine()}<div class="facts">${fact(esc(o.a || 'Unassigned'), 'Assignee')}${whoFacts(key)}${fact(ss.length, 'User stories')}${fact(f1(hh) + ' h', 'Original estimate', true)}${pp ? fact(pp, 'Story points, total of its user stories', true) : ''}</div>
+      ${infoBlocks(key, ...taskTime(ss.flatMap(x => x.tasks.length ? x.tasks : [{ key: x.key, h: x.own }])))}${descBlock(key)}<div class="sec"><div class="lb">User stories (${ss.length})</div><div class="list">${ss.map(s => `<button class="item story" data-s="${esc(s.key)}"><span class="k">${esc(s.key)}</span><span class="t">${esc(s.title)}</span><span class="h">${f1(hrs(s))} h${s.sp != null ? ' · ' + pts(s) : ''}</span><span class="s">${esc(spName(s.sprint))} · ${esc(s.a)}</span></button>`).join('')}</div></div>${linkBlock(key)}${extraBlocks(key)}`;
   } else if (kind === 's') {
     h += `<span class="kind story">User story</span><h2>${esc(o.title)}</h2><a class="link" target="_blank" rel="noopener" href="${J(key)}">${esc(key)} in Jira</a>
-      <div class="facts">${fact(esc(o.a || 'Unassigned'), 'Assignee')}${fact(esc(spName(o.sprint)), 'Sprint')}${fact(f1(hrs(o)) + ' h', 'Original estimate', true)}${o.sp != null ? fact(o.sp, 'Story points', true) : ''}</div>
-      ${descBlock(key)}<div class="sec"><div class="lb">Tasks (${o.tasks.length})${tip('jira')}</div>${o.tasks.length ? `<div class="list">${o.tasks.map(t => `<button class="item task" data-t="${esc(t.key)}"><span class="k">${esc(t.key)}</span><span class="t">${esc(t.t)}</span><span class="h">${f1(t.h || 0)} h</span><span class="s">${esc(t.a)} · ${esc(t.s)}</span></button>`).join('')}</div>` : '<span class="nodesc">No tasks under this user story.</span>'}</div>${extraBlocks(key)}`;
+      ${whereLine()}<div class="facts">${fact(esc(o.a || 'Unassigned'), 'Assignee')}${whoFacts(key)}${fact(esc(spName(o.sprint)), 'Sprint')}${fact(f1(hrs(o)) + ' h', 'Original estimate', true)}${o.sp != null ? fact(o.sp, 'Story points', true) : ''}</div>
+      ${infoBlocks(key, ...taskTime(o.tasks.length ? o.tasks : [{ key, h: o.own }]))}${descBlock(key)}<div class="sec"><div class="lb">Tasks (${o.tasks.length})${tip('jira')}</div>${o.tasks.length ? `<div class="list">${o.tasks.map(t => `<button class="item task" data-t="${esc(t.key)}"><span class="k">${esc(t.key)}</span><span class="t">${esc(t.t)}</span><span class="h">${f1(t.h || 0)} h</span><span class="s">${esc(t.a)} · ${esc(t.s)}</span></button>`).join('')}</div>` : '<span class="nodesc">No tasks under this user story.</span>'}</div>${linkBlock(key)}${extraBlocks(key)}`;
   } else {
     h += `<span class="kind task">Task</span><h2>${esc(o.t)}</h2><a class="link" target="_blank" rel="noopener" href="${J(key)}">${esc(key)} in Jira</a>
-      <div class="facts">${fact(esc(o.a || 'Unassigned'), 'Assignee')}${fact(f1(o.h || 0) + ' h', 'Original estimate', true)}${fact(esc(o.s || '–'), lab('Status', 'jira'))}</div>${descBlock(key)}${extraBlocks(key)}`;
+      ${whereLine()}<div class="facts">${fact(esc(o.a || 'Unassigned'), 'Assignee')}${whoFacts(key)}${fact(f1(o.h || 0) + ' h', 'Original estimate', true)}${fact(esc(o.s || '–'), lab('Status', 'jira'))}</div>${infoBlocks(key, ...taskTime([o]))}${descBlock(key)}${linkBlock(key)}${extraBlocks(key)}`;
   }
   dr.innerHTML = h; dr.classList.add('on'); scrim.classList.add('on'); dr.scrollTop = 0;
 }
@@ -1527,13 +1580,14 @@ $('#map').addEventListener('mouseleave', () => document.querySelectorAll('#lines
 
 function show() {
   const dead = LOADFAIL && !(D.stories || []).length; $('#loaderr').hidden = !dead;
-  if (dead) { ['map', 'cap', 'bd', 'leave', 'log', 'who', 'how'].forEach(x => $('#v-' + x).hidden = true); $('#bar').style.display = 'none'; document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab)); return; }
+  if (dead) { ['map', 'cap', 'bd', 'leave', 'log', 'how'].forEach(x => $('#v-' + x).hidden = true); $('#bar').style.display = 'none'; document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab)); return; }
   document.querySelectorAll('#tabs .tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
-  ['map', 'cap', 'bd', 'leave', 'log', 'who', 'how'].forEach(t => $('#v-' + t).hidden = t !== tab);
+  if (tab !== 'bd') { bdFull = false; document.body.classList.remove('fsopen'); }
+  ['map', 'cap', 'bd', 'leave', 'log', 'how'].forEach(t => $('#v-' + t).hidden = t !== tab);
   const sp = ['map', 'cap', 'bd', 'leave'].includes(tab);
   $('#fsprint').hidden = !sp; $('#fasof').hidden = tab !== 'bd'; $('#legend').style.display = tab === 'map' ? '' : 'none'; $('#bar').style.display = sp ? '' : 'none';
   ddLabel();
-  ({ map: renderMap, cap: renderCap, bd: renderBd, leave: renderLeave, log: renderLog, who: renderWho, how: renderHow })[tab]();
+  ({ map: renderMap, cap: renderCap, bd: renderBd, leave: renderLeave, log: renderLog, how: renderHow })[tab]();
 }
 $('#tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) { tab = b.dataset.tab; closeD(); show(); } });
 window.addEventListener('resize', () => { if (tab === 'map') lines(); });
@@ -1541,12 +1595,12 @@ let lastW = innerWidth, rzT = null; window.addEventListener('resize', () => { cl
 window.matchMedia('(max-width:720px)').addEventListener('change', () => { if (tab === 'bd' && D.stories.length) renderBd(); });
 
 /* ---------- what each status word means (shown by the (i) next to the column or label) ---------- */
-const TASK_CLOSED = ['Technical Review', 'Done', 'Fixed', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod', 'Invalid', 'Deferred'], STORY_CLOSED = ['Deployed to UAT', 'Deployed to Prod'], EPIC_CLOSED = ['Done'];
+const TASK_CLOSED = ['Done', 'Fixed', 'Deployed to UAT', 'Deployed to Prod', 'Invalid', 'Deferred'], STORY_CLOSED = ['Deployed to UAT', 'Deployed to Prod'], EPIC_CLOSED = ['Done'];
 const OPEN_STATUSES = ['Backlog', 'Research', 'Spec_Completed', 'Accepted by Developer', 'Ready for Development', 'In Progress', 'Code_Review', 'In Testing', 'On-Hold', 'New', 'Triaged', 'Reopened', 'Verified', 'ACTIVE', 'Duplicate', "Won't Fix"];
 const TT = {   // every (i): one short line, then a formula and a worked example laid out as rows
   dgrid: { h: 'Time logged each day', mk: 'tag', p: 'Each cell is the hours a person logged that day, by log date.', rows: [['ok', 'On pace', 'At or above the daily pace target'], ['warn', 'Behind pace', 'Some time logged, under the daily pace target'], ['bad', 'Nothing logged', 'No time logged on a working day'], ['na', 'Grey', 'Sprint Planning, leave, or a day that has not come yet'], ['now', 'Outline', 'Today, still in progress']], math: [{ h: 'Example', rows: [['Original estimate', '48 h'], ['Capacity days', '8'], ['Daily pace target', '(48 h) / (8) = 6 h']] }] },
   flag: { h: 'Flag', mk: 'tag', p: 'The pace target is a prediction from the original estimates, not a count of missed work.', rows: [['nil', 'Not started', 'Work has not begun'], ['ok', 'On pace', 'Logged is at or above the pace target'], ['warn', 'Behind pace', 'Up to 8 h under the pace target'], ['bad', 'Well behind pace', 'More than 8 h under the pace target']] },
-  verdict: { h: 'Verdict', mk: 'tag', p: 'Can the remaining work fit in the time left?', rows: [['blue', 'Formula', '(remaining estimate) − (time left)'], ['ok', 'Achievable', 'Result is 0 or less'], ['bad', 'Not achievable', 'Result is above 0'], ['ok', 'Completed', 'Sprint over, no work left'], ['bad', 'Not completed', 'Sprint over, work left']], math: [{ h: 'Example', rows: [['Remaining estimate', '36 h'], ['Time left', '33.5 h'], ['Short by', '(36 h) − (33.5 h) = 2.5 h']] }] },
+  verdict: { h: 'Verdict', mk: 'tag', p: 'Can the remaining work fit in the time left?', rows: [['blue', 'Formula', '(remaining estimate) − (time left)'], ['ok', 'Achievable', 'Result is 0 or less'], ['bad', 'Not achievable', 'Result is above 0'], ['ok', 'Completed', 'Remaining estimate is 0: no work left'], ['bad', 'Not completed', 'Sprint over, work left'], ['nil', 'No work planned', 'No estimate for this person']], math: [{ h: 'Example', rows: [['Remaining estimate', '36 h'], ['Time left', '33.5 h'], ['Short by', '(36 h) − (33.5 h) = 2.5 h']] }] },
   left: { h: 'Time left in the sprint (h)', p: 'Working hours still to come, after leave.', rows: [['blue', 'Formula', '(capacity) − (hours passed)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Hours passed', '40 h'], ['Time left', '(64 h) − (40 h) = 24 h']] }] },
   leave: { h: 'Leave (h)', p: 'Hours away. Lowers capacity only.', rows: [['blue', 'Formula', '(capacity) − (leave)']], math: [{ h: 'Example', rows: [['Capacity', '64 h'], ['Leave', '6 h'], ['After leave', '(64 h) − (6 h) = 58 h']] }] },
   missing: { h: 'Pace gap (h)', p: 'How far logged time is under the pace target. The target is a prediction from the original estimates.', mk: 'tag', rows: [['blue', 'Formula', '(pace target) − (logged)'], ['warn', 'Up to 8 h', 'Behind pace'], ['bad', 'More than 8 h', 'Well behind pace']], math: [{ h: 'Example', rows: [['Pace target', '24 h'], ['Logged', '18 h'], ['Pace gap', '(24 h) − (18 h) = 6 h']] }] },
@@ -1560,11 +1614,12 @@ const TT = {   // every (i): one short line, then a formula and a worked example
   latest: { h: 'Latest scheduled pull', p: 'The last scheduled pull that worked.' },
   next: { h: 'Next scheduled pull', p: 'The next timer slot, in India time.' },
   type: { h: 'Type', rows: [['blue', 'Epic', 'Holds user stories'], ['ok', 'User story', 'Holds sub-tasks'], ['nil', 'Sub-task', 'Sub-task, Story sub-task, Bug sub-task, New Feature sub-task']] },
+  timeline: { h: 'Sprint timeline', p: 'From the first to the last working day of the sprint.', rows: [['blue', 'Starts', 'Day 1, the first working day'], ['blue', 'Ends', 'Day 10, the last working day. The Monday after belongs to the next sprint.']] },
   day: { h: 'Sprint day', p: 'Working days since the sprint started. The first 2 are Sprint Planning.', rows: [['nil', 'Not started', 'Before day 1'], ['blue', 'Day N of 10', 'Counts every working day'], ['ok', 'Complete', 'After day 10']] },
-  success: { h: 'Sprint success', p: 'Share of committed tasks that are closed. A rate of 1 is 100%.', rows: [['blue', 'Formula', 'Success rate = C / T'], ['blue', 'C', 'Tasks closed'], ['blue', 'T', 'Tasks committed in the sprint']], sym: 1, math: [{ h: 'Example', rows: [['Tasks closed (C)', '81'], ['Tasks committed (T)', '85'], ['Success rate (C / T)', '81 / 85 = 0.953 = 95.3%']] }] },
+  success: { h: 'Sprint success', p: 'Share of committed tasks that are closed.', rows: [['blue', 'Formula', 'Success rate = C / T'], ['blue', 'C', 'Tasks closed'], ['blue', 'T', 'Tasks committed in the sprint'], ['blue', 'Epic is closed in', EPIC_CLOSED.join(', ')], ['blue', 'User story is closed in', STORY_CLOSED.join(', ')], ['blue', 'Sub-task is closed in', TASK_CLOSED.join(', ')], ['blue', 'Technical Review', 'Closes a sub-task only when it carries the label documentation-task. Without the label it stays open.']], sym: 1, math: [{ h: 'Example', rows: [['Tasks closed (C)', '81'], ['Tasks committed (T)', '85'], ['Success rate (C / T)', '81 / 85 = 0.953 = 95.3%']] }] },
   capday: { h: 'Capacity day', p: 'Working days that carry capacity. Sprint Planning days are not counted.', rows: [['blue', 'Formula', '(sprint day) − (planning days)']], math: [{ h: 'Example', rows: [['Sprint day', '6'], ['Planning days', '2'], ['Capacity day', '(6) − (2) = 4 of 8']] }] },
   renew: { h: 'Renew by', rows: [['ok', 'No expiry', 'Nothing to renew'], ['warn', 'A date', 'Renew before that day']] },
-  closed: { h: 'Counted as closed', note: 'Technical Review is the last stage only for Jira management, U.S. team demos, reporting and documentation tickets. For development, QA testing, infrastructure and cloud tickets it is not a last stage, so they stay open.', groups: [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]] },
+  closed: { h: 'Counted as closed', note: 'A sub-task in Technical Review counts as closed only when it carries the Jira label documentation-task. Without the label, Technical Review is just a step on the way and the ticket stays open. In Documentation is never counted as closed.', groups: [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]] },
   n1: { h: 'Jira', p: 'Where tickets and time logs live.', rows: [['ok', 'Read-only', 'The dashboard never writes to Jira']] },
   n2: { h: 'GitHub Actions', p: 'Reads Jira with an Atlassian API token.', rows: [['blue', 'Runs on', "GitHub's servers"]] },
   n3: { h: 'GitHub repository', p: 'Keeps the data as JSON files.', rows: [['ok', 'History', 'Every update is a commit']] },
@@ -1572,19 +1627,19 @@ const TT = {   // every (i): one short line, then a formula and a worked example
   n5: { h: 'This dashboard', p: 'The page in your browser.', rows: [['ok', 'Sign-in', 'Team password']] },
   c1: { h: 'GitHub Actions schedule', rows: [['blue', 'When', 'Every day, 10:50 AM and 6:50 PM IST'], ['warn', 'If skipped', 'Retries 30 and 60 minutes later']] },
   c3: { h: 'cron-job.org timer', rows: [['blue', 'When', 'Every day, 10:50 AM and 6:50 PM IST'], ['ok', 'Why', 'A second timer outside GitHub'], ['nil', 'Same pull', 'If one timer pulled, the other is skipped']] },
-  c2: { h: 'Refresh button', rows: [['blue', 'Does', 'Starts a pull now'], ['warn', 'Skipped if', 'A pull is running, or data is under 2 minutes old']] },
+  c2: { h: 'Refresh button', rows: [['blue', 'Does', 'Starts a pull now'], ['ok', 'No waiting', 'Every click starts a new pull'], ['warn', 'Ignored while', 'Your own refresh is still running']] },
   budget: { h: 'Refresh button', p: 'Limited by the free Vercel plan.', rows: [['blue', 'Limit', '100 pulls in 24 hours'], ['warn', 'Button stops at', '95, so timers always have 5'], ['blue', 'Formula', '(95) − (pulls in 24 hours)']], math: [{ h: 'Example', rows: [['Pulls in 24 hours', '3'], ['Refreshes left', '(95) − (3) = 92']] }] },
   cron: { h: 'Who runs the timers', rows: [['blue', 'GitHub account', 'ckvcanary'], ['ok', 'cron-job.org account', 'Dashboard owner'], ['ok', 'Owner email', 'chetan@canaryai.com'], ['warn', 'Claude', 'No Claude job runs the timers']] }
 };
 const ST_EPIC = ['Backlog', 'In Progress', 'In Testing', 'In Documentation', 'Done'];
 const ST_STORY = ['Backlog', 'Research', 'Spec_Completed', 'Accepted by Developer', 'Ready for Development', 'In Progress', 'Code_Review', 'In Testing', 'Technical Review', 'In Documentation', 'Deployed to UAT', 'Deployed to Prod', 'Done', 'On-Hold'];
 const ST_BUG = ['New', 'Triaged', 'ACTIVE', 'Reopened', 'Code_Review', 'Fixed', 'Verified', 'Deferred', 'Duplicate', "Won't Fix", 'Invalid', 'On-Hold', 'Done'];
-let jiraTab = 'status';
+let jiraTab = 'open';
 const chips = a => `<span class="tchips">${a.map(x => `<span class="tchip">${esc(x)}</span>`).join('')}</span>`;
 function jiraPop() {
-  const tabs = `<div class="jtabs" role="tablist"><button type="button" role="tab" data-jtab="status" aria-selected="${jiraTab === 'status'}">Statuses</button><button type="button" role="tab" data-jtab="closed" aria-selected="${jiraTab === 'closed'}">Counted as closed</button></div>`;
-  const groups = jiraTab === 'status' ? [['Epic', ST_EPIC], ['User story', ST_STORY], ['Sub-task, Story sub-task, New Feature sub-task', ST_STORY], ['Bug sub-task', ST_BUG]] : [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]];
-  return `<div class="tt jp"><div class="tth">Jira status</div>${tabs}${groups.map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${jiraTab === 'closed' ? '<p class="ttnote">Technical Review is the last stage only for Jira management, U.S. team demos, reporting and documentation tickets. For development, QA testing, infrastructure and cloud tickets it is not a last stage, so they stay open.</p>' : ''}</div>`;
+  const tabs = `<div class="jtabs" role="tablist"><button type="button" role="tab" data-jtab="open" aria-selected="${jiraTab === 'open'}">Counted as open</button><button type="button" role="tab" data-jtab="closed" aria-selected="${jiraTab === 'closed'}">Counted as closed</button></div>`;
+  const notIn = (all, closed) => all.filter(x => !closed.includes(x)), groups = jiraTab === 'open' ? [['Epic', notIn(ST_EPIC, EPIC_CLOSED)], ['User story', notIn(ST_STORY, STORY_CLOSED)], ['Sub-task, Story sub-task, New Feature sub-task', notIn(ST_STORY, TASK_CLOSED)], ['Bug sub-task', notIn(ST_BUG, TASK_CLOSED)]] : [['Epic', EPIC_CLOSED], ['User story', STORY_CLOSED], ['Sub-task, Story sub-task, Bug sub-task, New Feature sub-task', TASK_CLOSED]];
+  return `<div class="tt jp"><div class="tth">Jira status</div>${tabs}${groups.map(g => `<div class="ttg"><div class="ttgl">${esc(g[0])}</div>${chips(g[1])}</div>`).join('')}${jiraTab === 'closed' ? '<p class="ttnote">A sub-task in Technical Review counts as closed only when it carries the Jira label documentation-task. Without the label, Technical Review is just a step on the way and the ticket stays open. In Documentation is never counted as closed.</p>' : ''}</div>`;
 }
 // Colour appears in a legend only as the same tag or chip the page draws (Flag, Verdict, Pull status) or the same dot beside the time; every other row is a plain grey bullet. A marker appears only when the page really shows it: a coloured tag (Flag, Verdict), a chip with a dot (Pull status), or nothing.
 const mark = (mk, c, t) => mk === 'tag' && ['na', 'now'].includes(c) ? `<span class="swc dgc ${c}"></span><span class="swl">${esc(t)}</span>` : mk === 'tag' && ['ok', 'bad', 'warn', 'nil'].includes(c) ? `<span class="tag ${c}">${esc(t)}</span>` : mk === 'chip' ? `<span class="chip ${c === 'nil' ? 'na' : c}"><i></i>${esc(t)}</span>` : `<i class="bl"></i>${esc(t)}`;      // a plain grey bullet where colour would mean nothing
@@ -1692,7 +1747,7 @@ function usage() { const now = Date.now(), all = (RUNS || []).filter(x => now - 
 function refreshTip() {
   const u = usage();
   return `<div class="tt ttc"><div class="tph"><div class="tpd tth">Refresh limit</div><div class="tpl">Pulls from Jira are limited by the free Vercel plan.</div></div>
-    <div class="tps"><div class="tpt">Limit</div><table class="mt"><tbody><tr class="ttr"><td>Limit</td><td>100 pulls in 24 hours</td></tr><tr class="ttr"><td>Used</td><td><b>${u.n} of ${LIMIT}</b>, whole team</td></tr><tr class="ttr"><td>Two clicks</td><td>Under 2 minutes apart: skipped</td></tr></tbody></table></div>
+    <div class="tps"><div class="tpt">Limit</div><table class="mt"><tbody><tr class="ttr"><td>Limit</td><td>100 pulls in 24 hours</td></tr><tr class="ttr"><td>Used</td><td><b>${u.n} of ${LIMIT}</b>, whole team</td></tr><tr class="ttr"><td>Two clicks</td><td>Every click starts a pull</td></tr></tbody></table></div>
     <div class="tps"><div class="tpt">The dot beside the time</div><table class="mt lg"><tbody><tr class="ttr"><td><span class="ttn"><i class="td ok"></i> Green</span><small class="ttd">Under 14 hours old</small></td></tr><tr class="ttr"><td><span class="ttn"><i class="td warn"></i> Orange</span><small class="ttd">Older than 14 hours</small></td></tr><tr class="ttr"><td><span class="ttn"><i class="td blue"></i> Blue, pulsing</span><small class="ttd">Refreshing now</small></td></tr></tbody></table></div></div>`;
 }
 
@@ -1700,12 +1755,14 @@ function refreshTip() {
 function placeStack() { const r = $('.rfcard').getBoundingClientRect(), st = $('#stack').style, under = r.height && !isNarrow(); st.setProperty('--stk', (r.height ? Math.max(12, r.bottom + 10) : 16) + 'px'); st.setProperty('--stl', under ? Math.max(12, r.left) + 'px' : 'auto'); st.setProperty('--str', under ? 'auto' : 'max(16px,env(safe-area-inset-right,0px))'); }
 window.addEventListener('scroll', placeStack, { passive: true }); window.addEventListener('resize', placeStack);
 const ICONS = { success: '<svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>', error: '<svg viewBox="0 0 24 24"><path d="M12 6.5v7"/><path d="M12 17.5h.01"/></svg>', info: '<svg viewBox="0 0 24 24"><path d="M12 10.5v7"/><path d="M12 6.5h.01"/></svg>' };
+const TOAST_MS = 3500;   // every message leaves after 3.5 seconds; hovering pauses it so it can be read
 function notify({ kind = 'info', title, text = '', meta = '', ms }) {
-  placeStack(); const box = $('#toasts'), el = document.createElement('div'); el.className = 'tst ' + kind; el.setAttribute('role', kind === 'error' ? 'alert' : 'status');
-  el.innerHTML = `<div class="ic">${ICONS[kind]}</div><div><b>${esc(title)}</b>${text ? `<p>${esc(text)}</p>` : ''}${meta ? `<small>${esc(meta)}</small>` : ''}</div><button class="cl2" type="button" aria-label="Dismiss">×</button>`;
-  const kill = () => { el.classList.remove('on'); setTimeout(() => el.remove(), 220); };
-  el.querySelector('.cl2').onclick = kill; box.prepend(el); while (box.children.length > 3) box.lastChild.remove();
-  requestAnimationFrame(() => el.classList.add('on')); setTimeout(kill, ms || (kind === 'error' ? 9000 : 6500)); return el;
+  placeStack(); const box = $('#toasts'), el = document.createElement('div'), life = Math.min(ms || TOAST_MS, 4000); el.className = 'tst ' + kind; el.setAttribute('role', kind === 'error' ? 'alert' : 'status'); el.style.setProperty('--life', life + 'ms');
+  el.innerHTML = `<div class="ic">${ICONS[kind]}</div><div><b>${esc(title)}</b>${text ? `<p>${esc(text)}</p>` : ''}${meta ? `<small>${esc(meta)}</small>` : ''}</div><button class="cl2" type="button" aria-label="Dismiss">×</button><i class="tbar"></i>`;
+  let t = null; const kill = () => { clearTimeout(t); el.classList.remove('on'); setTimeout(() => el.remove(), 220); };
+  el.querySelector('.cl2').onclick = kill; el.addEventListener('mouseenter', () => clearTimeout(t)); el.addEventListener('mouseleave', () => { el.querySelector('.tbar').style.animation = 'none'; t = setTimeout(kill, 1200); });
+  box.prepend(el); while (box.children.length > 3) box.lastChild.remove();
+  requestAnimationFrame(() => el.classList.add('on')); t = setTimeout(kill, life); return el;
 }
 
 /* ---------- refresh ---------- */
@@ -1717,7 +1774,7 @@ function showMeta() {
   $('#rfval').textContent = tfmt(t); $('#rfval').title = ago(age); $('#rfdot').className = 'dot' + (age > 14 * 3600e3 ? ' old' : '');
   if ($('#asof')) $('#asof').textContent = tfmt(t);
 }
-const RF = Object.assign({ poll: 3000, max: 300000, expect: 75, fresh: 120000 }, window.RF_TEST || {});   // a pull takes 18 to 40 s on GitHub (one run took 104 s), plus the Vercel deploy: 75 s keeps a buffer so the countdown never restarts
+const RF = Object.assign({ poll: 3000, max: 300000, expect: 75 }, window.RF_TEST || {});   // a pull takes 18 to 40 s on GitHub (one run took 104 s), plus the Vercel deploy: 75 s keeps a buffer so the countdown never restarts
 const WORDS = ['Tinkering', 'Pondering', 'Brewing', 'Untangling', 'Noodling', 'Percolating', 'Simmering', 'Wrangling', 'Mulling', 'Synthesizing'];
 const getJ = async f => { const r = await fetch('data/' + f + '?v=' + Date.now() + Math.random(), { cache: 'no-store' }); if (!r.ok) throw new Error(f); return r.json(); };
 let LOADFAIL = false;
@@ -1729,10 +1786,28 @@ async function fetchAll() {   // data of the wrong shape (a half-written or dama
   if (!validMap(d) || !m || typeof m.refreshedAt !== 'string') throw new Error('The data files are not in the expected shape');
   return [d, (bd && typeof bd === 'object' && !Array.isArray(bd)) ? bd : {}, m, Array.isArray(r) ? r : [], (lv && typeof lv === 'object' && !Array.isArray(lv)) ? lv : {}];
 }
-function apply(d, bd, m, r, lv) { LOADFAIL = false; D = d; BD = bd; META = m; RUNS = r; LEAVE = lv || {}; ingest(); selMap = selMap.filter(i => SHOW.includes(i)); closeD(); show(); showMeta(); }
+function apply(d, bd, m, r, lv) { LOADFAIL = false; D = d; BD = bd; META = m; RUNS = r; LEAVE = lv || {}; ingest(); paintScope(); selMap = selMap.filter(i => SHOW.includes(i)); closeD(); show(); showMeta(); }
 async function loadData() { apply(...await fetchAll()); }
 const limitToast = (n, resetAt) => ({ kind: 'error', title: 'Daily refresh limit reached', text: n + ' of ' + LIMIT + ' refreshes were used in the last 24 hours. The limit comes from the free Vercel plan, and ' + RESERVE + ' are kept for the scheduled pulls.', meta: (resetAt ? 'You can refresh again after ' + tfmt(resetAt) + '. ' : '') + 'The backup copy at ckvcanary.github.io/sprint-dashboard always shows the latest data.', ms: 15000 });
-const verified = (d, bd, m) => d.asOf === m.refreshedAt && d.stories && d.stories.length && bd;
+// What a refresh is compared with: one line per ticket (title, owner, status, estimate, time logged, labels, due date, reporter, links and comment count) from the data the page shows right now.
+function snapOf(d, bd) {
+  const tk = {}, info = (d && d.info) || {}, ex = (d && d.extra) || {}, strip = o => JSON.stringify(o, (k, v) => k === 'asOf' ? undefined : v);
+  const sig = (k, base) => { const i = info[k] || {}; return [base, i.lg, i.oe, (i.lb || []).join(','), i.du, i.rp, (i.lk || []).length, ((ex[k] || {}).cm || []).length].join('|'); };
+  ((d && d.stories) || []).forEach(s => { tk[s.key] = sig(s.key, [s.title, s.a, s.sp, s.sprint, s.s].join('|')); (s.tasks || []).forEach(t => { tk[t.key] = sig(t.key, [t.t, t.a, t.h, t.s].join('|')); }); });
+  ((d && d.epics) || []).forEach(e => { tk[e.key] = sig(e.key, [e.title, e.a, e.s].join('|')); });
+  Object.values(bd || {}).forEach(v => { if (v && v.tasks) v.tasks.forEach(t => { tk[t.k] = (tk[t.k] || '') + '#' + [v.name, t.a, t.e, t.d, t.st, t.lg, t.ll].join('|'); }); });      // the burndown's line for the same ticket: owner, estimate, closed date, status, time logged
+  return { tk, raw: strip(d) + strip(bd) };
+}
+function diffSnap(a, b) {       // how many tickets are new, gone or different, and whether anything at all differs
+  let n = 0; Object.keys(b.tk).forEach(k => { if (a.tk[k] !== b.tk[k]) n++; }); Object.keys(a.tk).forEach(k => { if (!(k in b.tk)) n++; });
+  return { updated: n, same: a.raw === b.raw };
+}
+const readText = m => Number(m.issues != null ? m.issues : m.sprintIssues || 0).toLocaleString('en-US') + ' tickets read';
+const ticketsText = n => n ? n + (n === 1 ? ' ticket' : ' tickets') + ' updated' : 'No tickets updated';
+// "Data refreshed" is shown only after this check passes. All three data files must carry the same pull stamp (so none is a stale cached copy),
+// the pull must have STARTED after the click (a pull that was already running may have read Jira before the new time log), and the page must be showing that stamp.
+const verified = (d, bd, m, since, runs) => !!(m && d && d.asOf === m.refreshedAt && (!runs || runs.some(x => x.at === m.refreshedAt && x.ok !== false)) && d.stories && d.stories.length && bd && Object.values(bd).filter(v => v && v.win).length && Object.values(bd).filter(v => v && v.win).every(v => v.asOf === m.refreshedAt) && (!since || Date.parse(m.refreshedAt) >= since - 1000));
+const shownIs = m => !!(META && m && META.refreshedAt === m.refreshedAt && $('#rfval') && $('#rfval').textContent === tfmt(Date.parse(m.refreshedAt)));
 // A refresh is reported as done only when the page has loaded newer data and checked it: the new stamp differs from the one before the click,
 // map.json carries the same stamp as meta.json, and every file loaded. A failed run or a timeout is reported as such, never as an update.
 let rfRun = 0;
@@ -1742,15 +1817,13 @@ async function startRefresh() {
   if (rfb.disabled) return;
   const prog = $('#rfprog'), pt = $('#rfpt'), pbar = $('#rfpbar'), pwrap = $('#rfpbarwrap'), ps = $('#rfps');
   const shownStamp = META && META.refreshedAt; let baseStamp = shownStamp, baseRuns = RUNS ? RUNS.length : 0;
+  const before = snapOf(D, BD);      // the data on screen at the moment of the click: the pull is compared with this
   rfb.disabled = true; rfb.classList.add('spin'); $('#rfbtxt').textContent = 'Refreshing'; $('#rfdot').className = 'dot busy';
   const idle = () => { rfb.disabled = false; rfb.classList.remove('spin'); $('#rfbtxt').textContent = 'Refresh'; showMeta(); };
   let tick = null; const end = () => { clearInterval(tick); prog.hidden = true; pbar.style.width = '0'; idle(); }; window.__rfEnd = end;
   try { const [m, r] = await Promise.all([getJ('meta.json'), getJ('runs.json')]); baseStamp = m.refreshedAt; baseRuns = r.length; } catch (e) {}   // baseline taken now, not at page load
   const was = shownStamp ? tfmt(Date.parse(shownStamp)) : 'an unknown time';
-  const latest = async () => { try { const [d, bd, m, r, lv] = await fetchAll(); if (m.refreshedAt !== shownStamp && verified(d, bd, m)) { apply(d, bd, m, r, lv); return m; } } catch (e) {} return null; };
-  const current = async () => { const m = await latest(); const mm = m || META; return notify({ kind: 'info', title: 'Data is already up to date', text: (mm ? mm.sprint + ' was refreshed ' + ago(Date.now() - Date.parse(mm.refreshedAt)) : 'The data was refreshed a moment ago') + '. Refreshes less than 2 minutes apart are skipped.', meta: mm ? 'Last refreshed ' + tfmt(Date.parse(mm.refreshedAt)) : '' }); };
-  const ageMs = Date.now() - Date.parse(baseStamp);
-  if (baseStamp && ageMs >= 0 && ageMs < RF.fresh) { idle(); return current(); }   // a computer clock that runs behind must not block refreshing
+  const latest = async () => { try { const [d, bd, m, r, lv] = await fetchAll(); if (m.refreshedAt !== shownStamp && verified(d, bd, m, 0, r)) { apply(d, bd, m, r, lv); return m; } } catch (e) {} return null; };
   const u = usage(); if (u.n >= LIMIT - RESERVE) { idle(); return notify(limitToast(u.n, u.resetAt)); }
   if (u.n >= LIMIT - 15) notify({ kind: 'info', title: 'Close to the daily refresh limit', text: u.n + ' of ' + LIMIT + ' refreshes were used in the last 24 hours. Please refresh only when needed.', ms: 9000 });
   const t0 = Date.now(); let joined = false; const w0 = Math.floor(Math.random() * WORDS.length);
@@ -1759,10 +1832,10 @@ async function startRefresh() {
     const w = WORDS[(w0 + Math.floor(s / 2.4)) % WORDS.length]; if ($('#rfptxt').textContent !== w) $('#rfptxt').textContent = w;
     ps.textContent = joined ? 'Another refresh is already running. Waiting for it to finish.' : s > RF.expect ? 'Still reading Jira. This can take a little longer.' : 'Reading Jira, publishing the data, then checking it.'; };
   placeStack(); prog.hidden = false; paint(); tick = setInterval(paint, 500);
-  let info = {};
+  let info = {}, since = 0;
   try { const r = await fetch(REFRESH_URL, { method: 'POST' }); info = await r.json().catch(() => ({})); if (info.state === 'limit') { end(); return notify(limitToast(info.used, usage().resetAt)); } if (!r.ok) throw new Error('The refresh service answered ' + r.status); }
   catch (e) { end(); return notify({ kind: 'error', title: 'Could not start the refresh', text: String(e.message || e) + '. Try again in a minute.', meta: 'Still showing data from ' + was }); }
-  if (info.state === 'fresh') { end(); return current(); }
+  since = Number(info.since) || 0;      // server time of the click: only a pull that started after it can contain what was logged before it
   joined = info.state === 'running'; paint();
   while (Date.now() - t0 < RF.max) {
     await new Promise(r => setTimeout(r, RF.poll + Math.random() * 800));
@@ -1771,14 +1844,16 @@ async function startRefresh() {
       const [d, bd, m, r, lv] = await fetchAll();
       if (r.length > baseRuns && r.slice(baseRuns).some(x => x.ok === false)) { const f = r.slice(baseRuns).find(x => x.ok === false); end(); return notify({ kind: 'error', title: 'Refresh failed', text: 'The refresh ran but could not read Jira' + (f.error ? ' (' + f.error + ')' : '') + '.', meta: 'Still showing data from ' + was }); }
       if (m.refreshedAt === baseStamp) continue;                              // nothing new yet
-      if (!verified(d, bd, m)) continue;                                      // stamps differ (cache lag) or data incomplete: not verified yet
-      pbar.style.width = '100%'; apply(d, bd, m, r, lv); end();
-      return notify({ kind: 'success', title: 'Data refreshed', text: m.sprint + ' · ' + Number(m.sprintIssues != null ? m.sprintIssues : m.issues).toLocaleString('en-US') + ' issues synced from Jira', meta: 'Last refreshed ' + tfmt(Date.parse(m.refreshedAt)) });
+      if (since && Date.parse(m.refreshedAt) < since - 1000) continue;         // a pull that started before the click: it may not hold the latest logs, wait for the next one
+      if (!verified(d, bd, m, since, r)) continue;                            // stamps differ (cache lag), the pull is not in the run list yet, or the data is incomplete: not verified yet
+      pbar.style.width = '100%'; apply(d, bd, m, r, lv); if (!shownIs(m)) continue; end();   // the page must really show the new stamp before it says so
+      const ch = diffSnap(before, snapOf(D, BD));      // after the new data is on screen, compare it with what was shown before the click
+      return notify({ kind: ch.updated ? 'success' : 'info', title: 'Pulled from Jira', text: ticketsText(ch.updated), meta: readText(m) });      // always in tickets: how many were updated, how many were read
     } catch (e) {}
   }
   if (myRun !== rfRun) return;
   const m = await latest(); end();
-  if (m) return notify({ kind: 'info', title: 'Showing the latest data', text: 'Your click did not produce a newer pull. It may have been skipped because the data was only seconds old.', meta: 'Last refreshed ' + tfmt(Date.parse(m.refreshedAt)) });
+  if (m) return notify(since && Date.parse(m.refreshedAt) < since - 1000 ? { kind: 'info', title: 'Loaded a pull that began before your click', text: 'It may not include time logged in the last few minutes. Press Refresh again in a minute.', meta: 'Last refreshed ' + tfmt(Date.parse(m.refreshedAt)) } : { kind: 'info', title: 'Showing the latest data', text: 'Your click did not produce a newer pull. It may have been skipped because the data was only seconds old.', meta: 'Last refreshed ' + tfmt(Date.parse(m.refreshedAt)) });
   notify({ kind: 'error', title: 'No new data yet', text: 'The refresh did not produce newer data. If someone refreshed a moment ago the data may already be current. Try again in a minute.', meta: 'Still showing data from ' + was });
 }
 // sign-in gate (a light team password, checked in the browser). The browser keeps you signed in until you press Sign out.
@@ -1841,7 +1916,7 @@ async function checkNewer() {
   try {
     const m = await getJ('meta.json');
     try { const r = await getJ('runs.json'); const key = x => (x && x.length) + '|' + (x && x.length ? x[x.length - 1].at + x[x.length - 1].ok : ''); if (key(r) !== key(RUNS) && m.refreshedAt === META.refreshedAt) { RUNS = r; if (tab === 'log') renderLog(); } } catch (e) {}      // a pull that failed or was recorded without new data still reaches the Pull log
-    if (m.refreshedAt !== META.refreshedAt) { const [d, bd, mm, r, lv] = await fetchAll(); if (mm.refreshedAt !== META.refreshedAt && verified(d, bd, mm)) { apply(d, bd, mm, r, lv); notify({ kind: 'info', title: 'Data updated', text: 'A refresh by someone on the team brought newer data.', meta: 'Last refreshed ' + tfmt(Date.parse(mm.refreshedAt)) }); } }
+    if (m.refreshedAt !== META.refreshedAt) { const [d, bd, mm, r, lv] = await fetchAll(); if (mm.refreshedAt !== META.refreshedAt && verified(d, bd, mm)) { const before = snapOf(D, BD); apply(d, bd, mm, r, lv); const ch = diffSnap(before, snapOf(D, BD)); notify({ kind: ch.updated ? 'success' : 'info', title: 'Pulled from Jira', text: ticketsText(ch.updated), meta: readText(mm) + ' · refreshed by a teammate' }); } }
   } catch (e) {}
   autoBusy = false;
 }
@@ -1852,10 +1927,10 @@ const GUIDE = [
   { t: 'Welcome', x: 'A short tour of the dashboard. Use Next to move on, or Leave guide to go back to where you were.' },
   { sel: '.rfcard', t: 'Last refreshed', x: 'When Jira was last read. Press Refresh to read it again.' },
   { tab: 'map', sel: '#fsprint', t: 'Choose a sprint', x: 'Every page follows the sprint you choose here.' },
-  { sel: '#tabs', t: 'Pages', x: 'Map, Capacity, Burndown, Leave, Pull log, Stakeholders and How it works.' },
+  { sel: '#tabs', t: 'Pages', x: 'Map, Capacity, Burndown, Leave, Pull log and How it works.' },
   { tab: 'map', sel: '#v-map', t: 'Map', x: 'Epics with their user stories, sprint by sprint. Open a card for its details.' },
   { tab: 'cap', sel: '.capgrid', t: 'Capacity', x: 'Each person\'s original estimate against their capacity, after leave.' },
-  { tab: 'bd', view: 'overall', sel: '#daywidgets', t: 'Sprint day and capacity day', x: 'Sprint Planning days carry no capacity, so capacity day runs behind sprint day.' },
+  { tab: 'bd', view: 'overall', sel: '#daywidgets', t: 'Timeline, sprint day, capacity day and success', x: 'The timeline gives the first and last working day. Sprint Planning days carry no capacity, so capacity day runs behind sprint day.' },
   { tab: 'bd', view: 'overall', sel: '#capov', t: 'Capacity bars', x: 'Capacity used, capacity left and the remaining estimate. Remaining above left means the work will not fit.' },
   { tab: 'bd', view: 'person', sel: '#cw', t: 'Remaining work and ideal pace', x: 'The blue line is the work left. The dashed line is the ideal pace. Hover or tap a day for details.' },
   { tab: 'bd', view: 'person', sel: '#tplan', t: 'Can the work be finished?', x: 'The remaining estimate against the time left gives the verdict.' },

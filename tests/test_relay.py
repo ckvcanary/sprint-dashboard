@@ -8,7 +8,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = (ROOT / "api" / "refresh.js").read_text()
 HARNESS = """async ({src, origin, method, runs, runsStatus, dispatchStatus, twice, total}) => {
   const calls = []; const process = {env: {GH_TOKEN: 'test-token'}};
-  runs = runs.map(r => r.ago != null ? Object.assign({}, r, {updated_at: new Date(Date.now() - r.ago * 1000).toISOString()}) : r);
+  runs = runs.map(r => r.ago != null ? Object.assign({}, r, {updated_at: new Date(Date.now() - r.ago * 1000).toISOString(), run_started_at: new Date(Date.now() - r.ago * 1000).toISOString()}) : r);
   const fetch = async (url, opt) => { calls.push({url, method: (opt||{}).method || 'GET', auth: ((opt||{}).headers||{}).Authorization, body: (opt||{}).body});
     if (url.includes('/runs')) return {ok: runsStatus === 200, status: runsStatus, json: async () => ({workflow_runs: runs, total_count: total == null ? runs.length : total})};
     return {ok: dispatchStatus === 204, status: dispatchStatus}; };
@@ -47,21 +47,38 @@ def test_idle_relay_starts_the_workflow(page):
 
 
 def test_running_workflow_is_joined_not_started_again(page):
-    for st in ("queued", "in_progress", "waiting", "pending", "requested"):
+    for st in ("queued", "waiting", "pending", "requested"):
         r = call(page, runs=[{"status": st}]); assert r["a"]["code"] == 202 and r["a"]["body"]["state"] == "running" and not [c for c in r["calls"] if c["method"] == "POST"], st
 
 
-def test_recent_success_counts_as_current(page):
-    r = call(page, runs=[{"status": "completed", "conclusion": "success", "ago": iso(60)}])
-    assert r["a"]["body"]["state"] == "fresh" and not [c for c in r["calls"] if c["method"] == "POST"]
+def test_a_pull_that_started_one_second_ago_still_gets_a_follow_up_run(page):
+    # no timer: even a pull that started moments ago may have read Jira before the new log, so a click queues one more
+    for ago in (1, 4, 9):
+        r = call(page, runs=[{"status": "in_progress", "ago": ago}]); assert r["a"]["code"] == 200 and r["a"]["body"]["state"] == "queued" and len([c for c in r["calls"] if c["method"] == "POST"]) == 1, ago
+
+
+def test_a_pull_already_reading_jira_gets_a_follow_up_run(page):
+    # a time log may have been added after that pull read Jira, so the click queues one more pull behind it
+    r = call(page, runs=[{"status": "in_progress", "ago": 25}]); assert r["a"]["code"] == 200 and r["a"]["body"]["state"] == "queued" and r["a"]["body"]["since"]
+    assert len([c for c in r["calls"] if c["method"] == "POST"]) == 1
+
+
+def test_started_answer_carries_the_server_time_of_the_click(page):
+    r = call(page, runs=[]); assert r["a"]["body"]["state"] == "started" and isinstance(r["a"]["body"]["since"], (int, float))
+
+
+def test_a_recent_success_never_blocks_a_click(page):
+    for ago in (1, 10, 25):
+        r = call(page, runs=[{"status": "completed", "conclusion": "success", "ago": ago}])
+        assert r["a"]["body"]["state"] == "started" and len([c for c in r["calls"] if c["method"] == "POST"]) == 1, ago      # no 30 second skip
 
 
 def test_failed_recent_run_does_not_block_a_new_one(page):
     r = call(page, runs=[{"status": "completed", "conclusion": "failure", "ago": iso(30)}]); assert r["a"]["body"]["state"] == "started"
 
 
-def test_two_clicks_in_the_same_moment_dispatch_once(page):
-    r = call(page, twice=True); assert len([c for c in r["calls"] if c["method"] == "POST"]) == 1 and r["b"]["body"]["state"] == "running"
+def test_two_clicks_in_the_same_moment_both_start_a_run_and_github_keeps_one_waiting(page):
+    r = call(page, twice=True); assert len([c for c in r["calls"] if c["method"] == "POST"]) == 2 and r["b"]["body"]["state"] in ("started", "queued")      # no debounce timer; the workflow's concurrency group collapses waiting runs
 
 
 def test_unknown_origin_and_wrong_method_are_refused(page):
@@ -86,8 +103,8 @@ def test_relay_stops_at_95_refreshes_in_24_hours_and_says_so(page):
     r = call(page, runs=[{"status": "completed", "conclusion": "success", "ago": 900}], total=94); assert r["a"]["body"]["state"] == "started"
 
 
-def test_joining_a_running_refresh_is_allowed_even_at_the_limit(page):
-    r = call(page, runs=[{"status": "in_progress"}], total=99); assert r["a"]["body"]["state"] == "running"
+def test_joining_a_queued_refresh_is_allowed_even_at_the_limit(page):
+    r = call(page, runs=[{"status": "queued", "ago": 3}], total=99); assert r["a"]["body"]["state"] == "running"      # a queued run has not read Jira yet, so joining costs nothing
 
 
 HARNESS_CRON = """async ({src, origin, ua, nowIso, runs}) => {

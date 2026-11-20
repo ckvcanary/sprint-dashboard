@@ -19,7 +19,7 @@ SCAN = """(allowed) => [...document.querySelectorAll('body *')].filter(e => {
   return !allowed.some(s => e.matches(s));
 }).map(e => e.outerHTML.slice(0, 120))"""
 
-TABS = ["map", "cap", "bd", "leave", "log", "who", "how"]
+TABS = ["map", "cap", "bd", "leave", "log", "how"]
 
 
 @pytest.mark.parametrize("tab", TABS)

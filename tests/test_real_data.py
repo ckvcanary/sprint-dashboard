@@ -7,7 +7,7 @@ import mockserver
 
 SRC = os.environ.get("DASH_DATA")
 pytestmark = pytest.mark.skipif(not SRC, reason="set DASH_DATA to run against real data")
-TABS = ["map", "cap", "bd", "log", "who", "how"]
+TABS = ["map", "cap", "bd", "log", "how"]
 
 
 @pytest.fixture(scope="module")

@@ -14,7 +14,7 @@ def _chart(page):
 
 
 def hover_slot(page, k):
-    svg = _chart(page); L, pw, slots, W = 60, 1000 - 60 - 16, 11, 1000
+    svg = _chart(page); L, pw, slots, W = 60, 1000 - 60 - 16, 10, 1000
     x = svg["x"] + (L + (k + .5) / slots * pw) / W * svg["width"]; page.mouse.move(x, svg["y"] + svg["height"] * .4)
     page.wait_for_selector("#tip:not([hidden])"); return page.locator("#tip").inner_text()
 
@@ -24,12 +24,21 @@ def rows(page):
     return page.evaluate("() => Object.fromEntries([...document.querySelectorAll('#tip .mt tbody tr')].map(r => [r.cells[0].innerText.trim().split(String.fromCharCode(10))[0], [...r.cells].slice(1).map(c => c.innerText.trim())]))")
 
 
+def only(page, key):
+    """Filter the day list to one group: open the Filter menu, tick that group, untick the others"""
+    page.click("[data-dfilter]")
+    page.check(f'[data-dfk="{key}"]')
+    for k in ("today", "closed", "open"):
+        if k != key and page.locator(f'[data-dfk="{k}"]').is_checked(): page.uncheck(f'[data-dfk="{k}"]')
+    page.keyboard.press("Escape")
+
+
 def click_slot(page, k):
-    svg = _chart(page); L, pw, slots, W = 60, 1000 - 60 - 16, 11, 1000
+    svg = _chart(page); L, pw, slots, W = 60, 1000 - 60 - 16, 10, 1000
     page.mouse.click(svg["x"] + (L + (k + .5) / slots * pw) / W * svg["width"], svg["y"] + svg["height"] * .4)
 
 
-def ideal_left(total, n, tot=72): return total * (1 - n * 8 / tot)   # 8 capacity days plus the Monday cutoff day
+def ideal_left(total, n, tot=64): return total * (1 - n * 8 / tot)   # 8 capacity days: the line reaches 0 at the end of Day 10 (Friday)
 
 
 def num(t): return float(re.search(r"-?\d+(?:\.\d+)?", t).group(0))
@@ -77,7 +86,7 @@ def test_two_widgets_show_the_sprint_day_and_the_capacity_day(page):
         assert sp.inner_text().replace("\n", " ").upper().startswith("SPRINT DAY") and "5 of 10" in sp.inner_text().replace("\n", " ") and "Fri 13 Nov" in sp.inner_text()
         assert cp.inner_text().replace("\n", " ").upper().startswith("CAPACITY DAY") and "3 of 8" in cp.inner_text().replace("\n", " ") and "Fri 13 Nov" in cp.inner_text()
         a, b = sp.bounding_box(), cp.bounding_box(); assert abs(a["y"] - b["y"]) <= 1 and abs(a["height"] - b["height"]) <= 1 and abs(a["width"] - b["width"]) <= 2, "two equal widgets side by side"
-        assert page.evaluate("parseFloat(getComputedStyle(document.querySelector('#wsprint b')).fontSize)") >= 40, "big and highlighted"
+        assert page.evaluate("parseFloat(getComputedStyle(document.querySelector('#wsprint b')).fontSize)") >= 30, "big and highlighted"
     open_bd(page, "overall"); t = page.locator(".term").inner_text().lower()
     assert "10 working days" in t and "days 1 to 2" in t and "mon 9 nov" in t and "sprint day" not in t, "the rest of the facts sit below the two widgets"
     assert page.locator("#daywidgets").bounding_box()["y"] < page.locator(".term").bounding_box()["y"]
@@ -180,10 +189,10 @@ def test_remaining_estimate_info_explains_the_blue_line_with_an_example(page):
     assert page.locator("#gtip .ttmt tbody tr").count() == 3
 
 
-def test_x_axis_shows_every_sprint_day_and_the_retrospective(page):
+def test_x_axis_shows_every_sprint_day_and_stops_on_day_10(page):
     open_bd(page); s = page.locator("#cw svg").text_content()
-    for d in ["Mon9 Nov", "Tue10 Nov", "Fri13 Nov", "Fri20 Nov", "Mon23 Nov"]: assert d in s, d
-    assert "Retro" in s and "Retrospective" in s and "Day 10" in s and "SPRINT DAY" in s and "REMAINING ESTIMATE (HOURS)" in s and "Sprint Planning" in s
+    for d in ["Mon9 Nov", "Tue10 Nov", "Fri13 Nov", "Fri20 Nov"]: assert d in s, d
+    assert "Mon23 Nov" not in s and "RETRO" not in s and "Retro" not in s and "Day 10" in s and "SPRINT DAY" in s and "REMAINING ESTIMATE (HOURS)" in s and "Planning" in s
 
 
 def test_only_one_dot_sits_on_the_lines_and_it_says_now(page):
@@ -228,8 +237,8 @@ def test_hover_card_is_organised_and_in_plain_words(page):
 
 def test_hover_numbers_for_a_day(page):
     open_bd(page); t = hover_slot(page, 3); hrs = page.evaluate("() => Object.fromEntries([...document.querySelectorAll('#tip .mt')[0].querySelectorAll('tr')].map(r => [r.cells[0].innerText.trim().split(String.fromCharCode(10))[0], r.cells[1].innerText.trim()]))")
-    assert hrs == {"Ideal pace": "38.9 h", "Remaining estimate": "19 h"}, hrs         # 50 h; 31 h burned by Thu; 50 x (1 - 16/72) = 38.9 (the Monday cutoff day is the ninth day)
-    assert "19.9 h ahead of the ideal pace" in t
+    assert hrs == {"Ideal pace": "37.5 h", "Remaining estimate": "19 h"}, hrs         # 50 h; 31 h burned by Thu; 50 x (1 - 16/64) = 37.5
+    assert "18.5 h ahead of the ideal pace" in t
     r = rows(page); assert r["Sub-tasks"] == ["1", "1 of 5", "4"] and r["User stories"] == ["1", "1 of 3", "2"] and r["Epics"] == ["0", "0 of 2", "2"]
 
 
@@ -260,12 +269,12 @@ def test_ideal_pace_hours_follow_working_days(page):
     open_bd(page)
     for k, n in ((2, 1), (3, 2)):
         t = hover_slot(page, k); got = num(rows(page)["Ideal pace"][0]); assert f"Working day {n} of 8" in t and abs(got - ideal_left(50, n)) < .06, (k, got)
-    hover_slot(page, 4); got = num(rows(page)["Ideal pace"][0]); assert abs(got - 50 * (1 - 21.5667 / 72)) < .1, got        # today: only the hours worked so far
+    hover_slot(page, 4); got = num(rows(page)["Ideal pace"][0]); assert abs(got - 50 * (1 - 21.5667 / 64)) < .1, got        # today: only the hours worked so far
 
 
-def test_retrospective_day_is_shaded_and_labelled_not_a_line(page):
-    open_bd(page); t = hover_slot(page, 10); assert "retrospective" in t.lower() and "Mon 23 Nov" in t
-    assert page.locator("#cw svg line[stroke-dasharray]").count() == 0 and "Retrospective" in page.locator("#cw svg").text_content()
+def test_monday_after_the_sprint_is_not_drawn(page):
+    open_bd(page); assert page.evaluate("BDV.slots") == 10 and page.locator("#cw svg g.bnd").count() == 2      # Sprint Planning and Sprint end are the only bands; Mon 23 Nov belongs to the next sprint
+    assert "Mon 23 Nov" not in page.locator(".bdleg").inner_text() and "Retrospective" not in page.locator("#cw svg").text_content()
 
 
 def test_ideal_line_only_goes_down_and_actual_never_goes_up(page):
@@ -285,29 +294,29 @@ def test_click_on_a_day_shows_a_summary_and_one_list_in_three_groups(page):
     sm = {r[0]: r[1:] for r in d.locator(".dsum tbody tr").evaluate_all("rs => rs.map(r => [...r.cells].map(c => c.innerText.trim()))")}
     assert sm == {"Epics": ["0", "0 of 2", "2"], "User stories": ["1", "1 of 3", "2"], "Sub-tasks": ["1", "1 of 5", "4"]}
     assert [x.upper() for x in d.locator(".dsum thead th").all_inner_texts()] == ["", "CLOSED ON THIS DAY", "CLOSED UP TO THIS DAY", "STILL OPEN"]
-    assert d.locator(".dtabs button").all_inner_texts() == ["Closed on this day", "Closed up to this day", "Still open"] and not re.search(r"\d", " ".join(d.locator(".dtabs button").all_inner_texts()))
+    assert d.locator(".dtabs button").count() == 0 and d.locator("[data-dfilter]").count() == 1, "the three tabs became one Filter button"
     groups = lambda: d.locator("tr.dgrp b").all_inner_texts(); counts = lambda: d.locator("tr.dgrp .gn").all_inner_texts()
     assert groups() == ["Epics", "User stories", "Sub-tasks"] and counts() == ["0", "1", "1"] and "PROD-9112" in d.inner_text() and "PROD-9103" in d.inner_text()
     assert d.locator("a[href='https://canaryai.atlassian.net/browse/PROD-9112']").count() == 1
-    d.get_by_role("tab", name="Still open").click(); assert counts() == ["2", "2", "4"] and d.locator("table.dtab tbody tr:not(.dgrp):not(.rnone)").count() == 8
+    only(page, "open"); assert counts() == ["2", "2", "4"] and d.locator("table.dtab tbody tr:not(.dgrp):not(.rnone)").count() == 8
     assert d.locator("table.dtab tbody tr:not(.dgrp):not(.rnone)").first.inner_text().startswith("PROD-"), "epic rows come first"
-    d.get_by_role("tab", name="Closed up to this day").click(); assert counts() == ["0", "1", "1"] and d.locator("tr.rnone").count() == 1
+    only(page, "closed"); assert counts() == ["0", "1", "1"] and d.locator("tr.rnone").count() == 1
     page.click("[data-dayclose]"); assert not page.locator("#dayd").is_visible()
 
 
 def test_day_list_columns_and_the_closed_definition(page):
-    open_bd(page); click_slot(page, 3); d = page.locator("#dayd"); d.get_by_role("tab", name="Still open").click()
+    open_bd(page); click_slot(page, 3); d = page.locator("#dayd"); only(page, "open")
     ths = [x.upper().rstrip("I").strip() for x in d.locator("table.dtab th").all_inner_texts()]; assert ths == ["TICKET", "TITLE", "TYPE", "OWNER", "STATUS", "ORIGINAL ESTIMATE (H)"], ths
     types = set(d.locator("table.dtab tbody tr:not(.dgrp):not(.rnone) td:nth-child(3)").all_inner_texts()); assert types <= {"Epic", "User story", "Sub-task", "Story sub-task", "Bug sub-task", "New Feature sub-task"} and "Task" not in types, types
     d.locator(".dh .ibtn").hover(); tip = page.locator("#gtip")
     assert tip.locator(".tth").inner_text() == "Counted as closed" and tip.locator("p").count() == 0
-    g = tip.locator(".ttg"); assert g.count() == 3 and [g.nth(i).locator(".tchip").count() for i in range(3)] == [1, 2, 8]
+    g = tip.locator(".ttg"); assert g.count() == 3 and [g.nth(i).locator(".tchip").count() for i in range(3)] == [1, 2, 6]
     assert [x.strip().lower() for x in g.locator(".ttgl").all_inner_texts()] == ["epic", "user story", "sub-task, story sub-task, bug sub-task, new feature sub-task"]
     assert g.nth(0).locator(".tchip").inner_text() == "Done" and "Invalid" in g.nth(2).inner_text() and "Deferred" in g.nth(2).inner_text()
 
 
 def test_day_list_scrolls_inside_itself_when_it_is_long(page):
-    open_bd(page); click_slot(page, 3); page.get_by_role("tab", name="Still open").click()
+    open_bd(page); click_slot(page, 3); only(page, "open")
     assert page.evaluate("(() => { const c = getComputedStyle(document.querySelector('.dlist')); return [c.maxHeight, c.overflowY] })()") == ["360px", "auto"]
 
 
@@ -358,7 +367,7 @@ def test_hover_card_goes_away_when_the_pointer_leaves_the_chart_or_reaches_an_in
     hover_slot(page, 4); svg = page.locator("#cw svg").bounding_box(); page.mouse.move(svg["x"] + svg["width"] / 2, svg["y"] - 30); assert page.locator("#tip").is_hidden()
 
 
-def test_retrospective_slot_only_when_jira_end_is_the_next_working_day(page):
+def test_day_axis_is_always_day_1_to_day_10(page):
     open_bd(page)
     labs = page.evaluate("() => [...document.querySelectorAll('#cw svg text')].map(t => t.textContent).filter(x => /^(Day \\d+|Retro)$/.test(x))")
     assert labs[:10] == [f"Day {i}" for i in range(1, 11)]

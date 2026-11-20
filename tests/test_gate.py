@@ -12,12 +12,12 @@ def test_gate_shows_first_and_hides_dashboard(ctx_factory, mock):
     assert pg.get_by_role("heading", name="Sprint Dashboard").is_visible()
 
 
-def test_wrong_password_shows_toast_top_right_and_stays_locked(ctx_factory, mock):
+def test_wrong_password_shows_toast_on_the_right_edge_and_stays_locked(ctx_factory, mock):
     pg = open_locked(ctx_factory, mock)
     pg.fill("#gpw", "wrong"); pg.click("#gsub")
     t = pg.locator(".tst.error"); t.wait_for(); assert "Incorrect password" in t.inner_text()
     box = t.bounding_box(); vw = pg.viewport_size["width"]
-    assert box["x"] + box["width"] > vw - 40 and box["y"] < 40, "toast must sit in the top right corner"
+    vh = pg.viewport_size["height"]; assert box["x"] + box["width"] > vw - 40 and box["y"] + box["height"] > vh - 40, "toast must sit on the right edge of the screen, at the bottom"
     assert pg.locator("#gate").is_visible() and pg.locator("#gerr").inner_text() == "Incorrect password. Try again."
 
 

@@ -8,7 +8,7 @@ from playwright.sync_api import sync_playwright
 URL = os.environ.get("LIVE_URL", "").rstrip("/")
 pytestmark = pytest.mark.skipif(not URL, reason="set LIVE_URL to run against the live site")
 from conftest import PASSWORD, SESSION
-TABS = ["map", "cap", "bd", "log", "who", "how"]
+TABS = ["map", "cap", "bd", "log", "how"]
 
 
 @pytest.fixture(scope="module")

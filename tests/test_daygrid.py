@@ -44,12 +44,21 @@ def test_day_labels_are_weekday_and_date_not_letters(ctx_factory, mock):
     assert heads[-1] == "Total logged"
 
 
-def test_weekend_logs_have_their_own_labelled_column_and_the_total_still_adds_up(ctx_factory, mock):
+def test_each_weekend_day_with_time_has_its_own_dated_column_and_the_total_still_adds_up(ctx_factory, mock):
     pg = open_person_view(ctx_factory, mock, weekend=True); heads = [h.replace("\n", " ") for h in pg.locator("#dgrid .dgh span").all_inner_texts()]
-    assert "Weekend 7–8 Nov" in heads and "Other" not in " ".join(heads) and "+" not in "".join(heads), heads
+    wk = [h for h in heads if h.startswith(("Sat ", "Sun "))]
+    assert wk and all(h.split()[0] in ("Sat", "Sun") and h.split()[1].isdigit() for h in wk) and "Weekend" not in " ".join(heads) and "+" not in "".join(heads), heads      # named by weekday and date
     rows = {r.locator(".dgn").inner_text().strip(): r for r in pg.locator("#dgrid .dgr:not(.dgh)").all()}
-    assert rows["Nikita"].locator(".dgo").inner_text() == "3" and rows["Sumit"].locator(".dgo").inner_text() == "8" and rows["Aditi"].locator(".dgo").inner_text() == ""
-    cells = sum(float(c.inner_text() or 0) for c in rows["Nikita"].locator(".dgc").all() if c.inner_text() not in ("", "L")); assert abs(cells + 3 - float(rows["Nikita"].locator(".dgt").inner_text())) < .11
+    ex = lambda n: sum(float(c.inner_text() or 0) for c in rows[n].locator(".dgc.xtra").all())
+    assert ex("Nikita") == 3 and ex("Sumit") == 8 and ex("Aditi") == 0
+    assert all(rows["Nikita"].locator(".dgc.xtra").count() == len(wk) for _ in [0])
+    cells = sum(float(c.inner_text() or 0) for c in rows["Nikita"].locator(".dgc").all() if c.inner_text() not in ("", "L")); assert abs(cells - float(rows["Nikita"].locator(".dgt").inner_text())) < .11      # xtra cells are inside .dgc, so the sum is the total
+    assert all(c.get_attribute("class").split()[1] == "xtra" for c in rows["Nikita"].locator(".dgc.xtra").all())      # never judged green, amber or red
+
+
+def test_no_weekend_logs_means_no_weekend_column(ctx_factory, mock):
+    pg = open_person_view(ctx_factory, mock); heads = [h.replace("\n", " ") for h in pg.locator("#dgrid .dgh span").all_inner_texts()]
+    assert not [h for h in heads if h.startswith(("Sat ", "Sun ", "Weekend"))], heads
 
 
 def test_legend_uses_pace_words_and_the_same_tags(ctx_factory, mock):

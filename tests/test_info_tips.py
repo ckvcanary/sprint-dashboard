@@ -1,4 +1,5 @@
 """Every status-like label has an (i) that lists all the values it can show, laid out as short rows or chips"""
+from test_burndown import only
 import pytest
 
 pytestmark = pytest.mark.guard
@@ -29,7 +30,7 @@ def test_burndown_number_columns_explain_themselves(page):
     page.click('[data-tab="bd"]'); page.click('[data-bdview="person"]'); page.wait_for_selector("#cw svg")
     t = hover(page, page.locator("th:has-text('Pace gap') .ibtn")); assert names(t) == ["Up to 8 h", "More than 8 h"] and "Behind pace" in t.inner_text() and "(pace target) − (logged)" in t.inner_text()
     t = hover(page, page.locator("th:has-text('Pace target by now') .ibtn")); x = t.inner_text(); assert "Pace target = (E / D) × d" in x and "7.5 = 8 − 0.5" in x and "6.4 h" in x and "25.6 h" in x and "good to know" not in x.lower() and "half a day" not in x
-    t = hover(page, page.locator("th:has-text('Verdict') .ibtn")); assert names(t) == ["Achievable", "Not achievable", "Completed", "Not completed"] and "(remaining estimate) − (time left)" in t.inner_text() and "calculation" in t.inner_text().lower() and arith_ok(t.inner_text())
+    t = hover(page, page.locator("th:has-text('Verdict') .ibtn")); assert names(t) == ["Achievable", "Not achievable", "Completed", "Not completed", "No work planned"] and "(remaining estimate) − (time left)" in t.inner_text() and "calculation" in t.inner_text().lower() and arith_ok(t.inner_text())
     t = hover(page, page.locator("th:has-text('Leave') .ibtn")); assert "Lowers capacity only" in t.inner_text() and arith_ok(t.inner_text())
 
 
@@ -58,28 +59,30 @@ def test_pull_log_columns_and_tiles_list_every_status(page):
 
 def open_day(page):
     page.click('[data-tab="bd"]'); page.click('[data-bdview="person"]'); page.wait_for_selector("#cw svg"); page.locator("#cw").scroll_into_view_if_needed(); page.wait_for_timeout(250)
-    svg = page.locator("#cw svg").bounding_box(); page.mouse.click(svg["x"] + (60 + 4.5 / 11 * 924) / 1000 * svg["width"], svg["y"] + svg["height"] * .4); page.wait_for_selector("#dayd:not([hidden])"); page.get_by_role("tab", name="Still open").click()
+    svg = page.locator("#cw svg").bounding_box(); page.mouse.click(svg["x"] + (60 + 4.5 / 11 * 924) / 1000 * svg["width"], svg["y"] + svg["height"] * .4); page.wait_for_selector("#dayd:not([hidden])"); only(page, "open")
 
 
 def test_status_pop_up_has_two_buttons_with_the_real_jira_statuses(page):
     """Statuses taken from the PROD project's workflows in Jira; the second button lists what counts as closed."""
     open_day(page); tip = hover(page, page.locator("#dayd th:has-text('Status') .ibtn").first)
-    assert tip.locator(".tth").inner_text() == "Jira status" and tip.locator(".jtabs button").all_inner_texts() == ["Statuses", "Counted as closed"]
-    assert tip.locator(".jtabs button[aria-selected=true]").inner_text() == "Statuses"
+    assert tip.locator(".tth").inner_text() == "Jira status" and tip.locator(".jtabs button").all_inner_texts() == ["Counted as open", "Counted as closed"]
+    assert tip.locator(".jtabs button[aria-selected=true]").inner_text() == "Counted as open"
     g = tip.locator(".ttg"); assert g.count() == 4
     heads = [x.strip().lower() for x in g.locator(".ttgl").all_inner_texts()]; assert heads == ["epic", "user story", "sub-task, story sub-task, new feature sub-task", "bug sub-task"], heads
     chips = lambda i: g.nth(i).locator(".tchip").all_inner_texts()
-    assert chips(0) == ["Backlog", "In Progress", "In Testing", "In Documentation", "Done"]
-    story = ["Backlog", "Research", "Spec_Completed", "Accepted by Developer", "Ready for Development", "In Progress", "Code_Review", "In Testing", "Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Done", "On-Hold"]
-    assert chips(1) == story and chips(2) == story and len(chips(3)) == 13 and {"New", "Triaged", "Fixed", "Invalid", "Deferred", "Won't Fix"} <= set(chips(3))
+    assert chips(0) == ["Backlog", "In Progress", "In Testing", "In Documentation"]      # Done closes an epic
+    st_all = ["Backlog", "Research", "Spec_Completed", "Accepted by Developer", "Ready for Development", "In Progress", "Code_Review", "In Testing", "Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Done", "On-Hold"]
+    story = [x for x in st_all if x not in ("Deployed to UAT", "Deployed to Prod")]; task = [x for x in story if x != "Done"]      # what is NOT closed for each kind
+    assert chips(1) == story and chips(2) == task and len(chips(3)) == 9 and {"New", "Triaged", "Won't Fix"} <= set(chips(3)) and not {"Fixed", "Invalid", "Deferred", "Done"} & set(chips(3))
+    assert "Technical Review" in chips(2) and "In Documentation" in chips(2)      # both stay open for a sub-task
     assert "stays open" not in tip.inner_text().lower() and tip.locator("p").count() == 0, "no explanatory paragraphs"
     # the pop-up stays open while the pointer moves into it, and the second button shows what counts as closed
     box = tip.bounding_box(); page.mouse.move(box["x"] + 30, box["y"] + 20); page.wait_for_timeout(300); assert tip.is_visible()
     tip.locator(".jtabs button", has_text="Counted as closed").click(); page.wait_for_timeout(100); assert tip.is_visible()
     g = tip.locator(".ttg"); assert g.count() == 3 and tip.locator(".jtabs button[aria-selected=true]").inner_text() == "Counted as closed"
     assert g.nth(0).locator(".tchip").all_inner_texts() == ["Done"] and g.nth(1).locator(".tchip").all_inner_texts() == ["Deployed to UAT", "Deployed to Prod"]
-    assert g.nth(2).locator(".tchip").all_inner_texts() == ["Technical Review", "Done", "Fixed", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Invalid", "Deferred"]
-    tip.locator(".jtabs button", has_text="Statuses").click(); assert tip.locator(".ttg").count() == 4
+    assert g.nth(2).locator(".tchip").all_inner_texts() == ["Done", "Fixed", "Deployed to UAT", "Deployed to Prod", "Invalid", "Deferred"]
+    tip.locator(".jtabs button", has_text="Counted as open").click(); assert tip.locator(".ttg").count() == 4
     page.keyboard.press("Escape"); assert not tip.is_visible()
 
 
@@ -92,7 +95,7 @@ def test_every_status_on_the_page_is_one_the_popup_lists(page):
 
 
 def test_the_closed_tip_next_to_the_day_has_no_sentences(page):
-    open_day(page); t = hover(page, page.locator("#dayd .dh .ibtn")); assert t.locator(".tth").inner_text() == "Counted as closed" and t.locator("p").count() == 0 and t.locator(".ttnote").count() == 1 and "Technical Review is the last stage only for Jira management, U.S. team demos, reporting and documentation" in t.inner_text()
+    open_day(page); t = hover(page, page.locator("#dayd .dh .ibtn")); assert t.locator(".tth").inner_text() == "Counted as closed" and t.locator("p").count() == 0 and t.locator(".ttnote").count() == 1 and "documentation-task" in t.inner_text() and "In Documentation is never counted as closed" in t.inner_text()
     assert [x.strip().lower() for x in t.locator(".ttgl").all_inner_texts()] == ["epic", "user story", "sub-task, story sub-task, bug sub-task, new feature sub-task"] and "first entered" not in t.inner_text()
 
 

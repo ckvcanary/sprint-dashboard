@@ -54,7 +54,7 @@ def newer(mock): urllib.request.urlopen(urllib.request.Request(mock.url + "/__ne
 def test_a_teammates_refresh_reaches_an_open_page_without_a_click(page, mock):
     assert page.inner_text("#rfval") == "13 Nov, 4:34 PM IST"; newer(mock)
     page.clock.run_for(61000); page.wait_for_function("document.querySelector('#rfval').textContent.includes('4:42 PM')", timeout=8000)
-    t = page.locator(".tst.info"); t.wait_for(); assert "Data updated" in t.inner_text() and "someone on the team" in t.inner_text()
+    t = page.locator(".tst").first; t.wait_for(); x = t.inner_text(); assert "Pulled from Jira" in x and "ticket" in x and "tickets read" in x and "teammate" in x
 
 
 def test_the_update_waits_while_a_ticket_is_open_then_arrives(page, mock):

@@ -68,14 +68,16 @@ def model(sc):
         used = used_at(el); remain = max(0, p["E"] - burned); left = max(0, cap - used); gap = remain - left
         exp = p["E"] * used / cap if cap > 0 else 0          # (original estimate / capacity days) x capacity days passed
         miss = max(0, exp - logged)
-        if late: verdict = "Not completed" if remain > .05 else "Completed"
+        if p["E"] <= .05: verdict = "No work planned"
+        elif remain <= .05: verdict = "Completed"       # the whole estimate is done: no work left, sprint over or not
+        elif late: verdict = "Not completed"
         else: verdict = "Not achievable" if gap > .05 else "Achievable"
         flag = "Not started" if el <= 0 else "Well behind pace" if miss > 8 else "Behind pace" if miss > .05 else "On pace"
         out[n] = dict(E=p["E"], logged=logged, burned=burned, remain=remain, over=max(0, logged - burned), exp=exp, miss=miss, left=left, cap=cap, used=used, leave=sum(lv.values()), gap=gap, verdict=verdict, flag=flag, used_at=used_at, p=p)
     return out, dict(el=el, ad=ad, late=late)
 
 
-def ideal_at(M, h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / (m["cap"] + 8)) if m["cap"] > 0 else m["E"]) for m in M.values())
+def ideal_at(M, h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / m["cap"]) if m["cap"] > 0 else m["E"]) for m in M.values())
 def remaining_at(M, h, ad, el):
     """the blue line: each person's estimate minus the hours burned up to the point h (working hours since day 3 started)"""
     tot = 0.0
@@ -218,7 +220,7 @@ def test_verdict_and_gap_wording(ctx_factory, mock):
     row = [r for r in pg.locator("#tplan tbody tr").all() if r.inner_text().startswith("Nikita")][0].inner_text()
     assert "Not achievable" in row and f"Short by {M['Nikita']['gap']:.1f} h" in row
     row = [r for r in pg.locator("#tplan tbody tr").all() if r.inner_text().startswith("Sumit")][0].inner_text()
-    assert "Achievable" in row and "Room of" in row
+    assert "Completed" in row and "No work left" in row and "Achievable" not in row      # Sumit's remaining estimate is 0, so there is no work left
 
 
 def test_overtime_shows_the_extra_hours_and_does_not_hide_open_work(ctx_factory, mock):
@@ -273,8 +275,8 @@ def test_logic_page_is_gone(page):
 
 
 def test_estimate_column_lines_up_across_the_three_sections(ctx_factory, mock):
-    from test_burndown import click_slot
-    pg, M, info = load(ctx_factory, mock, "baseline"); pg.click('[data-bdview="person"]'); pg.wait_for_selector("#cw svg"); click_slot(pg, 4); pg.wait_for_selector("#dayd:not([hidden])"); pg.click('[data-dtab="open"]')
+    from test_burndown import click_slot, only
+    pg, M, info = load(ctx_factory, mock, "baseline"); pg.click('[data-bdview="person"]'); pg.wait_for_selector("#cw svg"); click_slot(pg, 4); pg.wait_for_selector("#dayd:not([hidden])"); only(pg, "open")
     assert pg.locator("#dayd table.dtab").count() == 1, "one table for epics, user stories and sub-tasks, so the columns line up"
     xs = pg.evaluate("() => [...document.querySelectorAll('#dayd .dtab td.num')].map(c => Math.round(c.getBoundingClientRect().right))"); assert len(set(xs)) == 1, xs
     txt = pg.locator("#dayd").inner_text(); assert "Sub-tasks" in txt and "original estimate (h)" in txt.lower() and "hour original estimate" not in txt
@@ -308,7 +310,7 @@ def test_ideal_pace_is_the_chunk_per_capacity_day(ctx_factory, mock):
     for k, h in ((2, 8), (3, 16), (4, 24), (5, 32)):
         from test_burndown import hover_slot
         hover_slot(pg, k); got = pg.evaluate("() => +document.querySelectorAll('#tip .mt')[0].querySelectorAll('tr')[0].cells[1].innerText.replace(' h', '')")
-        want = sum(m["E"] - m["E"] * m["used_at"](h) / (m["cap"] + 8) for m in M.values()); assert near(got, want, .06), (k, got, want)
+        want = sum(m["E"] - m["E"] * m["used_at"](h) / m["cap"] for m in M.values()); assert near(got, want, .06), (k, got, want)
 
 
 def test_leave_in_the_future_lowers_time_left_but_not_the_log_expected_now(ctx_factory, mock):

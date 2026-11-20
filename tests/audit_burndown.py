@@ -270,7 +270,7 @@ with sync_playwright() as pw:
             if not (int(sm[nm][0]) == c1 and sm[nm][1] == f"{c2} of {len(m)}" and int(sm[nm][2]) == len(m) - c2): ok = False; why.append((nm, sm[nm], c1, c2))
         check(f"Day panel {d}: summary counts (closed on the day, up to the day, still open) equal Jira", ok, why)
         for tab, want in (("today", sum(v == d for v in allc.values())), ("closed", sum(1 for v in allc.values() if v and v <= d)), ("open", sum(1 for v in allc.values() if not (v and v <= d)))):
-            pg.click(f'[data-dtab="{tab}"]'); nrows = pg.locator("#dayd .dtab tbody tr:not(.dgrp):not(.rnone)").count()
+            pg.click("[data-dfilter]"); pg.check(f'[data-dfk="{tab}"]'); [pg.uncheck(f'[data-dfk="{k}"]') for k in ("today", "closed", "open") if k != tab and pg.locator(f'[data-dfk="{k}"]').is_checked()]; pg.keyboard.press("Escape"); nrows = pg.locator("#dayd .dtab tbody tr:not(.dgrp):not(.rnone)").count()
             check(f"Day panel {d}, tab {tab}: the list holds {want} tickets", nrows == want, f"page {nrows}")
         xs = pg.evaluate("() => [...new Set([...document.querySelectorAll('#dayd .dtab td.num')].map(c => Math.round(c.getBoundingClientRect().right)))].length")
         check(f"Day panel {d}: the estimate column lines up across epics, user stories and sub-tasks", xs == 1, f"{xs} different right edges")
@@ -286,7 +286,7 @@ with sync_playwright() as pw:
 
     # ---------------- C. edge cases on older sprints: the axis must start on the sprint's first working day
     print("\nC. Edge cases")
-    for sp, first_day, retro in (("S22", "Mon 12 Oct", False), ("S23", "Mon 26 Oct", True), ("S21", "Mon 28 Sep", False), ("S20", "Tue 8 Sep", True)):
+    for sp, first_day, retro in (("S22", "Mon 12 Oct", False), ("S23", "Mon 26 Oct", False), ("S21", "Mon 28 Sep", False), ("S20", "Tue 8 Sep", False)):
         q = page_for(sp); q.click('[data-bdview="person"]'); q.wait_for_selector("#cw svg")
         labs = q.evaluate("() => [...document.querySelectorAll('#cw svg text')].map(t => t.textContent)")
         bsp = bd[sp]; wd = wdays(*bsp["win"])

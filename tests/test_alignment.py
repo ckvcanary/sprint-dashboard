@@ -5,7 +5,7 @@ import pytest
 from test_burndown_math import SCEN
 
 pytestmark = pytest.mark.guard
-TABS = ["map", "cap", "bd", "leave", "log", "who", "how"]
+TABS = ["map", "cap", "bd", "leave", "log", "how"]
 WIDTHS = [360, 390, 430, 768, 1024, 1280, 1440]
 
 JS_IBTN = """() => [...document.querySelectorAll('.ibtn')].filter(b => b.offsetParent !== null && b.getBoundingClientRect().width > 0 && !b.classList.contains('ci') && !b.closest('[hidden]') && (!b.checkVisibility || b.checkVisibility())).map(b => {
@@ -23,7 +23,7 @@ JS_IBTN = """() => [...document.querySelectorAll('.ibtn')].filter(b => b.offsetP
 JS_OVERFLOW = """() => { const vw = document.documentElement.clientWidth, out = [];
   document.querySelectorAll('body *').forEach(e => { if (e.closest('[hidden]') || e.closest('svg') || e.closest('#gtip') || e.closest('#stack') || e.closest('.tabs')) return; const r = e.getBoundingClientRect();
     if (r.width > 0 && r.height > 0 && (r.right > vw + 1 || r.left < -1) && getComputedStyle(e).position !== 'fixed') out.push((e.id || e.className || e.tagName).toString().slice(0, 40) + ' ' + Math.round(r.left) + '..' + Math.round(r.right)); });
-  const scrollers = [...document.querySelectorAll('#v-map,#v-cap,#v-bd,#v-leave,#v-log,#v-who,#v-how')].flatMap(v => [...v.querySelectorAll('*')].filter(e => e.scrollWidth > e.clientWidth + 1 && ['auto', 'scroll'].includes(getComputedStyle(e).overflowX) && !e.closest('svg')).map(e => 'scrolls sideways: ' + (e.className || e.tagName)));
+  const scrollers = [...document.querySelectorAll('#v-map,#v-cap,#v-bd,#v-leave,#v-log,#v-how')].flatMap(v => [...v.querySelectorAll('*')].filter(e => e.scrollWidth > e.clientWidth + 1 && ['auto', 'scroll'].includes(getComputedStyle(e).overflowX) && !e.closest('svg')).map(e => 'scrolls sideways: ' + (e.className || e.tagName)));
   return { page: document.documentElement.scrollWidth - innerWidth, out: out.slice(0, 6), scrollers: scrollers.slice(0, 6) }; }"""
 
 

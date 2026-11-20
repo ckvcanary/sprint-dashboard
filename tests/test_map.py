@@ -22,7 +22,7 @@ def test_epic_card_sums_points_and_uses_correct_plural(page):
 
 def test_story_drawer_shows_hours_and_highlights_facts(page):
     page.click('#map .card[data-s="PROD-9101"]'); d = page.locator("#drawer.on"); d.wait_for()
-    facts = d.locator(".fact"); assert facts.count() == 4
+    facts = d.locator(".fact"); assert facts.count() == 6      # assignee, reporter, due date, sprint, original estimate, story points
     hi = d.locator(".fact.hi"); assert hi.count() == 2
     assert "18 h" in hi.nth(0).inner_text() and "original estimate" in hi.nth(0).inner_text().lower() and "8" in hi.nth(1).inner_text()
     assert "Nikita" in facts.nth(0).inner_text() and "Sprint 24" in d.inner_text()

@@ -1,8 +1,9 @@
 """Local stand-in for the live site: serves the built page and the data files, and a fake refresh relay whose answer the tests choose.
-Modes: ok, running, fresh, fail, noop, mismatch, error502, forbidden. After `delay` seconds a successful refresh rewrites the data files."""
+Modes: ok, running, fresh, fail, noop, mismatch, stale_bd, since_ok, since_late, error502, forbidden. After `delay` seconds a successful refresh rewrites the data files."""
 import http.server, json, pathlib, shutil, threading, time, urllib.parse
 
 NEW_STAMP = "2026-11-13T11:12:00Z"
+NEW_MS = 1794568320000      # NEW_STAMP in milliseconds, the "server time of the click" the relay returns in the since_* modes
 
 
 class Mock:
@@ -31,9 +32,12 @@ class Mock:
                     if mock.mode == "error502": return s._send(502, {"state": "error"})
                     if mock.mode == "limit": return s._send(429, {"state": "limit", "used": 96, "limit": 100})
                     if mock.mode == "fresh": return s._send(200, {"state": "fresh"})
-                    if mock.mode in ("ok", "running", "fail", "mismatch"):
+                    if mock.mode in ("ok", "running", "fail", "mismatch", "stale_bd", "since_ok", "since_late", "nochange"):
                         threading.Thread(target=mock.job, daemon=True).start()
-                    return s._send(202 if mock.mode == "running" else 200, {"state": "running" if mock.mode == "running" else "started"})
+                    body = {"state": "running" if mock.mode == "running" else "started"}
+                    if mock.mode == "since_ok": body["since"] = NEW_MS - 5000          # the pull started after the click: acceptable
+                    if mock.mode == "since_late": body["since"] = NEW_MS + 60000       # the pull that arrives started BEFORE the click: must not count
+                    return s._send(202 if mock.mode == "running" else 200, body)
                 s._send(404, {})
             def do_GET(s):
                 if s.path.startswith("/__posts"): return s._send(200, {"n": len(mock.posts)})
@@ -52,6 +56,15 @@ class Mock:
     def write(self, stamp=NEW_STAMP, ok=True, map_stamp=None, error=None):
         d = self.site / "data"; rj = lambda n: json.loads((d / f"{n}.json").read_text())
         meta, m, runs = rj("meta"), rj("map"), rj("runs")
+        if ok and self.mode != "stale_bd":
+            b = rj("burndown")
+            for v in b.values(): v["asOf"] = stamp
+            if self.mode != "nochange":      # a real pull brings something new: Nikita logged 2 more hours
+                try: lg = b["S24"]["people"]["Nikita"]["logs"]; lg["2026-11-12"] = round(lg.get("2026-11-12", 0) + 2, 1)
+                except KeyError: pass
+            (d / "burndown.json").write_text(json.dumps(b))
+        if ok and self.mode != "nochange" and "info" in m:      # a real pull brings something new: two more hours on one ticket
+            m["info"]["PROD-9111"]["lg"] = round(m["info"]["PROD-9111"]["lg"] + 2, 2)
         if ok:
             meta.update({"refreshedAt": stamp, **({"issues": 1077, "sprintIssues": 14} if self.fake_counts else {})}); m["asOf"] = map_stamp or stamp
             (d / "map.json").write_text(json.dumps(m)); (d / "meta.json").write_text(json.dumps(meta))

@@ -44,7 +44,7 @@ def test_info_buttons_show_a_tooltip_on_hover_and_never_expand_the_cards(page):
     btns.nth(1).hover(); tip = page.locator("#gtip"); tip.wait_for(); assert "GitHub's servers" in tip.inner_text() and "Atlassian API token" in tip.inner_text() and page.locator("#gtip .ttr").count() == 1
     assert [n.bounding_box()["height"] for n in page.locator(".node").all()] == h0, "the cards must not grow"
     page.mouse.move(5, 5); tip.wait_for(state="hidden")
-    btns.nth(7).hover(); assert "Starts a pull now" in tip.inner_text() and "data is under 2 minutes old" in tip.inner_text()
+    btns.nth(7).hover(); assert "Starts a pull now" in tip.inner_text() and "Every click starts a new pull" in tip.inner_text() and "under 2 minutes" not in tip.inner_text()
 
 
 def test_info_boxes_use_the_hover_card_colours_and_stand_apart_from_the_page(ctx_factory, mock):
@@ -68,7 +68,7 @@ def test_sections_are_collapsed_and_rows_have_room(page):
 
 def test_usage_limits_use_a_short_table_and_a_live_team_wide_meter(page):
     open_how(page); page.click("summary:has-text('Refresh limits')"); t = page.locator(".lim").inner_text()
-    assert "3 of 100" in t and "Stops at 95 of 100 pulls a day" in t and "One refresh per 2 minutes" in t and "No limit (public repository)" in t and "5,000 requests an hour" in t
+    assert "3 of 100" in t and "Stops at 95 of 100 pulls a day" in t and "Ignored while your refresh is running" in t and "No limit (public repository)" in t and "5,000 requests an hour" in t
     assert [x.upper() for x in page.locator(".lim th").all_inner_texts()] == ["RULE", "VALUE"] and "Limit" not in page.locator(".lim th").all_inner_texts() and "Reason" not in t and len(t) < 330
 
 
