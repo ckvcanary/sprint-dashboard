@@ -20,7 +20,7 @@ URL = next((a for a in sys.argv[1:] if a.startswith("http")), "http://127.0.0.1:
 IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
 CAP, DH, WH0 = 64, 8, 11
 SPRINT_ID, START, WIN = 1195, "2026-11-09", ("2026-11-11", "2026-11-20")
-TASK_DONE = {"Technical Review", "In Documentation", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}; STORY_DONE = {"Deployed to UAT", "Deployed to Prod"}; EPIC_DONE = {"Done"}
+TASK_DONE = {"Technical Review", "Deployed to UAT", "Deployed to Prod", "Fixed", "Done", "Invalid", "Deferred"}; STORY_DONE = {"Deployed to UAT", "Deployed to Prod"}; EPIC_DONE = {"Done"}      # In Documentation never closes; Technical Review closes a sub-task only with the label documentation-task
 first = lambda a: a["displayName"].split()[0] if a else None
 res = []
 
@@ -36,7 +36,7 @@ def jira(path, body=None):
 
 import re as _re
 _ND = _re.compile(r"\b(document|documentation|docs?|demos?|jira|reporting|retrospective|presentation|deck|training|knowledge transfer|u\.?s\.? team)\b", _re.I)
-nondev = lambda x: (x["fields"].get("assignee") or {}).get("displayName", "").split(" ")[0] == "Chetan" or bool(_ND.search(x["fields"].get("summary") or ""))      # Technical Review closes only documentation, demo, reporting and Jira work
+nondev = lambda x: any(_re.sub(r"[\s_-]", "", str(l)).lower() == "documentationtask" for l in (x["fields"].get("labels") or []))      # Technical Review closes a sub-task only when it carries the label documentation-task, demo, reporting and Jira work
 
 
 def search(jql, fields, expand=None):
@@ -67,7 +67,7 @@ meta, bd = get("/data/meta.json"), get("/data/burndown.json"); S = bd["S24"]
 print("Data from", meta["refreshedAt"], "on", URL, "\n")
 
 # ---------------------------------------------------------------- independent read of Jira
-F = ["summary", "status", "assignee", "issuetype", "parent", "timeoriginalestimate", "worklog", "created", "updated", "statuscategorychangedate"]
+F = ["summary", "status", "assignee", "issuetype", "parent", "timeoriginalestimate", "worklog", "created", "updated", "statuscategorychangedate", "labels"]
 iss = {x["key"]: x for x in search(f"project = PROD AND sprint = {SPRINT_ID} AND issuetype != Epic", F, "changelog")}
 parents = {x["fields"]["parent"]["key"] for x in iss.values() if x["fields"].get("parent")}
 leaf = [k for k in iss if k not in parents]
@@ -77,6 +77,9 @@ is_story = lambda x: (not x["fields"]["issuetype"].get("subtask")) and x["fields
 def logs_of(x):
     w = x["fields"]["worklog"]
     return w["worklogs"] if w["total"] <= len(w["worklogs"]) else jira(f"/rest/api/3/issue/{x['key']}/worklog?maxResults=1000")["worklogs"]
+
+
+def ist(t): return dt.datetime.strptime(t, "%Y-%m-%dT%H:%M:%S.%f%z").astimezone(IST).date().isoformat()      # the page counts a log on its IST date
 
 
 def closed_day(x, ds):
@@ -94,12 +97,12 @@ P = collections.defaultdict(lambda: {"E": 0.0, "logs": collections.defaultdict(f
 task_close, over, noest, unassigned = {}, [], [], []
 for k in leaf:
     x = iss[k]; f = x["fields"]; raw = (f.get("timeoriginalestimate") or 0) / 3600; L = logs_of(x)
-    pre = sum(l["timeSpentSeconds"] / 3600 for l in L if l["started"][:10] < START); e = max(0.0, raw - pre)
+    pre = sum(l["timeSpentSeconds"] / 3600 for l in L if ist(l["started"]) < START); e = max(0.0, raw - pre)
     if not f.get("assignee"): unassigned.append(k); continue
     if not raw: noest.append(k)
     who, left, lg = first(f["assignee"]), e, 0.0
-    for l in sorted((l for l in L if START <= l["started"][:10] <= WIN[1]), key=lambda l: l["started"][:10]):
-        d, h = l["started"][:10], l["timeSpentSeconds"] / 3600; P[first(l["author"])]["logs"][d] += h; lg += h
+    for l in sorted((l for l in L if START <= ist(l["started"]) <= WIN[1]), key=lambda l: ist(l["started"])):
+        d, h = ist(l["started"]), l["timeSpentSeconds"] / 3600; P[first(l["author"])]["logs"][d] += h; lg += h
         c = min(h, left); left -= c; P[who]["burn"][d] += c
     if lg > e + .005: P[who]["over"] += lg - e; over.append(k)
     P[who]["E"] += e
@@ -167,13 +170,13 @@ def model(n, p):
     used = used_at(EL); remain, left = max(0, p["E"] - burned), max(0, capP - used); exp = p["E"] * used / capP if capP > 0 else 0; miss = max(0, exp - logged); gap = remain - left     # expected log = (original estimate / capacity days) x capacity days passed
     st = "Not started" if EL <= 0 else "Well behind pace" if miss > 8 else "Behind pace" if miss > .05 else "On pace"
     late = asof.date().isoformat() > WD[-1]
-    vd = ("Not completed" if remain > .05 else "Completed") if late else ("Not achievable" if gap > .05 else "Achievable")
+    vd = "No work planned" if p["E"] <= .05 else "Completed" if remain <= .05 else ("Not completed" if late else ("Not achievable" if gap > .05 else "Achievable"))      # nothing left is Completed, sprint over or not
     return dict(E=p["E"], logged=logged, remain=remain, over=max(0, logged - burned), exp=exp, miss=miss, left=left, st=st, cap=capP, used=used, leave=sum(lv.values()), vd=vd, used_at=used_at)
 M = {n: model(n, p) for n, p in people.items()}
 tot = lambda k: sum(m[k] for m in M.values())
 
 
-def ideal_at(h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / (m["cap"] + 8)) if m["cap"] > 0 else m["E"]) for m in M.values())
+def ideal_at(h): return sum((m["E"] * max(0, 1 - m["used_at"](h) / m["cap"]) if m["cap"] > 0 else m["E"]) for m in M.values())
 
 
 def remaining_at(day_i, who):
@@ -237,7 +240,7 @@ with sync_playwright() as pw:
     check("Chart: exactly one dot on the lines (the latest pull)", pg.locator("#cw svg circle:visible").count() == 1)
 
     # hover on every day, Everyone
-    svg = pg.locator("#cw svg").bounding_box(); slots = len(SD) + (1 if (WIN and S.get("end") == (dt.date.fromisoformat(SD[-1]) + dt.timedelta(3 if dt.date.fromisoformat(SD[-1]).weekday() == 4 else 1)).isoformat()) else 0)
+    svg = pg.locator("#cw svg").bounding_box(); slots = len(SD)      # the chart ends on Day 10; the Monday after belongs to the next sprint and is not drawn
     def slot_xy(k):
         pg.locator("#cw").scroll_into_view_if_needed(); pg.wait_for_timeout(450); sv = pg.locator("#cw svg").bounding_box()      # a scroll hides the hover card, so let it finish first
         return sv["x"] + (60 + (k + .5) / slots * (1000 - 60 - 16)) / 1000 * sv["width"], sv["y"] + sv["height"] * .4
